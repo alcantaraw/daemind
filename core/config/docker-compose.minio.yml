@@ -1,0 +1,48 @@
+services:
+  minio:
+    image: 'minio/minio:latest'
+    container_name: '${PREFIXO_CONTAINER}_minio'
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_MINIO}
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_MINIO:-1.0}'
+          memory: '${MEM_MINIO:-1024M}'
+        reservations:
+          memory: '${RES_MINIO:-256M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - MINIO_ROOT_USER=${TS_EMAIL}
+      - MINIO_ROOT_PASSWORD=${DB_PASSWORD}
+      - MINIO_SERVER_DEBUG=off
+      - MINIO_BROWSER_LOGIN_ANIMATION=off
+      - MINIO_API_REQUESTS_MAX=${MINIO_API_REQUESTS_MAX:-1500}
+      - MINIO_COMPRESS=on
+      - MINIO_COMPRESS_MIME_TYPES=text/csv,application/json,application/javascript,text/xml
+    volumes:
+      - './volumes/minio_data:/data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # --- INJEÇÃO DECLARATIVA NATIVA NO CHATWOOT QUANDO MINIO ESTÁ ATIVO ---
+  chatwoot:
+    depends_on:
+      minio:
+        condition: service_healthy
+
+  # --- INJEÇÃO DECLARATIVA NATIVA NO POSTIZ QUANDO MINIO ESTÁ ATIVO ---
+  postiz:
+    volumes:
+      - './volumes/minio_data/postiz:/app/uploads'
+    depends_on:
+      minio:
+        condition: service_healthy
