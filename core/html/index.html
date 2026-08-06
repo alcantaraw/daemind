@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>daemind. | Infraestrutura Autônoma</title>
+    <link rel="icon" type="image/png" href="favicon.png?v=3">
+
+    <style>
+        :root {
+            --bg-overlay: rgba(15, 23, 42, 0.85);
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --card-border-hover: rgba(56, 189, 248, 0.4);
+            --accent-cyan: #00f0ff;
+            --accent-violet: #a855f7;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #050b14;
+            background-image: url('bg-daemind.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(5, 11, 20, 0.8) 100%),
+                        linear-gradient(to bottom, rgba(5, 11, 20, 0.6) 0%, rgba(5, 11, 20, 0.9) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            padding: 3rem 1.5rem;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.8rem;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.3));
+        }
+
+        .brand h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--card-border-hover);
+            box-shadow: 0 12px 30px -10px rgba(0, 240, 255, 0.15);
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        .card:hover::before {
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .icon {
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card p.description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            padding-top: 1rem;
+        }
+
+        .port {
+            font-family: monospace;
+            color: var(--accent-cyan);
+            background: rgba(0, 240, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 4rem;
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .secure-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.05);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 2rem 1rem; }
+            .brand h1 { font-size: 2.2rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <img src="favicon-daemind.png" alt="daemind.">
+                <h1>daemind.</h1>
+            </div>
+            <p class="subtitle">Sistema Operacional Autônomo para Negócios Digitais</p>
+        </header>
+
+        <div class="grid">
+
+            <a href="#" data-port="3000" data-path="" class="card dynamic-link">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon">💬</div>
+                        <div class="status-indicator"><div class="status-dot"></div> Online</div>
+                    </div>
+                    <h3>Chatwoot CRM</h3>
+                    <p class="description">Atendimento multicanal unificado e gestão de conversas do WhatsApp.</p>
+                    <div class="card-footer">
+                        <span>Gateway: HTTP</span>
+                        <span class="port">:3000</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" data-port="8443" data-protocol="https" data-path="/manager" class="card dynamic-link">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon">📱</div>
+                        <div class="status-indicator"><div class="status-dot"></div> Online</div>
+                    </div>
+                    <h3>Evolution API</h3>
+                    <p class="description">Painel de controle e gerenciamento de instâncias e sessões da API WhatsApp.</p>
+                    <div class="card-footer">
+                        <span>Gateway: HTTPS Público</span>
+                        <span class="port">:8443/manager</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" data-port="5678" data-path="" class="card dynamic-link">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon">⚡</div>
+                        <div class="status-indicator"><div class="status-dot"></div> Online</div>
+                    </div>
+                    <h3>Automação (n8n)</h3>
+                    <p class="description">Orquestrador de fluxos de trabalho e integrações avançadas sem código.</p>
+                    <div class="card-footer">
+                        <span>Gateway: HTTP</span>
+                        <span class="port">:5678</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" data-port="18080" data-path="" class="card dynamic-link">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon">📊</div>
+                        <div class="status-indicator"><div class="status-dot"></div> Online</div>
+                    </div>
+                    <h3>NocoDB (CRM)</h3>
+                    <p class="description">Banco de dados relacional visual estilo planilha para gestão de dados.</p>
+                    <div class="card-footer">
+                        <span>Gateway: HTTP</span>
+                        <span class="port">:18080</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" data-port="5000" data-path="/auth/login" class="card dynamic-link">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon">📅</div>
+                        <div class="status-indicator"><div class="status-dot"></div> Online</div>
+                    </div>
+                    <h3>Postiz Planner</h3>
+                    <p class="description">Gerenciamento e agendamento de postagens em redes sociais.</p>
+                    <div class="card-footer">
+                        <span>Gateway: HTTP</span>
+                        <span class="port">:5000/auth/login</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" data-port="9001" data-path="" class="card dynamic-link">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon">🗄️</div>
+                        <div class="status-indicator"><div class="status-dot"></div> Online</div>
+                    </div>
+                    <h3>MinIO Console</h3>
+                    <p class="description">Armazenamento S3 soberano para gestão centralizada de mídias e arquivos.</p>
+                    <div class="card-footer">
+                        <span>Gateway: HTTP</span>
+                        <span class="port">:9001</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" data-port="3001" data-path="/" class="card dynamic-link">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon">🧠</div>
+                        <div class="status-indicator"><div class="status-dot"></div> Online</div>
+                    </div>
+                    <h3>Inteligência Artificial</h3>
+                    <p class="description">Assistente virtual com contexto soberano e automação de vendas.</p>
+                    <div class="card-footer">
+                        <span>Gateway: HTTP</span>
+                        <span class="port">:3001</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="footer-note">
+            <div class="secure-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Tráfego Criptografado (Tailscale Mesh)
+            </div>
+            <span>daemind SRE Engine • Monitoramento Ativo</span>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.dynamic-link').forEach(link => {
+            const port = link.getAttribute('data-port');
+            const path = link.getAttribute('data-path') || '';
+            const protocol = link.getAttribute('data-protocol') || 'http';
+            link.href = protocol + '://' + window.location.hostname + ':' + port + path;
+        });
+    </script>
+</body>
+</html>
