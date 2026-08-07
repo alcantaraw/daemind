@@ -1,8 +1,9 @@
 # =========================================================================
 # SRE EFÊMEROS (LOGS, CACHES, VOLUMES LOCAIS E RASCUNHOS)
 # =========================================================================
-# Ignora pasta de rascunhos e scripts temporários de desenvolvimento
+# Ignora pasta de rascunhos, checkpoints e scripts temporários de desenvolvimento
 scratch/
+LAST/
 *.scratch
 .gitattributes
 core/docs/OpenAPI/
