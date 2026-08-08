@@ -1,0 +1,1355 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Loja Integrada",
+    "description": "Especificação Técnica OpenAPI 3.0.3 para a API REST v1 da plataforma Loja Integrada. Mapeamento completo de categorias, produtos, pedidos, clientes, marcas, cupons, estoque, preço e webhooks.",
+    "version": "1.0.2",
+    "contact": {
+      "name": "Suporte ao Integrador Loja Integrada",
+      "email": "integrador@lojaintegrada.com.br",
+      "url": "https://ajuda.lojaintegrada.com.br"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.awsli.com.br/v1",
+      "description": "Ambiente Oficial de Produção (HTTPS)"
+    }
+  ],
+  "security": [
+    {
+      "HeaderAuth": []
+    },
+    {
+      "QueryChaveApi": [],
+      "QueryChaveAplicacao": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Categorias",
+      "description": "Gerenciamento da árvore de categorias da loja"
+    },
+    {
+      "name": "Produtos",
+      "description": "Gestão de produtos pai, produtos filhos, SKUs e variações"
+    },
+    {
+      "name": "Estoque e Preços",
+      "description": "Endpoints otimizados para sincronização rápida de saldo de estoque e preços"
+    },
+    {
+      "name": "Pedidos",
+      "description": "Consulta, alteração de status e rastreamento de envios de pedidos"
+    },
+    {
+      "name": "Clientes",
+      "description": "Gestão da base de clientes cadastrados no e-commerce"
+    },
+    {
+      "name": "Marcas",
+      "description": "Cadastro e gerenciamento de marcas do catálogo"
+    },
+    {
+      "name": "Cupons",
+      "description": "Gestão de cupons de desconto"
+    },
+    {
+      "name": "Webhooks",
+      "description": "Assinaturas de notificações de eventos em tempo real (pedidos, produtos, clientes)"
+    }
+  ],
+  "paths": {
+    "/categoria/": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Listar Categorias",
+        "description": "Retorna a lista paginada de categorias cadastradas na loja.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "Número máximo de registros por página"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "Deslocamento inicial para paginação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/MetaPaginacao"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Categoria"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/429RateLimit"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Cadastrar Categoria",
+        "description": "Cria uma nova categoria no catálogo da loja.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoriaCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Categoria criada com sucesso",
+            "headers": {
+              "Location": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "URI do recurso criado"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/401Unauthorized"
+          }
+        }
+      }
+    },
+    "/categoria/{id}/": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Obter Detalhes da Categoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID numérico da categoria"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Categoria"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Atualizar Categoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoriaCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Categoria atualizada com sucesso"
+          },
+          "400": {
+            "$ref": "#/components/responses/400BadRequest"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Excluir Categoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Categoria removida com sucesso"
+          },
+          "404": {
+            "$ref": "#/components/responses/404NotFound"
+          }
+        }
+      }
+    },
+    "/produto/": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Listar Produtos",
+        "description": "Retorna os produtos cadastrados com suporte a filtros por SKU e status.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "sku",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtro por SKU exato"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/MetaPaginacao"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Produto"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Cadastrar Produto (Pai ou Filho)",
+        "description": "Cria um novo produto. Para produtos filhos, defina 'tipo' como 'filho' e informe a URI do produto 'pai'.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Produto criado",
+            "headers": {
+              "Location": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400BadRequest"
+          }
+        }
+      }
+    },
+    "/produto/{id}/": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Obter Detalhes do Produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Produto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Atualizar Produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Produto atualizado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Remover Produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Produto removido com sucesso"
+          }
+        }
+      }
+    },
+    "/produto_estoque/{produto_id}/": {
+      "get": {
+        "tags": [
+          "Estoque e Preços"
+        ],
+        "summary": "Obter Saldo de Estoque",
+        "parameters": [
+          {
+            "name": "produto_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "quantidade": {
+                      "type": "number"
+                    },
+                    "gerenciado": {
+                      "type": "boolean"
+                    },
+                    "situacao_em_estoque": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Estoque e Preços"
+        ],
+        "summary": "Atualizar Saldo de Estoque de Produto",
+        "parameters": [
+          {
+            "name": "produto_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "quantidade"
+                ],
+                "properties": {
+                  "quantidade": {
+                    "type": "number",
+                    "example": 50
+                  },
+                  "gerenciado": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Estoque atualizado com sucesso"
+          }
+        }
+      }
+    },
+    "/produto_preco/{produto_id}/": {
+      "get": {
+        "tags": [
+          "Estoque e Preços"
+        ],
+        "summary": "Obter Preço do Produto",
+        "parameters": [
+          {
+            "name": "produto_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cheio": {
+                      "type": "number",
+                      "example": 199.9
+                    },
+                    "promocional": {
+                      "type": "number",
+                      "example": 149.9
+                    },
+                    "custo": {
+                      "type": "number",
+                      "example": 80.0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Estoque e Preços"
+        ],
+        "summary": "Atualizar Preço do Produto",
+        "parameters": [
+          {
+            "name": "produto_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cheio": {
+                    "type": "number",
+                    "example": 199.9
+                  },
+                  "promocional": {
+                    "type": "number",
+                    "example": 149.9
+                  },
+                  "custo": {
+                    "type": "number",
+                    "example": 80.0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Preço atualizado com sucesso"
+          }
+        }
+      }
+    },
+    "/pedido/": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Listar Pedidos",
+        "description": "Retorna a listagem de pedidos com filtros por situação e data de criação.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "situacao_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filtrar por código de situação (ex: 2 para Pago, 4 para Efetuado)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/MetaPaginacao"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PedidoSummary"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedido/{pedido_id}/": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Obter Detalhes Completos do Pedido",
+        "parameters": [
+          {
+            "name": "pedido_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Atualizar Status do Pedido",
+        "parameters": [
+          {
+            "name": "pedido_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "situacao"
+                ],
+                "properties": {
+                  "situacao": {
+                    "type": "string",
+                    "example": "/api/v1/situacao/4"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Status do pedido alterado"
+          }
+        }
+      }
+    },
+    "/pedido/envios/": {
+      "post": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Cadastrar Envio e Rastreamento",
+        "description": "Cadastra o código de rastreamento e dados da remessa de envio do pedido.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "pedido",
+                  "objeto"
+                ],
+                "properties": {
+                  "pedido": {
+                    "type": "string",
+                    "example": "/api/v1/pedido/12345"
+                  },
+                  "objeto": {
+                    "type": "string",
+                    "example": "BR123456789BR"
+                  },
+                  "data_envio": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Envio registrado"
+          }
+        }
+      }
+    },
+    "/cliente/": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Listar Clientes",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/MetaPaginacao"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Cliente"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cliente/{cliente_id}/": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Obter Detalhes do Cliente",
+        "parameters": [
+          {
+            "name": "cliente_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cliente"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marca/": {
+      "get": {
+        "tags": [
+          "Marcas"
+        ],
+        "summary": "Listar Marcas",
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Marcas"
+        ],
+        "summary": "Cadastrar Marca",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "nome"
+                ],
+                "properties": {
+                  "nome": {
+                    "type": "string",
+                    "example": "Marca Exemplo"
+                  },
+                  "descricao": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Marca criada"
+          }
+        }
+      }
+    },
+    "/cupom/": {
+      "get": {
+        "tags": [
+          "Cupons"
+        ],
+        "summary": "Listar Cupons de Desconto",
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cupons"
+        ],
+        "summary": "Cadastrar Cupom",
+        "responses": {
+          "201": {
+            "description": "Cupom criado"
+          }
+        }
+      }
+    },
+    "/webhook/": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Listar Webhooks Ativos",
+        "description": "Retorna a lista de assinaturas de webhooks configuradas na loja.",
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Webhook"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Assinar Webhook de Eventos",
+        "description": "Cadastra uma nova URL de destino para escutar webhooks em tempo real (ex: pedido.criado, pedido.editado, produto.editado).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook cadastrado com sucesso"
+          },
+          "400": {
+            "$ref": "#/components/responses/400BadRequest"
+          }
+        }
+      }
+    },
+    "/webhook/{webhook_id}/": {
+      "delete": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Remover Webhook",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Webhook removido"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "HeaderAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Sintaxe: chave_api {SUA_CHAVE_API} aplicacao {SUA_CHAVE_APLICACAO}"
+      },
+      "QueryChaveApi": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "chave_api",
+        "description": "Chave alfanumérica de 20 caracteres da loja"
+      },
+      "QueryChaveAplicacao": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "chave_aplicacao",
+        "description": "Chave UUID da aplicação integradora"
+      }
+    },
+    "responses": {
+      "400BadRequest": {
+        "description": "Requisição inválida ou parâmetros ausentes",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "401Unauthorized": {
+        "description": "Chaves de autorização inválidas ou ausentes",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "404NotFound": {
+        "description": "Recurso não encontrado"
+      },
+      "429RateLimit": {
+        "description": "Limite de requisições por minuto excedido (Err 633, Err 533 ou Err 133)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Err 633 - Limite de requisições por loja excedido"
+                },
+                "code": {
+                  "type": "integer",
+                  "example": 429
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "MetaPaginacao": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "example": 20
+          },
+          "next": {
+            "type": "string",
+            "nullable": true
+          },
+          "offset": {
+            "type": "integer",
+            "example": 0
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true
+          },
+          "total_count": {
+            "type": "integer",
+            "example": 150
+          }
+        }
+      },
+      "Categoria": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 15246059
+          },
+          "nome": {
+            "type": "string",
+            "example": "Moda Feminina"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Categoria de vestuário feminino"
+          },
+          "categoria_pai": {
+            "type": "string",
+            "nullable": true,
+            "example": "/api/v1/categoria/1334"
+          },
+          "resource_uri": {
+            "type": "string",
+            "example": "/api/v1/categoria/15246059"
+          }
+        }
+      },
+      "CategoriaCreate": {
+        "type": "object",
+        "required": [
+          "nome"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Moda Feminina"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Vestuário e acessórios"
+          },
+          "categoria_pai": {
+            "type": "string",
+            "example": "/api/v1/categoria/1334"
+          }
+        }
+      },
+      "Produto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 182904918
+          },
+          "nome": {
+            "type": "string",
+            "example": "Camiseta Algodão Premium"
+          },
+          "sku": {
+            "type": "string",
+            "example": "TSHIRT-BLK-M"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "pai",
+              "filho"
+            ],
+            "example": "normal"
+          },
+          "ativo": {
+            "type": "boolean",
+            "example": true
+          },
+          "peso": {
+            "type": "number",
+            "example": 0.25
+          },
+          "altura": {
+            "type": "number",
+            "example": 10
+          },
+          "largura": {
+            "type": "number",
+            "example": 20
+          },
+          "comprimento": {
+            "type": "number",
+            "example": 30
+          },
+          "resource_uri": {
+            "type": "string",
+            "example": "/api/v1/produto/182904918"
+          }
+        }
+      },
+      "ProdutoCreate": {
+        "type": "object",
+        "required": [
+          "nome",
+          "sku"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Camiseta Algodão Premium"
+          },
+          "sku": {
+            "type": "string",
+            "example": "TSHIRT-BLK-M"
+          },
+          "tipo": {
+            "type": "string",
+            "example": "normal"
+          },
+          "ativo": {
+            "type": "boolean",
+            "default": true
+          },
+          "pai": {
+            "type": "string",
+            "description": "URI do produto pai caso tipo seja filho",
+            "example": "/api/v1/produto/182904918"
+          },
+          "categorias": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "/api/v1/categoria/15246059"
+            ]
+          }
+        }
+      },
+      "PedidoSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1024
+          },
+          "numero": {
+            "type": "integer",
+            "example": 1024
+          },
+          "valor_total": {
+            "type": "number",
+            "example": 299.9
+          },
+          "situacao": {
+            "type": "string",
+            "example": "/api/v1/situacao/4"
+          },
+          "resource_uri": {
+            "type": "string",
+            "example": "/api/v1/pedido/1024"
+          }
+        }
+      },
+      "PedidoDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1024
+          },
+          "numero": {
+            "type": "integer",
+            "example": 1024
+          },
+          "valor_subtotal": {
+            "type": "number",
+            "example": 280.0
+          },
+          "valor_envio": {
+            "type": "number",
+            "example": 19.9
+          },
+          "valor_total": {
+            "type": "number",
+            "example": 299.9
+          },
+          "cliente": {
+            "type": "string",
+            "example": "/api/v1/cliente/14"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "envios": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "Cliente": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 14
+          },
+          "nome": {
+            "type": "string",
+            "example": "João da Silva"
+          },
+          "email": {
+            "type": "string",
+            "example": "joao@email.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "12345678901"
+          },
+          "telefone_celular": {
+            "type": "string",
+            "example": "11999998888"
+          }
+        }
+      },
+      "Webhook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 55
+          },
+          "url": {
+            "type": "string",
+            "example": "https://sua-tailnet.ts.net/webhook/loja"
+          },
+          "acao": {
+            "type": "string",
+            "example": "pedido.criado"
+          }
+        }
+      },
+      "WebhookCreate": {
+        "type": "object",
+        "required": [
+          "url",
+          "acao"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "https://sua-tailnet.ts.net/webhook/loja"
+          },
+          "acao": {
+            "type": "string",
+            "description": "Gatilho do evento: pedido.criado, pedido.editado, produto.editado, etc.",
+            "example": "pedido.criado"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Parâmetros inválidos na requisição"
+          },
+          "code": {
+            "type": "integer",
+            "example": 400
+          }
+        }
+      }
+    }
+  }
+}

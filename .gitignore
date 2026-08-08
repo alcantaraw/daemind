@@ -1,0 +1,103 @@
+# =========================================================================
+# SRE EFÊMEROS (LOGS, CACHES, VOLUMES LOCAIS E RASCUNHOS)
+# =========================================================================
+# Ignora pasta de rascunhos, checkpoints e scripts temporários de desenvolvimento
+scratch/
+LAST/
+*.scratch
+.gitattributes
+core/docs/OpenAPI/
+
+# Ignora rascunhos de fluxo local e Caddyfile dinâmico
+Cria
+Valida
+mergeia
+Caddyfile
+core/config/Caddyfile
+
+# Ignora arquivos de log e temporários gerados em runtime
+*.log
+*tmp*
+*TMP*
+*Tmp*
+
+# Ignora cópias de segurança e backups (BKP, bkp, backup, BACKUP)
+*bkp*
+*BKP*
+*Bkp*
+*backup*
+*BACKUP*
+*Backup*
+
+# Ignora os arquivos de estado criptográfico que serão restaurados/gerados no host
+*tailscale_state_backup.tar.gz
+*tailscale_state.tar.gz
+
+# Ignora pastas de volumes e caches gerados localmente se você rodar a stack na máquina de teste
+volumes/
+pgbouncer_conf/
+*Copia*
+
+# =========================================================================
+# SEGREDOS, SEGUROS E VARIÁVEIS DE AMBIENTE (SECRETS & CREDENTIALS)
+# =========================================================================
+*.env
+.env
+.env.*
+!Template.env
+!**/Template.env
+!.env.example
+
+# Chaves privadas, certificados X.509, chaves SSH e arquivos GPG
+*.key
+*.pem
+*.crt
+*.csr
+*.cer
+*.pfx
+*.p12
+*.gpg
+*.asc
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+
+# =========================================================================
+# MICROSOFT OFFICE E ARQUIVOS DE SISTEMA / IDES
+# =========================================================================
+# O Word cria um arquivo fantasma oculto que começa com "~$" no mesmo diretório
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Ignora arquivos temporários gerais salvos pelo Office, IDEs ou SO
+*~
+.~lock.*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.gemini/
+
+# =========================================================================
+# PYTHON, NODE.JS E CACHES DE RUNTIME
+# =========================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+node_modules/
+.npm/
+dist/
+build/
+.cache/
+
+# =========================================================================
+# SCRIPTS INTERNOS DE TESTE E UPGRADE (EXCLUSIVO MANTENEDOR/SRE)
+# =========================================================================
+ci_smoke_test.sh
+upgrade_stack.sh
+**/ci_smoke_test.sh
+**/upgrade_stack.sh
