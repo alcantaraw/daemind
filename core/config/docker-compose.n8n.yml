@@ -1,0 +1,80 @@
+services:
+  n8n:
+    # image: 'n8nio/n8n:2.31.6'
+    image: 'n8nio/n8n:2.34.6'
+    container_name: '${PREFIXO_CONTAINER}_n8n'
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_N8N}
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - |
+          node -e "fetch('http://localhost:5678/healthz').then(r => r.ok ? process.exit(0) : process.exit(1))" || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    stop_grace_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_N8N:-1.0}'
+          memory: '${MEM_N8N:-1024M}'
+        reservations:
+          memory: '${RES_N8N:-256M}'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-768} --no-deprecation
+      - N8N_PERSONALIZATION_ENABLED=false
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_METRICS_ENABLED=false
+      - N8N_HIDE_USAGE_PAGE=true
+      - N8N_SECURE_COOKIE=false
+      - N8N_UNVERIFIED_PACKAGES_ENABLED=true
+      - N8N_RUNNERS_TASK_TIMEOUT=60
+      - N8N_COMPRESSION_NODE_MAX_DECOMPRESSED_SIZE_BYTES=268435456
+      - N8N_COMPRESSION_NODE_MAX_ZIP_ENTRIES=1000
+      - N8N_LOG_LEVEL=error
+      - DB_POSTGRESDB_SCHEMA=n8n_schema
+      - DB_POSTGRESDB_POOL_MAX=50
+      # [SRE DOC] Ativação obrigatória do servidor MCP nativo do n8n
+      - N8N_MCP_ACCESS_ENABLED=true
+      - TZ=America/Sao_Paulo
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
+      - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
+      - OPENAI_API_BASE=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      - OPENAI_API_BASE_URLS=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      # --- INTEGRAÇÃO BANCO DE DADOS PARA ARMAZENAMENTO DINÂMICO ---
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - X_LOJISTA_ID=${PREFIXO_CONTAINER}
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=pgbouncer
+      - DB_POSTGRESDB_PORT=6432
+      - DB_POSTGRESDB_DATABASE=${DB_NAME}
+      - DB_POSTGRESDB_USER=${DB_USER}
+      - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
+      - DB_POSTGRESDB_RETRY_ATTEMPTS=10
+      - DB_POSTGRESDB_RETRY_TIMEOUT=3000
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=14
+      - EXECUTIONS_DATA_PRUNE_MAX_COUNT=50000
+      - LOJA_API_KEY=${LOJA_API_KEY}
+      - LOJA_APP_KEY=${LOJA_APP_KEY}
+      - EVOLUTION_API_KEY=${EVOLUTION_API_KEY}
+    volumes:
+      - './volumes/n8n_data:/home/node/.n8n'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  caddy:
+    ports:
+      - "5678:5678/tcp"

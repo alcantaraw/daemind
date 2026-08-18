@@ -1,0 +1,46 @@
+services:
+  metabase:
+    image: 'metabase/metabase:latest'
+    container_name: '${PREFIXO_CONTAINER}_metabase'
+    restart: unless-stopped
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_METABASE}
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_METABASE:-1.0}'
+          memory: '${MEM_METABASE:-1024M}'
+        reservations:
+          memory: '${RES_METABASE:-256M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - MB_DB_TYPE=postgres
+      - MB_DB_DBNAME=metabase_db
+      - MB_DB_PORT=5432
+      - MB_DB_USER=${DB_USER:-admin_db}
+      - MB_DB_PASS=${DB_PASSWORD}
+      - MB_DB_HOST=postgres
+      - MB_JETTY_PORT=3000
+      - MB_ANON_TRACKING_ENABLED=false
+      - MB_CHECK_FOR_UPDATES=false
+      - MB_EMOJI_IN_LOGS=false
+      - MB_LOG_LEVEL=ERROR
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -XX:+ExitOnOutOfMemoryError -Duser.timezone=America/Sao_Paulo -Dlog4j2.level=ERROR -Dorg.slf4j.simpleLogger.defaultLogLevel=error -Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory
+    volumes:
+      - './volumes/metabase_data:/metabase-data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://127.0.0.1:3000/api/health | grep -q 'ok' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
+
+  caddy:
+    ports:
+      - "${HOST_METABASE_PORT:-3030}:3030/tcp" # Metabase BI Console

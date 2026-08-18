@@ -1,0 +1,114 @@
+services:
+  temporal:
+    image: 'temporalio/auto-setup:1.29.7'
+    container_name: '${PREFIXO_CONTAINER}_temporal'
+    restart: unless-stopped
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_TEMPORAL}
+    ports:
+      - "7233:7233"
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_TEMPORAL:-0.5}'
+          memory: '${MEM_TEMPORAL:-768M}'
+        reservations:
+          memory: '${RES_TEMPORAL:-128M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - LOG_LEVEL=error
+      - TEMPORAL_CLI_LOG_LEVEL=error
+      - SQL_LOG_LEVEL=error
+      - SERVICES=history,matching,frontend,worker
+      - TEMPORAL_ADDRESS=0.0.0.0:7233
+      - TEMPORAL_CLI_ADDRESS=127.0.0.1:7233
+      - TEMPORAL_CLI_SHOW_STACKS=false
+      - SKIP_SCHEMA_SETUP=true
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PWD=${DB_PASSWORD}
+      - DB_PORT_5432_TCP_ADDR=${IP_POSTGRES}
+      - POSTGRES_SEEDS=${IP_POSTGRES}
+      - POSTGRES_VISIBILITY_SEEDS=${IP_POSTGRES}
+      - SKIP_SCHEMA_SETUP=false
+      - SQL_MAX_CONNS=12
+      - SQL_MAX_IDLE_CONNS=2
+      - BIND_ON_IP=0.0.0.0
+    volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "temporal operator cluster health --address $$(hostname -i | awk '{print $$1}'):7233"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 25s
+
+  postiz:
+    # image: 'ghcr.io/gitroomhq/postiz-app:v2.21.10'
+    image: 'ghcr.io/gitroomhq/postiz-app:v2.23.0'
+    container_name: '${PREFIXO_CONTAINER}_postiz'
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_POSTIZ}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_POSTIZ:-2.0}'
+          memory: '${MEM_POSTIZ:-4096M}'
+        reservations:
+          memory: '${RES_POSTIZ:-1024M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_POSTIZ:-2048}
+      - POSTIZ_FRONTEND_URL=${POSTIZ_FRONTEND_URL}
+      - MAIN_URL=${MAIN_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}/api
+      - BACKEND_INTERNAL_URL=http://localhost:3000
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/postiz_db?connection_limit=30
+      - REDIS_URL=redis://${IP_REDIS}:6379
+      - REDIS_HOST=${PREFIXO_CONTAINER}_redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${POSTIZ_JWT_SECRET}
+      - TEMPORAL_ADDRESS=${PREFIXO_CONTAINER}_temporal:7233
+      - TEMPORAL_TLS=false
+      - TEMPORAL_INSECURE=true
+      - DISABLE_SEARCH_ATTRIBUTES=true
+      - DISABLE_TEMPORAL_SEARCH_ATTRIBUTES=true
+      - NODE_ENV=production
+      - LOG_LEVEL=error
+      - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
+      - OPENAI_API_BASE=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      - OPENAI_API_BASE_URLS=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      - STORAGE_PROVIDER=${POSTIZ_STORAGE_PROVIDER:-local}
+      - STORAGE_TYPE=${POSTIZ_STORAGE_PROVIDER:-local}
+      - UPLOAD_DIRECTORY=/app/uploads
+      - NEXT_PUBLIC_UPLOAD_DIRECTORY=/uploads
+    volumes:
+      - './volumes/storage_data/postiz:/app/uploads'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    depends_on:
+      temporal:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:5000/auth', (r) => process.exit(r.statusCode === 200 || r.statusCode === 307 ? 0 : 1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
+
+  caddy:
+    ports:
+      - "5000:5000/tcp" # Postiz

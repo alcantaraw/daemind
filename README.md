@@ -36,12 +36,13 @@ O **daemind.** é uma infraestrutura empresarial pronta para uso que centraliza 
   - [🧠 4. Inteligência Artificial Corporativa \& RAG Soberano](#-4-inteligência-artificial-corporativa--rag-soberano)
   - [🔒 5. Blindagem de Dados, Segurança Bancária e Autocura](#-5-blindagem-de-dados-segurança-bancária-e-autocura)
 - [🛠️ Como funciona a implementação?](#️-como-funciona-a-implementação)
-- [📦 Matriz de Versões da Stack & Imagens Docker (SRE BOM)](#-matriz-de-versões-da-stack--imagens-docker-sre-bom)
-- [🛡️ Engenharia de Resiliência & SRE (Destaques da Arquitetura)](#️-engenharia-de-resiliência--sre-destaques-da-arquitetura)
-- [📌 Roadmap de Engenharia & Futuras Evoluções (TODO)](#-roadmap-de-engenharia--futuras-evoluções-todo)
-- [⚖️ Aviso Legal & Isenção de Responsabilidade](#️-aviso-legal--isenção-de-responsabilidade-third-party-disclaimer)
-- [📜 Conformidade Jurídica & Matriz de Licenciamento](#-conformidade-jurídica--matriz-de-licenciamento)
-- [👨‍💻 Autor & Engenharia de Arquitetura](#-autor--engenharia-de-arquitetura)
+- [📦 Matriz de Versões da Stack \& Imagens Docker (SRE BOM)](#-matriz-de-versões-da-stack--imagens-docker-sre-bom)
+- [🛡️ Engenharia de Resiliência \& SRE (Destaques da Arquitetura)](#️-engenharia-de-resiliência--sre-destaques-da-arquitetura)
+- [📌 Roadmap de Engenharia \& Futuras Evoluções (TODO)](#-roadmap-de-engenharia--futuras-evoluções-todo)
+- [⚖️ Aviso Legal \& Isenção de Responsabilidade](#️-aviso-legal--isenção-de-responsabilidade-third-party-disclaimer)
+- [📜 Conformidade Jurídica \& Matriz de Licenciamento](#-conformidade-jurídica--matriz-de-licenciamento)
+- [📋 Changelog](#-changelog)
+- [👨‍💻 Autor \& Engenharia de Arquitetura](#-autor--engenharia-de-arquitetura)
 - [📄 Licença](#-licença)
 
 ---
@@ -112,7 +113,7 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 > - Para o passo a passo completo da coleta de variáveis no Wizard, rede e credenciais, consulte o [Manual de Implantação (docs/MANUAL_DE_IMPLANTACAO.md)](docs/MANUAL_DE_IMPLANTACAO.md).
 > - Para as especificações técnicas de integração de e-commerce, consulte o [Manual Técnico da Loja Integrada (docs/MANUAL_TECNICO_INTEGRACAO_LOJA_INTEGRADA.md)](docs/MANUAL_TECNICO_INTEGRACAO_LOJA_INTEGRADA.md).
 
-A infraestrutura é provisionada de forma **Low-Touch (Assistida)**. O script de preparação instala os pacotes básicos, ajusta o kernel, clona o repositório em `/opt/daemind` e guia o operador por um **Wizard CLI de 2 minutos no terminal** para coletar a identidade da empresa, senha mestra segura e chaves de IA.
+A infraestrutura é provisionada de forma **Low-Touch (Assistida)**. O script de preparação instala os pacotes básicos, ajusta o kernel, clona o repositório em `/opt/daemind` e guia o operador por um **Wizard CLI de 2 minutos no terminal** para coletar a identidade da empresa, seleção de módulos opcionais (Evolution API, Postiz, Chatwoot, NocoDB), senha mestra segura e chaves de IA.
 
 Com o ambiente pronto e o código clonado, o sistema gera os pares de chaves criptográficas e executa a instalação autônoma em segundo plano.
 
@@ -140,18 +141,28 @@ sudo ./core/scripts/install.sh
 
 ## 📦 Componentes & Arquitetura da Stack
 
-O **daemind.** integra os melhores microsserviços de código aberto em uma única malha de alta performance:
+O **daemind.** opera sob uma arquitetura de **Núcleo Core Único & Imutável** complementado por **Módulos Opcionais Desacoplados e Plugáveis**:
 
-- 🗣️ **Chatwoot & Evolution API**: Inbox Omnichannel de atendimento e API de conexão direta com WhatsApp.
-- ⚡ **n8n & Temporal Engine**: Motor ilimitado de automações de vendas, webhooks e orquestração de rotinas.
-- 📊 **NocoDB**: CRM e banco de dados relacional visual estilo planilha.
-- 🚀 **Postiz Planner**: Agendamento automatizado de postagens para redes sociais.
-- 🤖 **LiteLLM & Open WebUI**: Gateway soberano de Inteligência Artificial e interface gráfica para chatbots RAG.
+### 🏛️ Núcleo Core Único & Imutável (Fundação Obrigatória)
+Consolidado em um manifesto de alta coesão e performance, o Core garante a base relacional, cache, segurança e inteligência do sistema:
+- 🐘 **PostgreSQL 17 + PGVector**: Banco de dados relacional e vetorial de alta performance com multiplexação via **PgBouncer**.
+- ⚡ **Redis 8**: Cache em memória ultra-rápido e fila assíncrona de baixa latência.
+- 🛡️ **Caddy WAF**: Firewall de borda, proxy reverso e emissor automatizado de certificados SSL/TLS.
+- 🤖 **LiteLLM Gateway**: Gateway soberano e roteador multi-LLM (OpenRouter, Gemini, OpenAI, Claude, DeepSeek).
+
+### 🧩 Módulos Plugáveis & Opcionais (Seleção Dinâmica via Wizard)
+Cada aplicação opera como um módulo 100% desacoplado (`docker-compose.<modulo>.yml` + `install_<modulo>.sh`), permitindo ativação sob demanda para economia extrema de memória:
+- ⚡ **n8n (Automation)**: Motor de automações ilimitadas de vendas, webhooks e workflows.
+- 🧠 **Open WebUI (Chat & RAG)**: Interface gráfica corporativa de Inteligência Artificial e MCP.
+- 🗣️ **Chatwoot & Evolution API**: Inbox Omnichannel de atendimento multiatendente e API de WhatsApp.
+- 📊 **NocoDB**: CRM e banco de dados relacional estilo planilha inteligente.
+- 🚀 **Postiz Planner & Temporal Engine**: Agendador e publicador de mídias sociais.
 - 🗄️ **MinIO S3 / Storage Flexível**: Gestão de mídias e arquivos (Soberano, Disco Local ou Cloud S3).
-- 🛡️ **Caddy WAF, Postgres & Redis**: Firewall de borda, banco vetorial/relacional e cache em memória.
+- 📈 **Metabase BI**: Painéis analíticos, dashboards e relatórios executivos em tempo real.
+- 🦙 **Ollama & Docling**: Motor local de modelos de linguagem soberanos e OCR/parsing avançado de documentos.
 
 > [!NOTE]
-> 📊 **Matriz de Versões Auditadas (SRE BOM):** Para a lista exaustiva de contêineres, tags e versões internas auditadas em tempo de execução, consulte o [Manual de Arquitetura & Engenharia SRE (docs/ARQUITETURA_E_ENGENHARIA_SRE.md)](docs/ARQUITETURA_E_ENGENHARIA_SRE.md#49-matriz-dinâmica-de-versões-e-imagens-docker-sre-bom).
+> 📊 **Matriz de Versões Auditadas (SRE BOM):** Para a lista exaustiva de contêineres, tags e versões internas auditadas em tempo de execução, consulte o [Manual de Arquitetura & Engenharia SRE (docs/ARQUITETURA_E_ENGENHARIA_SRE.md)](docs/ARQUITETURA_E_ENGENHARIA_SRE.md#410-matriz-dinâmica-de-versões-e-imagens-docker-sre-bom).
 
 ---
 
@@ -164,47 +175,51 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 - 🔒 **Hardening Perimetral & Segurança Zero-Trust:** Regras estritas no Firewall IPTables, isolamento de rede privada e proteção contra acessos externos não autorizados.
 - ⚡ **Auto-Tuning Dinâmico de Hardware:** Inspeção autônoma do servidor (CPU, RAM e Disco) com otimização profunda de memória, CPU e I/O de disco aplicada individualmente a cada microsserviço para garantir máxima performance sem estouros.
-- 🐘 **Banco de Dados Escalável:** PostgreSQL 16 com extensão `pgvector` multiplexado via PgBouncer para buscas por IA e webhooks ilimitados.
+- 🐘 **Banco de Dados Escalável:** PostgreSQL 17 com extensão `pgvector` multiplexado via PgBouncer para buscas por IA e webhooks ilimitados.
 - 🧼 **Sanitização de Segredos:** Expurgo automático de chaves e credenciais da memória após o boot para zero vazamento.
 
 ---
 
-## 📌 Roadmap de Engenharia & Futuras Evoluções (TODO)
+## 📌 Roadmap de Negócios & Futuras Evoluções (TODO)
 
-Visando a expansão contínua da capacidade computacional, governança de dados e soberania da infraestrutura, os seguintes módulos estão mapeados para integração nas próximas releases:
+Visando a expansão da esteira de vendas, automações corporativas e aplicação prática de IA no dia a dia dos negócios, os seguintes módulos estão mapeados para as próximas releases:
 
-- 🧠 **IA Local Soberana & Parsing Avançado de Documentos (Open WebUI + Ollama + Docling)**
-  - Implementação de detecção dinâmica de capacidade de hardware no `preinstall.sh` (inspeção de RAM, CPU Cores, VRAM e presença do *NVIDIA Container Toolkit*).
-  - Alocação inteligente e automatizada dos serviços de inferência local (Ollama) e extração de documentos (Docling) em CPU ou GPU, garantindo alta performance em servidores com placas dedicadas e estabilidade sem travamentos em VPSs modestas.
+- 🛍️ **1. Conectores Nativos de E-commerce & Marketplaces (Workflows n8n)**
+  - Criação de templates de automação prontos para uso no **n8n** integrando lojas virtuais (**Shopify, WooCommerce, Nuvemshop, Loja Integrada**) e marketplaces (**Mercado Livre, Amazon, Shopee**).
+  - Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX pendentes** e **Notificações de Rastreamento de Envio** diretamente via WhatsApp (*Evolution API*).
+  - Algoritmos de **Throttling e Rate Limiting** nas esteiras para proteger as contas e chaves de API contra bloqueios nas plataformas parceiras.
 
-- 📊 **Business Intelligence, Protocolo MCP & Ingestão Dinâmica OpenAPI (Metabase + Servidores MCP + n8n)**
-  - Conexão nativa das bases de dados relacionais ao **Metabase** para visualização e dashboards analíticos.
-  - Estabelecimento de servidores do protocolo **MCP (Model Context Protocol)** para que os agentes de IA operem de forma estruturada sobre a infraestrutura.
-  - Implementação do pipeline de conversão **OpenAPI ➔ MCP**, com captura e ingestão automática de especificações técnicas de ferramentas e serviços diretamente nos workflows do **n8n**.
+- 🤖 **2. Agentes de IA Especialistas & Protocolo MCP para Negócios**
+  - Configuração de **Servidores MCP (Model Context Protocol)** para que os agentes de IA consultem produtos, estoques, status de pedidos e tabelas de frete em tempo real no PostgreSQL e NocoDB.
+  - Criação de **Agentes SDR (Pré-vendas) e Suporte N1** treinados com RAG na base de dados da empresa para atender clientes no Chatwoot de forma autônoma e humanizada.
 
-- 🔐 **Gestão Profissional de Credenciais (Cofre Infisical)**
-  - Transição do modelo de variáveis de ambiente baseadas em arquivo de disco (`.env`) para a custódia centralizada e criptografada no cofre do **Infisical**.
-  - Reestruturação do mecanismo de inicialização do Docker Compose com tratamento rigoroso do *"Secret Zero"* (`INFISICAL_TOKEN`), garantindo rotação segura de credenciais e injeção em tempo de execução.
+- 📊 **3. Painéis Executivos de BI & Gestão de Lucro Real (Metabase)**
+  - Dashboards pré-configurados no **Metabase** cruzando vendas, custos de produtos (CMV), despesas de anúncios/marketing e taxas de gateways de pagamento.
+  - Relatórios automatizados diários e semanais enviados direto no WhatsApp ou e-mail dos gestores com métricas-chave de faturamento e estoque crítico.
 
-- 🔌 **Framework Universal de Conectores & Resiliência de APIs (E-commerce Integrations)**
-  - Expansão da malha de conectores nativos no **n8n** para e-commerces (Shopify, WooCommerce, Mercado Livre, Bling, Tiny) utilizando especificações OpenAPI padronizadas.
-  - Implementação de algoritmo de **Rate Limit Throttling (Token Bucket / Circuit Breaker)** nas esteiras de automação para evitar estouros de cotas (HTTP 429) e bloqueios de IP/chaves nas plataformas parceiras.
-  - Padrão unificado de **Deduplicação de Webhooks por Hash SHA-256** no Redis/Postgres com TTL configurável, prevenindo duplo processamento em retentativas assíncronas.
-
-- 📑 **Mapeamento & Padronização de Especificações OpenAPI (Stack Interna & E-commerces)**
-  - Varredura e extração sistemática do padrão **OpenAPI 3.0/3.1** para todos os microsserviços da pilha interna (Chatwoot, Evolution API, Postiz, MinIO, LiteLLM, NocoDB) e plataformas de e-commerce parceiras (Shopify, WooCommerce, Mercado Livre, Bling, Tiny, Nuvemshop).
-  - Ingestão contínua dos schemas OpenAPI no **n8n** e no roteador **LiteLLM / MCP**, permitindo a geração autônoma de nós de automação e capacitando os agentes de IA a realizarem chamadas REST dinâmicas de forma padronizada.
-
-- 🧩 **Arquitetura de Núcleo Único & Módulos Desacoplados (Core vs Plugins Selecionáveis)**
-  - Reestruturação da esteira de deploy em uma arquitetura de **Core Único Minimalista e Agnosticista** (banco de dados, rede privada, orquestrador e proxy).
-  - Todas as ferramentas superiores (CRM, Chatbot/WhatsApp, Mídias Sociais, RAG/IA, BI) se tornam **módulos plugáveis e 100% desacoplados**, permitindo que o usuário escolha dinamicamente no Wizard CLI quais serviços deseja provisionar, economizando recursos de hardware e ajustando a stack à necessidade exata de cada negócio.
-
-- 🎯 **Foco Primário de Mercado & Versatilidade Multi-Setorial**
-  - **Foco Atual:** O **daemind.** nasce com foco especialista em **Vendedores de Marketplaces, Lojas Virtual/E-commerce e Profissionais de Vendas & Marketing Digital**, resolvendo a dor de conversão de carrinhos abandonados, recuperação de Boletos/PIX, atendimento multi-canal e inteligência de catálogo.
-  - **Expansão Futura (Versatilidade Vertical):** Graças à arquitetura desacoplada e agnosticista, o **daemind.** será facilmente expansível para novos nichos profissionais através de *módulos de domínio*, tais como:
-    - 🩺 **Saúde & Clínicas (Médicos e Dentistas):** Agendamentos inteligentes via WhatsApp, confirmação de consultas, prontuário seguro e retenção de pacientes.
-    - 👥 **Recursos Humanos & Departamento Pessoal:** Triagem automática de currículos por IA, onboarding de colaboradores e gestão de chamados internos.
+- 🎯 **4. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
+  - O **daemind.** nasce especialista em **Vendas Online & Marketing Digital**, mas sua esteira modular permite rápida expansão para outros setores:
+    - 🩺 **Saúde & Clínicas:** Agendamentos inteligentes via WhatsApp, confirmação de consultas, triagem pré-atendimento e retenção de pacientes.
+    - 👥 **Recursos Humanos & Departamento Pessoal:** Triagem automática de currículos por IA, onboarding de novos colaboradores e gestão de solicitações internas.
     - ⚖️ **Jurídico & Consultorias:** Acompanhamento de prazos, triagem de casos, RAG para consulta de contratos e atendimento automatizado a clientes.
+
+- ~~❌ **[DESCONTINUADO / ABANDONADO] 🔐 Gestão de Credenciais via Cofre Externo (Infisical)**~~
+  - ~~Substituição do `.env` por cofre Infisical descartada em favor do modelo **SSOT com Permissões Estritas (chmod 600)**, âncora `SRE HOME ANCHOR` e sanitização atômica de memória no boot, mantendo a arquitetura simples, independente de terceiros e com zero overhead computacional.~~
+
+- ~~✅ **[CONCLUÍDO] 🧠 IA Local Soberana & Parsing Avançado de Documentos (Open WebUI + Ollama + Docling)**~~
+  - ~~(Módulo Opcional de Alto Desempenho - Host com > 4 Cores e > 16GB RAM)~~
+  - ~~Implementação de detecção dinâmica de capacidade de hardware desacoplada via `autotune.sh` no `preinstall.sh` (inspeção de RAM e CPU Cores).~~
+  - ~~Alocação inteligente e automatizada de sizing pesado dos serviços de inferência local (Ollama) e extração de documentos (Docling), garantindo alta performance em servidores dedicados e estabilidade sem travamentos em VPSs modestas.~~
+
+- ~~✅ **[CONCLUÍDO] 🔌 Desacoplamento da Rede Tailscale (`core/scripts/install_0ts.sh`) e Catálogo de IA (`core/scripts/install_1ia.sh`)**~~
+  - ~~Isolamento da lógica de provisionamento, autenticação OAuth, criação de nós satélites, auto-cura/recovery e expurgo da rede VPN perimetral **Tailscale** no módulo padronizado `core/scripts/install_0ts.sh`.~~
+  - ~~Desacoplamento do motor de sincronização inteligente de IA (matchmaking dinâmico multiprovedor Big 5) no módulo padronizado `core/scripts/install_1ia.sh`.~~
+
+- ~~✅ **[CONCLUÍDO] 🧩 Arquitetura de Núcleo Core Único Imutável, Auto-Descoberta Total & Inversão de Controle (IoC)**~~
+  - ~~Consolidação do **Núcleo Core Imutável** (PostgreSQL 17, PgBouncer, Redis, Caddy WAF e LiteLLM Gateway) em manifesto monolítico de alta coesão e performance.~~
+  - ~~Desacoplamento integral de **todos os serviços superiores** (**n8n**, **Open WebUI**, **Chatwoot**, **Evolution API**, **Postiz**, **NocoDB**, **S3MinIO**, **Metabase**, **Ollama** e **Docling**) em manifestos `docker-compose.<modulo>.yml` e scripts de ciclo de vida com contrato universal de 15 funções (`install_<modulo>.sh`).~~
+  - ~~Implementação do padrão **Inversion of Control (IoC)** no `preinstall.sh`: auto-descoberta total e dinâmica de perguntas (`collect_wizard_inputs`) e variáveis de ambiente (`build_envs`) com preservação estrita do **Wizard Cache** (`.daemind_wizard_cache.env`), eliminando para sempre edições manuais no `preinstall.sh` ao criar novos módulos.~~
+  - ~~Consolidação do guia oficial de desenvolvimento de novas extensões em **[Manual de Engenharia SRE: Desacoplamento Modular & Integração de Novos Módulos (docs/MANUAL_DE_DESACOPLAMENTO_E_NOVOS_MODULOS.md)](docs/MANUAL_DE_DESACOPLAMENTO_E_NOVOS_MODULOS.md)**.~~
 
 ---
 
@@ -212,7 +227,7 @@ Visando a expansão contínua da capacidade computacional, governança de dados 
 
 O **daemind.** é uma solução de orquestração de infraestrutura, automação e integração que se conecta a múltiplos softwares de código aberto (*Open Source*) e plataformas/APIs de terceiros, incluindo:
 
-- 📦 **Pilha de Software Interna:** NocoDB, n8n, Evolution API, Chatwoot, Postiz, MinIO, LiteLLM, Open WebUI, PostgreSQL, PgBouncer, Redis, Caddy, Tailscale, Ollama, Docling, Metabase, Infisical, entre outros.
+- 📦 **Pilha de Software Interna:** NocoDB, n8n, Evolution API, Chatwoot, Postiz, S3MinIO, LiteLLM, Open WebUI, PostgreSQL, PgBouncer, Redis, Caddy, Tailscale, Ollama, Docling, Metabase, entre outros.
 - 🛍️ **Plataformas de E-commerce & Marketplaces Integrados ou a Integrar:** Loja Integrada, Mercado Livre, Amazon, Magalu, Shopee, Shopify, WooCommerce, Nuvemshop, Bling, Tiny ERP, etc.
 
 > [!NOTE]
@@ -246,6 +261,17 @@ Com mais de **25 anos de carreira na TI** (com forte atuação em ecossistemas c
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alcantaraw/)
 [![E-mail](https://img.shields.io/badge/E--mail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:alcantaraw@gmail.com)
+
+---
+
+## 📋 Changelog
+
+Todas as mudanças relevantes entre versões estão documentadas em **[CHANGELOG.md](CHANGELOG.md)**.
+
+| Versão | Data | Descrição |
+|--------|------|-----------|
+| [`v1.0.0`](CHANGELOG.md#v100--2026-08-18--desacoplamento-completo) | 2026-08-18 | Desacoplamento completo — wizard TUI/CLI, módulos independentes, guardrails SRE |
+| [`v0.5.0`](CHANGELOG.md#v050--2026-08--main-prova-de-conceito) | 2026-08 | Prova de conceito — stack monolítica funcional, instalador CLI simples |
 
 ---
 
