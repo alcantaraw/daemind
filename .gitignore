@@ -94,3 +94,9 @@ ci_smoke_test.sh
 upgrade_stack.sh
 **/ci_smoke_test.sh
 **/upgrade_stack.sh
+.clineignore
+.clinerules
+.geminiignore
+.gignore
+*.zip
+*.jpg

@@ -18,21 +18,21 @@ Para garantir **boa-fé, transparência e segurança jurídica (compliance)** pa
 
 A tabela abaixo lista os softwares de terceiros orquestrados pelo **daemind.**, a versão de referência utilizada no deploy, sua respectiva licença e o nível de atenção requerido:
 
-| Software / Componente | Licença Oficial | Versão / Tag Ref. | Permite Uso Comercial em Serviços? | Nível de Atenção / Risco Jurídico |
-| :--- | :--- | :--- | :--- | :--- |
-| **Caddy** | Apache 2.0 | `2.11.4` | ✅ Sim | 🟢 Nenhum |
-| **Chatwoot CE** | MIT | `v4.16.0` | ✅ Sim | 🟢 Nenhum |
-| **Docker Compose** | Apache 2.0 | Native | ✅ Sim | 🟢 Nenhum |
-| **Evolution API** | Apache 2.0 | `v2.3.7` | ✅ Sim | 🟢 Nenhum |
-| **LiteLLM (Gateway)** | Apache 2.0 (OSS) | `main-latest` | ✅ Sim | 🟢 Low (Recursos Enterprise são à parte) |
-| **Open WebUI** | BSD-3-Clause | `main` | ✅ Sim | 🟢 Nenhum |
-| **PgBouncer** | ISC-like | `v1.25.2-p0` | ✅ Sim | 🟢 Nenhum |
-| **Temporal** | MIT | `1.29.7` | ✅ Sim | 🟢 Nenhum |
-| **MinIO** | AGPLv3 | `latest` | ⚠️ Sim (Sob Regras AGPL) | 🟡 Médio (Reciprocracidade de código de core) |
-| **NocoDB** | AGPLv3 | `2026.07.0` | ⚠️ Sim (Sob Regras AGPL) | 🟡 Médio (Reciprocracidade de código de core) |
-| **Postiz** | AGPLv3 | `v2.21.10` | ⚠️ Sim (Sob Regras AGPL) | 🟡 Médio (Reciprocracidade de código de core) |
-| **Redis** | RSALv2 / SSPLv1 / AGPLv3 | `7.4-alpine` | ⚠️ Sim (Para uso como cache/fila da stack) | 🟡 Médio (Atenção às versões e termos) |
-| **n8n Community Edition** | Sustainable Use License (SUL) | `2.31.6` | ⚠️ Sim (Prestação de Serviços / Auto-hospedagem) | 🔴 Alto (Proibido criar produto SaaS concorrente direto) |
+| Software / Componente | Imagem Docker Oficial | Versão Interna Auditada | Licença Oficial | Permite Uso Comercial em Serviços? | Nível de Atenção / Risco Jurídico |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **PostgreSQL (`pgvector`)** | `pgvector/pgvector:pg17` | `17.11` | PostgreSQL License | ✅ Sim | 🟢 Nenhum |
+| **Temporal Engine** | `temporalio/auto-setup:1.29.7` | `1.29.7` | MIT | ✅ Sim | 🟢 Nenhum |
+| **MinIO S3** | `minio/minio:latest` | `2025-09-07T16-13-09` | AGPLv3 | ⚠️ Sim (Sob Regras AGPL) | 🟡 Médio (Reciprocidade de código de core) |
+| **Redis** | `redis:8.10-alpine` | `8.10.0` | RSALv2 / SSPLv1 / AGPLv3 | ⚠️ Sim (Para uso como cache/fila da stack) | 🟡 Médio (Atenção às versões e termos) |
+| **Postiz Planner** | `ghcr.io/gitroomhq/postiz-app:v2.23.0` | `2.23.0` | AGPLv3 | ⚠️ Sim (Sob Regras AGPL) | 🟡 Médio (Reciprocidade de código de core) |
+| **Caddy WAF** | `caddy:2.11.4-alpine` | `2.11.4` | Apache 2.0 | ✅ Sim | 🟢 Nenhum |
+| **LiteLLM (AI Gateway)** | `ghcr.io/berriai/litellm:main-latest` | `1.98.0` | Apache 2.0 (OSS) | ✅ Sim | 🟢 Low (Recursos Enterprise são à parte) |
+| **PgBouncer** | `edoburu/pgbouncer:v1.25.2-p0` | `1.25.2-p0` | ISC-like | ✅ Sim | 🟢 Nenhum |
+| **NocoDB** | `nocodb/nocodb:2026.08.0` | `2026.08.0` | AGPLv3 | ⚠️ Sim (Sob Regras AGPL) | 🟡 Médio (Reciprocidade de código de core) |
+| **Open WebUI** | `ghcr.io/open-webui/open-webui:main` | `0.11.0` | BSD-3-Clause | ✅ Sim | 🟢 Nenhum |
+| **Chatwoot CE** | `chatwoot/chatwoot:v4.16.2` | `4.16.2` | MIT | ✅ Sim | 🟢 Nenhum |
+| **Evolution API** | `evoapicloud/evolution-api:v2.3.7` | `2.3.7` | Apache 2.0 | ✅ Sim | 🟢 Nenhum |
+| **n8n Community Edition** | `n8nio/n8n:2.34.6` | `2.34.6` | Sustainable Use License (SUL) | ⚠️ Sim (Prestação de Serviços / Auto-hospedagem) | 🔴 Alto (Proibido criar produto SaaS concorrente direto) |
 
 ---
 

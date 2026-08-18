@@ -1,0 +1,63 @@
+services:
+  s3minio:
+    image: 'alpine/minio:latest-release'
+    container_name: '${PREFIXO_CONTAINER}_s3minio'
+    user: '0:0'
+    restart: unless-stopped
+    command: server --quiet /data --console-address ":9001"
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_S3MINIO}
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_S3MINIO:-1.0}'
+          memory: '${MEM_S3MINIO:-1024M}'
+        reservations:
+          memory: '${RES_S3MINIO:-256M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - MINIO_ROOT_USER=${TS_EMAIL}
+      - MINIO_ROOT_PASSWORD=${DB_PASSWORD}
+      - MINIO_SERVER_DEBUG=off
+      - MINIO_NOTIFY_AMQP_ENABLE=off
+      - MINIO_BROWSER_LOGIN_ANIMATION=off
+      - MINIO_API_REQUESTS_MAX=${S3MINIO_API_REQUESTS_MAX:-1500}
+      - MINIO_COMPRESS=on
+      - MINIO_COMPRESS_MIME_TYPES=text/csv,application/json,application/javascript,text/xml
+    volumes:
+      - './volumes/storage_data:/data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -q --spider http://127.0.0.1:9000/minio/health/live || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # --- INJEÇÃO DECLARATIVA NATIVA NO CHATWOOT QUANDO S3MINIO ESTÁ ATIVO ---
+  # chatwoot:
+  #   depends_on:
+  #     s3minio:
+  #       condition: service_healthy
+  # --- INJEÇÃO DECLARATIVA NATIVA NO CHATWOOT QUANDO S3MINIO ESTÁ ATIVO ---
+
+
+  # --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---
+  # evolution:
+  #   depends_on:
+  #     s3minio:
+  #       condition: service_healthy
+  # --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---
+
+  # --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---
+  # nocodb:
+  #   depends_on:
+  #     s3minio:
+  #       condition: service_healthy
+  # --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---
+
+  caddy:
+    ports:
+      - "9000:9000/tcp" # MinIO S3 API
+      - "9001:9001/tcp" # MinIO Console UI

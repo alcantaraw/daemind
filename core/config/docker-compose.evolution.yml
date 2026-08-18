@@ -1,0 +1,60 @@
+services:
+  evolution:
+    image: 'evoapicloud/evolution-api:v2.3.7'
+    container_name: '${PREFIXO_CONTAINER}_evolution'
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_EVOLUTION}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_EVOLUTION:-1.0}'
+          memory: '${MEM_EVOLUTION:-1024M}'
+        reservations:
+          memory: '${RES_EVOLUTION:-256M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-768} --no-deprecation
+      - LOG_LEVEL=error
+      - DEL_INSTANCE_TRACKER=true
+      - SWAGGER_ENABLED=true
+      - DOCS_ENABLED=true
+      - SERVER_URL=${SERVER_URL}
+      - SERVER_TYPE=http
+      - CONFIG_SESSION_PHONE_CLIENT=${PREFIXO_CONTAINER}
+      - CONFIG_SESSION_PHONE_NAME=Chrome
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://${DB_USER}:${DB_PASSWORD}@pgbouncer:6432/evolution_db?schema=public&connection_limit=50
+      - AUTHENTICATION_TYPE=apikey
+      - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY}
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+      - CACHE_PROVIDER=redis
+      - CACHE_LOCAL_ENABLED=false
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://${IP_REDIS}:6379/0
+      - S3_ENABLED=${EVOLUTION_S3_ENABLED:-false}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
+      - S3_BUCKET=${S3_EVOLUTION_BUCKET:-evolution}
+      - S3_PORT=${S3_PORT:-9000}
+      - S3_ENDPOINT=${S3_ENDPOINT_HOST:-${PREFIXO_CONTAINER}_s3minio}
+      - S3_USE_SSL=${S3_USE_SSL:-false}
+    volumes:
+      - './volumes/evolution_instances:/evolution/instances'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    ports:
+      - "${EVO_PORT:-8081}:8081/tcp"

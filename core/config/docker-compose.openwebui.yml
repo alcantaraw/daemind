@@ -1,0 +1,71 @@
+services:
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: '${PREFIXO_CONTAINER}_openwebui'
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_OPENWEBUI}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_OPENWEBUI:-1.0}'
+          memory: '${MEM_OPENWEBUI:-1024M}'
+        reservations:
+          memory: '${RES_OPENWEBUI:-512M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      # --- 1. INTEGRAÇÃO POSTGRESQL + PGVECTOR (Via PgBouncer) ---
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@pgbouncer:6432/openwebui_db
+      
+      - USER_AGENT=open-webui
+      - GLOBAL_LOG_LEVEL=WARNING
+      - CORS_ALLOW_ORIGIN=http://${TS_DOMAIN:-localhost}:3001,https://${TS_DOMAIN:-localhost},http://localhost:3001
+
+      # --- 2. INTEGRAÇÃO REDIS (Sessões e Rate Limit) ---
+      # - ENABLE_WEBSOCKET_SUPPORT=True
+      # - WEBSOCKET_MANAGER=redis
+      # - WEBSOCKET_REDIS_URL=redis://${PREFIXO_CONTAINER}_redis:6379/3
+
+      # --- 3. ROTEAMENTO DE IA (LiteLLM) ---
+      - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
+      - OPENAI_API_BASE=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      - DEFAULT_MODELS=openrouter/free
+
+      # --- 4. DEBLOAT & HARDENING (SRE) ---
+      - ENABLE_IMAGE_GENERATION=False
+      - ENABLE_PLUGINS=True # Mantido true apenas para o Admin usar Pipelines/n8n
+      - ENABLE_COMMUNITY_SHARING=False
+      - ENABLE_MESSAGE_RATING=False
+      - ENABLE_EVALUATION_ARENA_MODELS=False
+      - ENABLE_AUTOCOMPLETE_GENERATION=False
+      - ENABLE_TAGS_GENERATION=False
+      - ENABLE_ADMIN_EXPORT=False
+      - ENABLE_CONTEXT_COMPACTION=True # Comprime histórico para poupar tokens do OpenRouter
+      # Bloqueia a criação de contas soltas (só admin aprova/cria usuários)
+      # - ENABLE_SIGNUP=False
+      - WEBUI_SECRET_KEY=${OPENWEBUI_SECRET_KEY}
+      - RAG_EMBEDDING_ENGINE=openai
+      - ENABLE_OLLAMA_API=False
+      - OPENAI_API_BASE_URLS=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      litellm:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://127.0.0.1:8080/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - './volumes/openwebui_data:/app/backend/data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+
+  caddy:
+    ports:
+      - "3001:3001/tcp" # Open WebUI (IA)

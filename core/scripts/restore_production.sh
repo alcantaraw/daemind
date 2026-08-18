@@ -14,39 +14,20 @@ CLR_CYAN="\e[36m"
 CLR_RED="\e[31m"
 CLR_BLUE="\e[34m"
 
-log_info()    { echo -e "${CLR_CYAN}➜ [INFO]${CLR_RESET} $1"; }
-log_success() { echo -e "${CLR_GREEN}✔ [SUCESSO]${CLR_RESET} $1"; }
-log_warn()    { echo -e "${CLR_YELLOW}⚠️  [ATENÇÃO]${CLR_RESET} $1"; }
-log_error()   { echo -e "${CLR_RED}🚨 [ERRO CRÍTICO]${CLR_RESET} $1"; }
+log_info()    { echo -e "${CLR_CYAN}➜ [INFO RESTORE]${CLR_RESET} $1"; }
+log_success() { echo -e "${CLR_GREEN}✔ [SUCESSO RESTORE]${CLR_RESET} $1"; }
+log_warn()    { echo -e "${CLR_YELLOW}⚠️  [ATENÇÃO RESTORE]${CLR_RESET} $1"; }
+log_error()   { echo -e "${CLR_RED}🚨 [ERRO CRÍTICO RESTORE]${CLR_RESET} $1"; }
 log_substep() { echo -e "${CLR_CYAN}  ↳${CLR_RESET} $1"; }
 log_header()  {
     echo ""
     echo -e "${CLR_YELLOW}=====================================================================${CLR_RESET}"
-    echo -e "${CLR_BOLD}${CLR_YELLOW}=== [SRE] $1 ===${CLR_RESET}"
+    echo -e "${CLR_BOLD}${CLR_YELLOW}=== [SRE RESTORE] $1 ===${CLR_RESET}"
     echo -e "${CLR_YELLOW}=====================================================================${CLR_RESET}"
 }
 
-exibir_banner_daemind() {
-    local descricao="$1"
-    echo -e "${CLR_CYAN}"
-    cat << 'BANNER'
-         _                      _           _   
-      __| | __ _  ___ _ __ ___ (_)_ __   __| |  
-     / _` |/ _` |/ _ \ '_ ` _ \| | '_ \ / _` |  
-    | (_| | (_| |  __/ | | | | | | | | | (_| |_ 
-     \__,_|\__,_|\___|_| |_| |_|_|_| |_|\__,_(_)
-                                                
-BANNER
-    echo -e "${CLR_RESET}"
-    echo -e "${CLR_BOLD}${CLR_YELLOW}  Sistema Operacional Autônomo para Negócios Digitais${CLR_RESET}"
-    if [ -n "$descricao" ]; then
-        echo -e "${CLR_CYAN}    ➜ $descricao${CLR_RESET}"
-    fi
-    echo -e "${CLR_CYAN}=====================================================================${CLR_RESET}"
-    echo ""
-}
-
-exibir_banner_daemind "Restaurador Mestre de Disaster Recovery (PostgreSQL, Redis, Mídias e TLS)"
+log_header "Restaurador Mestre de Disaster Recovery (PostgreSQL, Redis, Mídias e TLS)"
+echo ""
 
 # =========================================================================
 # GOLPE DE MESTRE SRE: COBERTURA FORENSE TRANSVERSAL (DEBUG, TRAP & LOG)
@@ -56,17 +37,17 @@ SCRIPT_DIR="$(pwd)"
 SCRIPT_NOME="restore_production"
 LOG_FILE="${SCRIPT_DIR}/volumes/tailscale_state/debug_${SCRIPT_NOME}.log"
 
-# Absorve Fonte da Verdade (SSOT)
-if [ -f "${SCRIPT_DIR}/core/config/.env" ]; then
-    set -a; source "${SCRIPT_DIR}/core/config/.env"; set +a
+# Absorve Fonte da Verdade (SSOT na Raiz)
+if [ -f "${SCRIPT_DIR}/.env" ]; then
+    set -a; source "${SCRIPT_DIR}/.env"; set +a
 elif [ -f .env ]; then 
     set -a; source .env; set +a
 else 
-    echo "[ERRO CRÍTICO] Arquivo .env local ausente." && exit 1
+    echo "[ERRO CRÍTICO RESTORE] Arquivo .env local ausente." && exit 1
 fi
 
 if [ -z "$PREFIXO_CONTAINER" ]; then
-    echo "[ERRO CRÍTICO] Variável PREFIXO_CONTAINER não configurada no .env" && exit 1
+    echo "[ERRO CRÍTICO RESTORE] Variável PREFIXO_CONTAINER não configurada no .env" && exit 1
 fi
 DB_NAME="${DB_NAME:-${PREFIXO_CONTAINER}_db}"
 
@@ -77,7 +58,7 @@ error_forensic_handler() {
     local linha_erro="$1"
     local comando_falho="$2"
     echo "====================================================================="
-    echo "[FALHA CRÍTICA DETECTADA] Processo de Restauração interrompido!"
+    echo "[FALHA CRÍTICA RESTORE] Processo de Restauração interrompido!"
     echo "➜ Script: $0"
     echo "➜ Linha da Quebra: ${linha_erro}"
     echo "➜ Comando Abortado: ${comando_falho}"
@@ -87,7 +68,7 @@ error_forensic_handler() {
 trap 'error_forensic_handler $LINENO "$BASH_COMMAND"' ERR
 
 if [ "$DEBUG" = "true" ]; then
-    echo "[INFO] Ativando rastreamento de expansão de variáveis (Xtrace)..."
+    echo "[INFO RESTORE] Ativando rastreamento de expansão de variáveis (Xtrace)..."
     set -x
     export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 fi
@@ -106,8 +87,8 @@ if [ -z "$ARQUIVO_ENTRADA" ]; then
 fi
 
 if [ -z "$ARQUIVO_ENTRADA" ] || [ ! -f "$ARQUIVO_ENTRADA" ]; then
-    echo "🚨 [ERRO CRÍTICO] Nenhum arquivo de backup válido fornecido ou encontrado."
-    echo "Uso: $0 /caminho/do/backup_loja_YYYYMMDD.sql.gz.gpg"
+    echo "🚨 [ERRO CRÍTICO RESTORE] Nenhum arquivo de backup válido fornecido ou encontrado."
+    echo "Uso: $0 /caminho/do/backup_${PREFIXO_CONTAINER}_YYYYMMDD.sql.gz.gpg"
     exit 1
 fi
 
@@ -118,7 +99,9 @@ chmod 700 "$TMP_RESTORE_DIR"
 
 cleanup_restore() {
     rm -rf "$TMP_RESTORE_DIR" || true
-    unset TS_OAUTH_ID TS_OAUTH_SECRET DB_USER DB_PASSWORD LOJA_API_KEY LOJA_APP_KEY GEMINI_API_KEY OPENAI_API_KEY ANTHROPIC_API_KEY DEEPSEEK_API_KEY OPENROUTER_API_KEY LITELLM_MASTER_KEY
+    for var in $(compgen -v | grep -E '(_KEY|_SECRET|_PASSWORD|_TOKEN|TS_OAUTH|DB_USER)'); do
+        unset "$var" 2>/dev/null || true
+    done
 }
 trap cleanup_restore EXIT
 
@@ -148,9 +131,8 @@ fi
 # =========================================================================
 log_header "Fase 2: Parada de Serviços e Sanitização Controlada"
 
-log_info "Parando aplicações para evitar escritas concorrentes..."
-docker compose stop n8n evolution nocodb postiz chatwoot openwebui litellm minio temporal 2>/dev/null || true
-docker compose stop postgres pgbouncer redis 2>/dev/null || true
+log_info "Parando todas as aplicações para evitar escritas concorrentes..."
+docker compose stop 2>/dev/null || docker stop $(docker ps -q) 2>/dev/null || true
 
 log_warn "Expurgando volume PostgreSQL para garantia de restauração limpa (0-State)..."
 sudo rm -rf "${SCRIPT_DIR}/volumes/postgres_data"/*
@@ -165,7 +147,7 @@ docker compose up -d postgres pgbouncer
 
 log_info "Aguardando estabilização do motor PostgreSQL..."
 TENTATIVAS=0
-until docker exec -i ${PREFIXO_CONTAINER}_db pg_isready -h 127.0.0.1 -U "$DB_USER" -d "$DB_NAME" > /dev/null 2>&1; do
+until docker exec -i ${PREFIXO_CONTAINER}_postgres pg_isready -h 127.0.0.1 -U "$DB_USER" -d "$DB_NAME" > /dev/null 2>&1; do
     TENTATIVAS=$((TENTATIVAS + 1))
     if [ "$TENTATIVAS" -ge 20 ]; then
         echo "🚨 [ALERTA FATAL] Timeout aguardando o PostgreSQL estabilizar."
@@ -176,10 +158,10 @@ done
 
 if [ -f "$TMP_RESTORE_DIR/raw_backup.sql.gz" ]; then
     log_info "Injetando dump relacional descompactado..."
-    gunzip -c "$TMP_RESTORE_DIR/raw_backup.sql.gz" | docker exec -i ${PREFIXO_CONTAINER}_db psql -v ON_ERROR_STOP=1 -q -U "$DB_USER" -d "$DB_NAME"
+    gunzip -c "$TMP_RESTORE_DIR/raw_backup.sql.gz" | docker exec -i ${PREFIXO_CONTAINER}_postgres psql -v ON_ERROR_STOP=1 -q -U "$DB_USER" -d postgres
     log_success "Banco Relacional PostgreSQL restaurado com 100% de integridade."
 elif [ -f "$TMP_RESTORE_DIR/raw_backup.sql" ]; then
-    docker exec -i ${PREFIXO_CONTAINER}_db psql -v ON_ERROR_STOP=1 -q -U "$DB_USER" -d "$DB_NAME" < "$TMP_RESTORE_DIR/raw_backup.sql"
+    docker exec -i ${PREFIXO_CONTAINER}_postgres psql -v ON_ERROR_STOP=1 -q -U "$DB_USER" -d postgres < "$TMP_RESTORE_DIR/raw_backup.sql"
     log_success "Banco Relacional PostgreSQL restaurado com 100% de integridade."
 fi
 
@@ -190,17 +172,24 @@ log_header "Fase 4: Restauração de Redis e Mídias dos Clientes"
 
 if [ -f "$TMP_RESTORE_DIR/redis_dump.rdb" ]; then
     log_info "Restaurando snapshot binário do Redis..."
+    mkdir -p "${SCRIPT_DIR}/volumes/redis_data"
     cp "$TMP_RESTORE_DIR/redis_dump.rdb" "${SCRIPT_DIR}/volumes/redis_data/dump.rdb" 2>/dev/null || true
     log_success "Snapshot do Redis restaurado com sucesso."
 fi
 
 if [ -d "$TMP_RESTORE_DIR/uploads" ]; then
-    log_info "Restaurando arquivos de mídia e anexos dos clientes..."
-    [ -d "$TMP_RESTORE_DIR/uploads/minio" ] && cp -r "$TMP_RESTORE_DIR/uploads/minio"/* "${SCRIPT_DIR}/volumes/minio_data/" 2>/dev/null || true
-    [ -d "$TMP_RESTORE_DIR/uploads/chatwoot" ] && cp -r "$TMP_RESTORE_DIR/uploads/chatwoot"/* "${SCRIPT_DIR}/volumes/chatwoot_data/" 2>/dev/null || true
-    [ -d "$TMP_RESTORE_DIR/uploads/postiz" ] && cp -r "$TMP_RESTORE_DIR/uploads/postiz"/* "${SCRIPT_DIR}/volumes/postiz_data/" 2>/dev/null || true
-    [ -d "$TMP_RESTORE_DIR/uploads/nocodb" ] && cp -r "$TMP_RESTORE_DIR/uploads/nocodb"/* "${SCRIPT_DIR}/volumes/nocodb_data/" 2>/dev/null || true
-    log_success "Mídias e anexos dos clientes restaurados."
+    log_info "Restaurando dinamicamente arquivos de volumes e mídias..."
+    mkdir -p "${SCRIPT_DIR}/volumes"
+    rsync -a --exclude='postgres_data' \
+             --exclude='redis_data' \
+             --exclude='ollama_models' \
+             "$TMP_RESTORE_DIR/uploads/" "${SCRIPT_DIR}/volumes/" 2>/dev/null || \
+    cp -r "$TMP_RESTORE_DIR/uploads"/* "${SCRIPT_DIR}/volumes/" 2>/dev/null || true
+
+    # Garante a exclusão de qualquer resíduo indevido
+    rm -rf "${SCRIPT_DIR}/volumes/postgres_data"/*_corrupted \
+           "${SCRIPT_DIR}/volumes/ollama_models"/*_corrupted 2>/dev/null || true
+    log_success "Volumes persistentes e mídias restaurados com sucesso."
 fi
 
 # =========================================================================
