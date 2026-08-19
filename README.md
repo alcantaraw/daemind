@@ -271,7 +271,7 @@ Todas as mudanças relevantes entre versões estão documentadas em **[CHANGELOG
 | Versão | Data | Descrição |
 |--------|------|-----------|
 | [`v1.0.0`](CHANGELOG.md#v100--2026-08-18--desacoplamento-completo) | 2026-08-18 | Desacoplamento completo — wizard TUI/CLI, módulos independentes, guardrails SRE |
-| [`v0.5.0`](CHANGELOG.md#v050--2026-08--main-prova-de-conceito) | 2026-08 | Prova de conceito — stack monolítica funcional, instalador CLI simples |
+| [`v0.5.0`](CHANGELOG.md#v050--2026-08--main-prova-de-conceito) | 2026-08-06 | Prova de conceito — stack monolítica funcional, instalador CLI simples |
 
 ---
 
