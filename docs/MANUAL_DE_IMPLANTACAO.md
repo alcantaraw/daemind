@@ -26,6 +26,14 @@ O **daemind.** é projetado para rodar de forma leve e otimizada sobre qualquer 
 * **Armazenamento:** 60 GB+ em SSD ou NVMe
 * **Sistema Operacional:** Ubuntu Server (22.04 LTS, 24.04 LTS ou 26.04 LTS — *instalação mínima/headless*)
 
+### 🧠 Requisitos para Módulos de IA Local & OCR Pesado (Ollama / Docling):
+* **Processador:** > 4 Cores (vCPUs)
+* **Memória RAM:** $\ge$ 16 GB
+* **GPU Dedicada com VRAM > 4 GB (Desktop ou Notebook/Mobile):**
+  * **NVIDIA:** Famílias GeForce RTX (20xx, 30xx, 40xx, 50xx — Desktop e Laptop/Mobile), Quadro RTX, RTX A-Series, Tesla/Ampere/Hopper/Blackwell.
+  * **AMD:** Famílias Radeon RX 6000, 7000, 8000 e 9000 Séries (Desktop e Mobile RX 6000M/S, 7000M/S, 8000M, 9000M, Radeon PRO Mobile).
+  * **Intel:** Famílias Intel Arc Série A (A350M, A370M, A380, A530M, A550M, A570M, A580, A730M, A750, A770, A770M, Arc Pro) e Série B (Battlemage: B570, B580) tanto Desktop quanto Mobile.
+
 ### 🏢 Ambientes Suportados:
 - **Cloud VPS / Dedicado:** Hetzner, Contabo, DigitalOcean, Linode, AWS, Oracle Cloud.
 - **Virtualizadores (On-Premises):** Proxmox VE, VMware ESXi, Hyper-V, KVM, VirtualBox.
@@ -216,7 +224,7 @@ O provisionamento do **daemind.** é **Low-Touch / Assistido**: em vez de exigir
   - `[X] S3MinIO / Storage (MinIO ou S3 Cloud)`
   - `[X] Open WebUI (Portal de Chat IA & MCP)`
   - `[X] Metabase BI (Painéis Executivos)`
-  - `[ ] Ollama & Docling` *(Exibidos em servidores com > 4 vCPUs e > 16GB RAM)*.
+  - `[ ] Ollama & Docling` *(Exibidos em hosts/notebooks com > 4 vCPUs, >= 16GB RAM e GPU dedicada compatível > 4GB VRAM: NVIDIA RTX, Radeon RX 6000-9000 ou Intel Arc)*.
 - **Arquitetura de Storage (`--radiolist`):** Define armazenamento Local Direto (disco), MinIO S3 Soberano (local) ou Provedor S3 Cloud Externo (Cloudflare R2 / AWS S3).
 
 #### 4️⃣ Passo 4/6: Malha de Inteligência Artificial (`--checklist` & `--mixedform`)
@@ -263,8 +271,8 @@ O wizard consulta interativamente se o operador deseja instalar cada uma das apl
 - **`Chatwoot (CRM Omnichannel)`** [`[S/n]`]: Central de atendimento multiatendente (Padrão: `S`).
 - **`NocoDB (Smart Databases)`** [`[S/n]`]: Interface de planilhas inteligentes e CRM de estoque (Padrão: `S`).
 - **`Metabase (BI & Analytics)`** [`[S/n]`]: Painéis analíticos e dashboards executivos (Padrão: `S`).
-- **`Ollama (Local AI Engine)`** [`[S/n]`]: Motor local de modelos de linguagem soberanos (Ativação condicionada a hosts de alta performance: **> 4 Cores e > 16 GB RAM**).
-- **`Docling (Document Parsing)`** [`[S/n]`]: Extração e OCR avançado de documentos e PDFs (Ativação condicionada a hosts de alta performance: **> 4 Cores e > 16 GB RAM**).
+- **`Ollama (Local AI Engine)`** [`[S/n]`]: Motor local de modelos de linguagem soberanos (Ativação condicionada a hosts/notebooks com **> 4 Cores, >= 16 GB RAM e GPU dedicada compatível > 4 GB VRAM**: NVIDIA RTX, Radeon RX 6000-9000 ou Intel Arc).
+- **`Docling (Document Parsing)`** [`[S/n]`]: Extração e OCR avançado de documentos e PDFs (Ativação condicionada a hosts de alta performance: **> 4 Cores e >= 16 GB RAM**).
 
 > [!TIP]
 > **Normalização Estrita:** Todas as respostas são normalizadas automaticamente para `s` ou `n`. Caso o usuário desative um módulo (`N`), a esteira omitirá os containers, rotas de proxy WAF Caddy, cards no portal web e volume de dados do serviço, otimizando o consumo de RAM do servidor. O **Núcleo Core** (`PostgreSQL 17`, `PgBouncer`, `Redis`, `Caddy WAF` e `LiteLLM`) permanece sempre ativo e imutável.

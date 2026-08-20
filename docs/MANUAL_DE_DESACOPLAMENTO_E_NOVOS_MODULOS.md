@@ -168,13 +168,18 @@ Para assegurar **Zero Bugs, Idempotência Absoluta e Resiliência em Produção*
 ### 7. **Roteamento Universal de Ações via CLI (`case "$ACTION"`):**
    - Todo script deve possuir no rodapé o roteador de comandos CLI suportando execução individual de qualquer uma das 15 funções, com aliases seguros (ex: `inject_card`, `teardown`, `inject_caddy`, `render_report`) e a execução do fluxo completo `all`.
 
-### 8. **Consumo de Métricas de Hardware via `autotune.sh` (Zero Chamadas OS Diretas):**
-   - Nenhum script modular deve executar comandos diretos de SO (`nproc`, `free -m`, `df -BG`) em `collect_wizard_inputs` ou em suas funções para obter dados de hardware.
-   - O motor `core/scripts/autotune.sh` é o **Single Source of Truth (SSOT)** de inspeção física de hardware e exporta globalmente as métricas normalizadas:
+### 8. **Consumo de Métricas de Hardware e GPU via `autotune.sh` (Zero Chamadas OS Diretas):**
+   - Nenhum script modular deve executar comandos diretos de SO (`nproc`, `free -m`, `df -BG`, `nvidia-smi`, `lspci`) em `collect_wizard_inputs` ou em suas funções para obter dados de hardware ou aceleração gráfica.
+   - O motor `core/scripts/autotune.sh` é o **Single Source of Truth (SSOT)** de inspeção física de hardware e aceleração por GPU dedicada (Desktop e Mobile/Notebook), exportando globalmente as métricas normalizadas:
      - `SYSTEM_TOTAL_CPUS` / `TOTAL_CPUS` (Quantidade de núcleos vCPU)
      - `SYSTEM_TOTAL_RAM_GB` / `TOTAL_RAM_GB` (Capacidade de memória RAM em GB)
      - `IS_MODEST_SERVER` (`true` se $\le$ 4 vCPUs ou $<$ 8 GB RAM)
-   - Módulos que exigem validação de capacidade (ex: `install_s3minio.sh`, `install_docling.sh`, `install_ollama.sh`) devem consumir estritamente essas variáveis do ambiente.
+     - `SYSTEM_HAS_DEDICATED_GPU` / `HAS_DEDICATED_GPU` (`true` se detectada GPU dedicada compatível)
+     - `SYSTEM_GPU_VENDOR` / `GPU_VENDOR` (`NVIDIA`, `AMD`, `INTEL` ou `NONE`)
+     - `SYSTEM_GPU_MODEL` / `GPU_MODEL` (Nome/descrição do modelo de GPU detectado)
+     - `SYSTEM_GPU_VRAM_MB` / `GPU_VRAM_MB` (Quantidade de memória de vídeo VRAM em MB)
+     - `SYSTEM_GPU_VRAM_GB` / `GPU_VRAM_GB` (Quantidade de memória de vídeo VRAM em GB)
+   - Módulos que exigem validação de capacidade e aceleração gráfica (ex: `install_s3minio.sh`, `install_docling.sh`, `install_ollama.sh`) devem consumir estritamente essas variáveis do ambiente na função `is_hardware_supported()`. O Ollama requer vCPUs $> 4$, RAM $\ge 16\text{ GB}$ e GPU dedicada com VRAM $> 4\text{ GB}$ (NVIDIA RTX, Radeon RX 6000/7000/8000/9000 ou Intel Arc — Desktop ou Laptop/Mobile).
 
 ---
 

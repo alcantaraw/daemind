@@ -145,7 +145,7 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | `USE_OPENWEBUI` | `s` / `n` | Open WebUI (Interface Web de IA Corporativa & MCP) |
 | `USE_POSTIZ` | `s` / `n` | Postiz (Agendador & Publicador de Mídias Sociais) |
 | `USE_METABASE` | `s` / `n` | Metabase (Painéis & Dashboards Analíticos em Tempo Real) |
-| `USE_OLLAMA` | `s` / `n` *(Requer >4 vCPUs e >=16GB RAM)* | Ollama (Inferência Local de Modelos Soberanos / LLMs) |
+| `USE_OLLAMA` | `s` / `n` *(Requer >4 vCPUs, >=16GB RAM e GPU >=4GB VRAM)* | Ollama (Inferência Local de Modelos Soberanos / LLMs) |
 | `USE_DOCLING` | `s` / `n` *(Requer >4 vCPUs e >=16GB RAM)* | Docling (OCR & Parser Avançado de Documentos/PDFs por IA) |
 | `USE_S3MINIO` | `s` / `n` | Controlado dinamicamente pelo `STORAGE_MODE` |
 
@@ -301,13 +301,16 @@ done
 
 ---
 
-### ⚙️ 3.5. Motor de Auto-Tuning de Hardware & Descentralização nos Módulos (`autotune.sh` & `build_envs`)
+### ⚙️ 3.5. Motor de Auto-Tuning de Hardware, Descoberta de GPU & Descentralização nos Módulos (`autotune.sh` & `build_envs`)
 Para permitir o desacoplamento e o escalonamento autônomo dos microsserviços sem engessamento ou ponto único de falha:
 
-1. **Extração Universal de Hardware (`core/scripts/autotune.sh`):** Módulo SRE focado na descoberta pura de hardware do Host (`SYSTEM_TOTAL_CPUS`, `SYSTEM_TOTAL_RAM_MB`, `SYSTEM_TOTAL_DISK_GB`, `IS_MODEST_SERVER`).
+1. **Extração Universal de Hardware & Aceleração GPU (`core/scripts/autotune.sh`):** Módulo SRE focado na descoberta pura de recursos do Host (`SYSTEM_TOTAL_CPUS`, `SYSTEM_TOTAL_RAM_MB`, `SYSTEM_TOTAL_DISK_GB`, `IS_MODEST_SERVER`) e detecção determinística de GPU dedicada compatível (`SYSTEM_HAS_DEDICATED_GPU`, `SYSTEM_GPU_VENDOR`, `SYSTEM_GPU_MODEL`, `SYSTEM_GPU_VRAM_MB`, `SYSTEM_GPU_VRAM_GB`):
+   - **NVIDIA:** Famílias GeForce RTX (20xx/30xx/40xx/50xx), Quadro RTX, RTX A-Series, RTX Laptop/Mobile, Tesla/Ampere/Hopper/Blackwell via `nvidia-smi`.
+   - **AMD:** Famílias Radeon RX 6000, 7000, 8000 e 9000 Séries (Desktop e Mobile RX 6000M/S, 7000M/S, 8000M, 9000M, Radeon PRO) via `rocm-smi` / `lspci` + sysfs.
+   - **Intel:** Famílias Intel Arc Série A (A350M-A770M, A380-A770, Arc Pro) e Série B Battlemage (B570, B580) Desktop e Mobile via `xpu-smi` / `lspci` + sysfs.
 2. **Dimensionamento do Núcleo Core (`core/scripts/autotune.sh`):** Dimensiona exclusivamente a infraestrutura de dados base e borda obrigatória (Postgres 17, PgBouncer, Redis 8, Caddy WAF e LiteLLM Gateway), ajustando buffers (`shared_buffers`, `work_mem`), evicção de memória do Redis (`maxmemory`), workers do LiteLLM e limites de CPU/RAM do Core.
-3. **Dimensionamento Descentralizado por Módulo (`install_<modulo>.sh -> build_envs`):** Cada script de módulo é soberano e dono do seu próprio dimensionamento. Na execução de `build_envs()`, a aplicação avalia as métricas de hardware exportadas e injeta suas próprias variáveis de limites (`CPU_*`, `MEM_*`, `RES_*`, concorrência web/sidekiq, JVM/Node Heaps) no arquivo `.env` de forma 100% autônoma.
-4. **Consumo no Docker Compose:** Todos os manifestos consom as variáveis dinâmicas com fallbacks seguros `${VAR:-DEFAULT}`, garantindo idempotência e execução perfeita em instâncias modestas de 4GB até servidores dedicados de 64GB+.
+3. **Dimensionamento Descentralizado por Módulo (`install_<modulo>.sh -> build_envs`):** Cada script de módulo é soberano e dono do seu próprio dimensionamento. Na execução de `build_envs()`, a aplicação avalia as métricas de hardware exportadas e injeta suas próprias variáveis de limites (`CPU_*`, `MEM_*`, `RES_*`, concorrência web/sidekiq, JVM/Node Heaps) no arquivo `.env` de forma 100% autônoma. Módulos de inferência como o `install_ollama.sh` validam requisitos de CPU (> 4), RAM ($\ge$ 16GB) e GPU dedicada $> 4\text{ GB}$ VRAM via `is_hardware_supported()`.
+4. **Consumo no Docker Compose:** Todos os manifestos consom as variáveis dinâmicas com fallbacks seguros `${VAR:-DEFAULT}`, garantindo idempotência e execução perfeita em instâncias modestas de 4GB até servidores dedicados ou notebooks de alta performance com placas dedicadas.
 
 ---
 
