@@ -37,7 +37,7 @@ services:
       - '/etc/localtime:/etc/localtime:ro'
     depends_on:
       chatwoot:
-        condition: service_healthy
+        condition: service_started
       redis:
         condition: service_healthy
     healthcheck:
