@@ -244,11 +244,12 @@ render_forensic_report() {
 
     cat << EOF
 ---------------------------------------------------------------------
-  💬 WPPCONNECT SERVER (WHATSAPP GATEWAY & CHATWOOT BRIDGE)
+  💬 WPPCONNECT SERVER (WHATSAPP GATEWAY, CHATWOOT & N8N BRIDGE)
 ---------------------------------------------------------------------
   ↳ Documentação Swagger API:  http://${ts_domain}:${port_ext}/api-docs/
   ↳ Chave Secreta API (Bearer): ${sec_key}
   ↳ Integração Chatwoot:        Ativa (URL: http://${PREFIXO_CONTAINER}_chatwoot:3000)
+  ↳ Webhooks de Eventos n8n:    Ativo (URL: http://${PREFIXO_CONTAINER}_n8n:5678/webhook/wppconnect)
 ---------------------------------------------------------------------
 EOF
 }
