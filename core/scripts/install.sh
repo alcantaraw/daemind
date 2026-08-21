@@ -177,11 +177,22 @@ resolver_containers_ativos() {
     STACK_ACTIVE_CONTAINERS=()
     local prefix="${PREFIXO_CONTAINER}"
     
-    # 1. Se o docker-compose.yml final (unificado) já existe, descobre os serviços via CLI
+    # 1. Se o docker-compose.yml final (unificado) já existe, descobre os containers reais
     if command -v docker >/dev/null 2>&1 && [ -f "$TARGET_DIR/docker-compose.yml" ]; then
-        for svc in $(cd "$TARGET_DIR" && docker compose config --services 2>/dev/null); do
-            STACK_ACTIVE_CONTAINERS+=("${prefix}_${svc}")
-        done
+        local compose_cnts=($(cd "$TARGET_DIR" && docker compose ps -a --format '{{.Name}}' 2>/dev/null || true))
+        if [ ${#compose_cnts[@]} -gt 0 ]; then
+            for c in "${compose_cnts[@]}"; do
+                [ -n "$c" ] && STACK_ACTIVE_CONTAINERS+=("$c")
+            done
+        else
+            for svc in $(cd "$TARGET_DIR" && docker compose config --services 2>/dev/null); do
+                local svc_clean=$(echo "$svc" | tr '-' '_')
+                local c_name=$(docker inspect -f '{{.Name}}' "${prefix}_${svc_clean}" 2>/dev/null | sed 's/^\///' || echo "")
+                [ -z "$c_name" ] && c_name=$(docker inspect -f '{{.Name}}' "${prefix}_${svc}" 2>/dev/null | sed 's/^\///' || echo "")
+                [ -z "$c_name" ] && c_name="${prefix}_${svc_clean}"
+                STACK_ACTIVE_CONTAINERS+=("$c_name")
+            done
+        fi
     fi
     
     # 2. Fallback 100% Dinâmico: Varre o docker-compose.yml base + YAMLs dos módulos ativos

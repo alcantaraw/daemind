@@ -1,5 +1,40 @@
 # CHANGELOG
 
+## [v1.1.0] — (Em Desenvolvimento — Branch `test`)
+
+> Expansão modular da stack com novos microsserviços soberanos, motor de auto-recuperação de rede Docker, auditoria proativa de IP Drift e eliminação total de acoplamentos hardcoded.
+
+---
+
+### 🧩 Novas Aplicações & Módulos Desacoplados
+
+- **[ADD] Shlink + Shlink Web Client (`install_shlink.sh` + `docker-compose.shlink.yml`):**
+  - Motor de encurtador de links soberano, QR Codes, analytics de cliques e atribuição de tags UTM.
+  - Interface web moderna (`shlinkio/shlink-web-client`) desacoplada com gateway em porta dedicada `:8082` e API em `:8081`.
+  - Persistência 100% nativa no PostgreSQL (`shlink_db`) e Redis da stack.
+- **[ADD] Listmonk (`install_listmonk.sh` + `docker-compose.listmonk.yml`):**
+  - Plataforma de e-mail marketing, newsletters e disparo transacional soberano de alta performance.
+  - Banco relacional dedicado `listmonk_db`, isolamento perimetral de WAF e porta de borda `:9005`.
+- **[ADD] Umami Analytics (`install_umami.sh` + `docker-compose.umami.yml`):**
+  - Web analytics soberano, leve e 100% em conformidade com a LGPD/GDPR (cookieless).
+  - Banco lógico dedicado `umami_db` e proxy reverso Caddy em porta `:3008`.
+
+---
+
+### 🛡️ Engenharia SRE, Resiliência de Rede & Auto-Healing
+
+- **[ADD] Auditoria Proativa de IP Drift (Zero-Touch Self-Healing):**
+  - O `install.sh` inspeciona o IP de cada container em execução e compara com o `.env`. Contêineres rodando em IPs desalinhados são desanexados da rede e recriados automaticamente sem intervenção manual.
+- **[ADD] Mitigação de Race Conditions no Docker (`Address already in use`):**
+  - Desconexão atômica de endpoints com `docker network disconnect -f` antes de remoções forçadas (`docker rm -f`), liberando imediatamente a interface `veth` no kernel.
+- **[ADD] Inversão de Controle Dinâmica (IoC) para Matriz de Versões (SRE BOM):**
+  - Eliminação de `elif` hardcoded no core. O `install.sh` descobre dinamicamente os scripts responsáveis através da Linha 2 de cada `install_*.sh` e delega a extração de versões de forma polimórfica.
+  - Suporte universal a labels OCI (`org.opencontainers.image.version` e `version`).
+- **[ADD] Diretiva Máxima Universal de Zero Hardcode:**
+  - Proibição absoluta de números de versão, portas ou IPs estáticos fixados em código.
+
+---
+
 ## [v1.0.0] — 2026-08-18 — (DESACOPLAMENTO COMPLETO)
 
 > Refatoração completa da arquitetura de provisionamento. A stack passa de um instalador monolítico com todos os serviços em um único `docker-compose.yml` e `install.sh` para um ecossistema desacoplado orientado a contratos.

@@ -219,16 +219,17 @@ audit_health() {
     local ts_domain="${1:-localhost}"
     local PREFIX="${PREFIXO_CONTAINER}"
     local port_web="${HOST_SHLINK_WEB_PORT:-8082}"
-    local health_val=$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}unhealthy{{end}}' ${PREFIX}_shlink 2>/dev/null || echo "OFFLINE")
+    local health_val=$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{if .State.Running}}healthy{{else}}unhealthy{{end}}{{end}}' "${PREFIX}_shlink_web" 2>/dev/null || echo "OFFLINE")
     local http_status="OFFLINE"
 
     if [ "$health_val" = "healthy" ]; then
-        http_status=$(curl -s -L -H "Host: ${ts_domain}" -o /dev/null -w "%{http_code}" --max-time 10 --retry 3 --retry-delay 2 "http://127.0.0.1:${port_web}/" || echo "FALHOU")
+        http_status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:${port_web}/" 2>/dev/null || echo "FALHOU")
+        [ "$http_status" = "000" ] && http_status="FALHOU"
     else
         http_status="CONTAINER_ERRO"
     fi
 
-    printf "  ↳ %-32s http://%s:%s  -> Status: [%s]\n" "Shlink Links Web UI:" "${ts_domain}" "${port_web}" "${http_status}"
+    printf "  ↳ %-32s http://%s:%s  -> Status: [%s]" "Shlink Links Web UI:" "${ts_domain}" "${port_web}" "${http_status}"
 }
 
 get_version() {
