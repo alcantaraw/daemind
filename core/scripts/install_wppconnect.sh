@@ -82,11 +82,18 @@ inject_caddy_routes() {
             cat << EOF >> "$target_caddyfile"
 
 # --- WPPCONNECT_START ---
-:${port_ext} {
+:18081 {
     log {
         level error
     }
     reverse_proxy ${PREFIX}_wppconnect:21465
+}
+
+:80 {
+    route /wpp/* {
+        uri strip_prefix /wpp
+        reverse_proxy ${PREFIX}_wppconnect:21465
+    }
 }
 # --- WPPCONNECT_END ---
 EOF

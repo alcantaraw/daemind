@@ -235,8 +235,9 @@
             btn.innerText = '⏳ Gerando Token com a Senha Mestra...';
 
             try {
-                // 1. Gerar Token de Acesso da Sessão utilizando a Senha Mestra
-                const tokenRes = await fetch(`${window.location.protocol}//${host}:18081/api/${session}/${MASTER_KEY}/generate-token`, {
+                // 1. Gerar Token de Acesso da Sessão utilizando a Senha Mestra (Caminho relativo via Caddy WAF ou direto)
+                const apiBase = window.location.protocol === 'https:' ? '/wpp' : `http://${host}:18081`;
+                const tokenRes = await fetch(`${apiBase}/api/${session}/${MASTER_KEY}/generate-token`, {
                     method: 'POST',
                     headers: { 'Accept': 'application/json' }
                 });
@@ -253,7 +254,7 @@
                 statusText.innerText = 'Gerando QR Code...';
 
                 // 2. Iniciar / Consultar Sessão
-                await fetch(`${window.location.protocol}//${host}:18081/api/${session}/start-session`, {
+                await fetch(`${apiBase}/api/${session}/start-session`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -277,7 +278,8 @@
 
         async function consultarStatus(session, token) {
             try {
-                const res = await fetch(`${window.location.protocol}//${host}:18081/api/${session}/status-session`, {
+                const apiBase = window.location.protocol === 'https:' ? '/wpp' : `http://${host}:18081`;
+                const res = await fetch(`${apiBase}/api/${session}/status-session`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
