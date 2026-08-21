@@ -1079,6 +1079,29 @@ ALL_DECLARED_SERVICES=($(docker compose config --services 2>/dev/null | grep -v 
 RUNNING_SERVICES=($(docker compose ps --services --filter "status=running" 2>/dev/null | grep -v '^$' || true))
 APPS_OFFLINE=()
 
+# 🛡️ SRE AUDIT: Validação Atômica de Integridade de IP (Evita Drift e Colisões Ocultas)
+for svc in "${RUNNING_SERVICES[@]}"; do
+    svc_clean=$(echo "$svc" | tr '-' '_')
+    c_name="${PREFIXO_CONTAINER}_${svc_clean}"
+    
+    # Obtém o IP atual alocado no container em execução
+    current_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$c_name" 2>/dev/null || true)
+    
+    # Obtém a variável de IP esperada no .env (ex: IP_OPENWEBUI, IP_SHLINK_WEB)
+    var_name="IP_$(echo "$svc" | tr '[:lower:]-' '[:upper:]_')"
+    expected_ip="${!var_name:-}"
+    
+    if [ -n "$expected_ip" ] && [ -n "$current_ip" ] && [ "$current_ip" != "$expected_ip" ]; then
+        echo "⚠️ [SRE IP DRIFT DETECTED] O serviço '$svc' está rodando no IP $current_ip, mas o .env espera $expected_ip."
+        echo "  ↳ Purgando contêiner desatualizado para realocação determinística de IP..."
+        docker network disconnect -f "instancia_net" "$c_name" 2>/dev/null || true
+        docker rm -f "$c_name" "${PREFIXO_CONTAINER}_${svc}" 2>/dev/null || true
+    fi
+done
+
+# Reavalia serviços em execução após a autocorreção de drift
+RUNNING_SERVICES=($(docker compose ps --services --filter "status=running" 2>/dev/null | grep -v '^$' || true))
+
 for svc in "${ALL_DECLARED_SERVICES[@]}"; do
     if ! echo "${RUNNING_SERVICES[*]}" | grep -qw "$svc"; then
         APPS_OFFLINE+=("$svc")
@@ -1088,7 +1111,7 @@ done
 if [ ${#APPS_OFFLINE[@]} -eq 0 ]; then
     echo "➜ [IDEMPOTÊNCIA INSTALL] Todos os ${#ALL_DECLARED_SERVICES[@]} serviços declarados já estão rodando em status RUNNING."
 else
-    echo "  ↳ Disparando subida seletiva apenas dos microsserviços offline: ${APPS_OFFLINE[*]}..."
+    echo "  ↳ Disparando subida seletiva dos microsserviços: ${APPS_OFFLINE[*]}..."
     
     # SRE FIX: Proteção contra falso-negativo de 'unhealthy' e 'Address already in use' (Race condition de IP)
     if ! UP_ERR=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
