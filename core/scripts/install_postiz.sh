@@ -365,9 +365,11 @@ provision_user() {
       '{email: $email, password: $pwd, name: $name, company: $company, provider: "LOCAL"}')
 
     local RESPONSE_POSTIZ="502"
-    for attempt in {1..10}; do
-        # Valida se o backend do Postiz está aceitando requisições antes do payload
-        local probe=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
+    for attempt in {1..30}; do
+        # 1. Aguarda ativamente o backend do Postiz responder com código válido (não 502/000)
+        local probe=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
+        probe=$(echo "$probe" | tr -dc '0-9')
+        
         if [ "$probe" = "200" ] || [ "$probe" = "307" ] || [ "$probe" = "302" ]; then
             RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 15 -X POST "http://127.0.0.1:5000/api/auth/register" \
               -H "Content-Type: application/json" \

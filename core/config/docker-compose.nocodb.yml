@@ -55,4 +55,4 @@ services:
 
   caddy:
     ports:
-      - "${NOCO_PORT:-18080}:8080/tcp" # NocoDB
+      - "${HOST_NOCODB_PORT:-18080}:${HOST_NOCODB_PORT:-18080}/tcp" # NocoDB

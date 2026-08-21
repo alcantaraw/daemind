@@ -61,6 +61,9 @@ provision_db() {
             -e LISTMONK_db__database=listmonk_db \
             -e LISTMONK_db__ssl_mode=disable \
             listmonk/listmonk:latest ./listmonk --install --idempotent --yes >/dev/null 2>&1 || true
+
+        echo "  ↳ Provisionando conta de Super Admin no banco do Listmonk..."
+        provision_user
     fi
 }
 
