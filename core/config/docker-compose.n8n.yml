@@ -1,7 +1,6 @@
 services:
   n8n:
-    # image: 'n8nio/n8n:2.31.6'
-    image: 'n8nio/n8n:2.34.6'
+    image: 'n8nio/n8n:latest'
     container_name: '${PREFIXO_CONTAINER}_n8n'
     networks:
       instancia_net:

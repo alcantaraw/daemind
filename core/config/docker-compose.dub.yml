@@ -1,0 +1,51 @@
+services:
+  dub:
+    image: 'dubinc/dub:latest'
+    container_name: '${PREFIXO_CONTAINER}_dub'
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_DUB}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_DUB:-1.0}'
+          memory: '${MEM_DUB:-1024M}'
+        reservations:
+          memory: '${RES_DUB:-256M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-768} --no-deprecation
+      - LOG_LEVEL=error
+      - PORT=3000
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@pgbouncer:6432/dub_db?sslmode=disable
+      - REDIS_URL=redis://${IP_REDIS}:6379/2
+      - NEXTAUTH_SECRET=${DUB_SECRET:-${DB_PASSWORD}}
+      - NEXTAUTH_URL=http://${TS_DOMAIN:-localhost}:${HOST_DUB_PORT:-3009}
+      - NEXT_PUBLIC_APP_URL=http://${TS_DOMAIN:-localhost}:${HOST_DUB_PORT:-3009}
+      - NEXT_PUBLIC_APP_NAME=daemind Links
+      - SHORT_DOMAIN=${DUB_SHORT_DOMAIN:-${TS_DOMAIN:-localhost}}
+      - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
+      - OPENAI_BASE_URL=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+    volumes:
+      - './volumes/dub_data:/app/data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      litellm:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    ports:
+      - "${HOST_DUB_PORT:-3009}:3009/tcp"

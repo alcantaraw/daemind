@@ -147,6 +147,9 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | `USE_METABASE` | `s` / `n` | Metabase (Painéis & Dashboards Analíticos em Tempo Real) |
 | `USE_OLLAMA` | `s` / `n` *(Requer >4 vCPUs, >=16GB RAM e GPU >=4GB VRAM)* | Ollama (Inferência Local de Modelos Soberanos / LLMs) |
 | `USE_DOCLING` | `s` / `n` *(Requer >4 vCPUs e >=16GB RAM)* | Docling (OCR & Parser Avançado de Documentos/PDFs por IA) |
+| `USE_LISTMONK` | `s` / `n` | Listmonk (E-mail Marketing & Transacional Soberano) |
+| `USE_UMAMI` | `s` / `n` | Umami (Web Analytics & Privacidade sem Cookies) |
+| `USE_DUB` | `s` / `n` | Dub.co (Encurtador de Links, UTMs & Atribuição de Cliques) |
 | `USE_S3MINIO` | `s` / `n` | Controlado dinamicamente pelo `STORAGE_MODE` |
 
 #### 5. 💾 Armazenamento de Objetos (Storage: Local vs MinIO vs S3 Externo)

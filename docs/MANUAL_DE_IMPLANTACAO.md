@@ -321,7 +321,7 @@ O **daemind.** orquestra microsserviços organizados de forma desacoplada e aut�
 | **PostgreSQL 17** | `${PREFIXO}_postgres` | `pgvector/pgvector` | `pg17` | **17.11** | Interna (5432) | Core Obrigatório |
 | **PgBouncer** | `${PREFIXO}_pgbouncer` | `edoburu/pgbouncer` | `v1.25.2-p0` | **1.25.2-p0** | Interna (6432) / 5432 | Core Obrigatório |
 | **Redis 8.10** | `${PREFIXO}_redis` | `redis` | `8.10-alpine` | **8.10.0** | Interna (6379) | Core Obrigatório |
-| **n8n** | `${PREFIXO}_n8n` | `n8nio/n8n` | `2.34.6` | **2.34.6** | `5678` | Core Obrigatório |
+| **n8n** | `${PREFIXO}_n8n` | `n8nio/n8n` | `latest` *(dinâmica)* | **latest** | `5678` | Core Obrigatório |
 | **Evolution API** | `${PREFIXO}_evolution` | `evoapicloud/evolution-api` | `v2.3.7` | **2.3.7** | `8081` | Opcional Desacoplado |
 | **Chatwoot** | `${PREFIXO}_chatwoot` | `chatwoot/chatwoot` | `v4.16.2` | **4.16.2** | `3000` | Opcional Desacoplado |
 | **NocoDB** | `${PREFIXO}_nocodb` | `nocodb/nocodb` | `2026.08.0` | **2026.08.0** | `18080` (8080) | Opcional Desacoplado |
@@ -331,6 +331,9 @@ O **daemind.** orquestra microsserviços organizados de forma desacoplada e aut�
 | **Metabase BI** | `${PREFIXO}_metabase` | `metabase/metabase` | `latest` *(dinâmica)* | **0.50.0** | `3030` | Opcional Desacoplado |
 | **Ollama AI** | `${PREFIXO}_ollama` | `ollama/ollama` | `latest` *(dinâmica)* | **0.5.0** | `11434` | Opcional Desacoplado |
 | **Docling OCR** | `${PREFIXO}_docling` | `ds4sd/docling-serve` | `latest` *(dinâmica)* | **1.0.0** | `5001` | Opcional Desacoplado |
+| **Listmonk Mailer** | `${PREFIXO}_listmonk` | `listmonk/listmonk` | `latest` *(dinâmica)* | **latest** | `9005` (9000) | Opcional Desacoplado |
+| **Umami Analytics** | `${PREFIXO}_umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` *(dinâmica)* | **latest** | `3008` (3000) | Opcional Desacoplado |
+| **Dub Links** | `${PREFIXO}_dub` | `dubinc/dub` | `latest` *(dinâmica)* | **latest** | `3009` (3000) | Opcional Desacoplado |
 | **LiteLLM Gateway** | `${PREFIXO}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` *(dinâmica)* | **1.98.0** | `4000` | Core Obrigatório |
 | **Open WebUI** | `${PREFIXO}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` *(dinâmica)* | **0.11.0** | `3001` | Core Obrigatório |
 | **Caddy WAF** | `${PREFIXO}_caddy` | `caddy` | `2.11.4-alpine` | **2.11.4** | `80` / `443` | Core Obrigatório |
