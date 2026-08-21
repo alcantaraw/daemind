@@ -209,7 +209,7 @@ EOF
 
 tui_dialog() {
     [ ! -f "/tmp/.daemind_dialogrc" ] && gerar_dialogrc
-    dialog --clear --ascii-lines --mouse --cr-wrap "$@" < /dev/tty
+    dialog --clear --ascii-lines --mouse --cr-wrap --no-collapse "$@" < /dev/tty
     return $?
 }
 
@@ -1304,11 +1304,12 @@ EOF
                         else
                             current_line="${current_line}  [X] ${m_name}"
                         fi
-                        if [ $(( local_mod_count % 4 )) -eq 0 ]; then
+                        if [ $(( local_mod_count % 3 )) -eq 0 ]; then
                             if [ -z "$active_mods_formatted" ]; then
                                 active_mods_formatted="${current_line}"
                             else
-                                active_mods_formatted="${active_mods_formatted}\n${current_line}"
+                                active_mods_formatted="${active_mods_formatted}
+${current_line}"
                             fi
                             current_line=""
                         fi
@@ -1318,7 +1319,8 @@ EOF
                     if [ -z "$active_mods_formatted" ]; then
                         active_mods_formatted="${current_line}"
                     else
-                        active_mods_formatted="${active_mods_formatted}\n${current_line}"
+                        active_mods_formatted="${active_mods_formatted}
+${current_line}"
                     fi
                 fi
 
@@ -1333,18 +1335,23 @@ EOF
                 local topologia_str="BYODNS (${CUSTOM_DOMAIN})"
                 [ "$ROUTING_CHOICE" = "1" ] && topologia_str="Tailscale VPN Soberana"
 
-                SUMMARY_MSG=$(printf "Identidade da Empresa:    %s\nAdministrador:            %s %s\nE-mail Corporativo:       %s\nTopologia de Borda:       %s\nModo de Storage:          %s\nSub-rede Privada:         %s.0/24\n\nProvedores de IA:\n%b\n\nMódulos Ativos (%d):\n%b\n\nDeseja confirmar e iniciar a instalação imediatamente?" \
-                    "${EMPRESA}" \
-                    "${CLIENTE_NOME}" "${CLIENTE_SOBRENOME}" \
-                    "${CLIENTE_EMAIL}" \
-                    "${topologia_str}" \
-                    "${STORAGE_MODE}" \
-                    "${BASE_IP}" \
-                    "${ai_list_formatted}" \
-                    "${local_mod_count}" \
-                    "${active_mods_formatted}")
+                SUMMARY_MSG="• Identidade da Empresa:    ${EMPRESA}
+• Administrador:            ${CLIENTE_NOME} ${CLIENTE_SOBRENOME}
+• E-mail Corporativo:       ${CLIENTE_EMAIL}
+• Topologia de Borda:       ${topologia_str}
+• Modo de Storage:          ${STORAGE_MODE}
+• Sub-rede Privada:         ${BASE_IP}.0/24
 
-                if tui_dialog --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 22 84; then
+• Provedores de IA:
+${ai_list_formatted}
+
+• Módulos Ativos (${local_mod_count}):
+${active_mods_formatted}
+
+----------------------------------------------------------------------
+Deseja confirmar e iniciar a instalação imediatamente?"
+
+                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 22 80; then
                     EXECUTAR_INSTALL="s"
                     break
                 else
