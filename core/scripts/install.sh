@@ -614,11 +614,9 @@ ${BIND_PORTAL} {
     }
 
     # --- PORTAL WHITE-LABEL ---
-    handle {
-        root * /etc/caddy/public
-        header Cache-Control "no-cache, no-store, must-revalidate"
-        file_server
-    }
+    root * /etc/caddy/public
+    header Cache-Control "no-cache, no-store, must-revalidate"
+    file_server
 }
 
 # ===============================================================================
