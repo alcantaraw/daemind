@@ -128,7 +128,7 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | `TS_OAUTH_ID` | `kXXXXXXXXXX` | OAuth Client ID do Tailscale *(Obrigatório se ROUTING_CHOICE=1)* |
 | `TS_OAUTH_SECRET` | `tskey-client-XXXXX` | OAuth Client Secret do Tailscale *(Obrigatório se ROUTING_CHOICE=1)* |
 | `CUSTOM_DOMAIN` | `painel.suaempresa.com.br` | Domínio do Painel Mestre / Caddy *(Obrigatório se ROUTING_CHOICE=2)* |
-| `CUSTOM_EVO_DOMAIN` | `api.suaempresa.com.br` | Domínio da API WhatsApp / Webhooks *(Obrigatório se ROUTING_CHOICE=2)* |
+| `CUSTOM_WPP_DOMAIN` | `api.suaempresa.com.br` | Domínio da API WhatsApp / Webhooks *(Obrigatório se ROUTING_CHOICE=2)* |
 | `CADDY_PROTOCOL` | `https` *(default)* ou `http` | Protocolo para emissão de certificados ou proxy reverso |
 | `TLS_CHOICE` | `1` (Offload / HTTP) ou `2` (Caddy SSL Nativo / HTTPS) | Tratamento TLS do Caddy (usado na CLI) |
 | `REDE_CHOICE` | `1`, `2`, `3` ou `4` | Escolha do CIDR Docker Privado |
@@ -139,7 +139,7 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | Variável | Opções / Formato | Descrição |
 | :--- | :--- | :--- |
 | `USE_CHATWOOT` | `s` / `n` | Chatwoot CRM (Atendimento Omnichannel Multiatendente) |
-| `USE_EVOLUTION` | `s` / `n` | Evolution API (Gateway WhatsApp / Baileys Webhooks) |
+| `USE_WPPCONNECT`| `s` / `n` | WPPConnect Server (Gateway Open Source WhatsApp & Chatwoot Bridge) |
 | `USE_N8N` | `s` / `n` | n8n (Orquestrador & Automação de Workflows Ilimitados) |
 | `USE_NOCODB` | `s` / `n` | NocoDB (Smart Database & Interface Relacional/ERP) |
 | `USE_OPENWEBUI` | `s` / `n` | Open WebUI (Interface Web de IA Corporativa & MCP) |

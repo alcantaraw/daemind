@@ -459,7 +459,7 @@ VARIAVEIS_CRITICAS=(
     TS_EMAIL TS_OAUTH_ID TS_OAUTH_SECRET DB_USER DB_PASSWORD
     HASH_ESPERADO CHAVE_PUBLICA_B64 PREFIXO_CONTAINER PROJETO_DIR
     CLIENTE_NOME CLIENTE_SOBRENOME
-    HOST_CADDY_PORT HOST_EVO_PORT HOST_NOCODB_PORT
+    HOST_CADDY_PORT HOST_WPPCONNECT_PORT HOST_NOCODB_PORT
 )
 
 for var in "${VARIAVEIS_CRITICAS[@]}"; do
@@ -574,15 +574,12 @@ echo "=== [SRE INSTALL] Processando Assets Visuais e Rotas WAF ==="
 # GOLPE DE MESTRE SRE: O Caddyfile DEVE ser criado antes de reiniciar o container
 # ===============================================================================
 BIND_PORTAL=":80"
-BIND_API=":8081"
 
 if [ "$USE_TAILSCALE" = "false" ]; then
     if [ "$CADDY_PROTOCOL" = "http" ]; then
         BIND_PORTAL="http://${CUSTOM_DOMAIN}"
-        BIND_API="http://${CUSTOM_EVO_DOMAIN}"
     else
         BIND_PORTAL="${CUSTOM_DOMAIN}"
-        BIND_API="${CUSTOM_EVO_DOMAIN}"
     fi
 fi
 
@@ -889,12 +886,7 @@ preparar_compose_monolitico
 
 cd "$TARGET_DIR" 2>/dev/null || true
 
-# [SRE DOC] Polimorfismo de Portas: Se estivermos em BYODNS, a API Evolution não usa 
-# mais uma porta separada (8081). Tudo passa pela 80/443 usando roteamento por Domínio (SNI).
 if [ "$USE_TAILSCALE" = "false" ]; then
-    # SRE FIX: Purga a porta 8081 no Compose usando RegEx flexível para evitar quebras por espaço/string
-    sed -i -E '/\$\{EVO_PORT.*:8081\/tcp/d' ./docker-compose.yml
-    
     if [ "$CADDY_PROTOCOL" = "https" ]; then
         sed -i 's/- "${PROXY_PORT:-80}:80\/tcp"/- "80:80\/tcp"\n      - "443:443\/tcp"/g' ./docker-compose.yml
     fi

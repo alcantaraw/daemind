@@ -2266,8 +2266,10 @@ fi
 # SRE FIX: usa bash (subshell) com export do ambiente para que ACTION router receba $2="build_envs" corretamente
 for script in "$SCRIPTS_DIR"/install_*.sh; do
     [ ! -f "$script" ] && continue
-    # Exporta as variáveis chave para o subshell (USE_*, OVERRIDE_*, NOME_ARQUIVO, SYSTEM_*)
-    export USE_DOCLING USE_OLLAMA USE_N8N USE_CHATWOOT USE_EVOLUTION USE_METABASE USE_OPENWEBUI USE_NOCODB USE_POSTIZ USE_S3MINIO 2>/dev/null || true
+    # Exporta dinamicamente todas as variáveis de controle (USE_*, OVERRIDE_*, NOME_ARQUIVO, SYSTEM_*)
+    for _uvar in $(compgen -v | grep '^USE_'); do
+        export "$_uvar" 2>/dev/null || true
+    done
     export OVERRIDE_TOTAL_CPUS OVERRIDE_TOTAL_RAM_GB OVERRIDE_TOTAL_RAM_MB SYSTEM_TOTAL_CPUS SYSTEM_TOTAL_RAM_MB SYSTEM_TOTAL_RAM_GB TOTAL_CPUS TOTAL_RAM_MB TOTAL_RAM_GB 2>/dev/null || true
     export NOME_ARQUIVO EMPRESA PREFIXO_CONTAINER TARGET_DIR 2>/dev/null || true
     bash "$script" "$TARGET_DIR" build_envs || true
@@ -2296,7 +2298,7 @@ done
     printf 'ROUTING_CHOICE="%s"\n' "${ROUTING_CHOICE:-1}"
     if [ "${ROUTING_CHOICE:-1}" != "1" ]; then
         printf 'CUSTOM_DOMAIN="%s"\n'     "${CUSTOM_DOMAIN:-}"
-        printf 'CUSTOM_EVO_DOMAIN="%s"\n' "${CUSTOM_EVO_DOMAIN:-}"
+        printf 'CUSTOM_WPP_DOMAIN="%s"\n' "${CUSTOM_WPP_DOMAIN:-}"
         printf 'CADDY_PROTOCOL="%s"\n'    "${CADDY_PROTOCOL:-https}"
     fi
     printf '\n# --- Provedores de Inteligência Artificial (Wizard Selections) ---\n'

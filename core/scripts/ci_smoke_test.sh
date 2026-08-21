@@ -111,7 +111,7 @@ until docker exec -i ${PREFIXO_CONTAINER}_postgres pg_isready -h 127.0.0.1 -U "$
 done
 
 echo "=== [CI] Provisionando Bancos de Dados Lógicos dos Módulos Desacoplados ==="
-# Invoca provision_db dos módulos ativos para criar os bancos lógicos (chatwoot_db, postiz_db, temporal, evolution_db)
+# Invoca provision_db dos módulos ativos para criar os bancos lógicos (chatwoot_db, postiz_db, temporal, shlink_db, listmonk_db, umami_db)
 for script in "${SCRIPT_DIR}"/core/scripts/install_*.sh; do
     if [ -f "$script" ]; then
         bash "$script" "$SCRIPT_DIR" provision_db 2>/dev/null || true

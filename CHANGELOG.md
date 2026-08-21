@@ -18,6 +18,10 @@
 - **[ADD] Umami Analytics (`install_umami.sh` + `docker-compose.umami.yml`):**
   - Web analytics soberano, leve e 100% em conformidade com a LGPD/GDPR (cookieless).
   - Banco lógico dedicado `umami_db` e proxy reverso Caddy em porta `:3008`.
+- **[REPLACE] WPPConnect Server (`install_wppconnect.sh` + `docker-compose.wppconnect.yml`):**
+  - Substituição integral do antigo Evolution API pelo **WPPConnect Server (`latest`)**, eliminando o risco de estagnação de repositório.
+  - Integração nativa e bidirecional com o **Chatwoot CRM** e webhooks em tempo real no **n8n** (`/webhook/wppconnect`).
+  - Documentação Swagger integrada em `:18081/api-docs/` e gerenciamento de sessões com persistência local e cache em Redis.
 
 ---
 
@@ -61,7 +65,7 @@ Cada um com script próprio, overlay compose, rotas Caddy e card do portal:
 | LiteLLM + IA Sync | `install_1ia.sh` | Novo |
 | Chatwoot CRM | `install_chatwoot.sh` | Desacoplado |
 | Docling OCR | `install_docling.sh` | **Novo** |
-| Evolution API | `install_evolution.sh` | Desacoplado |
+| WPPConnect Server | `install_wppconnect.sh` | **Substituição (Evolution)** |
 | Metabase BI | `install_metabase.sh` | Desacoplado |
 | n8n Automações | `install_n8n.sh` | Desacoplado |
 | NocoDB | `install_nocodb.sh` | Desacoplado |
