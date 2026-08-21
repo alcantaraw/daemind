@@ -209,7 +209,7 @@ EOF
 
 tui_dialog() {
     [ ! -f "/tmp/.daemind_dialogrc" ] && gerar_dialogrc
-    dialog --clear --ascii-lines --mouse "$@" < /dev/tty
+    dialog --clear --ascii-lines --mouse --cr-wrap "$@" < /dev/tty
     return $?
 }
 
@@ -1292,44 +1292,58 @@ EOF
 
             7)
                 # 📊 Tela 7: Resumo Geral de Governança & Confirmação de Deploy
-                ACTIVE_MODULES_LIST=""
-                local_mod_count=0
+                local active_mods_formatted=""
+                local current_line=""
+                local local_mod_count=0
                 for m_name in "${SORTED_MOD_FILES[@]}"; do
                     var_use="USE_$(echo "$m_name" | tr '[:lower:]' '[:upper:]')"
                     if [[ "${!var_use}" =~ ^[Ss]$ ]]; then
-                        if [ "$local_mod_count" -gt 0 ] && [ $(( local_mod_count % 4 )) -eq 0 ]; then
-                            ACTIVE_MODULES_LIST="${ACTIVE_MODULES_LIST}\n  "
-                        fi
-                        ACTIVE_MODULES_LIST="${ACTIVE_MODULES_LIST} [X] ${m_name}"
                         local_mod_count=$((local_mod_count + 1))
+                        if [ -z "$current_line" ]; then
+                            current_line="  [X] ${m_name}"
+                        else
+                            current_line="${current_line}  [X] ${m_name}"
+                        fi
+                        if [ $(( local_mod_count % 4 )) -eq 0 ]; then
+                            if [ -z "$active_mods_formatted" ]; then
+                                active_mods_formatted="${current_line}"
+                            else
+                                active_mods_formatted="${active_mods_formatted}\n${current_line}"
+                            fi
+                            current_line=""
+                        fi
                     fi
                 done
-
-                AI_PROVIDERS_LIST="  [X] OpenRouter (Obrigatório)"
-                [ -n "${OPENAI_API_KEY:-}" ]    && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] OpenAI"
-                [ -n "${ANTHROPIC_API_KEY:-}" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] Anthropic Claude"
-                if [ -n "${GEMINI_API_KEY:-}" ] || [ "${FREE_GEMINI:-0}" = "1" ] || [[ "${RESP_GEMINI_FREE:-}" =~ ^[Ss]$ ]]; then
-                    [ "${FREE_GEMINI:-0}" = "1" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] Gemini (Free Flash/Gemma)" || AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] Gemini (Pro)"
+                if [ -n "$current_line" ]; then
+                    if [ -z "$active_mods_formatted" ]; then
+                        active_mods_formatted="${current_line}"
+                    else
+                        active_mods_formatted="${active_mods_formatted}\n${current_line}"
+                    fi
                 fi
-                [ -n "${DEEPSEEK_API_KEY:-}" ]  && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] DeepSeek"
 
-                SUMMARY_MSG=$(cat << EOF
-Identidade da Empresa:    ${EMPRESA}
-Administrador:            ${CLIENTE_NOME} ${CLIENTE_SOBRENOME}
-E-mail Corporativo:       ${CLIENTE_EMAIL}
-Topologia de Borda:       $([ "$ROUTING_CHOICE" = "1" ] && echo "Tailscale VPN Soberana" || echo "BYODNS (${CUSTOM_DOMAIN})")
-Modo de Storage:          ${STORAGE_MODE}
-Sub-rede Privada:         ${BASE_IP}.0/24
+                local ai_list_formatted="  [X] OpenRouter (Obrigatório)"
+                [ -n "${OPENAI_API_KEY:-}" ]    && ai_list_formatted="${ai_list_formatted}  [X] OpenAI"
+                [ -n "${ANTHROPIC_API_KEY:-}" ] && ai_list_formatted="${ai_list_formatted}  [X] Anthropic Claude"
+                if [ -n "${GEMINI_API_KEY:-}" ] || [ "${FREE_GEMINI:-0}" = "1" ] || [[ "${RESP_GEMINI_FREE:-}" =~ ^[Ss]$ ]]; then
+                    [ "${FREE_GEMINI:-0}" = "1" ] && ai_list_formatted="${ai_list_formatted}  [X] Gemini (Free Flash/Gemma)" || ai_list_formatted="${ai_list_formatted}  [X] Gemini (Pro)"
+                fi
+                [ -n "${DEEPSEEK_API_KEY:-}" ]  && ai_list_formatted="${ai_list_formatted}  [X] DeepSeek"
 
-Provedores de IA:
-${AI_PROVIDERS_LIST}
+                local topologia_str="BYODNS (${CUSTOM_DOMAIN})"
+                [ "$ROUTING_CHOICE" = "1" ] && topologia_str="Tailscale VPN Soberana"
 
-Módulos Ativos (${local_mod_count}):
-  ${ACTIVE_MODULES_LIST}
+                SUMMARY_MSG=$(printf "Identidade da Empresa:    %s\nAdministrador:            %s %s\nE-mail Corporativo:       %s\nTopologia de Borda:       %s\nModo de Storage:          %s\nSub-rede Privada:         %s.0/24\n\nProvedores de IA:\n%b\n\nMódulos Ativos (%d):\n%b\n\nDeseja confirmar e iniciar a instalação imediatamente?" \
+                    "${EMPRESA}" \
+                    "${CLIENTE_NOME}" "${CLIENTE_SOBRENOME}" \
+                    "${CLIENTE_EMAIL}" \
+                    "${topologia_str}" \
+                    "${STORAGE_MODE}" \
+                    "${BASE_IP}" \
+                    "${ai_list_formatted}" \
+                    "${local_mod_count}" \
+                    "${active_mods_formatted}")
 
-Deseja confirmar e iniciar a instalação imediatamente?
-EOF
-)
                 if tui_dialog --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 22 84; then
                     EXECUTAR_INSTALL="s"
                     break
