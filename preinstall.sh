@@ -564,6 +564,10 @@ EOF
     done
 
     echo "=== [SRE PREINSTALL] Configurando chaves e repositórios oficiais do Docker ==="
+    sudo mkdir -p /etc/needrestart/conf.d
+    echo '$nrconf{restart} = "a";' | sudo tee /etc/needrestart/conf.d/daemind-auto.conf > /dev/null 2>&1 || true
+    echo '$nrconf{ui} = "NeedRestart::UI::stdio";' | sudo tee -a /etc/needrestart/conf.d/daemind-auto.conf > /dev/null 2>&1 || true
+
     sudo install -m 0755 -d /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
