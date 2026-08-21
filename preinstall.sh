@@ -1201,7 +1201,7 @@ EOF
                 done
 
                 SEL_MODS=$(tui_dialog_step --title "Passo 3/6: Seleção de Microsserviços da Stack" \
-                    --checklist "Marque com [Espaço] os módulos desejados.\n⚠️  ATENÇÃO: Desmarcar um item ativo irá PARAR o container, remover a rota no Caddy e ocultar o card do portal." 20 78 10 \
+                    --checklist "Marque com [Espaço] os módulos desejados.\n⚠️  ATENÇÃO: Desmarcar um item ativo irá PARAR o container, remover a rota no Caddy e ocultar o card do portal." 24 82 15 \
                     "${CHECKLIST_OPTS[@]}")
                 ST_M=$?
                 if [ "$ST_M" -ne 0 ]; then
