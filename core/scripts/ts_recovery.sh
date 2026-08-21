@@ -32,7 +32,7 @@ sleep 5
 # 4. Reconstrói os tunnels do Funnel apontando para os sockets locais
 echo "➜ Ativando novos túneis do Funnel em background..."
 sudo tailscale funnel --bg ${PROXY_PORT}
-sudo tailscale funnel --bg --https=8443 ${EVO_PORT}
+sudo tailscale funnel --bg --https=8443 ${HOST_WPPCONNECT_PORT:-18081}
 
 # 5. Executa a validação dinâmica de handshakes externos
 echo "=== [SRE AUDIT] Validando estabilidade externa das aplicações ==="
@@ -40,13 +40,13 @@ sleep 5
 TS_DOMAIN=$(tailscale status --json | grep -A 10 '"Self":' | grep '"DNSName"' | head -n 1 | cut -d'"' -f4 | sed 's/\.$//' | tr -d '\r\n ')
 
 HTTP_N8N=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://${TS_DOMAIN}/healthz" || echo "000")
-HTTP_EVO=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://${TS_DOMAIN}:8443/" || echo "000")
+HTTP_WPP=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://${TS_DOMAIN}:8443/api-docs/" || echo "000")
 
 echo "====================================================================="
-echo "➜ n8n Gateway Status:       [$HTTP_N8N]"
-echo "➜ Evolution API Status:     [$HTTP_EVO]"
+echo "➜ n8n Gateway Status:           [$HTTP_N8N]"
+echo "➜ WPPConnect Server Status:     [$HTTP_WPP]"
 echo "====================================================================="
-if [ "$HTTP_N8N" = "200" ] && [ "$HTTP_EVO" = "200" ]; then
+if [ "$HTTP_N8N" = "200" ] && [ "$HTTP_WPP" = "200" ]; then
     echo "       [SUCESSO ABSOLUTO] ECOSSISTEMA TOTALMENTE RESTABELECIDO       "
 else
     echo "       [ALERTA] Ambiente ativo, mas com oscilação de barramento.     "

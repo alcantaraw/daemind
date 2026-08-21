@@ -550,13 +550,13 @@ audit_health() {
     local HTTP_GATEWAY_FUNNEL
     HTTP_GATEWAY_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}/healthz" || echo "000")
 
-    local HTTP_EVO_FUNNEL
-    HTTP_EVO_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}:8443/" || echo "000")
+    local HTTP_WPP_FUNNEL
+    HTTP_WPP_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}:8443/api-docs/" || echo "000")
 
     echo "====================================================================="
-    echo "➜ FQDN Canônico:          https://${FQDN}"
-    echo "➜ Portal Gateway (443):   Status [${HTTP_GATEWAY_FUNNEL}]"
-    echo "➜ Evolution API (8443):   Status [${HTTP_EVO_FUNNEL}]"
+    echo "➜ FQDN Canônico:            https://${FQDN}"
+    echo "➜ Portal Gateway (443):     Status [${HTTP_GATEWAY_FUNNEL}]"
+    echo "➜ WPPConnect Server (8443): Status [${HTTP_WPP_FUNNEL}]"
     echo "====================================================================="
 
     # Inspeção de logs ACME/Let's Encrypt para detecção proativa de Rate Limits

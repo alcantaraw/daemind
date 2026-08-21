@@ -41,9 +41,6 @@ build_structure() {
             if [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/postiz 2>/dev/null || true
             fi
-            if [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]]; then
-                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/evolution 2>/dev/null || true
-            fi
             if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/nocodb 2>/dev/null || true
             fi
@@ -331,19 +328,6 @@ provision_infra() {
             fi
         fi
 
-        # 3. Bucket e política da Evolution API
-        if [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${EVO_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local EVO_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${EVO_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$EVO_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
         # 4. Bucket e política do NocoDB
         if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]]; then
             if ! sudo docker exec "$MINIO_CTR" mc ls "local/${NOCO_BUCKET}" >/dev/null 2>&1; then
@@ -516,8 +500,7 @@ collect_wizard_inputs_tui() {
                         "Secret Access Key:"                    4 1 "${S3_SECRET_KEY_EXT:-}"                  4 40 44 512 0 \
                         "Bucket Chatwoot:"                      5 1 "${S3_CHATWOOT_BUCKET_EXT:-chatwoot}"     5 40 44 128 0 \
                         "Bucket Postiz:"                        6 1 "${S3_POSTIZ_BUCKET_EXT:-postiz}"         6 40 44 128 0 \
-                        "Bucket Evolution API:"                 7 1 "${S3_EVOLUTION_BUCKET_EXT:-evolution}"   7 40 44 128 0 \
-                        "Bucket NocoDB:"                        8 1 "${S3_NOCODB_BUCKET_EXT:-nocodb}"         8 40 44 128 0 \
+                        "Bucket NocoDB:"                        7 1 "${S3_NOCODB_BUCKET_EXT:-nocodb}"         7 40 44 128 0 \
                         )
                     if [ $? -ne 0 ]; then
                         s3_substep=1
@@ -530,8 +513,7 @@ collect_wizard_inputs_tui() {
                     S3_SECRET_KEY_EXT=$(echo "$S3_FORM_OUT" | sed -n '4p' | tr -d '\r\n')
                     S3_CHATWOOT_BUCKET_EXT=$(echo  "$S3_FORM_OUT" | sed -n '5p' | tr -d '\r\n ')
                     S3_POSTIZ_BUCKET_EXT=$(echo    "$S3_FORM_OUT" | sed -n '6p' | tr -d '\r\n ')
-                    S3_EVOLUTION_BUCKET_EXT=$(echo "$S3_FORM_OUT" | sed -n '7p' | tr -d '\r\n ')
-                    S3_NOCODB_BUCKET_EXT=$(echo    "$S3_FORM_OUT" | sed -n '8p' | tr -d '\r\n ')
+                    S3_NOCODB_BUCKET_EXT=$(echo    "$S3_FORM_OUT" | sed -n '7p' | tr -d '\r\n ')
 
                     if [ -z "$S3_ENDPOINT_EXT" ] || [ -z "$S3_ACCESS_KEY_EXT" ] || [ -z "$S3_SECRET_KEY_EXT" ]; then
                         tui_dialog --title "Campos Obrigatórios" \
@@ -541,7 +523,6 @@ collect_wizard_inputs_tui() {
                     [ -z "$S3_REGION_EXT" ]          && S3_REGION_EXT="us-east-1"
                     [ -z "$S3_CHATWOOT_BUCKET_EXT" ]  && S3_CHATWOOT_BUCKET_EXT="chatwoot"
                     [ -z "$S3_POSTIZ_BUCKET_EXT" ]    && S3_POSTIZ_BUCKET_EXT="postiz"
-                    [ -z "$S3_EVOLUTION_BUCKET_EXT" ] && S3_EVOLUTION_BUCKET_EXT="evolution"
                     [ -z "$S3_NOCODB_BUCKET_EXT" ]    && S3_NOCODB_BUCKET_EXT="nocodb"
                     save_wizard_cache "S3_ENDPOINT_EXT"       "$S3_ENDPOINT_EXT"
                     save_wizard_cache "S3_REGION_EXT"         "$S3_REGION_EXT"
@@ -549,9 +530,8 @@ collect_wizard_inputs_tui() {
                     save_wizard_cache "S3_SECRET_KEY_EXT"     "$S3_SECRET_KEY_EXT"
                     save_wizard_cache "S3_CHATWOOT_BUCKET_EXT"  "$S3_CHATWOOT_BUCKET_EXT"
                     save_wizard_cache "S3_POSTIZ_BUCKET_EXT"    "$S3_POSTIZ_BUCKET_EXT"
-                    save_wizard_cache "S3_EVOLUTION_BUCKET_EXT" "$S3_EVOLUTION_BUCKET_EXT"
                     save_wizard_cache "S3_NOCODB_BUCKET_EXT"    "$S3_NOCODB_BUCKET_EXT"
-                    export STORAGE_MODE USE_S3MINIO OPT_STORAGE S3_ENDPOINT_EXT S3_REGION_EXT S3_ACCESS_KEY_EXT S3_SECRET_KEY_EXT S3_CHATWOOT_BUCKET_EXT S3_POSTIZ_BUCKET_EXT S3_EVOLUTION_BUCKET_EXT S3_NOCODB_BUCKET_EXT
+                    export STORAGE_MODE USE_S3MINIO OPT_STORAGE S3_ENDPOINT_EXT S3_REGION_EXT S3_ACCESS_KEY_EXT S3_SECRET_KEY_EXT S3_CHATWOOT_BUCKET_EXT S3_POSTIZ_BUCKET_EXT S3_NOCODB_BUCKET_EXT
                     return 0
                 done
                 ;;
@@ -649,7 +629,6 @@ collect_wizard_inputs() {
         coletar_input "Secret Access Key do S3" S3_SECRET_KEY_EXT "true" "" "" "true"
         coletar_input "Nome do Bucket do Chatwoot" S3_CHATWOOT_BUCKET_EXT "false" "" "chatwoot" "false"
         coletar_input "Nome do Bucket do Postiz" S3_POSTIZ_BUCKET_EXT "false" "" "postiz" "false"
-        coletar_input "Nome do Bucket da Evolution API" S3_EVOLUTION_BUCKET_EXT "false" "" "evolution" "false"
         coletar_input "Nome do Bucket do NocoDB" S3_NOCODB_BUCKET_EXT "false" "" "nocodb" "false"
     fi
 
@@ -662,7 +641,6 @@ collect_wizard_inputs() {
         save_wizard_cache "S3_SECRET_KEY_EXT" "$S3_SECRET_KEY_EXT"
         save_wizard_cache "S3_CHATWOOT_BUCKET_EXT" "$S3_CHATWOOT_BUCKET_EXT"
         save_wizard_cache "S3_POSTIZ_BUCKET_EXT" "$S3_POSTIZ_BUCKET_EXT"
-        save_wizard_cache "S3_EVOLUTION_BUCKET_EXT" "$S3_EVOLUTION_BUCKET_EXT"
         save_wizard_cache "S3_NOCODB_BUCKET_EXT" "$S3_NOCODB_BUCKET_EXT"
     fi
 }
@@ -698,16 +676,13 @@ build_envs() {
     local s3_secret_val="${S3_SECRET_KEY_EXT}"
     local s3_cw_bucket="${S3_CHATWOOT_BUCKET_EXT:-chatwoot}"
     local s3_pz_bucket="${S3_POSTIZ_BUCKET_EXT:-postiz}"
-    local s3_evo_bucket="${S3_EVOLUTION_BUCKET_EXT:-evolution}"
     local s3_noco_bucket="${S3_NOCODB_BUCKET_EXT:-nocodb}"
 
-    local evo_s3_enabled="false"
     local noco_storage_type="local"
     local active_storage="local"
     local pz_storage="local"
 
     if [ "$STORAGE_MODE" = "s3minio" ] || [ "$STORAGE_MODE" = "minio" ]; then
-        evo_s3_enabled="true"
         noco_storage_type="s3"
         active_storage="amazon"
         pz_storage="local"
@@ -715,7 +690,6 @@ build_envs() {
         s3_access_val="${TS_EMAIL}"
         s3_secret_val="${DB_PASSWORD}"
     elif [ "$STORAGE_MODE" = "s3_external" ]; then
-        evo_s3_enabled="true"
         noco_storage_type="s3"
         active_storage="amazon"
         pz_storage="local"
@@ -740,7 +714,6 @@ S3_ACCESS_KEY_EXT="${S3_ACCESS_KEY_EXT}"
 S3_SECRET_KEY_EXT="${S3_SECRET_KEY_EXT}"
 S3_CHATWOOT_BUCKET_EXT="${s3_cw_bucket}"
 S3_POSTIZ_BUCKET_EXT="${s3_pz_bucket}"
-S3_EVOLUTION_BUCKET_EXT="${s3_evo_bucket}"
 S3_NOCODB_BUCKET_EXT="${s3_noco_bucket}"
 S3_ENDPOINT="${s3_endpoint_val}"
 S3_ENDPOINT_HOST="${PREFIXO_CONTAINER}_s3minio"
@@ -751,9 +724,7 @@ S3_ACCESS_KEY_ID="${s3_access_val}"
 S3_SECRET_ACCESS_KEY="${s3_secret_val}"
 S3_CHATWOOT_BUCKET="${s3_cw_bucket}"
 S3_POSTIZ_BUCKET="${s3_pz_bucket}"
-S3_EVOLUTION_BUCKET="${s3_evo_bucket}"
 S3_NOCODB_BUCKET="${s3_noco_bucket}"
-EVOLUTION_S3_ENABLED="${evo_s3_enabled}"
 NOCODB_STORAGE_TYPE="${noco_storage_type}"
 ACTIVE_STORAGE_SERVICE="${active_storage}"
 POSTIZ_STORAGE_PROVIDER="${pz_storage}"
