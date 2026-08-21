@@ -236,9 +236,24 @@ install_binary() {
         echo "nameserver 1.1.1.1" | sudo tee /etc/resolv.conf > /dev/null
         
         # SRE FIX: Injetado env NONINTERACTIVE=1 para execução não-interativa e blindada
-        if ! curl -fsSL --retry 3 --connect-timeout 15 https://tailscale.com/install.sh | sudo env NONINTERACTIVE=1 sh > /tmp/debug_tailscale.log 2>&1; then
-            echo "🚨 [ERRO CRÍTICO TAILSCALE] Falha ao instalar Tailscale. Verifique: tail -f /tmp/debug_tailscale.log"
-            exit 1
+        # Prevenção SRE contra triggers quebrados de dracut/initramfs de kernels órfãos
+        sudo dpkg --configure -a >/dev/null 2>&1 || true
+
+        local ts_install_ok=0
+        if curl -fsSL --retry 3 --connect-timeout 15 https://tailscale.com/install.sh | sudo env NONINTERACTIVE=1 sh > /tmp/debug_tailscale.log 2>&1; then
+            ts_install_ok=1
+        fi
+
+        # Se o script do Tailscale retornou erro apenas devido a triggers de terceiros (ex: dracut/initramfs),
+        # mas o binário do Tailscale foi de fato instalado no sistema:
+        if [ "$ts_install_ok" -eq 0 ]; then
+            if command -v tailscale &>/dev/null; then
+                echo "⚠️  [SRE WARN TAILSCALE] O apt retornou aviso de trigger no SO, mas o binário do Tailscale foi instalado com sucesso."
+                ts_install_ok=1
+            else
+                echo "🚨 [ERRO CRÍTICO TAILSCALE] Falha ao instalar Tailscale. Verifique: tail -f /tmp/debug_tailscale.log"
+                exit 1
+            fi
         fi
         echo "✔ [SUCESSO TAILSCALE] Binário do Tailscale instalado com sucesso."
     else

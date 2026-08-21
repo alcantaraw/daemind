@@ -1753,6 +1753,9 @@ EOF
 
     LISTAS_APT=$(ls /var/lib/apt/lists/ 2>/dev/null | grep -v '^partial$' | head -n 1 || true)
 
+    # SRE GUARDRAIL: Sanitiza pacotes com pós-instalação pendente e recupera dpkg
+    sudo dpkg --configure -a >/dev/null 2>&1 || true
+
     if [ $TEMPO_DECORRIDO -gt $JANELA_CORTE_SEGUNDOS ] || [ -z "$LISTAS_APT" ]; then
         if ! sudo apt-get update -qq -o Dpkg::Lock::Timeout=120 2>/dev/null; then
             sudo killall -9 apt-get apt 2>/dev/null || true
