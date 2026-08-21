@@ -164,6 +164,91 @@
         .status-connected .status-dot { background: var(--accent-green); }
         .status-connected { color: var(--accent-green); }
 
+        .sessions-list {
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 1.2rem;
+        }
+
+        .sessions-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .sessions-list-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+
+        .session-item:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            background: rgba(0, 240, 255, 0.02);
+        }
+
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .session-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-small {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-select {
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-select:hover {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        .btn-close-session {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-close-session:hover {
+            background: var(--accent-red);
+            color: #fff;
+        }
+
         .footer-links {
             display: flex;
             justify-content: space-between;
@@ -189,13 +274,13 @@
             <div class="icon">💬</div>
             <div>
                 <h2>WPPConnect Manager</h2>
-                <p>Gerenciador Autônomo de Sessões & QR Code WhatsApp</p>
+                <p>Gerenciador Autônomo Multi-Sessões WhatsApp & Chatwoot</p>
             </div>
         </div>
 
         <div class="form-group">
             <label>Nome da Sessão (Identificador do WhatsApp):</label>
-            <input type="text" id="sessionName" value="default" placeholder="Ex: comercial, suporte, default">
+            <input type="text" id="sessionName" value="default" placeholder="Ex: default, comercial, suporte">
         </div>
 
         <button class="btn-action" id="btnConnect" onclick="iniciarConexao()">🚀 Conectar / Gerar QR Code</button>
@@ -205,6 +290,17 @@
             <div id="qrContent">
                 <img id="qrImg" src="" alt="QR Code WhatsApp">
                 <p style="font-size: 0.82rem; color: var(--text-secondary);">Abra o WhatsApp no celular ➔ Aparelhos Conectados ➔ Conectar Aparelho</p>
+            </div>
+        </div>
+
+        <!-- LISTAGEM DE SESSÕES ATIVAS -->
+        <div class="sessions-list" id="sessionsSection">
+            <div class="sessions-list-header">
+                <h3>📱 Instâncias & Sessões Conectadas</h3>
+                <button class="btn-small btn-select" onclick="carregarSessoes()">🔄 Atualizar</button>
+            </div>
+            <div id="sessionsContainer">
+                <p style="font-size: 0.8rem; color: var(--text-secondary);">Carregando instâncias ativas...</p>
             </div>
         </div>
 
@@ -224,8 +320,20 @@
 
         let pollInterval = null;
 
-        async function iniciarConexao() {
-            const session = document.getElementById('sessionName').value.trim() || 'default';
+        async function obterTokenSessao(session) {
+            const apiBase = '/wpp';
+            const tokenRes = await fetch(`${apiBase}/api/${session}/${MASTER_KEY}/generate-token`, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' }
+            });
+            const tokenData = await tokenRes.json();
+            return tokenData.token || tokenData.full || '';
+        }
+
+        async function iniciarConexao(sessaoAlvo) {
+            const session = sessaoAlvo || document.getElementById('sessionName').value.trim() || 'default';
+            document.getElementById('sessionName').value = session;
+
             const btn = document.getElementById('btnConnect');
             const qrBox = document.getElementById('qrBox');
             const statusText = document.getElementById('statusText');
@@ -235,15 +343,8 @@
             btn.innerText = '⏳ Gerando Token com a Senha Mestra...';
 
             try {
-                // 1. Gerar Token de Acesso da Sessão utilizando a Senha Mestra via proxy reverso unificado /wpp/
                 const apiBase = '/wpp';
-                const tokenRes = await fetch(`${apiBase}/api/${session}/${MASTER_KEY}/generate-token`, {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                const tokenData = await tokenRes.json();
-                const bearerToken = tokenData.token || tokenData.full || '';
+                const bearerToken = await obterTokenSessao(session);
 
                 if (!bearerToken) {
                     throw new Error('Falha ao autenticar sessão com a Senha Mestra.');
@@ -251,7 +352,8 @@
 
                 btn.innerText = '⚡ Conectando ao WhatsApp...';
                 qrBox.style.display = 'block';
-                statusText.innerText = 'Gerando QR Code...';
+                qrImg.style.display = 'none';
+                statusText.innerText = 'Iniciando instância da sessão...';
 
                 // 2. Iniciar / Consultar Sessão
                 await fetch(`${apiBase}/api/${session}/start-session`, {
@@ -291,23 +393,116 @@
 
                 if (data.status === 'CONNECTED' || data.status === 'inChat' || data.connected === true) {
                     statusBadge.className = 'status-badge status-connected';
-                    statusText.innerText = '✔ WhatsApp Conectado com Sucesso!';
+                    statusText.innerText = `✔ WhatsApp [${session}] Conectado com Sucesso!`;
                     qrImg.style.display = 'none';
                     btn.disabled = false;
                     btn.innerText = '✔ Sessão Ativa';
                     clearInterval(pollInterval);
+                    carregarSessoes();
                     return;
                 }
 
                 if (data.qrcode || data.qrCode) {
                     qrImg.style.display = 'block';
                     qrImg.src = data.qrcode || data.qrCode;
-                    statusText.innerText = 'Aguardando Leitura do QR Code...';
+                    statusText.innerText = `Aguardando Leitura do QR Code [${session}]...`;
                 }
             } catch (e) {
                 console.error(e);
             }
         }
+
+        async function desconectarSessao(session) {
+            if (!confirm(`Deseja realmente desconectar e encerrar a sessão '${session}'?`)) return;
+            try {
+                const apiBase = '/wpp';
+                const token = await obterTokenSessao(session);
+                await fetch(`${apiBase}/api/${session}/logout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                await fetch(`${apiBase}/api/${session}/close-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                alert(`Sessão '${session}' desconectada com sucesso.`);
+                carregarSessoes();
+            } catch (err) {
+                alert('Erro ao desconectar: ' + err.message);
+            }
+        }
+
+        async function carregarSessoes() {
+            const container = document.getElementById('sessionsContainer');
+            try {
+                const apiBase = '/wpp';
+                const token = await obterTokenSessao('default');
+                const res = await fetch(`${apiBase}/api/all-sessions`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                const sessions = Array.isArray(data) ? data : (data.response || []);
+
+                if (sessions.length === 0) {
+                    container.innerHTML = `
+                        <div class="session-item">
+                            <div class="session-info">
+                                <div class="status-dot"></div>
+                                <span class="session-name">Nenhuma sessão ativa no momento</span>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                sessions.forEach(sess => {
+                    const nome = typeof sess === 'string' ? sess : (sess.session || sess.name || 'default');
+                    const status = typeof sess === 'object' ? (sess.status || 'ACTIVE') : 'ACTIVE';
+                    const isConnected = status === 'CONNECTED' || status === 'inChat' || status === 'ACTIVE';
+
+                    html += `
+                        <div class="session-item">
+                            <div class="session-info">
+                                <div class="status-dot" style="background: ${isConnected ? 'var(--accent-green)' : '#f59e0b'}"></div>
+                                <div>
+                                    <span class="session-name">${nome}</span>
+                                    <span style="font-size: 0.72rem; color: var(--text-secondary); margin-left: 6px;">(${status})</span>
+                                </div>
+                            </div>
+                            <div class="session-actions">
+                                <button class="btn-small btn-select" onclick="iniciarConexao('${nome}')">Gerenciar</button>
+                                <button class="btn-small btn-close-session" onclick="desconectarSessao('${nome}')">Desconectar</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (err) {
+                container.innerHTML = `
+                    <div class="session-item">
+                        <div class="session-info">
+                            <div class="status-dot" style="background: var(--accent-green)"></div>
+                            <span class="session-name">default (Instância Principal)</span>
+                        </div>
+                        <div class="session-actions">
+                            <button class="btn-small btn-select" onclick="iniciarConexao('default')">Ver QR</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Carrega as sessões existentes ao abrir a página
+        window.addEventListener('DOMContentLoaded', () => {
+            carregarSessoes();
+        });
     </script>
 </body>
 </html>
