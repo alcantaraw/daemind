@@ -20,6 +20,7 @@
   - Banco lógico dedicado `umami_db` e proxy reverso Caddy em porta `:3008`.
 - **[REPLACE] WPPConnect Server (`install_wppconnect.sh` + `docker-compose.wppconnect.yml`):**
   - Substituição integral do antigo Evolution API pelo **WPPConnect Server (`latest`)**, eliminando o risco de estagnação de repositório.
+  - **[NEW] Interface Web Manager Integrada (`core/html/wppconnect.html`):** Painel nativo com zero atrito de autenticação (consome a Senha Mestra `$DB_PASSWORD` do SSOT), gerador automático de tokens de sessão, início de instância e projeção de **QR Code em tempo real com auto-polling de status de conexão**.
   - Integração nativa e bidirecional com o **Chatwoot CRM** e webhooks em tempo real no **n8n** (`/webhook/wppconnect`).
   - Documentação Swagger integrada em `:18081/api-docs/` e gerenciamento de sessões com persistência local e cache em Redis.
 

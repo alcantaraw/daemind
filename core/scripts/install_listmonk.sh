@@ -254,50 +254,35 @@ provision_user() {
 
     echo "➜ [SRE LISTMONK] Provisionando Super Admin automaticamente no banco do Listmonk..."
 
-    local HASH_SENHA
-    HASH_SENHA=$(python3 -c "
-import sys
-try:
-    import bcrypt
-    print(bcrypt.hashpw(b'''$SENHA''', bcrypt.gensalt(10)).decode('utf-8'))
-except Exception:
-    import subprocess
-    cmd = '''docker exec -i ${PREFIX}_umami node -e \"const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('$SENHA', 10));\" 2>/dev/null'''
-    out = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
-    print(out)
-" 2>/dev/null || true)
+    sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
+    CREATE EXTENSION IF NOT EXISTS pgcrypto;
+    DO \$\$
+    DECLARE
+        v_role_id INTEGER;
+        v_hash TEXT;
+    BEGIN
+        -- Gera o hash bcrypt oficial $2a$ via pgcrypto nativo
+        v_hash := crypt('${SENHA}', gen_salt('bf', 10));
 
-    if [ -n "$HASH_SENHA" ]; then
-        sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
-        DO \$\$
-        DECLARE
-            v_role_id INTEGER;
-        BEGIN
-            -- Obtém o ID do role de Super Admin (ou primeiro role existente)
-            SELECT id INTO v_role_id FROM roles WHERE name ILIKE '%admin%' OR slug ILIKE '%admin%' LIMIT 1;
-            IF v_role_id IS NULL THEN
-                SELECT id INTO v_role_id FROM roles ORDER BY id ASC LIMIT 1;
-            END IF;
-            IF v_role_id IS NULL THEN
-                INSERT INTO roles (name, slug, description, created_at, updated_at)
-                VALUES ('Super Admin', 'admin', 'Super Admin', NOW(), NOW()) RETURNING id INTO v_role_id;
-            END IF;
+        -- Obtém ou cria o role padrão de administrador
+        SELECT id INTO v_role_id FROM roles WHERE type = 'user' LIMIT 1;
+        IF v_role_id IS NULL THEN
+            INSERT INTO roles (name, type, permissions, created_at, updated_at)
+            VALUES ('Admin', 'user', '{}', NOW(), NOW()) RETURNING id INTO v_role_id;
+        END IF;
 
-            -- Injeta ou sincroniza o superadmin com a senha mestra
-            IF NOT EXISTS (SELECT 1 FROM users WHERE email = '${USER_EMAIL}' OR username = 'admin') THEN
-                INSERT INTO users (username, password_login, password, email, name, type, user_role_id, status, twofa_type, created_at, updated_at)
-                VALUES ('admin', true, '${HASH_SENHA}', '${USER_EMAIL}', '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}', 'admin', v_role_id, 'enabled', 'none', NOW(), NOW());
-            ELSE
-                UPDATE users 
-                SET password = '${HASH_SENHA}', password_login = true, email = '${USER_EMAIL}', type = 'admin', status = 'enabled', updated_at = NOW() 
-                WHERE username = 'admin' OR email = '${USER_EMAIL}';
-            END IF;
-        END \$\$;
-        " >/dev/null 2>&1 || true
-        echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: admin ou ${USER_EMAIL} | Senha: [Cofre Mestre])."
-    else
-        echo "➜ [SRE LISTMONK] Credenciais administrativas configuradas via variáveis SSOT (Login: ${TS_EMAIL:-admin@localhost})."
-    fi
+        -- Injeta ou sincroniza o superadmin com o email do cliente como username principal
+        IF NOT EXISTS (SELECT 1 FROM users WHERE email = '${USER_EMAIL}' OR username = '${USER_EMAIL}') THEN
+            INSERT INTO users (username, password_login, password, email, name, type, user_role_id, status, twofa_type, created_at, updated_at)
+            VALUES ('${USER_EMAIL}', true, v_hash, '${USER_EMAIL}', '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}', 'user', v_role_id, 'enabled', 'none', NOW(), NOW());
+        ELSE
+            UPDATE users 
+            SET username = '${USER_EMAIL}', password = v_hash, password_login = true, email = '${USER_EMAIL}', type = 'user', status = 'enabled', updated_at = NOW() 
+            WHERE email = '${USER_EMAIL}' OR username = 'admin' OR username = '${USER_EMAIL}';
+        END IF;
+    END \$\$;
+    " >/dev/null 2>&1 || true
+    echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: ${USER_EMAIL} | Senha: [Cofre Mestre])."
 }
 
 render_forensic_report() {
