@@ -1,6 +1,6 @@
 services:
   wppconnect:
-    image: 'wppconnect/server:latest'
+    image: 'wppconnect/wppconnect-server:latest'
     container_name: '${PREFIXO_CONTAINER}_wppconnect'
     networks:
       instancia_net:
