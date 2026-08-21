@@ -358,8 +358,12 @@ build_envs() {
         cpu_wpp="1.0"
     fi
 
-    local mem_wpp="1024M"
+    local mem_wpp="1536M"
     local res_wpp="256M"
+    if [ "$ram_mb" -gt 12288 ]; then
+        mem_wpp="2048M"
+        res_wpp="512M"
+    fi
 
     cat << EOF >> "$env_path"
 
