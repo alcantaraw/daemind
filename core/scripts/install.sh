@@ -1182,9 +1182,31 @@ else
             exit 1
         fi
     fi
-    # SRE: Recria o Caddy WAF com os novos mapeamentos de portas e Caddyfile consolidado
-    echo "➜ [SRE INSTALL] Sincronizando portas e rotas de borda no Caddy WAF..."
-    sudo docker compose up -d --force-recreate caddy > /dev/null 2>&1 || true
+fi
+
+# SRE: Recria o Caddy WAF com os novos mapeamentos de portas e Caddyfile consolidado
+echo "➜ [SRE INSTALL] Sincronizando portas e rotas de borda no Caddy WAF..."
+sudo docker compose up -d --force-recreate caddy > /dev/null 2>&1 || true
+
+# 🛡️ SRE GUARDRAIL & SELF-HEALING: Validação do Ingress Estático do Portal (/etc/caddy/public/index.html)
+local CADDY_PORTAL_OK=false
+for tent_caddy in {1..5}; do
+    if docker exec "${PREFIXO_CONTAINER}_caddy" test -s /etc/caddy/public/index.html 2>/dev/null; then
+        CADDY_PORTAL_OK=true
+        break
+    else
+        echo "⚠️ [SRE WARN INSTALL] Assets do portal ausentes no volume do Caddy (Tentativa ${tent_caddy}/5). Re-sincronizando..."
+        cp -r "$TARGET_DIR/core/html/"* "$TARGET_DIR/core/html/" 2>/dev/null || true
+        sudo docker compose up -d --force-recreate caddy > /dev/null 2>&1 || true
+        sleep 2
+    fi
+done
+
+if [ "$CADDY_PORTAL_OK" = "true" ]; then
+    echo "✔ [SUCESSO SRE] Portal White-Label validado e acessível no Caddy WAF."
+else
+    echo "🚨 [ERRO CRÍTICO SRE] Falha ao sincronizar arquivos do portal no Caddy WAF."
+fi
 
     # --- AUTOMAÇÃO ATÔMICA DO CATÁLOGO DE IAS (HÍBRIDO) ---
     if [ "$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:4000/health/liveliness || echo "000")" != "200" ]; then
@@ -1193,7 +1215,6 @@ else
             sleep 3
         done
     fi
-fi
 }
 echo -e "\e[33m⏳ [EXECUTANDO INSTALL] Subida e Orquestração dos Microsserviços...\e[0m"
 step_docker_up_apps
