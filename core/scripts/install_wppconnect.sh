@@ -75,25 +75,44 @@ inject_caddy_routes() {
 
     if [ -f "$target_caddyfile" ]; then
         if grep -q "reverse_proxy ${PREFIX}_wppconnect:21465" "$target_caddyfile" 2>/dev/null; then
-            echo "➜ [IDEMPOTÊNCIA WPPCONNECT] Rota do WPPConnect já presente no Caddyfile (Porta :${port_ext})."
+            echo "➜ [IDEMPOTÊNCIA WPPCONNECT] Rotas do WPPConnect já presentes no Caddyfile."
         else
-            echo "➜ [SRE WPPCONNECT] Injetando rota do WPPConnect Server no Caddyfile (Porta :${port_ext})..."
+            echo "➜ [SRE WPPCONNECT] Injetando rotas do WPPConnect Server no Caddyfile (Subpath /wpp/ & Porta :${port_ext})..."
+            
+            # Injeta o proxy transparente /wpp/* logo antes do file_server no bloco do portal
+            python3 -c "
+path = '$target_caddyfile'
+try:
+    with open(path, 'r+', encoding='utf-8') as f:
+        content = f.read()
+        if 'handle_path /wpp/*' not in content:
+            target = '    file_server'
+            replacement = '''    # --- WPPCONNECT_SUBPATH_START ---
+    handle_path /wpp/* {
+        reverse_proxy ${PREFIX}_wppconnect:21465
+    }
+    # --- WPPCONNECT_SUBPATH_END ---
+
+    file_server'''
+            if target in content:
+                new_content = content.replace(target, replacement, 1)
+                f.seek(0)
+                f.write(new_content)
+                f.truncate()
+except Exception:
+    pass
+" 2>/dev/null || true
+
+            # Injeta a porta dedicada externa :18081
             sed -i "/# --- WPPCONNECT_START ---/,/# --- WPPCONNECT_END ---/d" "$target_caddyfile" 2>/dev/null || true
             cat << EOF >> "$target_caddyfile"
 
 # --- WPPCONNECT_START ---
-:18081 {
+:${port_ext} {
     log {
         level error
     }
     reverse_proxy ${PREFIX}_wppconnect:21465
-}
-
-:80 {
-    route /wpp/* {
-        uri strip_prefix /wpp
-        reverse_proxy ${PREFIX}_wppconnect:21465
-    }
 }
 # --- WPPCONNECT_END ---
 EOF
@@ -106,6 +125,7 @@ remove_caddy_routes() {
     if [ -f "$target_caddyfile" ]; then
         echo "➜ [SRE WPPCONNECT] Purgando rotas do WPPConnect Server do Caddyfile..."
         sed -i "/# --- WPPCONNECT_START ---/,/# --- WPPCONNECT_END ---/d" "$target_caddyfile" 2>/dev/null || true
+        sed -i "/# --- WPPCONNECT_SUBPATH_START ---/,/# --- WPPCONNECT_SUBPATH_END ---/d" "$target_caddyfile" 2>/dev/null || true
         sudo docker exec "${PREFIXO_CONTAINER}_caddy" caddy reload --config /etc/caddy/Caddyfile 2>/dev/null || true
     fi
 }
