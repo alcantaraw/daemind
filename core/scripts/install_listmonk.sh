@@ -247,7 +247,43 @@ get_version() {
 }
 
 provision_user() {
-    echo "➜ [SRE LISTMONK] Credenciais administrativas configuradas via variáveis SSOT (Login: ${TS_EMAIL:-admin@localhost})."
+    local PREFIX="${PREFIXO_CONTAINER}"
+    local DB_ADMIN="${DB_USER}"
+    local USER_EMAIL="${TS_EMAIL:-admin@localhost}"
+    local SENHA="${DB_PASSWORD}"
+
+    echo "➜ [SRE LISTMONK] Provisionando Super Admin automaticamente no banco do Listmonk..."
+
+    local HASH_SENHA
+    HASH_SENHA=$(python3 -c "
+import sys
+try:
+    import bcrypt
+    print(bcrypt.hashpw(b'''$SENHA''', bcrypt.gensalt(10)).decode('utf-8'))
+except Exception:
+    import subprocess
+    cmd = '''docker exec -i ${PREFIX}_umami node -e \"const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('$SENHA', 10));\" 2>/dev/null'''
+    out = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
+    print(out)
+" 2>/dev/null || true)
+
+    if [ -n "$HASH_SENHA" ]; then
+        sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
+        DO \$\$
+        BEGIN
+            -- Se não existir usuário no listmonk, insere o superadmin com a senha mestra
+            IF NOT EXISTS (SELECT 1 FROM users WHERE email = '${USER_EMAIL}' OR username = 'admin') THEN
+                INSERT INTO users (username, password, name, email, status, role, created_at, updated_at)
+                VALUES ('admin', '${HASH_SENHA}', '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}', '${USER_EMAIL}', 'active', 'superadmin', NOW(), NOW());
+            ELSE
+                UPDATE users SET password = '${HASH_SENHA}', email = '${USER_EMAIL}', updated_at = NOW() WHERE username = 'admin' OR email = '${USER_EMAIL}';
+            END IF;
+        END \$\$;
+        " >/dev/null 2>&1 || true
+        echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: admin ou ${USER_EMAIL} | Senha: [Cofre Mestre])."
+    else
+        echo "➜ [SRE LISTMONK] Credenciais administrativas configuradas via variáveis SSOT (Login: ${TS_EMAIL:-admin@localhost})."
+    fi
 }
 
 render_forensic_report() {

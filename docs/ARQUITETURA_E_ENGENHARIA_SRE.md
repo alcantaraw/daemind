@@ -455,17 +455,23 @@ A infraestrutura do **daemind.** opera com a matriz de imagens e versões audita
 | `${PREFIXO_CONTAINER}_postgres` | `pgvector/pgvector` | `pg17` | **17.11** | Banco de Dados Relacional & Vetorial |
 | `${PREFIXO_CONTAINER}_pgbouncer` | `edoburu/pgbouncer` | `v1.25.2-p0` | **1.25.2-p0** | Multiplexador de Conexões Postgres |
 | `${PREFIXO_CONTAINER}_caddy` | `caddy` | `2.11.4-alpine` | **2.11.4** | Reverse Proxy & WAF com SSL Automático |
-| `${PREFIXO_CONTAINER}_redis` | `redis` | `8.10-alpine` | **8.10.0** | Cache & Fila de Automações em Memória |
-| `${PREFIXO_CONTAINER}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` *(dinâmica)* | **1.98.0** | Gateway & Roteador de Modelos de IA |
+| `${PREFIXO_CONTAINER}_redis` | `redis` | `8.10-alpine` | **8.10.1** | Cache & Fila de Automações em Memória |
+| `${PREFIXO_CONTAINER}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` *(dinâmica)* | **1.99.0** | Gateway & Roteador de Modelos de IA |
 | `${PREFIXO_CONTAINER}_s3minio` | `alpine/minio` | `latest-release` *(dinâmica)* | **2025-10-25** | Armazenamento S3 Soberano *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_metabase` | `metabase/metabase` | `latest` *(dinâmica)* | **0.63.13** | Painéis e Dashboards de BI *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_n8n` | `n8nio/n8n` | `2.34.6` | **2.34.6** | Motor de Automação de Processos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_metabase` | `metabase/metabase` | `latest` *(dinâmica)* | **0.63.14.1** | Painéis e Dashboards de BI *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_n8n` | `n8nio/n8n` | `latest` *(dinâmica)* | **2.35.7** | Motor de Automação de Processos *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Orquestrador de Workflows (Postiz) |
 | `${PREFIXO_CONTAINER}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `v2.23.0` | **2.23.0** | Agendador de Redes Sociais *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_chatwoot` | `chatwoot/chatwoot` | `v4.16.2` | **4.16.2** | Inbox Omnichannel & Atendimento *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_evolution` | `evoapicloud/evolution-api` | `v2.3.7` | **2.3.7** | API de Conexão WhatsApp *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_wppconnect` | `wppconnect/wppconnect-server` | `latest` *(dinâmica)* | **2.10.4** | Gateway WhatsApp & Chatwoot Bridge *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_nocodb` | `nocodb/nocodb` | `2026.08.0` | **2026.08.0** | CRM e Planilhas Inteligentes *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` *(dinâmica)* | **0.11.0** | Interface Gráfica de IA *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_ollama` | `ollama/ollama` | `latest` *(dinâmica)* | **0.32.15** | Motor de Inferência Local Soberano *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` *(dinâmica)* | **2.121.0** | Motor de OCR & Parsing de Documentos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_listmonk` | `listmonk/listmonk` | `latest` *(dinâmica)* | **6.2.0** | E-mail Marketing & Transacional *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_shlink` | `shlinkio/shlink` | `stable` | **5.1.5** | Encurtador de Links & API UTM *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_shlink_web` | `shlinkio/shlink-web-client` | `latest` *(dinâmica)* | **4.8.1** | Interface Web do Shlink *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` | **3.3.1** | Web Analytics Soberano LGPD *(Módulo Opcional Desacoplado)* |
 
 ---
 

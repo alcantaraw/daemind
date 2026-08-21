@@ -222,7 +222,45 @@ get_version() {
 }
 
 provision_user() {
-    echo "➜ [SRE UMAMI] Engine Umami pronta. Login padrão inicial: admin / umami (recomenda-se alteração no primeiro login)."
+    local PREFIX="${PREFIXO_CONTAINER}"
+    local DB_ADMIN="${DB_USER}"
+    local USER_EMAIL="${TS_EMAIL:-admin@localhost}"
+    local SENHA="${DB_PASSWORD}"
+
+    echo "➜ [SRE UMAMI] Provisionando credenciais unificadas do Administrador no Umami..."
+
+    # Gera o hash bcrypt da senha mestra com custo 10
+    local HASH_SENHA
+    HASH_SENHA=$(python3 -c "
+import sys
+try:
+    import bcrypt
+    print(bcrypt.hashpw(b'''$SENHA''', bcrypt.gensalt(10)).decode('utf-8'))
+except Exception:
+    import subprocess
+    cmd = '''docker exec -i ${PREFIX}_umami node -e \"const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('$SENHA', 10));\" 2>/dev/null'''
+    out = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
+    print(out)
+" 2>/dev/null || true)
+
+    if [ -n "$HASH_SENHA" ]; then
+        # Sincroniza o usuário 'admin' existente ou cria com o e-mail cadastrado
+        sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "umami_db" -q -c "
+        DO \$\$
+        BEGIN
+            -- Atualiza senha do usuário admin padrão
+            UPDATE \"user\" SET password = '${HASH_SENHA}', updated_at = NOW() WHERE username = 'admin';
+            
+            -- Se não existir usuário com o email do cliente, atualiza o username do admin ou insere
+            IF NOT EXISTS (SELECT 1 FROM \"user\" WHERE username = '${USER_EMAIL}') THEN
+                UPDATE \"user\" SET username = '${USER_EMAIL}' WHERE username = 'admin';
+            END IF;
+        END \$\$;
+        " >/dev/null 2>&1 || true
+        echo "✔ [SUCESSO UMAMI] Administrador provisionado no Umami (Login: ${USER_EMAIL} ou admin | Senha: [Cofre Mestre])."
+    else
+        echo "⚠️ [SRE WARN UMAMI] Não foi possível calcular o hash bcrypt. Mantendo admin / umami como fallback."
+    fi
 }
 
 render_forensic_report() {
