@@ -209,7 +209,7 @@ EOF
 
 tui_dialog() {
     [ ! -f "/tmp/.daemind_dialogrc" ] && gerar_dialogrc
-    dialog --clear --ascii-lines --mouse --cr-wrap --no-collapse "$@" < /dev/tty
+    dialog --clear --ascii-lines --mouse --tab-correct --cr-wrap --no-collapse "$@" < /dev/tty
     return $?
 }
 
@@ -1305,14 +1305,21 @@ EOF
                     var_use="USE_$(echo "$m_name" | tr '[:lower:]' '[:upper:]')"
                     if [[ "${!var_use}" =~ ^[Ss]$ ]]; then
                         local_mod_count=$((local_mod_count + 1))
-                        item_fmt=$(printf "  %-20s" "[X] ${m_name}")
+                        # Alinhamento por preenchimento de espaços exato
+                        pad="                   " # 19 chars
+                        entry="[X] ${m_name}"
+                        len=${#entry}
+                        diff=$(( 22 - len ))
+                        [ $diff -lt 1 ] && diff=1
+                        item_fmt="${entry}${pad:0:$diff}"
+                        
                         current_line="${current_line}${item_fmt}"
                         if [ $(( local_mod_count % 3 )) -eq 0 ]; then
                             if [ -z "$active_mods_formatted" ]; then
-                                active_mods_formatted="${current_line}"
+                                active_mods_formatted="  ${current_line}"
                             else
                                 active_mods_formatted="${active_mods_formatted}
-${current_line}"
+  ${current_line}"
                             fi
                             current_line=""
                         fi
@@ -1320,10 +1327,10 @@ ${current_line}"
                 done
                 if [ -n "$current_line" ]; then
                     if [ -z "$active_mods_formatted" ]; then
-                        active_mods_formatted="${current_line}"
+                        active_mods_formatted="  ${current_line}"
                     else
                         active_mods_formatted="${active_mods_formatted}
-${current_line}"
+  ${current_line}"
                     fi
                 fi
 

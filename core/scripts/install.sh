@@ -1090,9 +1090,21 @@ if [ ${#APPS_OFFLINE[@]} -eq 0 ]; then
 else
     echo "  ↳ Disparando subida seletiva apenas dos microsserviços offline: ${APPS_OFFLINE[*]}..."
     
-    # SRE FIX: Proteção contra falso-negativo de 'unhealthy' no Docker Compose (Pico de I/O)
+    # SRE FIX: Proteção contra falso-negativo de 'unhealthy' e 'Address already in use' (Race condition de IP)
     if ! UP_ERR=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
-        if echo "$UP_ERR" | grep -qiE "unhealthy|dependency failed"; then
+        if echo "$UP_ERR" | grep -qiE "Address already in use|failed to set up container networking"; then
+            echo "⚠️ [SRE RECOVERY INSTALL] O Docker Engine encontrou race condition de alocação de IP ('Address already in use')."
+            echo "  ↳ Purgando contêineres órfãos e recriando com flush de rede..."
+            for svc_off in "${APPS_OFFLINE[@]}"; do
+                docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" 2>/dev/null || true
+            done
+            sleep 3
+            if ! UP_ERR_NET=$(docker compose up -d --force-recreate "${APPS_OFFLINE[@]}" 2>&1); then
+                echo "🚨 [ERRO CRÍTICO INSTALL] Falha na re-alocação de IP dos microsserviços:"
+                echo "$UP_ERR_NET"
+                exit 1
+            fi
+        elif echo "$UP_ERR" | grep -qiE "unhealthy|dependency failed"; then
             echo "⚠️ [SRE RECOVERY INSTALL] O Docker bloqueou a subida pois uma dependência reportou 'unhealthy' temporário (Pico de CPU/IO)."
             echo "  ↳ Aguardando 15s para estabilização das migrações e readiness probes..."
             sleep 15
