@@ -92,26 +92,6 @@ try:
             content = content[:m_cw.start(1)] + '\n'.join(new_lines) + content[m_cw.end(1):]
 
 
-        # Evolution overlay handler
-        evo_tag = '# --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---'
-        evo_pattern = re.escape(evo_tag) + r'\n([\s\S]*?)\n\s*' + re.escape(evo_tag)
-        m_evo = re.search(evo_pattern, content)
-        if m_evo:
-            block = m_evo.group(1)
-            lines = block.splitlines()
-            if use_evo:
-                new_lines = []
-                for line in lines:
-                    if line.startswith('  # '):
-                        new_lines.append('  ' + line[4:])
-                    elif line.startswith('# '):
-                        new_lines.append('  ' + line[2:])
-                    else:
-                        new_lines.append(line)
-            else:
-                new_lines = ['  # ' + line.lstrip(' #') if line.strip() else line for line in lines]
-            content = content[:m_evo.start(1)] + '\n'.join(new_lines) + content[m_evo.end(1):]
-
         # NocoDB overlay handler
         noco_tag = '# --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---'
         noco_pattern = re.escape(noco_tag) + r'\n([\s\S]*?)\n\s*' + re.escape(noco_tag)

@@ -43,13 +43,6 @@ services:
   # --- INJEÇÃO DECLARATIVA NATIVA NO CHATWOOT QUANDO S3MINIO ESTÁ ATIVO ---
 
 
-  # --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---
-  # evolution:
-  #   depends_on:
-  #     s3minio:
-  #       condition: service_healthy
-  # --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---
-
   # --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---
   # nocodb:
   #   depends_on:
