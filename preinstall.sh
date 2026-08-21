@@ -620,7 +620,7 @@ EOF
         sudo apt-get update -qq -o Dpkg::Lock::Timeout=120 > /dev/null 2>&1 || true
         sudo touch "$NOSSO_STAMP"
 
-        sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
+        sudo -E env DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
         sudo apt-get clean > /dev/null 2>&1 || true
         sudo systemctl stop dnsmasq 2>/dev/null || true
         echo "✔ [SUCESSO PREINSTALL] Pacotes do sistema instalados com sucesso."
@@ -1882,7 +1882,7 @@ EOF
         sudo apt-get update -qq -o Dpkg::Lock::Timeout=120 > /dev/null 2>&1 || true
         sudo touch "$NOSSO_STAMP"
 
-        sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
+        sudo -E env DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
         sudo apt-get clean > /dev/null 2>&1 || true
         sudo systemctl stop dnsmasq 2>/dev/null || true
         echo "✔ [SUCESSO PREINSTALL] Pacotes do sistema instalados com sucesso."
