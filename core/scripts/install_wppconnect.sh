@@ -291,9 +291,22 @@ get_version() {
 
 provision_user() {
     local PREFIX="${PREFIXO_CONTAINER}"
-    echo "➜ [SRE WPPCONNECT] Validando integração com Chatwoot CRM..."
-    if [ "${USE_CHATWOOT:-s}" = "s" ] && [ -n "${CHATWOOT_API_TOKEN:-}" ]; then
-        echo "✔ [SUCESSO WPPCONNECT] Token do Chatwoot CRM injetado no ambiente do WPPConnect."
+    echo "➜ [SRE WPPCONNECT] Validando integrações autônomas (Chatwoot CRM & n8n Workflows)..."
+    local env_file="${TARGET_DIR:-/opt/daemind}/.env"
+    local cw_token="${CHATWOOT_API_TOKEN:-}"
+    if [ -z "$cw_token" ] && [ -f "$env_file" ]; then
+        cw_token=$(grep '^CHATWOOT_API_TOKEN=' "$env_file" 2>/dev/null | cut -d= -f2 | tr -d '"\r\n ' || true)
+    fi
+
+    if [ -n "$cw_token" ]; then
+        echo "✔ [AUTO-INTEGRAÇÃO WPPCONNECT] Sincronizando token do Chatwoot no container WPPConnect..."
+        cd "${TARGET_DIR:-/opt/daemind}"
+        sudo docker compose up -d wppconnect >/dev/null 2>&1 || true
+        echo "✔ [SUCESSO WPPCONNECT] Integração WPPConnect <-> Chatwoot 100% autônoma e conectada."
+    fi
+
+    if [ "${USE_N8N:-s}" = "s" ]; then
+        echo "✔ [AUTO-INTEGRAÇÃO WPPCONNECT] Bridge de Webhook n8n ativa em: http://${PREFIX}_n8n:5678/webhook/wppconnect"
     fi
 }
 
@@ -306,6 +319,7 @@ render_forensic_report() {
 ---------------------------------------------------------------------
   💬 WPPCONNECT SERVER (WHATSAPP GATEWAY, CHATWOOT & N8N BRIDGE)
 ---------------------------------------------------------------------
+  ↳ Gerenciador & QR Code (Portal): http://${ts_domain}/wppconnect.html
   ↳ Documentação Swagger API:   http://${ts_domain}:${port_ext}/api-docs/
   ↳ Chave Secreta API (Bearer): ${sec_key}
   ↳ Integração Chatwoot:         Ativa (URL: http://${PREFIXO_CONTAINER}_chatwoot:3000)

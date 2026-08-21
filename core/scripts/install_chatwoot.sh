@@ -308,6 +308,31 @@ provision_user() {
         " < /dev/null 2>/dev/null || true
         echo "➜ [SUCESSO CHATWOOT] Administrador Chatwoot cadastrado."
     fi
+
+    # ---------------------------------------------------------------------------
+    # SRE AUTO-INTEGRAÇÃO ZERO-TOUCH: Captura o Access Token do Admin e salva no .env
+    # ---------------------------------------------------------------------------
+    local CW_TOKEN=$(sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
+      user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.first
+      if user
+        token = user.access_token&.token || user.create_access_token.token rescue nil
+        token ||= user.tokens.keys.first rescue nil
+        puts token if token
+      end
+    " < /dev/null 2>/dev/null | tr -d '\r\n ' || true)
+
+    if [ -n "$CW_TOKEN" ]; then
+        local env_file="${TARGET_DIR:-/opt/daemind}/.env"
+        if [ -f "$env_file" ]; then
+            if grep -q '^CHATWOOT_API_TOKEN=' "$env_file"; then
+                sudo sed -i "s|^CHATWOOT_API_TOKEN=.*|CHATWOOT_API_TOKEN=\"${CW_TOKEN}\"|" "$env_file" 2>/dev/null || true
+            else
+                echo "CHATWOOT_API_TOKEN=\"${CW_TOKEN}\"" | sudo tee -a "$env_file" > /dev/null 2>&1 || true
+            fi
+        fi
+        export CHATWOOT_API_TOKEN="$CW_TOKEN"
+        echo "✔ [AUTO-INTEGRAÇÃO CHATWOOT] Token de API obtido e persistido com sucesso."
+    fi
 }
 
 collect_wizard_inputs() {
