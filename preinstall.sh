@@ -1301,28 +1301,53 @@ EOF
                 active_mods_formatted=""
                 current_line=""
                 local_mod_count=0
+                selected_nodes_list=()
+
                 for m_name in "${SORTED_MOD_FILES[@]}"; do
                     var_use="USE_$(echo "$m_name" | tr '[:lower:]' '[:upper:]')"
                     if [[ "${!var_use}" =~ ^[Ss]$ ]]; then
-                        local_mod_count=$((local_mod_count + 1))
-                        # Alinhamento por preenchimento de espaços exato
-                        pad="                   " # 19 chars
-                        entry="[X] ${m_name}"
-                        len=${#entry}
-                        diff=$(( 22 - len ))
-                        [ $diff -lt 1 ] && diff=1
-                        item_fmt="${entry}${pad:0:$diff}"
-                        
-                        current_line="${current_line}${item_fmt}"
-                        if [ $(( local_mod_count % 3 )) -eq 0 ]; then
-                            if [ -z "$active_mods_formatted" ]; then
-                                active_mods_formatted="  ${current_line}"
-                            else
-                                active_mods_formatted="${active_mods_formatted}
-  ${current_line}"
+                        mod_script=""
+                        for cand_dir in "$SCRIPTS_DIR" "./core/scripts" "${TARGET_DIR}/core/scripts" "/opt/daemind/core/scripts"; do
+                            if [ -f "${cand_dir}/install_${m_name}.sh" ]; then
+                                mod_script="${cand_dir}/install_${m_name}.sh"
+                                break
                             fi
-                            current_line=""
+                        done
+
+                        if [ -n "$mod_script" ] && [ -f "$mod_script" ]; then
+                            nodes=$(sed -n '2p' "$mod_script" 2>/dev/null | sed -e 's/^#[[:space:]]*//' -e 's/\r//g' || true)
+                            for nd in $nodes; do
+                                [ -n "$nd" ] && selected_nodes_list+=("$(echo "$nd" | tr '[:lower:]' '[:upper:]')")
+                            done
+                        else
+                            selected_nodes_list+=("$(echo "$m_name" | tr '[:lower:]' '[:upper:]')")
                         fi
+                    fi
+                done
+
+                # Remove duplicatas e preserva a ordem
+                local_mod_count=${#selected_nodes_list[@]}
+                for node_entry in "${selected_nodes_list[@]}"; do
+                    pad="                   " # 19 chars
+                    entry="[X] ${node_entry}"
+                    len=${#entry}
+                    diff=$(( 22 - len ))
+                    [ $diff -lt 1 ] && diff=1
+                    item_fmt="${entry}${pad:0:$diff}"
+                    
+                    current_line="${current_line}${item_fmt}"
+                    if [ $(( (${#selected_nodes_list[@]} - (local_mod_count - 1)) % 3 )) -eq 0 ] || [ $(( ${#selected_nodes_list[@]} - local_mod_count + 1 )) -eq ${#selected_nodes_list[@]} ]; then
+                        :
+                    fi
+                    local_mod_count=$((local_mod_count - 1))
+                    if [ $(( (${#selected_nodes_list[@]} - local_mod_count) % 3 )) -eq 0 ]; then
+                        if [ -z "$active_mods_formatted" ]; then
+                            active_mods_formatted="  ${current_line}"
+                        else
+                            active_mods_formatted="${active_mods_formatted}
+  ${current_line}"
+                        fi
+                        current_line=""
                     fi
                 done
                 if [ -n "$current_line" ]; then
@@ -1333,6 +1358,8 @@ EOF
   ${current_line}"
                     fi
                 fi
+
+                local_mod_count=${#selected_nodes_list[@]}
 
                 ai_list_formatted="  [X] OpenRouter (Obrigatório)"
                 [ -n "${OPENAI_API_KEY:-}" ]    && ai_list_formatted="${ai_list_formatted}  [X] OpenAI"
@@ -1355,13 +1382,13 @@ EOF
 • Provedores de IA:
 ${ai_list_formatted}
 
-• Módulos Ativos (${local_mod_count}):
+• Módulos & Nós Ativos (${local_mod_count}):
 ${active_mods_formatted}
 
 ----------------------------------------------------------------------
 Deseja confirmar e iniciar a instalação imediatamente?"
 
-                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 24 82; then
+                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 25 82; then
                     EXECUTAR_INSTALL="s"
                     break
                 else
