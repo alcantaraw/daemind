@@ -74,12 +74,27 @@ inject_caddy_routes() {
     local port_ext="${HOST_WPPCONNECT_PORT:-18081}"
 
     if [ -f "$target_caddyfile" ]; then
+        # SRE PURGE: Garante a eliminação preventiva de qualquer bloco :80 residual que declare /wpp/
+        python3 -c "
+import re
+path = '$target_caddyfile'
+try:
+    with open(path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    # Remove blocos ':80 { route /wpp...' ou ':80 { handle /wpp...' avulsos no fim do arquivo
+    content = re.sub(r'\n+:80\s*\{[^}]*(?:/wpp|wppconnect)[^}]*\}', '', content)
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+except Exception:
+    pass
+" 2>/dev/null || true
+
         if grep -q "reverse_proxy ${PREFIX}_wppconnect:21465" "$target_caddyfile" 2>/dev/null; then
             echo "➜ [IDEMPOTÊNCIA WPPCONNECT] Rotas do WPPConnect já presentes no Caddyfile."
         else
             echo "➜ [SRE WPPCONNECT] Injetando rotas do WPPConnect Server no Caddyfile (Subpath /wpp/ & Porta :${port_ext})..."
             
-            # Injeta o proxy transparente /wpp/* logo antes do file_server no bloco do portal
+            # Injeta o proxy transparente /wpp/* dentro do bloco do portal (antes de file_server)
             python3 -c "
 path = '$target_caddyfile'
 try:
@@ -126,6 +141,18 @@ remove_caddy_routes() {
         echo "➜ [SRE WPPCONNECT] Purgando rotas do WPPConnect Server do Caddyfile..."
         sed -i "/# --- WPPCONNECT_START ---/,/# --- WPPCONNECT_END ---/d" "$target_caddyfile" 2>/dev/null || true
         sed -i "/# --- WPPCONNECT_SUBPATH_START ---/,/# --- WPPCONNECT_SUBPATH_END ---/d" "$target_caddyfile" 2>/dev/null || true
+        python3 -c "
+import re
+path = '$target_caddyfile'
+try:
+    with open(path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    content = re.sub(r'\n+:80\s*\{[^}]*(?:/wpp|wppconnect)[^}]*\}', '', content)
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+except Exception:
+    pass
+" 2>/dev/null || true
         sudo docker exec "${PREFIXO_CONTAINER}_caddy" caddy reload --config /etc/caddy/Caddyfile 2>/dev/null || true
     fi
 }
