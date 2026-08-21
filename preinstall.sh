@@ -967,7 +967,7 @@ EOF
                 IS_PROVISIONED=0
 
                 if [ -f "$EXISTING_ENV" ] || (command -v sudo >/dev/null 2>&1 && sudo test -f "$EXISTING_ENV" 2>/dev/null); then
-                    local _env_content=""
+                    _env_content=""
                     if [ -r "$EXISTING_ENV" ]; then
                         _env_content=$(cat "$EXISTING_ENV" 2>/dev/null || true)
                     elif command -v sudo >/dev/null 2>&1; then
@@ -1428,7 +1428,7 @@ else
     IS_PROVISIONED=0
 
     if [ -f "$EXISTING_ENV" ] || (command -v sudo >/dev/null 2>&1 && sudo test -f "$EXISTING_ENV" 2>/dev/null); then
-        local _cli_env_content=""
+        _cli_env_content=""
         if [ -r "$EXISTING_ENV" ]; then
             _cli_env_content=$(cat "$EXISTING_ENV" 2>/dev/null || true)
         elif command -v sudo >/dev/null 2>&1; then
