@@ -62,7 +62,7 @@ inject_caddy_routes() {
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
     local PREFIX="${PREFIXO_CONTAINER}"
-    local port_api="${HOST_SHLINK_PORT:-8080}"
+    local port_api="${HOST_SHLINK_PORT:-8081}"
     local port_web="${HOST_SHLINK_WEB_PORT:-8082}"
 
     if [ -f "$CADDYFILE_PATH" ]; then
@@ -92,7 +92,7 @@ remove_caddy_routes() {
     if [ ! -f "$CADDYFILE_PATH" ] && [ -f "$TARGET_DIR/core/config/Caddyfile" ]; then
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
-    local port_api="${HOST_SHLINK_PORT:-8080}"
+    local port_api="${HOST_SHLINK_PORT:-8081}"
     local port_web="${HOST_SHLINK_WEB_PORT:-8082}"
     if [ -f "$CADDYFILE_PATH" ] && grep -q ":${port_api}" "$CADDYFILE_PATH"; then
         echo "➜ [SRE SHLINK] Removendo rotas do Shlink do Caddyfile..."
@@ -278,7 +278,7 @@ build_envs() {
 
 # --- Shlink Decoupled Env & Tuning ---
 USE_SHLINK="${USE_SHLINK:-s}"
-HOST_SHLINK_PORT="8080"
+HOST_SHLINK_PORT="8081"
 HOST_SHLINK_WEB_PORT="8082"
 CPU_SHLINK=${CPU_SHLINK:-${cpu_shlink}}
 MEM_SHLINK=${MEM_SHLINK:-${mem_shlink}}

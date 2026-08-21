@@ -1092,13 +1092,14 @@ else
     
     # SRE FIX: Proteção contra falso-negativo de 'unhealthy' e 'Address already in use' (Race condition de IP)
     if ! UP_ERR=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
-        if echo "$UP_ERR" | grep -qiE "Address already in use|failed to set up container networking"; then
+        if echo "$UP_ERR" | grep -qiE "Address already in use|failed to set up container networking|already in use"; then
             echo "⚠️ [SRE RECOVERY INSTALL] O Docker Engine encontrou race condition de alocação de IP ('Address already in use')."
             echo "  ↳ Purgando contêineres órfãos e recriando com flush de rede..."
             for svc_off in "${APPS_OFFLINE[@]}"; do
-                docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" 2>/dev/null || true
+                svc_clean=$(echo "$svc_off" | tr '-' '_')
+                docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" "${PREFIXO_CONTAINER}_${svc_clean}" 2>/dev/null || true
             done
-            sleep 3
+            sleep 4
             if ! UP_ERR_NET=$(docker compose up -d --force-recreate "${APPS_OFFLINE[@]}" 2>&1); then
                 echo "🚨 [ERRO CRÍTICO INSTALL] Falha na re-alocação de IP dos microsserviços:"
                 echo "$UP_ERR_NET"
