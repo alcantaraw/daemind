@@ -365,13 +365,13 @@ provision_user() {
       '{email: $email, password: $pwd, name: $name, company: $company, provider: "LOCAL"}')
 
     local RESPONSE_POSTIZ="502"
-    for attempt in {1..30}; do
+    for attempt in {1..10}; do
         # 1. Aguarda ativamente o backend do Postiz responder com código válido (não 502/000)
-        local probe=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
+        local probe=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
         probe=$(echo "$probe" | tr -dc '0-9')
         
-        if [ "$probe" = "200" ] || [ "$probe" = "307" ] || [ "$probe" = "302" ]; then
-            RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 15 -X POST "http://127.0.0.1:5000/api/auth/register" \
+        if [ "$probe" = "200" ] || [ "$probe" = "307" ] || [ "$probe" = "302" ] || [ "$probe" = "404" ]; then
+            RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 10 -X POST "http://127.0.0.1:5000/api/auth/register" \
               -H "Content-Type: application/json" \
               -d "$PAYLOAD_POSTIZ" 2>/dev/null || echo "000")
             
@@ -380,7 +380,7 @@ provision_user() {
                 break
             fi
         fi
-        sleep 3
+        sleep 2
     done
 
     if [[ "$RESPONSE_POSTIZ" =~ ^2 ]]; then
@@ -450,7 +450,7 @@ FRONTEND_URL="http://${domain}:5000"
 MAIN_URL="http://${domain}:5000"
 NEXT_PUBLIC_BACKEND_URL="http://${domain}:5000"
 BACKEND_URL="http://${domain}:5000"
-BACKEND_INTERNAL_URL="http://localhost:3000"
+BACKEND_INTERNAL_URL="http://localhost:3002"
 CPU_POSTIZ=${CPU_POSTIZ:-${cpu_postiz}}
 MEM_POSTIZ=${MEM_POSTIZ:-${mem_postiz}}
 RES_POSTIZ=${RES_POSTIZ:-${res_postiz}}

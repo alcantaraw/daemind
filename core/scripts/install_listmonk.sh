@@ -257,6 +257,10 @@ provision_user() {
 
     echo "➜ [SRE LISTMONK] Provisionando Super Admin automaticamente no banco do Listmonk..."
 
+    local JA_EXISTE=$(sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -t -A -c "
+        SELECT 1 FROM users WHERE email = '${USER_EMAIL}' OR username = '${USER_EMAIL}' LIMIT 1;
+    " 2>/dev/null | tr -d '\r\n ' || true)
+
     sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
     CREATE EXTENSION IF NOT EXISTS pgcrypto;
     DO \$\$
@@ -285,7 +289,12 @@ provision_user() {
         END IF;
     END \$\$;
     " >/dev/null 2>&1 || true
-    echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: ${USER_EMAIL} | Senha: [Cofre Mestre])."
+
+    if [ "$JA_EXISTE" = "1" ]; then
+        echo "➜ [IDEMPOTÊNCIA LISTMONK] Super Admin Listmonk (${USER_EMAIL}) já cadastrado. Credenciais sincronizadas com o Cofre Mestre."
+    else
+        echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: ${USER_EMAIL} | Senha: [Cofre Mestre])."
+    fi
 }
 
 render_forensic_report() {

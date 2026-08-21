@@ -229,6 +229,10 @@ provision_user() {
 
     echo "➜ [SRE UMAMI] Provisionando credenciais unificadas do Administrador no Umami..."
 
+    local JA_EXISTE=$(sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "umami_db" -t -A -c "
+        SELECT 1 FROM \"user\" WHERE username = '${USER_EMAIL}' LIMIT 1;
+    " 2>/dev/null | tr -d '\r\n ' || true)
+
     sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "umami_db" -q -c "
     CREATE EXTENSION IF NOT EXISTS pgcrypto;
     DO \$\$
@@ -246,7 +250,12 @@ provision_user() {
         END IF;
     END \$\$;
     " >/dev/null 2>&1 || true
-    echo "✔ [SUCESSO UMAMI] Administrador provisionado no Umami (Login: ${USER_EMAIL} ou admin | Senha: [Cofre Mestre])."
+
+    if [ "$JA_EXISTE" = "1" ]; then
+        echo "➜ [IDEMPOTÊNCIA UMAMI] Administrador Umami (${USER_EMAIL}) já cadastrado. Credenciais sincronizadas com o Cofre Mestre."
+    else
+        echo "✔ [SUCESSO UMAMI] Administrador provisionado no Umami (Login: ${USER_EMAIL} ou admin | Senha: [Cofre Mestre])."
+    fi
 }
 
 render_forensic_report() {
