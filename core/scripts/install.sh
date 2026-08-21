@@ -1094,17 +1094,19 @@ else
     if ! UP_ERR=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
         if echo "$UP_ERR" | grep -qiE "unhealthy|dependency failed"; then
             echo "⚠️ [SRE RECOVERY INSTALL] O Docker bloqueou a subida pois uma dependência reportou 'unhealthy' temporário (Pico de CPU/IO)."
-            echo "  ↳ Resetando o estado de saúde do Redis e do Postgres..."
-            docker restart ${PREFIXO_CONTAINER}_redis ${PREFIXO_CONTAINER}_postgres > /dev/null 2>&1 || true
-            
-            # Aguarda o reset cravar no Daemon
-            sleep 10
+            echo "  ↳ Aguardando 15s para estabilização das migrações e readiness probes..."
+            sleep 15
             
             echo "  ↳ Retentando injeção dos contêineres..."
             if ! UP_ERR2=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
-                echo "🚨 [ERRO CRÍTICO INSTALL] Falha definitiva ao inicializar microsserviços:"
-                echo "$UP_ERR2"
-                exit 1
+                echo "  ↳ Resetando o estado de saúde dos bancos e retentando..."
+                docker restart ${PREFIXO_CONTAINER}_redis ${PREFIXO_CONTAINER}_postgres > /dev/null 2>&1 || true
+                sleep 10
+                if ! UP_ERR3=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
+                    echo "🚨 [ERRO CRÍTICO INSTALL] Falha definitiva ao inicializar microsserviços:"
+                    echo "$UP_ERR3"
+                    exit 1
+                fi
             fi
         else
             echo "🚨 [ERRO CRÍTICO INSTALL] Falha ao inicializar os microsserviços:"
