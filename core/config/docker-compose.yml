@@ -70,7 +70,7 @@ services:
       retries: 3
 
   pgbouncer:
-    image: 'edoburu/pgbouncer:v1.25.2-p0'
+    image: 'edoburu/pgbouncer:latest'
     container_name: '${PREFIXO_CONTAINER}_pgbouncer'
     networks:
       instancia_net:
@@ -115,7 +115,7 @@ services:
       retries: 3
 
   caddy:
-    image: 'caddy:2.11.4-alpine'
+    image: 'caddy:alpine'
     container_name: '${PREFIXO_CONTAINER}_caddy'
     restart: unless-stopped
     networks:

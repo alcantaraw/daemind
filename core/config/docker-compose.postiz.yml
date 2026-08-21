@@ -50,8 +50,7 @@ services:
       start_period: 25s
 
   postiz:
-    # image: 'ghcr.io/gitroomhq/postiz-app:v2.21.10'
-    image: 'ghcr.io/gitroomhq/postiz-app:v2.23.0'
+    image: 'ghcr.io/gitroomhq/postiz-app:latest'
     container_name: '${PREFIXO_CONTAINER}_postiz'
     networks:
       instancia_net:

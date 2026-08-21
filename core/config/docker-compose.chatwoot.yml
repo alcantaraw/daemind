@@ -1,6 +1,6 @@
 services:
   chatwoot:
-    image: 'chatwoot/chatwoot:v4.16.2'
+    image: 'chatwoot/chatwoot:latest'
     container_name: '${PREFIXO_CONTAINER}_chatwoot'
     networks:
       instancia_net:
