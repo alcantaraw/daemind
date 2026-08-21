@@ -1094,13 +1094,28 @@ else
     if ! UP_ERR=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
         if echo "$UP_ERR" | grep -qiE "Address already in use|failed to set up container networking|already in use"; then
             echo "⚠️ [SRE RECOVERY INSTALL] O Docker Engine encontrou race condition de alocação de IP ('Address already in use')."
-            echo "  ↳ Purgando contêineres órfãos e liberando endpoints da rede instancia_net..."
-            local net_id=$(docker network ls --filter "name=instancia_net" -q 2>/dev/null | head -n 1 || true)
+            echo "  ↳ Purgando contêineres conflitantes e liberando endpoints da rede..."
+            
+            # 1. Pede ao Docker para desconectar forçadamente e remover os serviços offline
             for svc_off in "${APPS_OFFLINE[@]}"; do
                 svc_clean=$(echo "$svc_off" | tr '-' '_')
-                [ -n "$net_id" ] && docker network disconnect -f "$net_id" "${PREFIXO_CONTAINER}_${svc_clean}" 2>/dev/null || true
                 docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" "${PREFIXO_CONTAINER}_${svc_clean}" 2>/dev/null || true
             done
+            
+            # 2. Se o IP ainda estiver retido por outro container legado/desatualizado, localiza e desanexa
+            for net_name in $(docker network ls --format '{{.Name}}' | grep -E "instancia_net|default" || true); do
+                for c_id in $(docker network inspect "$net_name" --format '{{range $k, $v := .Containers}}{{$k}} {{end}}' 2>/dev/null || true); do
+                    c_name=$(docker inspect -f '{{.Name}}' "$c_id" 2>/dev/null | sed 's/^\///' || true)
+                    for svc_off in "${APPS_OFFLINE[@]}"; do
+                        svc_clean=$(echo "$svc_off" | tr '-' '_')
+                        if [ "$c_name" = "${PREFIXO_CONTAINER}_${svc_off}" ] || [ "$c_name" = "${PREFIXO_CONTAINER}_${svc_clean}" ]; then
+                            docker network disconnect -f "$net_name" "$c_id" 2>/dev/null || true
+                            docker rm -f "$c_id" 2>/dev/null || true
+                        fi
+                    done
+                done
+            done
+            
             sleep 3
             if ! UP_ERR_NET=$(docker compose up -d --force-recreate "${APPS_OFFLINE[@]}" 2>&1); then
                 echo "🚨 [ERRO CRÍTICO INSTALL] Falha na re-alocação de IP dos microsserviços:"
