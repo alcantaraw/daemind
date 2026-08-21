@@ -279,15 +279,29 @@ gerar_relatorio_versoes_stack() {
         [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
 
         for container in "${STACK_ACTIVE_CONTAINERS[@]}"; do
-            local imagem=$(docker inspect --format '{{.Config.Image}}' "$container" 2>/dev/null || echo "N/A")
+            local imagem=$(docker inspect --format '{{.Config.Image}}' "$container" 2>/dev/null | tr -d '\r\n' || echo "N/A")
+            [ -z "$imagem" ] && imagem="N/A"
             local servico="${container#${PREFIXO}_}"
             local versao=""
 
-            # Delegador Polimórfico: se existir install_<servico>.sh, delega para get_version do módulo
-            if [ -f "$TARGET_DIR/core/scripts/install_${servico}.sh" ]; then
-                versao=$(bash "$TARGET_DIR/core/scripts/install_${servico}.sh" "$TARGET_DIR" get_version "$servico" 2>/dev/null || echo "")
-            elif [ "$servico" = "temporal" ] && [ -f "$TARGET_DIR/core/scripts/install_postiz.sh" ]; then
-                versao=$(bash "$TARGET_DIR/core/scripts/install_postiz.sh" "$TARGET_DIR" get_version "temporal" 2>/dev/null || echo "")
+            # Inversão de Controle (IoC): Descoberta dinâmica do script responsável pelo nó (via Linha 2 de cada install_*.sh)
+            for mod_script in "$TARGET_DIR"/core/scripts/install_*.sh; do
+                [ ! -f "$mod_script" ] && continue
+                local nodes_decl=$(sed -n '2p' "$mod_script" 2>/dev/null | sed 's/^#[[:space:]]*//' | tr '[:upper:]' '[:lower:]')
+                local svc_norm=$(echo "$servico" | tr '_-' ' ')
+                for nd in $nodes_decl; do
+                    nd_norm=$(echo "$nd" | tr '_-' ' ')
+                    if [ "$nd_norm" = "$svc_norm" ] || [ "$nd" = "$servico" ] || [ "$nd" = "${servico//-/_}" ]; then
+                        versao=$(bash "$mod_script" "$TARGET_DIR" get_version "$servico" 2>/dev/null || echo "")
+                        break 2
+                    fi
+                done
+            done
+
+            # Fallback Universal: Leitura de Labels OCI nativas da imagem do container
+            if [ -z "$versao" ]; then
+                versao=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "$container" 2>/dev/null || true)
+                [ -z "$versao" ] && versao=$(docker inspect -f '{{index .Config.Labels "version"}}' "$container" 2>/dev/null || true)
             fi
 
             # Fallback para serviços do Core que não possuem script desacoplado dedicado
@@ -318,19 +332,9 @@ gerar_relatorio_versoes_stack() {
                         fi
                         ;;
                 esac
-            fi
-
-            if [ -z "$versao" ]; then
-                local tag_imagem="${imagem##*:}"
-                if [ -n "$tag_imagem" ] && [ "$tag_imagem" != "$imagem" ]; then
-                    versao="${tag_imagem}"
-                else
-                    versao="N/A"
-                fi
-            fi
-
             # Sanitização global de formatação (remove "Tag (...)", "RELEASE.", e prefixo "v")
-            versao=$(echo "$versao" | sed -E 's/^Tag \((.*)\)$/\1/; s/^RELEASE\.//; s/^[vV]//')
+            versao=$(echo "$versao" | sed -E 's/^Tag \((.*)\)$/\1/; s/^RELEASE\.//; s/^[vV]//' | tr -d '\r\n ' | head -n 1)
+            [ -z "$versao" ] && versao="N/A"
 
             printf "%-20s | %-50s | %-20s\n" "$container" "$imagem" "$versao"
         done

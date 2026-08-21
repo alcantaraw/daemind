@@ -232,9 +232,19 @@ audit_health() {
 }
 
 get_version() {
+    local target_svc="${1:-shlink}"
     local PREFIX="${PREFIXO_CONTAINER}"
-    local container_name="${PREFIX}_shlink"
-    sudo docker exec "$container_name" shlink --version 2>/dev/null | grep -o '[0-9.]*' | head -n 1 || echo "stable"
+    local ver=""
+    if [ "$target_svc" = "shlink-web" ] || [ "$target_svc" = "shlink_web" ]; then
+        ver=$(sudo docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "${PREFIX}_shlink_web" 2>/dev/null || true)
+        [ -z "$ver" ] && ver=$(sudo docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "${PREFIX}_shlink-web" 2>/dev/null || true)
+        [ -z "$ver" ] && ver=$(sudo docker inspect -f '{{index .Config.Labels "version"}}' "${PREFIX}_shlink_web" 2>/dev/null || true)
+    else
+        local container_name="${PREFIX}_shlink"
+        ver=$(sudo docker exec "$container_name" shlink --version 2>/dev/null | grep -oE '[0-9]+(\.[0-9]+)+' | head -n 1 || true)
+        [ -z "$ver" ] && ver=$(sudo docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "$container_name" 2>/dev/null || true)
+    fi
+    echo "$ver"
 }
 
 provision_user() {
