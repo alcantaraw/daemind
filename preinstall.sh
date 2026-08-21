@@ -70,10 +70,19 @@ if [ -n "$HTTP_NOW" ]; then
     sudo date -s "$HTTP_NOW" >/dev/null 2>&1 || true
 fi
 
-# Instalação silenciosa de ferramentas essenciais de bootstrap (dialog e git)
+# Instalação silenciosa de ferramentas essenciais de bootstrap (dialog e git) com timeout estrito de 60s
 if ! command -v dialog &>/dev/null || ! command -v git &>/dev/null; then
-    sudo apt-get update -qq -o Dpkg::Lock::Timeout=60 > /dev/null 2>&1 || true
-    sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" dialog git > /dev/null 2>&1 || true
+    local_err_apt=0
+    sudo apt-get update -qq -o Dpkg::Lock::Timeout=30 > /dev/null 2>&1 || local_err_apt=1
+    sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=30 -o Dpkg::Options::="--force-confold" dialog git > /dev/null 2>&1 || local_err_apt=1
+
+    if [ "$local_err_apt" -eq 1 ] || ! command -v dialog &>/dev/null; then
+        if [ "$USE_TUI" = "true" ]; then
+            echo -e "${CLR_YELLOW}⚠️  [BOOTSTRAP WARN] Não foi possível instalar o pacote 'dialog' via apt (timeout/bloqueio de lock).${CLR_RESET}"
+            echo -e "${CLR_YELLOW}  ↳ Alternando automaticamente para o Modo CLI Clássico...${CLR_RESET}"
+            USE_TUI="false"
+        fi
+    fi
 fi
 
 # =========================================================================
@@ -1748,7 +1757,7 @@ EOF
 
     PACOTES_REQUERIDOS=(
         chrony wget iputils-ping curl openssl iptables ipset cron dnsmasq apt-transport-https
-        ca-certificates gnupg tcpdump net-tools lsb-release jq git vim
+        ca-certificates gnupg tcpdump net-tools lsb-release jq git vim dialog
         docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
         bind9-utils sysstat htop dnsutils systemd-timesyncd
     )
