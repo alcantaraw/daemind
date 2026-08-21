@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>daemind. | Gerenciador WhatsApp WPPConnect</title>
+    <link rel="icon" type="image/png" href="/favicon-daemind.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050b14;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #00f0ff;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --input-bg: rgba(2, 6, 23, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.08) 0%, transparent 60%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .manager-card {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+        }
+
+        .header .icon {
+            font-size: 2rem;
+            background: rgba(0, 240, 255, 0.1);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00f0ff 0%, #0099ff 100%);
+            color: #020617;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .qr-container {
+            display: none;
+            margin-top: 1.5rem;
+            text-align: center;
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px dashed rgba(0, 240, 255, 0.3);
+            border-radius: 14px;
+            padding: 1.5rem;
+        }
+
+        .qr-container img {
+            max-width: 240px;
+            border-radius: 12px;
+            margin: 12px auto;
+            display: block;
+            background: #fff;
+            padding: 8px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #64748b;
+        }
+
+        .status-connected .status-dot { background: var(--accent-green); }
+        .status-connected { color: var(--accent-green); }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="manager-card">
+        <div class="header">
+            <div class="icon">💬</div>
+            <div>
+                <h2>WPPConnect Manager</h2>
+                <p>Gerenciador Autônomo de Sessões & QR Code WhatsApp</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Nome da Sessão (Identificador do WhatsApp):</label>
+            <input type="text" id="sessionName" value="default" placeholder="Ex: comercial, suporte, default">
+        </div>
+
+        <button class="btn-action" id="btnConnect" onclick="iniciarConexao()">🚀 Conectar / Gerar QR Code</button>
+
+        <div class="qr-container" id="qrBox">
+            <div class="status-badge" id="statusBadge"><div class="status-dot"></div> <span id="statusText">Aguardando Leitura...</span></div>
+            <div id="qrContent">
+                <img id="qrImg" src="" alt="QR Code WhatsApp">
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">Abra o WhatsApp no celular ➔ Aparelhos Conectados ➔ Conectar Aparelho</p>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <a href="/" target="_self">← Voltar ao Portal</a>
+            <a href="http://" id="linkSwagger" target="_blank">Documentação Swagger (API) ➔</a>
+        </div>
+    </div>
+
+    <script>
+        // Senha Mestra injetada pelo SSOT no provisionamento
+        const MASTER_KEY = "__MASTER_KEY__";
+
+        // Sincroniza porta do Swagger dinamicamente
+        const host = window.location.hostname;
+        document.getElementById('linkSwagger').href = `${window.location.protocol}//${host}:18081/api-docs/`;
+
+        let pollInterval = null;
+
+        async function iniciarConexao() {
+            const session = document.getElementById('sessionName').value.trim() || 'default';
+            const btn = document.getElementById('btnConnect');
+            const qrBox = document.getElementById('qrBox');
+            const statusText = document.getElementById('statusText');
+            const qrImg = document.getElementById('qrImg');
+
+            btn.disabled = true;
+            btn.innerText = '⏳ Gerando Token com a Senha Mestra...';
+
+            try {
+                // 1. Gerar Token de Acesso da Sessão utilizando a Senha Mestra
+                const tokenRes = await fetch(`${window.location.protocol}//${host}:18081/api/${session}/${MASTER_KEY}/generate-token`, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                const tokenData = await tokenRes.json();
+                const bearerToken = tokenData.token || tokenData.full || '';
+
+                if (!bearerToken) {
+                    throw new Error('Falha ao autenticar sessão com a Senha Mestra.');
+                }
+
+                btn.innerText = '⚡ Conectando ao WhatsApp...';
+                qrBox.style.display = 'block';
+                statusText.innerText = 'Gerando QR Code...';
+
+                // 2. Iniciar / Consultar Sessão
+                await fetch(`${window.location.protocol}//${host}:18081/api/${session}/start-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${bearerToken}`
+                    },
+                    body: JSON.stringify({ waitQrCode: true })
+                });
+
+                // Inicia polling de QR Code e Status
+                if (pollInterval) clearInterval(pollInterval);
+                pollInterval = setInterval(() => consultarStatus(session, bearerToken), 3000);
+                consultarStatus(session, bearerToken);
+
+            } catch (err) {
+                alert('Erro na operação: ' + err.message);
+                btn.disabled = false;
+                btn.innerText = '🚀 Conectar / Gerar QR Code';
+            }
+        }
+
+        async function consultarStatus(session, token) {
+            try {
+                const res = await fetch(`${window.location.protocol}//${host}:18081/api/${session}/status-session`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+
+                const statusBadge = document.getElementById('statusBadge');
+                const statusText = document.getElementById('statusText');
+                const qrImg = document.getElementById('qrImg');
+                const btn = document.getElementById('btnConnect');
+
+                if (data.status === 'CONNECTED' || data.status === 'inChat' || data.connected === true) {
+                    statusBadge.className = 'status-badge status-connected';
+                    statusText.innerText = '✔ WhatsApp Conectado com Sucesso!';
+                    qrImg.style.display = 'none';
+                    btn.disabled = false;
+                    btn.innerText = '✔ Sessão Ativa';
+                    clearInterval(pollInterval);
+                    return;
+                }
+
+                if (data.qrcode || data.qrCode) {
+                    qrImg.style.display = 'block';
+                    qrImg.src = data.qrcode || data.qrCode;
+                    statusText.innerText = 'Aguardando Leitura do QR Code...';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>

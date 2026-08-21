@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# WPPCONNECT WPPCONNECT_WEB
-# Gateway Oficial Open Source WhatsApp, Frontend Web & Chatwoot Bridge
+# WPPCONNECT
+# Gateway Oficial Open Source WhatsApp & Chatwoot Bridge
 # ===============================================================================
 # DAEMIND SRE MODULE - PROVISIONADOR DINÂMICO WPPCONNECT SERVER (WHATSAPP)
 # Especificação: Módulo desacoplado de gerenciamento, injeção Caddy, visual e relatório WPPConnect
@@ -9,7 +9,7 @@
 
 set -eo pipefail
 
-MODULE_VERSION="v2026.08.21.02-FRONTEND-INTEGRATED"
+MODULE_VERSION="v2026.08.21.03-STANDALONE-OFFICIAL"
 
 TARGET_DIR="${1:-/opt/daemind}"
 ENV_FILE="${TARGET_DIR}/.env"
@@ -35,6 +35,12 @@ build_structure() {
         echo "➜ [SRE WPPCONNECT] Criando estrutura física de volumes e permissões do WPPConnect Server..."
         sudo mkdir -p "$VOL_PATH/tokens" "$VOL_PATH/userDataDir" 2>/dev/null || true
         sudo chown -R "$TARGET_OWNER" "$VOL_PATH" 2>/dev/null || true
+    fi
+
+    # Injeta a Senha Mestra diretamente no template HTML para Zero Atrito
+    local HTML_MGR="$TARGET_DIR/core/html/wppconnect.html"
+    if [ -f "$HTML_MGR" ]; then
+        sed -i "s|__MASTER_KEY__|${DB_PASSWORD}|g" "$HTML_MGR" 2>/dev/null || true
     fi
 }
 
@@ -68,11 +74,10 @@ inject_caddy_routes() {
     local port_ext="${HOST_WPPCONNECT_PORT:-18081}"
 
     if [ -f "$target_caddyfile" ]; then
-        if grep -q "reverse_proxy ${PREFIX}_wppconnect:21465" "$target_caddyfile" 2>/dev/null && \
-           grep -q "reverse_proxy ${PREFIX}_wppconnect_web:8080" "$target_caddyfile" 2>/dev/null; then
-            echo "➜ [IDEMPOTÊNCIA WPPCONNECT] Rotas do WPPConnect Server e Frontend já presentes no Caddyfile (Porta :${port_ext})."
+        if grep -q "reverse_proxy ${PREFIX}_wppconnect:21465" "$target_caddyfile" 2>/dev/null; then
+            echo "➜ [IDEMPOTÊNCIA WPPCONNECT] Rota do WPPConnect já presente no Caddyfile (Porta :${port_ext})."
         else
-            echo "➜ [SRE WPPCONNECT] Injetando rotas do WPPConnect Server e Frontend no Caddyfile (Porta :${port_ext})..."
+            echo "➜ [SRE WPPCONNECT] Injetando rota do WPPConnect Server no Caddyfile (Porta :${port_ext})..."
             sed -i "/# --- WPPCONNECT_START ---/,/# --- WPPCONNECT_END ---/d" "$target_caddyfile" 2>/dev/null || true
             cat << EOF >> "$target_caddyfile"
 
@@ -81,12 +86,7 @@ inject_caddy_routes() {
     log {
         level error
     }
-    handle_path /manager* {
-        reverse_proxy ${PREFIX}_wppconnect_web:8080
-    }
-    handle {
-        reverse_proxy ${PREFIX}_wppconnect:21465
-    }
+    reverse_proxy ${PREFIX}_wppconnect:21465
 }
 # --- WPPCONNECT_END ---
 EOF
@@ -108,7 +108,7 @@ inject_dashboard_card() {
     local port_ext="${HOST_WPPCONNECT_PORT:-18081}"
 
     if [ -f "$target_html" ]; then
-        if grep -q 'data-port="'"$port_ext"'"' "$target_html" 2>/dev/null; then
+        if grep -q 'data-path="/wppconnect.html"' "$target_html" 2>/dev/null; then
             echo "➜ [IDEMPOTÊNCIA WPPCONNECT] Card do WPPConnect já presente no portal."
         else
             echo "➜ [SRE WPPCONNECT] Injetando card do WPPConnect no portal web..."
@@ -117,17 +117,17 @@ import sys
 try:
     with open('$target_html', 'r+', encoding='utf-8') as f:
         content = f.read()
-        if 'data-port=\"$port_ext\"' not in content:
-            card_html = '''        <a href=\"#\" data-port=\"$port_ext\" data-path=\"/manager/\" class=\"card dynamic-link\">
+        if 'data-path=\"/wppconnect.html\"' not in content:
+            card_html = '''        <a href=\"#\" data-port=\"80\" data-path=\"/wppconnect.html\" class=\"card dynamic-link\">
             <div class=\"card-content\">
                 <div class=\"card-header\">
                     <div class=\"icon\">💬</div>
                     <div class=\"status-indicator\"><div class=\"status-dot\"></div> Online</div>
                 </div>
-                <h3>WPPConnect Server</h3>
-                <p class=\"description\">Gateway Open Source para WhatsApp com painel Web Manager, Swagger e Chatwoot.</p>
+                <h3>WPPConnect WhatsApp</h3>
+                <p class=\"description\">Gerenciador de Sessões, Leitura de QR Code, API Swagger e Chatwoot Bridge.</p>
                 <div class=\"card-footer\">
-                    <span>Manager UI & API</span>
+                    <span>Manager & API</span>
                     <span class=\"port\">:$port_ext</span>
                 </div>
             </div>
@@ -174,7 +174,7 @@ disable() {
     remove_dashboard_card
     remove_caddy_routes
     local PREFIX="${PREFIXO_CONTAINER}"
-    sudo docker rm -f "${PREFIX}_wppconnect" "${PREFIX}_wppconnect_web" 2>/dev/null || true
+    sudo docker rm -f "${PREFIX}_wppconnect" 2>/dev/null || true
 
     # Limpeza de Regras de Firewall e DNS
     sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 18081 -j ACCEPT 2>/dev/null || true
@@ -183,7 +183,7 @@ disable() {
         sudo rm -f /etc/dnsmasq.d/wppconnect.conf 2>/dev/null || true
         sudo systemctl restart dnsmasq 2>/dev/null || true
     fi
-    echo "✔ [SUCESSO WPPCONNECT] Módulo WPPConnect Server desativado, containers removidos, firewall e rotas limpos."
+    echo "✔ [SUCESSO WPPCONNECT] Módulo WPPConnect Server desativado, container removido, firewall e rotas limpos."
 }
 
 start_container() {
@@ -250,9 +250,8 @@ render_forensic_report() {
 
     cat << EOF
 ---------------------------------------------------------------------
-  💬 WPPCONNECT SERVER (WHATSAPP GATEWAY, MANAGER UI & CHATWOOT)
+  💬 WPPCONNECT SERVER (WHATSAPP GATEWAY, CHATWOOT & N8N BRIDGE)
 ---------------------------------------------------------------------
-  ↳ Painel Web Manager (GUI):   http://${ts_domain}:${port_ext}/manager/
   ↳ Documentação Swagger API:   http://${ts_domain}:${port_ext}/api-docs/
   ↳ Chave Secreta API (Bearer): ${sec_key}
   ↳ Integração Chatwoot:         Ativa (URL: http://${PREFIXO_CONTAINER}_chatwoot:3000)
