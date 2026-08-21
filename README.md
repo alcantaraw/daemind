@@ -74,10 +74,14 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 | **Atendimento Omnichannel & WhatsApp** | Zendesk, ManyChat, Intercom | R$ 600 – R$ 1.500/mês | **Incluso** *(Chatwoot + Evolution API)* |
 | **Automação de Processos** | Zapier, Make, ActiveCampaign | R$ 400 – R$ 2.000/mês | **Incluso** *(n8n ilimitado)* |
 | **CRM e ERP Transacional** | Airtable, Salesforce, HubSpot | R$ 500 – R$ 1.800/mês | **Incluso** *(NocoDB)* |
-| **Agendamento de Redes Sociais** | Hootsuite, Buffer, mLabs | R$ 200 – R$ 600/mês | **Incluso** *(Postiz Planner)* |
+| **Agendamento de Redes Sociais** | Hootsuite, Buffer, mLabs | R$ 200 – R$ 600/mês | **Incluso** *(Postiz Planner + Temporal)* |
+| **E-mail Marketing & Transacional** | Mailchimp, SendGrid, RD Station | R$ 300 – R$ 1.500/mês | **Incluso** *(Listmonk Mailer)* |
+| **Encurtador de Links & UTMs** | Bitly Pro, Dub.co, Rebrandly | R$ 150 – R$ 600/mês | **Incluso** *(Shlink + Web Client)* |
+| **Web Analytics sem Cookies (LGPD)** | Google Analytics 4, Plausible | R$ 100 – R$ 400/mês | **Incluso** *(Umami Analytics)* |
+| **Business Intelligence & Dashboards**| PowerBI Pro, Tableau, Looker | R$ 300 – R$ 1.200/mês | **Incluso** *(Metabase BI)* |
 | **Gateway de IA & Chatbot Interno** | ChatGPT Team, Claude Pro, Poe | R$ 300 – R$ 1.200/mês | **Incluso** *(LiteLLM + Open WebUI)* |
 | **Armazenamento de Arquivos e Mídia** | AWS S3, Google Drive, Dropbox | R$ 150 – R$ 500/mês | **Incluso** *(MinIO S3 Soberano, Disco Local ou S3 Cloud)* |
-| **CUSTO TOTAL APROXIMADO** | — | **R$ 2.150 – R$ 7.600/mês** | **Apenas o custo do servidor (VPS)** |
+| **CUSTO TOTAL APROXIMADO** | — | **R$ 3.000 – R$ 11.300/mês** | **Apenas o custo do servidor (VPS)** |
 
 ---
 
@@ -95,11 +99,16 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 - **Visão 360°**: Visualize pedidos, dados de clientes, funis de prospecção B2B e acompanhamento de embalagens/insumos em painéis simples estilo planilha.
 - **Soberania dos Dados**: Mantenha seu histórico de clientes 100% sob seu controle, livre de exportações travadas por SaaS terceirizados.
 
-### 🧠 4. Inteligência Artificial Corporativa & RAG Soberano
+### ✉️ 4. E-mail Marketing, Campanhas e Atribuição Soberana
+- **Disparos em Massa & Transacionais**: Envie newsletters, fluxos de onboarding e e-mails de confirmação de compra sem pagar por volume de contatos via **Listmonk**.
+- **Encurtador de Links & Tags UTM**: Crie links curtos personalizados com domínio próprio, QR Codes dinâmicos e rastreamento de cliques em campanhas via **Shlink**.
+- **Privacidade & Analytics (LGPD)**: Acompanhe visitas e conversões em tempo real sem banners invasivos de cookies e sem enviar dados dos seus clientes para big techs via **Umami**.
+
+### 🧠 5. Inteligência Artificial Corporativa & RAG Soberano
 - **Roteamento Inteligente**: Roteie consultas entre os modelos mais avançados do mercado (Google Gemini, OpenAI ChatGPT, Anthropic Claude, DeepSeek) pelo menor custo disponível.
 - **Cérebro da Empresa (RAG)**: Treine IAs com manuais de produtos, FAQs de atendimento e políticas da empresa para responder dúvidas de clientes e equipe com precisão cirúrgica.
 
-### 🔒 5. Blindagem de Dados, Segurança Bancária e Autocura
+### 🔒 6. Blindagem de Dados, Segurança Bancária e Autocura
 - **Soberania Absoluta**: Seus leads, contatos e faturamento nunca saem do seu servidor privado.
 - **Backup Diário Criptografado**: Cópia de segurança automática dos dados e bancos com criptografia militar.
 - **Disponibilidade 24/7**: Sistema projetado com tecnologia de tolerância a falhas e autocura imediata caso haja oscilações de conexão.
@@ -113,7 +122,7 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 > - Para o passo a passo completo da coleta de variáveis no Wizard, rede e credenciais, consulte o [Manual de Implantação (docs/MANUAL_DE_IMPLANTACAO.md)](docs/MANUAL_DE_IMPLANTACAO.md).
 > - Para as especificações técnicas de integração de e-commerce, consulte o [Manual Técnico da Loja Integrada (docs/MANUAL_TECNICO_INTEGRACAO_LOJA_INTEGRADA.md)](docs/MANUAL_TECNICO_INTEGRACAO_LOJA_INTEGRADA.md).
 
-A infraestrutura é provisionada de forma **Low-Touch (Assistida)**. O script de preparação instala os pacotes básicos, ajusta o kernel, clona o repositório em `/opt/daemind` e guia o operador por um **Wizard CLI de 2 minutos no terminal** para coletar a identidade da empresa, seleção de módulos opcionais (Evolution API, Postiz, Chatwoot, NocoDB), senha mestra segura e chaves de IA.
+A infraestrutura é provisionada de forma **Low-Touch (Assistida)**. O script de preparação instala os pacotes básicos, ajusta o kernel, clona o repositório em `/opt/daemind` e guia o operador por um **Wizard CLI de 2 minutos no terminal** para coletar a identidade da empresa, seleção de módulos opcionais (Evolution API, Postiz, Chatwoot, NocoDB, Listmonk, Umami, Shlink, etc.), senha mestra segura e chaves de IA.
 
 Com o ambiente pronto e o código clonado, o sistema gera os pares de chaves criptográficas e executa a instalação autônoma em segundo plano.
 
@@ -157,6 +166,9 @@ Cada aplicação opera como um módulo 100% desacoplado (`docker-compose.<modulo
 - 🗣️ **Chatwoot & Evolution API**: Inbox Omnichannel de atendimento multiatendente e API de WhatsApp.
 - 📊 **NocoDB**: CRM e banco de dados relacional estilo planilha inteligente.
 - 🚀 **Postiz Planner & Temporal Engine**: Agendador e publicador de mídias sociais.
+- ✉️ **Listmonk Mailer**: Disparador de e-mail marketing, newsletters e transacionais soberanos.
+- 🔗 **Shlink & Web Client**: Encurtador de links soberano, QR Codes e atribuição de campanhas UTM.
+- 📈 **Umami Analytics**: Web analytics moderno, leve e 100% aderente à LGPD/GDPR sem cookies invasivos.
 - 🗄️ **MinIO S3 / Storage Flexível**: Gestão de mídias e arquivos (Soberano, Disco Local ou Cloud S3).
 - 📈 **Metabase BI**: Painéis analíticos, dashboards e relatórios executivos em tempo real.
 - 🦙 **Ollama & Docling**: Motor local de modelos de linguagem soberanos e OCR/parsing avançado de documentos.
