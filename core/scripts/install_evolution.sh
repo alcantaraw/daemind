@@ -99,12 +99,13 @@ inject_caddy_routes() {
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_evo="${HOST_EVO_PORT:-18081}"
 
     if [ -f "$CADDYFILE_PATH" ]; then
-        if ! grep -q 'reverse_proxy.*_evolution:8080' "$CADDYFILE_PATH"; then
+        if ! grep -q ":${port_evo} {" "$CADDYFILE_PATH" && ! grep -q 'reverse_proxy.*_evolution:8080' "$CADDYFILE_PATH"; then
             cat << EOF | sudo tee -a "$CADDYFILE_PATH" > /dev/null
 
-:8081 {
+:${port_evo} {
     log {
         level error
     }
@@ -124,7 +125,8 @@ remove_caddy_routes() {
     if [ ! -f "$CADDYFILE_PATH" ] && [ -f "$TARGET_DIR/core/config/Caddyfile" ]; then
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
-    if [ -f "$CADDYFILE_PATH" ] && grep -q ':8081 {' "$CADDYFILE_PATH"; then
+    local port_evo="${HOST_EVO_PORT:-18081}"
+    if [ -f "$CADDYFILE_PATH" ] && { grep -q ":${port_evo} {" "$CADDYFILE_PATH" || grep -q ':8081 {' "$CADDYFILE_PATH"; }; then
         echo "➜ [SRE EVOLUTION] Removendo rotas da Evolution API do Caddyfile..."
         python3 -c "
 path = '$CADDYFILE_PATH'
@@ -132,7 +134,8 @@ try:
     with open(path, 'r+') as f:
         content = f.read()
         import re
-        new_content = re.sub(r'\s*:8081\s*\{[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:${port_evo}\s*\{[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:8081\s*\{[\s\S]*?\}', '', new_content)
         f.seek(0)
         f.write(new_content)
         f.truncate()
@@ -146,9 +149,9 @@ inject_dashboard_card() {
     echo "➜ [SRE EVOLUTION] Injetando card da Evolution API no portal de controle (index.html)..."
     local INDEX_PATH="$TARGET_DIR/core/html/index.html"
     local PREFIX="${PREFIXO_CONTAINER}"
-    local EVO_PORT="${HOST_EVO_PORT:-8081}"
+    local EVO_PORT="${HOST_EVO_PORT:-18081}"
 
-    if [ -f "$INDEX_PATH" ] && ! grep -q 'data-port="8081"' "$INDEX_PATH" && ! grep -q 'Evolution API' "$INDEX_PATH"; then
+    if [ -f "$INDEX_PATH" ] && ! grep -q "data-port=\"$EVO_PORT\"" "$INDEX_PATH" && ! grep -q 'Evolution API' "$INDEX_PATH"; then
         python3 -c "
 path = '$INDEX_PATH'
 card = '''            <a href=\"#\" data-port=\"$EVO_PORT\" data-path=\"/manager\" class=\"card dynamic-link\">
@@ -193,8 +196,8 @@ try:
     with open(path, 'r+') as f:
         content = f.read()
         import re
-        new_content = re.sub(r'\s*<a href=\"[^\"]*\" [^>]*data-port=\"(8081|$EVO_PORT)\"[\s\S]*?</a>\s*', '', content)
-        new_content = re.sub(r'\s*<a href=\"[^\"]*\" [\s\S]*?Evolution API[\s\S]*?</a>\s*', '', new_content)
+        new_content = re.sub(r'\s*<a href=\"[^\"]*\" [^\>]*data-port=\"(8081|$EVO_PORT)\"[\s\S]*?</a>\s*', '', content)
+        new_content = re.sub(r'\s*<a href=\"[^\"]*\" [^\>]*Evolution API[\s\S]*?</a>\s*', '', new_content)
         f.seek(0)
         f.write(new_content)
         f.truncate()
@@ -212,17 +215,18 @@ disable() {
     sudo docker rm -f "${PREFIX}_evolution" 2>/dev/null || true
 
     # Limpeza de Regras de Firewall e DNS
-    sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 18081 -j ACCEPT 2>/dev/null || true
-    sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 18081 -j ACCEPT 2>/dev/null || true
+    local port_evo="${HOST_EVO_PORT:-18081}"
+    sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport "$port_evo" -j ACCEPT 2>/dev/null || true
+    sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport "$port_evo" -j ACCEPT 2>/dev/null || true
     if [ -f /etc/dnsmasq.d/evolution.conf ]; then
         sudo rm -f /etc/dnsmasq.d/evolution.conf 2>/dev/null || true
         sudo systemctl restart dnsmasq 2>/dev/null || true
     fi
-    echo "✔ [SUCESSO EVOLUTION] Módulo Evolution API desativado, container removido, firewall e rotas limpos."
+    echo "✔ [SUCESSO EVOLUTION] Módulo Evolution API desativado, containers removidos, firewall e rotas limpos."
 }
 
 start_container() {
-    echo "➜ [SRE EVOLUTION] Garantindo subida integrada do container Evolution API..."
+    echo "➜ [SRE EVOLUTION] Subindo container da Evolution API..."
     cd "$TARGET_DIR"
     sudo docker compose up -d evolution 2>/dev/null || true
 }
@@ -231,6 +235,8 @@ wait_readiness() {
     echo "➜ [SRE EVOLUTION] Validando prontidão de socket e healthcheck da Evolution API..."
     local TENTATIVAS=0
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_evo="${HOST_EVO_PORT:-18081}"
+
     until [ "$(sudo docker inspect -f '{{.State.Health.Status}}' ${PREFIX}_evolution 2>/dev/null)" = "healthy" ]; do
         TENTATIVAS=$((TENTATIVAS+1))
         if [ "$TENTATIVAS" -ge 30 ]; then
@@ -241,14 +247,14 @@ wait_readiness() {
     done
 
     echo "➜ [SRE EVOLUTION] Validando integridade da conexão Prisma com PgBouncer..."
-    local EVO_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:8081/instance/fetchInstances" 2>/dev/null || echo "000")
+    local EVO_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_evo}/instance/fetchInstances" 2>/dev/null || echo "000")
 
     if [ "$EVO_STATUS" = "500" ]; then
         echo "➜ [SRE RECOVERY EVOLUTION] Deadlock de conexão detectado no Prisma ORM (HTTP 500). Reciclando a Evolution API..."
         docker compose restart evolution > /dev/null 2>&1 || true
         sleep 5
         TENTATIVAS=0
-        until [ "$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:8081/instance/fetchInstances" 2>/dev/null || echo "200")" = "200" ]; do
+        until [ "$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_evo}/instance/fetchInstances" 2>/dev/null || echo "200")" = "200" ]; do
             TENTATIVAS=$((TENTATIVAS+1))
             [ "$TENTATIVAS" -ge 20 ] && { echo "⚠️ [SRE WARN EVOLUTION] Evolution não estabilizou totalmente após restart SRE. Prosseguindo..."; return 1 2>/dev/null || true; }
             sleep 5
@@ -261,15 +267,16 @@ wait_readiness() {
 audit_health() {
     local ts_domain="${1:-localhost}"
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_evo="${HOST_EVO_PORT:-18081}"
     local health_status=$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}unhealthy{{end}}' ${PREFIX}_evolution 2>/dev/null || echo "OFFLINE")
     local http_status="OFFLINE"
     if [ "$health_status" = "healthy" ]; then
-        http_status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:${HOST_EVO_PORT:-8081}/" 2>/dev/null || echo "FALHOU")
+        http_status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:${port_evo}/" 2>/dev/null || echo "FALHOU")
     else
         http_status="CONTAINER_ERRO"
     fi
 
-    printf "  ↳ %-32s http://%s:%s  -> Status: [%s]\n" "WhatsApp API (Evolution):" "${ts_domain}" "${HOST_EVO_PORT:-8081}" "${http_status}"
+    printf "  ↳ %-32s http://%s:%s  -> Status: [%s]\n" "WhatsApp API (Evolution):" "${ts_domain}" "${port_evo}" "${http_status}"
 }
 
 get_version() {

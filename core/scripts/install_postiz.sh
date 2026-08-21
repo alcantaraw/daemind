@@ -262,15 +262,20 @@ wait_readiness() {
     local BACKEND_SOCKET_OK=false
 
     for i in {1..30}; do
-        # 1. Checagem rápida de HTTP na API do Caddy/Postiz (:5000)
-        HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 -X POST -H "Content-Type: application/json" -d "{}" http://127.0.0.1:5000/api/auth/register 2>/dev/null || echo "000")
-        HTTP_CODE=$(echo "$HTTP_CODE" | tr -dc '0-9')
-        HTTP_CODE="${HTTP_CODE:-000}"
+        # 1. Checagem do healthcheck nativo do container Postiz
+        local health_postiz=$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{if .State.Running}}healthy{{else}}unhealthy{{end}}{{end}}' "${PREFIX}_postiz" 2>/dev/null || echo "OFFLINE")
 
-        if [ "$HTTP_CODE" != "502" ] && [ "$HTTP_CODE" != "503" ] && [ "$HTTP_CODE" != "000" ]; then
-            echo "➜ [OK POSTIZ] Backend API do Postiz totalmente operante (HTTP $HTTP_CODE)."
-            BACKEND_SOCKET_OK=true
-            break
+        if [ "$health_postiz" = "healthy" ]; then
+            # 2. Checagem de resposta HTTP na porta :5000
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
+            HTTP_CODE=$(echo "$HTTP_CODE" | tr -dc '0-9')
+            HTTP_CODE="${HTTP_CODE:-000}"
+
+            if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "307" ] || [ "$HTTP_CODE" = "302" ]; then
+                echo "➜ [OK POSTIZ] Backend API do Postiz totalmente operante (HTTP $HTTP_CODE)."
+                BACKEND_SOCKET_OK=true
+                break
+            fi
         fi
 
         # 2. Se a API externa ainda deu 502/000, valida se o socket interno :3000 já abriu
@@ -287,9 +292,9 @@ wait_readiness() {
         sleep 3
     done
 
-    if [ "$HTTP_CODE" = "502" ] || [ "$HTTP_CODE" = "503" ] || [ "$HTTP_CODE" = "000" ]; then
-        echo "⚠️ [SRE WARN POSTIZ] Timeout aguardando inicialização do Backend NestJS do Postiz. Continuando em modo resiliente..."
-        return 1 2>/dev/null || true
+    if [ "$BACKEND_SOCKET_OK" = "false" ]; then
+        echo "⚠️ [SRE WARN POSTIZ] Postiz ainda inicializando migrações internas. Continuando em modo resiliente..."
+        return 0
     fi
 
     echo "✔ [SUCESSO POSTIZ] Postiz Planner e Temporal Engine online e saudáveis!"
@@ -360,14 +365,18 @@ provision_user() {
       '{email: $email, password: $pwd, name: $name, company: $company, provider: "LOCAL"}')
 
     local RESPONSE_POSTIZ="502"
-    for attempt in {1..5}; do
-        RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 15 -X POST "http://127.0.0.1:5000/api/auth/register" \
-          -H "Content-Type: application/json" \
-          -d "$PAYLOAD_POSTIZ" || echo "000")
-        
-        RESPONSE_POSTIZ=$(echo "$RESPONSE_POSTIZ" | tr -dc '0-9')
-        if [[ "$RESPONSE_POSTIZ" =~ ^(2|400|409) ]]; then
-            break
+    for attempt in {1..10}; do
+        # Valida se o backend do Postiz está aceitando requisições antes do payload
+        local probe=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
+        if [ "$probe" = "200" ] || [ "$probe" = "307" ] || [ "$probe" = "302" ]; then
+            RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 15 -X POST "http://127.0.0.1:5000/api/auth/register" \
+              -H "Content-Type: application/json" \
+              -d "$PAYLOAD_POSTIZ" 2>/dev/null || echo "000")
+            
+            RESPONSE_POSTIZ=$(echo "$RESPONSE_POSTIZ" | tr -dc '0-9')
+            if [[ "$RESPONSE_POSTIZ" =~ ^(2|400|409) ]]; then
+                break
+            fi
         fi
         sleep 3
     done

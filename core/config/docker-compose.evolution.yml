@@ -57,4 +57,4 @@ services:
 
   caddy:
     ports:
-      - "${EVO_PORT:-8081}:8081/tcp"
+      - "${HOST_EVO_PORT:-18081}:18081/tcp"

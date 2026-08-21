@@ -99,12 +99,13 @@ inject_caddy_routes() {
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_noco="${HOST_NOCODB_PORT:-18080}"
 
     if [ -f "$CADDYFILE_PATH" ]; then
-        if ! grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; then
+        if ! grep -q ":${port_noco} {" "$CADDYFILE_PATH" && ! grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; then
             cat << EOF | sudo tee -a "$CADDYFILE_PATH" > /dev/null
 
-:8080 {
+:${port_noco} {
     log {
         level error
     }
@@ -120,7 +121,8 @@ remove_caddy_routes() {
     if [ ! -f "$CADDYFILE_PATH" ] && [ -f "$TARGET_DIR/core/config/Caddyfile" ]; then
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
-    if [ -f "$CADDYFILE_PATH" ] && grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; then
+    local port_noco="${HOST_NOCODB_PORT:-18080}"
+    if [ -f "$CADDYFILE_PATH" ] && { grep -q ":${port_noco} {" "$CADDYFILE_PATH" || grep -q ':8080 {' "$CADDYFILE_PATH" || grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; }; then
         echo "➜ [SRE NOCODB] Removendo rotas do NocoDB ERP do Caddyfile..."
         python3 -c "
 path = '$CADDYFILE_PATH'
@@ -128,7 +130,8 @@ try:
     with open(path, 'r+') as f:
         content = f.read()
         import re
-        new_content = re.sub(r'\s*:8080\s*\{[\s\S]*?nocodb[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:${port_noco}\s*\{[\s\S]*?nocodb[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:8080\s*\{[\s\S]*?nocodb[\s\S]*?\}', '', new_content)
         f.seek(0)
         f.write(new_content)
         f.truncate()
