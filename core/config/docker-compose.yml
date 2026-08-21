@@ -10,8 +10,7 @@ networks:
 
 services:
   redis:
-    # image: 'redis:7.4-alpine'
-    image: 'redis:8.10-alpine'    
+    image: 'redis:8-alpine'
     container_name: '${PREFIXO_CONTAINER}_redis'
     command: [ "redis-server", "--protected-mode", "no", "--loglevel", "warning", "--maxmemory", "${REDIS_MAXMEMORY:-200mb}", "--maxmemory-policy", "volatile-lru" ]
     networks:
@@ -39,7 +38,6 @@ services:
       start_period: 10s
 
   postgres:
-    # image: 'pgvector/pgvector:pg16'
     image: 'pgvector/pgvector:pg17'
     container_name: '${PREFIXO_CONTAINER}_postgres'
     command: [ "postgres", "-c", "max_connections=250", "-c", "shared_buffers=${POSTGRES_SHARED_BUFFERS:-256MB}", "-c", "work_mem=${POSTGRES_WORK_MEM:-8MB}", "-c", "maintenance_work_mem=${POSTGRES_MAINTENANCE_WORK_MEM:-64MB}", "-c", "max_parallel_workers=${POSTGRES_MAX_PARALLEL_WORKERS:-2}", "-c", "log_connections=off", "-c", "log_disconnections=off", "-c", "log_min_messages=warning" ]
