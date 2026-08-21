@@ -1361,13 +1361,45 @@ EOF
 
                 local_mod_count=${#selected_nodes_list[@]}
 
-                ai_list_formatted="  [X] OpenRouter (Obrigatório)"
-                [ -n "${OPENAI_API_KEY:-}" ]    && ai_list_formatted="${ai_list_formatted}  [X] OpenAI"
-                [ -n "${ANTHROPIC_API_KEY:-}" ] && ai_list_formatted="${ai_list_formatted}  [X] Anthropic Claude"
+                ai_providers_list=("OpenRouter (Obrigatório)")
+                [ -n "${OPENAI_API_KEY:-}" ]    && ai_providers_list+=("OpenAI")
+                [ -n "${ANTHROPIC_API_KEY:-}" ] && ai_providers_list+=("Anthropic Claude")
                 if [ -n "${GEMINI_API_KEY:-}" ] || [ "${FREE_GEMINI:-0}" = "1" ] || [[ "${RESP_GEMINI_FREE:-}" =~ ^[Ss]$ ]]; then
-                    [ "${FREE_GEMINI:-0}" = "1" ] && ai_list_formatted="${ai_list_formatted}  [X] Gemini (Free Flash/Gemma)" || ai_list_formatted="${ai_list_formatted}  [X] Gemini (Pro)"
+                    [ "${FREE_GEMINI:-0}" = "1" ] && ai_providers_list+=("Gemini (Free Flash/Gemma)") || ai_providers_list+=("Gemini (Pro)")
                 fi
-                [ -n "${DEEPSEEK_API_KEY:-}" ]  && ai_list_formatted="${ai_list_formatted}  [X] DeepSeek"
+                [ -n "${DEEPSEEK_API_KEY:-}" ]  && ai_providers_list+=("DeepSeek")
+
+                ai_list_formatted=""
+                ai_curr_line=""
+                ai_count=0
+                for ai_entry in "${ai_providers_list[@]}"; do
+                    ai_count=$((ai_count + 1))
+                    pad_ai="                                  " # 34 chars
+                    item_str="[X] ${ai_entry}"
+                    len_ai=${#item_str}
+                    diff_ai=$(( 35 - len_ai ))
+                    [ $diff_ai -lt 1 ] && diff_ai=1
+                    item_ai_fmt="${item_str}${pad_ai:0:$diff_ai}"
+                    
+                    ai_curr_line="${ai_curr_line}${item_ai_fmt}"
+                    if [ $(( ai_count % 2 )) -eq 0 ]; then
+                        if [ -z "$ai_list_formatted" ]; then
+                            ai_list_formatted="  ${ai_curr_line}"
+                        else
+                            ai_list_formatted="${ai_list_formatted}
+  ${ai_curr_line}"
+                        fi
+                        ai_curr_line=""
+                    fi
+                done
+                if [ -n "$ai_curr_line" ]; then
+                    if [ -z "$ai_list_formatted" ]; then
+                        ai_list_formatted="  ${ai_curr_line}"
+                    else
+                        ai_list_formatted="${ai_list_formatted}
+  ${ai_curr_line}"
+                    fi
+                fi
 
                 topologia_str="BYODNS (${CUSTOM_DOMAIN})"
                 [ "$ROUTING_CHOICE" = "1" ] && topologia_str="Tailscale VPN Soberana"
@@ -1379,7 +1411,7 @@ EOF
 • Modo de Storage:          ${STORAGE_MODE}
 • Sub-rede Privada:         ${BASE_IP}.0/24
 
-• Provedores de IA:
+• Provedores de IA (${#ai_providers_list[@]}):
 ${ai_list_formatted}
 
 • Módulos & Nós Ativos (${local_mod_count}):
@@ -1388,7 +1420,7 @@ ${active_mods_formatted}
 ----------------------------------------------------------------------
 Deseja confirmar e iniciar a instalação imediatamente?"
 
-                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 25 82; then
+                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 28 82; then
                     EXECUTAR_INSTALL="s"
                     break
                 else
