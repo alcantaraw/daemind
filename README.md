@@ -163,7 +163,7 @@ Consolidado em um manifesto de alta coesão e performance, o Core garante a base
 Cada aplicação opera como um módulo 100% desacoplado (`docker-compose.<modulo>.yml` + `install_<modulo>.sh`), permitindo ativação sob demanda para economia extrema de memória:
 - ⚡ **n8n (Automation)**: Motor de automações ilimitadas de vendas, webhooks e workflows.
 - 🧠 **Open WebUI (Chat & RAG)**: Interface gráfica corporativa de Inteligência Artificial e MCP.
-- 🗣️ **Chatwoot & Evolution API**: Inbox Omnichannel de atendimento multiatendente e API de WhatsApp.
+- 🗣️ **Chatwoot & WPPConnect Server**: Inbox Omnichannel de atendimento multiatendente e Gateway Open Source de WhatsApp.
 - 📊 **NocoDB**: CRM e banco de dados relacional estilo planilha inteligente.
 - 🚀 **Postiz Planner & Temporal Engine**: Agendador e publicador de mídias sociais.
 - ✉️ **Listmonk Mailer**: Disparador de e-mail marketing, newsletters e transacionais soberanos.

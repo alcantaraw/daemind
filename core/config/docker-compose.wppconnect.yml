@@ -1,0 +1,49 @@
+services:
+  wppconnect:
+    image: 'wppconnect/server:latest'
+    container_name: '${PREFIXO_CONTAINER}_wppconnect'
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_WPPCONNECT}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_WPPCONNECT:-1.0}'
+          memory: '${MEM_WPPCONNECT:-1024M}'
+        reservations:
+          memory: '${RES_WPPCONNECT:-256M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - PORT=21465
+      - SECRET_KEY=${WPPCONNECT_SECRET_KEY:-${DB_PASSWORD}}
+      - HOST=0.0.0.0
+      - WEBHOOK_ALL_UNREAD_MESSAGES=true
+      - CHATWOOT_ACCOUNT_ID=1
+      - CHATWOOT_TOKEN=${CHATWOOT_API_TOKEN:-}
+      - CHATWOOT_URL=http://${PREFIXO_CONTAINER}_chatwoot:3000
+      - CHATWOOT_SIGN_MSG=true
+      - CHATWOOT_REOPEN_CONVERSATION=true
+      - CHATWOOT_CONVERSATION_PENDING=false
+      - CHATWOOT_IMPORT_CONTACTS=true
+      - CHATWOOT_IMPORT_MESSAGES=true
+      - CHATWOOT_DAYS_LIMIT_IMPORT_MESSAGES=3
+    volumes:
+      - './volumes/wppconnect_data/tokens:/home/node/app/tokens'
+      - './volumes/wppconnect_data/userDataDir:/home/node/app/userDataDir'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    depends_on:
+      chatwoot:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:21465/api-docs/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    ports:
+      - "${HOST_WPPCONNECT_PORT:-18081}:18081/tcp"
