@@ -270,13 +270,27 @@ except Exception:
     if [ -n "$HASH_SENHA" ]; then
         sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
         DO \$\$
+        DECLARE
+            v_role_id INTEGER;
         BEGIN
-            -- Se não existir usuário no listmonk, insere o superadmin com a senha mestra
+            -- Obtém o ID do role de Super Admin (ou primeiro role existente)
+            SELECT id INTO v_role_id FROM roles WHERE name ILIKE '%admin%' OR slug ILIKE '%admin%' LIMIT 1;
+            IF v_role_id IS NULL THEN
+                SELECT id INTO v_role_id FROM roles ORDER BY id ASC LIMIT 1;
+            END IF;
+            IF v_role_id IS NULL THEN
+                INSERT INTO roles (name, slug, description, created_at, updated_at)
+                VALUES ('Super Admin', 'admin', 'Super Admin', NOW(), NOW()) RETURNING id INTO v_role_id;
+            END IF;
+
+            -- Injeta ou sincroniza o superadmin com a senha mestra
             IF NOT EXISTS (SELECT 1 FROM users WHERE email = '${USER_EMAIL}' OR username = 'admin') THEN
-                INSERT INTO users (username, password, name, email, status, role, created_at, updated_at)
-                VALUES ('admin', '${HASH_SENHA}', '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}', '${USER_EMAIL}', 'active', 'superadmin', NOW(), NOW());
+                INSERT INTO users (username, password_login, password, email, name, type, user_role_id, status, twofa_type, created_at, updated_at)
+                VALUES ('admin', true, '${HASH_SENHA}', '${USER_EMAIL}', '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}', 'admin', v_role_id, 'enabled', 'none', NOW(), NOW());
             ELSE
-                UPDATE users SET password = '${HASH_SENHA}', email = '${USER_EMAIL}', updated_at = NOW() WHERE username = 'admin' OR email = '${USER_EMAIL}';
+                UPDATE users 
+                SET password = '${HASH_SENHA}', password_login = true, email = '${USER_EMAIL}', type = 'admin', status = 'enabled', updated_at = NOW() 
+                WHERE username = 'admin' OR email = '${USER_EMAIL}';
             END IF;
         END \$\$;
         " >/dev/null 2>&1 || true
