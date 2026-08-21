@@ -224,6 +224,9 @@ O provisionamento do **daemind.** é **Low-Touch / Assistido**: em vez de exigir
   - `[X] S3MinIO / Storage (MinIO ou S3 Cloud)`
   - `[X] Open WebUI (Portal de Chat IA & MCP)`
   - `[X] Metabase BI (Painéis Executivos)`
+  - `[X] Listmonk (E-mail Marketing & Transacional)`
+  - `[X] Umami (Web Analytics & Privacidade sem Cookies)`
+  - `[X] Shlink + Web Client (Encurtador de Links Soberano & UTMs)`
   - `[ ] Ollama & Docling` *(Exibidos em hosts/notebooks com > 4 vCPUs, >= 16GB RAM e GPU dedicada compatível > 4GB VRAM: NVIDIA RTX, Radeon RX 6000-9000 ou Intel Arc)*.
 - **Arquitetura de Storage (`--radiolist`):** Define armazenamento Local Direto (disco), MinIO S3 Soberano (local) ou Provedor S3 Cloud Externo (Cloudflare R2 / AWS S3).
 
