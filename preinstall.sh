@@ -1293,37 +1293,44 @@ EOF
             7)
                 # 📊 Tela 7: Resumo Geral de Governança & Confirmação de Deploy
                 ACTIVE_MODULES_LIST=""
+                local_mod_count=0
                 for m_name in "${SORTED_MOD_FILES[@]}"; do
                     var_use="USE_$(echo "$m_name" | tr '[:lower:]' '[:upper:]')"
                     if [[ "${!var_use}" =~ ^[Ss]$ ]]; then
+                        if [ "$local_mod_count" -gt 0 ] && [ $(( local_mod_count % 4 )) -eq 0 ]; then
+                            ACTIVE_MODULES_LIST="${ACTIVE_MODULES_LIST}\n  "
+                        fi
                         ACTIVE_MODULES_LIST="${ACTIVE_MODULES_LIST} [X] ${m_name}"
+                        local_mod_count=$((local_mod_count + 1))
                     fi
                 done
 
-                AI_PROVIDERS_LIST="[X] OpenRouter (Obrigatório)"
-                [ -n "${OPENAI_API_KEY:-}" ]    && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] OpenAI"
-                [ -n "${ANTHROPIC_API_KEY:-}" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] Anthropic Claude"
+                AI_PROVIDERS_LIST="  [X] OpenRouter (Obrigatório)"
+                [ -n "${OPENAI_API_KEY:-}" ]    && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] OpenAI"
+                [ -n "${ANTHROPIC_API_KEY:-}" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] Anthropic Claude"
                 if [ -n "${GEMINI_API_KEY:-}" ] || [ "${FREE_GEMINI:-0}" = "1" ] || [[ "${RESP_GEMINI_FREE:-}" =~ ^[Ss]$ ]]; then
-                    [ "${FREE_GEMINI:-0}" = "1" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] Gemini (Free Flash/Gemma)" || AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] Gemini (Pro)"
+                    [ "${FREE_GEMINI:-0}" = "1" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] Gemini (Free Flash/Gemma)" || AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] Gemini (Pro)"
                 fi
-                [ -n "${DEEPSEEK_API_KEY:-}" ]  && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] DeepSeek"
+                [ -n "${DEEPSEEK_API_KEY:-}" ]  && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST}  [X] DeepSeek"
 
                 SUMMARY_MSG=$(cat << EOF
 Identidade da Empresa:    ${EMPRESA}
-Administrador Responsável: ${CLIENTE_NOME} ${CLIENTE_SOBRENOME}
-E-mail Corporativo:        ${CLIENTE_EMAIL}
-Topologia de Borda:        $([ "$ROUTING_CHOICE" = "1" ] && echo "Tailscale VPN Soberana" || echo "BYODNS (${CUSTOM_DOMAIN})")
-Modo de Armazenamento:     ${STORAGE_MODE}
-Sub-rede Privada:          ${BASE_IP}.0/24
+Administrador:            ${CLIENTE_NOME} ${CLIENTE_SOBRENOME}
+E-mail Corporativo:       ${CLIENTE_EMAIL}
+Topologia de Borda:       $([ "$ROUTING_CHOICE" = "1" ] && echo "Tailscale VPN Soberana" || echo "BYODNS (${CUSTOM_DOMAIN})")
+Modo de Storage:          ${STORAGE_MODE}
+Sub-rede Privada:         ${BASE_IP}.0/24
+
 Provedores de IA:
 ${AI_PROVIDERS_LIST}
-Módulos Ativos:
-${ACTIVE_MODULES_LIST}
+
+Módulos Ativos (${local_mod_count}):
+  ${ACTIVE_MODULES_LIST}
 
 Deseja confirmar e iniciar a instalação imediatamente?
 EOF
 )
-                if tui_dialog --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 20 78; then
+                if tui_dialog --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 22 84; then
                     EXECUTAR_INSTALL="s"
                     break
                 else
