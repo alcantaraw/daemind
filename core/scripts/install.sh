@@ -332,6 +332,8 @@ gerar_relatorio_versoes_stack() {
                         fi
                         ;;
                 esac
+            fi
+
             # Sanitização global de formatação (remove "Tag (...)", "RELEASE.", e prefixo "v")
             versao=$(echo "$versao" | sed -E 's/^Tag \((.*)\)$/\1/; s/^RELEASE\.//; s/^[vV]//' | tr -d '\r\n ' | head -n 1)
             [ -z "$versao" ] && versao="N/A"
