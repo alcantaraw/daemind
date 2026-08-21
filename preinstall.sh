@@ -1298,9 +1298,9 @@ EOF
 
             7)
                 # 📊 Tela 7: Resumo Geral de Governança & Confirmação de Deploy
-                local active_mods_formatted=""
-                local current_line=""
-                local local_mod_count=0
+                active_mods_formatted=""
+                current_line=""
+                local_mod_count=0
                 for m_name in "${SORTED_MOD_FILES[@]}"; do
                     var_use="USE_$(echo "$m_name" | tr '[:lower:]' '[:upper:]')"
                     if [[ "${!var_use}" =~ ^[Ss]$ ]]; then
@@ -1330,7 +1330,7 @@ ${current_line}"
                     fi
                 fi
 
-                local ai_list_formatted="  [X] OpenRouter (Obrigatório)"
+                ai_list_formatted="  [X] OpenRouter (Obrigatório)"
                 [ -n "${OPENAI_API_KEY:-}" ]    && ai_list_formatted="${ai_list_formatted}  [X] OpenAI"
                 [ -n "${ANTHROPIC_API_KEY:-}" ] && ai_list_formatted="${ai_list_formatted}  [X] Anthropic Claude"
                 if [ -n "${GEMINI_API_KEY:-}" ] || [ "${FREE_GEMINI:-0}" = "1" ] || [[ "${RESP_GEMINI_FREE:-}" =~ ^[Ss]$ ]]; then
@@ -1338,7 +1338,7 @@ ${current_line}"
                 fi
                 [ -n "${DEEPSEEK_API_KEY:-}" ]  && ai_list_formatted="${ai_list_formatted}  [X] DeepSeek"
 
-                local topologia_str="BYODNS (${CUSTOM_DOMAIN})"
+                topologia_str="BYODNS (${CUSTOM_DOMAIN})"
                 [ "$ROUTING_CHOICE" = "1" ] && topologia_str="Tailscale VPN Soberana"
 
                 SUMMARY_MSG="• Identidade da Empresa:    ${EMPRESA}
@@ -1357,7 +1357,7 @@ ${active_mods_formatted}
 ----------------------------------------------------------------------
 Deseja confirmar e iniciar a instalação imediatamente?"
 
-                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 22 80; then
+                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 24 82; then
                     EXECUTAR_INSTALL="s"
                     break
                 else
