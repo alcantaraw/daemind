@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SHLINK
+# SHLINK SHLINK_WEB
 # Shlink: Encurtador de Links Inteligentes, UTMs e Atribuição de Campanhas
 # ===============================================================================
 # DAEMIND SRE MODULE - PROVISIONADOR DINÂMICO SHLINK & WEB CLIENT

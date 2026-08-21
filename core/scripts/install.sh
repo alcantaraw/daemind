@@ -1094,12 +1094,14 @@ else
     if ! UP_ERR=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
         if echo "$UP_ERR" | grep -qiE "Address already in use|failed to set up container networking|already in use"; then
             echo "⚠️ [SRE RECOVERY INSTALL] O Docker Engine encontrou race condition de alocação de IP ('Address already in use')."
-            echo "  ↳ Purgando contêineres órfãos e recriando com flush de rede..."
+            echo "  ↳ Purgando contêineres órfãos e liberando endpoints da rede instancia_net..."
+            local net_id=$(docker network ls --filter "name=instancia_net" -q 2>/dev/null | head -n 1 || true)
             for svc_off in "${APPS_OFFLINE[@]}"; do
                 svc_clean=$(echo "$svc_off" | tr '-' '_')
+                [ -n "$net_id" ] && docker network disconnect -f "$net_id" "${PREFIXO_CONTAINER}_${svc_clean}" 2>/dev/null || true
                 docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" "${PREFIXO_CONTAINER}_${svc_clean}" 2>/dev/null || true
             done
-            sleep 4
+            sleep 3
             if ! UP_ERR_NET=$(docker compose up -d --force-recreate "${APPS_OFFLINE[@]}" 2>&1); then
                 echo "🚨 [ERRO CRÍTICO INSTALL] Falha na re-alocação de IP dos microsserviços:"
                 echo "$UP_ERR_NET"
