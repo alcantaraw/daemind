@@ -1239,6 +1239,12 @@ EOF
                         W_STEP=4
                         continue
                     fi
+                    # SRE FIX: Recarrega as chaves e provedores exportados pelo wizard de IA
+                    if [ -f "$CACHE_WIZARD_FILE" ]; then
+                        set -a
+                        source "$CACHE_WIZARD_FILE" 2>/dev/null || true
+                        set +a
+                    fi
                 fi
                 W_STEP=6
                 ;;
