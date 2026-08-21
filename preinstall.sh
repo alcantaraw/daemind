@@ -1740,10 +1740,10 @@ EOF
     done
 
     echo "=== [SRE PREINSTALL] Detectando e corrigindo dinamicamente pacotes corrompidos ==="
-    PACOTES_QUEBRADOS=$(dpkg -l | awk '/^i[FHRU]/ {print $2}')
+    PACOTES_QUEBRADOS=$(dpkg -l | awk '/^i[FHRU]/ {print $2}' || true)
     if [ -n "$PACOTES_QUEBRADOS" ]; then 
         echo "  ↳ Removendo resíduos de Kernel/Pacotes quebrados silenciosamente..."
-        echo "$PACOTES_QUEBRADOS" | sudo xargs -r env DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y -qq > /dev/null 2>&1 < /dev/null
+        echo "$PACOTES_QUEBRADOS" | sudo xargs -r env DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y -qq > /dev/null 2>&1 < /dev/null || true
     fi
 
     sudo chmod -x /etc/kernel/prerm.d/vboxadd /etc/kernel/postinst.d/vboxadd 2>/dev/null || true
