@@ -310,6 +310,7 @@ provision_user() {
         if [ -f "$html_file" ]; then
             sudo sed -i "s|__CHATWOOT_TOKEN__|${cw_token}|g" "$html_file" 2>/dev/null || true
             sudo sed -i "s|__CHATWOOT_URL__|http://${PREFIX}_chatwoot:3000|g" "$html_file" 2>/dev/null || true
+            sudo sed -i "s|__MASTER_KEY__|${WPPCONNECT_SECRET_KEY:-${DB_PASSWORD}}|g" "$html_file" 2>/dev/null || true
         fi
         cd "${TARGET_DIR:-/opt/daemind}"
         sudo docker compose up -d --force-recreate wppconnect >/dev/null 2>&1 || true

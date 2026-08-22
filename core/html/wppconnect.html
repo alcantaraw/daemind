@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -161,8 +162,13 @@
             background: #64748b;
         }
 
-        .status-connected .status-dot { background: var(--accent-green); }
-        .status-connected { color: var(--accent-green); }
+        .status-connected .status-dot {
+            background: var(--accent-green);
+        }
+
+        .status-connected {
+            color: var(--accent-green);
+        }
 
         .sessions-list {
             margin-top: 1.5rem;
@@ -267,6 +273,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="manager-card">
@@ -286,10 +293,13 @@
         <button class="btn-action" id="btnConnect" onclick="iniciarConexao()">🚀 Conectar / Gerar QR Code</button>
 
         <div class="qr-container" id="qrBox">
-            <div class="status-badge" id="statusBadge"><div class="status-dot"></div> <span id="statusText">Aguardando Leitura...</span></div>
+            <div class="status-badge" id="statusBadge">
+                <div class="status-dot"></div> <span id="statusText">Aguardando Leitura...</span>
+            </div>
             <div id="qrContent">
                 <img id="qrImg" src="" alt="QR Code WhatsApp">
-                <p style="font-size: 0.82rem; color: var(--text-secondary);">Abra o WhatsApp no celular ➔ Aparelhos Conectados ➔ Conectar Aparelho</p>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">Abra o WhatsApp no celular ➔ Aparelhos
+                    Conectados ➔ Conectar Aparelho</p>
             </div>
         </div>
 
@@ -315,12 +325,12 @@
                     <code id="cwWebhookUrl" style="color: var(--accent-cyan); word-break: break-all;">http://loja_wppconnect:21465/api/default/chatwoot</code>
                 </div>
                 <div style="margin-bottom: 8px;">
-                    <span style="color: var(--text-secondary); display: block; font-size: 0.72rem; font-weight: 600;">SENHA MESTRA / SECRET KEY DO WPPCONNECT:</span>
-                    <code id="wppSecretKey" style="color: #34d399; font-weight: 700;">Suprjo55_</code>
-                </div>
-                <div>
                     <span style="color: var(--text-secondary); display: block; font-size: 0.72rem; font-weight: 600;">WEBHOOK N8N (EVENTOS DE MENSAGEM):</span>
                     <code id="n8nWebhookUrl" style="color: #fbbf24; word-break: break-all;">http://loja_n8n:5678/webhook/wppconnect</code>
+                </div>
+                <div>
+                    <span style="color: var(--text-secondary); display: block; font-size: 0.72rem; font-weight: 600;">ACCESS KEY / SECRET KEY DO WPPCONNECT:</span>
+                    <code id="wppSecretKey" style="color: #34d399; font-weight: 700;">__MASTER_KEY__</code>
                 </div>
             </div>
         </div>
@@ -384,7 +394,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${bearerToken}`
                     },
-                    body: JSON.stringify({ 
+                    body: JSON.stringify({
                         waitQrCode: true,
                         chatwoot: {
                             accountId: "1",
@@ -461,7 +471,7 @@
             try {
                 const apiBase = '/wpp';
                 const token = await obterTokenSessao(session);
-                
+
                 // Limpa polling ativo
                 if (pollInterval) clearInterval(pollInterval);
 
@@ -472,7 +482,7 @@
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
-                }).catch(() => {});
+                }).catch(() => { });
 
                 // 2. Limpa dados de sessão e tokens de forma oficial via Secret Key
                 await fetch(`${apiBase}/api/${session}/${MASTER_KEY}/clear-session-data`, {
@@ -480,7 +490,7 @@
                     headers: {
                         'Accept': 'application/json'
                     }
-                }).catch(() => {});
+                }).catch(() => { });
 
                 // 3. Fecha o navegador
                 await fetch(`${apiBase}/api/${session}/close-session`, {
@@ -489,7 +499,7 @@
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
-                }).catch(() => {});
+                }).catch(() => { });
 
                 // Reseta interface visual
                 qrImg.style.display = 'none';
@@ -544,7 +554,7 @@
                                 </div>
                             </div>
                             <div class="session-actions">
-                                <button class="btn-small btn-select" onclick="iniciarConexao('${nome}')">Gerenciar</button>
+                                <button class="btn-small btn-select" onclick="iniciarConexao('${nome}')">QR Code</button>
                                 <button class="btn-small btn-close-session" onclick="desconectarSessao('${nome}')">Desconectar</button>
                             </div>
                         </div>
@@ -572,4 +582,5 @@
         });
     </script>
 </body>
+
 </html>
