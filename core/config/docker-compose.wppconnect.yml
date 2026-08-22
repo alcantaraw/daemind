@@ -18,7 +18,7 @@ services:
       - TZ=America/Sao_Paulo
       - PORT=21465
       - SECRET_KEY=${WPPCONNECT_SECRET_KEY:-${DB_PASSWORD}}
-      - HOST=0.0.0.0
+      - HOST=http://localhost
       - NODE_OPTIONS=--max-old-space-size=1024
       - CHROME_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-accelerated-2d-canvas,--no-first-run,--no-zygote,--single-process,--disable-gpu
       - WEBHOOK_ALL_UNREAD_MESSAGES=true
@@ -34,8 +34,8 @@ services:
       - CHATWOOT_IMPORT_MESSAGES=true
       - CHATWOOT_DAYS_LIMIT_IMPORT_MESSAGES=3
     volumes:
-      - './volumes/wppconnect_data/tokens:/home/node/app/tokens'
-      - './volumes/wppconnect_data/userDataDir:/home/node/app/userDataDir'
+      - './volumes/wppconnect_data/tokens:/usr/src/wpp-server/tokens'
+      - './volumes/wppconnect_data/userDataDir:/usr/src/wpp-server/userDataDir'
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
     depends_on:

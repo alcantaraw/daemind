@@ -192,24 +192,34 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 ---
 
-## 📌 Roadmap de Negócios & Futuras Evoluções (TODO)
+## 📌 Roadmap de Engenharia & Futuras Evoluções (TODO)
 
-Visando a expansão da esteira de vendas, automações corporativas e aplicação prática de IA no dia a dia dos negócios, os seguintes módulos estão mapeados para as próximas releases:
+- 🚀 **1. Integrações Transversais de Alto Impacto (Zero-Touch Inter-App Ecosystem)**
+  - 📊 **BI & Analytics Unificados (Metabase Auto-Connect):**
+    - Auto-provisionamento de conexões no **Metabase** para todas as fontes de dados ativas da stack (`listmonk_db`, `shlink_db`, `umami_db`, `chatwoot_production`) via API/bootstrap, disponibilizando dashboards analíticos pré-construídos de vendas, cliques, tráfego e atendimento com zero configuração manual.
+  - 🔗 **Rastreamento de Campanhas em Tempo Real (Shlink + Umami):**
+    - Configuração integrada do **Shlink** para padronização automática de tags e parâmetros UTM reconhecidos nativamente pelo **Umami Analytics**, unificando o funil de atribuição de tráfego.
+  - ✉️ **Auto-Encurtamento & Rastreamento em Newsletters (Listmonk + Shlink):**
+    - Integração de disparos do **Listmonk** consumindo a API do **Shlink** para auto-encurtamento de links de campanhas, analytics de taxa de clique e proteção de entregabilidade.
+  - 🗃️ **NocoDB como Painel de Gestão Visual (Listmonk & Shlink):**
+    - Vinculação declarativa das bases `listmonk_db` e `shlink_db` no **NocoDB**, permitindo visualização, segmentação e gestão de inscritos e links encurtados em formato de planilha visual (Airtable soberano).
+  - 🗄️ **Armazenamento Desacoplado no NocoDB (MinIO S3 Attachments):**
+    - Injeção das variáveis de S3 (`NC_S3_BUCKET`, `NC_S3_KEY`, `NC_S3_SECRET`) para que todos os uploads de anexos e mídias de tabelas do NocoDB sejam roteados diretamente ao bucket dedicado `nocodb` do MinIO.
 
-- 🛍️ **1. Conectores Nativos de E-commerce & Marketplaces (Workflows n8n)**
+- 🛒 **2. Templates de Automação Prontos para E-commerce & Marketplaces (n8n)**
   - Criação de templates de automação prontos para uso no **n8n** integrando lojas virtuais (**Shopify, WooCommerce, Nuvemshop, Loja Integrada**) e marketplaces (**Mercado Livre, Amazon, Shopee**).
-  - Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX pendentes** e **Notificações de Rastreamento de Envio** diretamente via WhatsApp (*Evolution API*).
+  - Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX pendentes** e **Notificações de Rastreamento de Envio** diretamente via WhatsApp (*WPPConnect / Chatwoot*).
   - Algoritmos de **Throttling e Rate Limiting** nas esteiras para proteger as contas e chaves de API contra bloqueios nas plataformas parceiras.
 
-- 🤖 **2. Agentes de IA Especialistas & Protocolo MCP para Negócios**
+- 🤖 **3. Agentes de IA Especialistas & Protocolo MCP para Negócios**
   - Configuração de **Servidores MCP (Model Context Protocol)** para que os agentes de IA consultem produtos, estoques, status de pedidos e tabelas de frete em tempo real no PostgreSQL e NocoDB.
   - Criação de **Agentes SDR (Pré-vendas) e Suporte N1** treinados com RAG na base de dados da empresa para atender clientes no Chatwoot de forma autônoma e humanizada.
 
-- 📊 **3. Painéis Executivos de BI & Gestão de Lucro Real (Metabase)**
+- 📈 **4. Painéis Executivos de BI & Gestão de Lucro Real (Metabase)**
   - Dashboards pré-configurados no **Metabase** cruzando vendas, custos de produtos (CMV), despesas de anúncios/marketing e taxas de gateways de pagamento.
   - Relatórios automatizados diários e semanais enviados direto no WhatsApp ou e-mail dos gestores com métricas-chave de faturamento e estoque crítico.
 
-- 🎯 **4. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
+- 🎯 **5. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
   - O **daemind.** nasce especialista em **Vendas Online & Marketing Digital**, mas sua esteira modular permite rápida expansão para outros setores:
     - 🩺 **Saúde & Clínicas:** Agendamentos inteligentes via WhatsApp, confirmação de consultas, triagem pré-atendimento e retenção de pacientes.
     - 👥 **Recursos Humanos & Departamento Pessoal:** Triagem automática de currículos por IA, onboarding de novos colaboradores e gestão de solicitações internas.

@@ -304,6 +304,27 @@
             </div>
         </div>
 
+        <!-- PAINEL DE WEBHOOK & CREDENCIAIS DE INTEGRAÇÃO -->
+        <div class="sessions-list" style="margin-top: 1rem; padding-top: 1rem;">
+            <div class="sessions-list-header">
+                <h3>⚡ Integração & Webhook Ativo</h3>
+            </div>
+            <div style="background: rgba(2, 6, 23, 0.5); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; font-size: 0.8rem;">
+                <div style="margin-bottom: 8px;">
+                    <span style="color: var(--text-secondary); display: block; font-size: 0.72rem; font-weight: 600;">URL DO WEBHOOK DO CHATWOOT (REVERSO):</span>
+                    <code id="cwWebhookUrl" style="color: var(--accent-cyan); word-break: break-all;">http://loja_wppconnect:21465/api/default/chatwoot</code>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <span style="color: var(--text-secondary); display: block; font-size: 0.72rem; font-weight: 600;">SENHA MESTRA / SECRET KEY DO WPPCONNECT:</span>
+                    <code id="wppSecretKey" style="color: #34d399; font-weight: 700;">Suprjo55_</code>
+                </div>
+                <div>
+                    <span style="color: var(--text-secondary); display: block; font-size: 0.72rem; font-weight: 600;">WEBHOOK N8N (EVENTOS DE MENSAGEM):</span>
+                    <code id="n8nWebhookUrl" style="color: #fbbf24; word-break: break-all;">http://loja_n8n:5678/webhook/wppconnect</code>
+                </div>
+            </div>
+        </div>
+
         <div class="footer-links">
             <a href="/" target="_self">← Voltar ao Portal</a>
             <a href="http://" id="linkSwagger" target="_blank">Documentação Swagger (API) ➔</a>
