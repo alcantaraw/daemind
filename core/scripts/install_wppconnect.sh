@@ -341,12 +341,14 @@ EOF
 }
 
 collect_wizard_inputs() {
-    coletar_sn "Deseja instalar o WPPConnect Server (Gateway Open Source WhatsApp & Chatwoot)?" USE_WPPCONNECT "s"
+    coletar_sn "Deseja instalar o WPPConnect Server (Gateway Open Source WhatsApp, Chatwoot & n8n)?" USE_WPPCONNECT "s"
     [[ "${USE_WPPCONNECT:-s}" =~ ^[Ss]$ ]] && USE_WPPCONNECT="s" || USE_WPPCONNECT="n"
-    # SRE Guardrail de Dependência: Se WPPConnect for ativado, Chatwoot DEVE ser ativado
+    # SRE Guardrail de Dependência: Se WPPConnect for ativado, Chatwoot e n8n DEVEM ser ativados
     if [ "$USE_WPPCONNECT" = "s" ]; then
         USE_CHATWOOT="s"
+        USE_N8N="s"
         save_wizard_cache "USE_CHATWOOT" "s"
+        save_wizard_cache "USE_N8N" "s"
     fi
     save_wizard_cache "USE_WPPCONNECT" "$USE_WPPCONNECT"
 }
@@ -356,10 +358,12 @@ build_envs() {
     local API_KEY="${API_MASTER_KEY:-${DB_PASSWORD:-}}"
     local domain="${TS_DOMAIN:-localhost}"
 
-    # SRE Guardrail de Dependência Autônomo: WPPConnect ativa o Chatwoot no .env
+    # SRE Guardrail de Dependência Autônomo: WPPConnect ativa o Chatwoot e n8n no .env
     if [[ "${USE_WPPCONNECT:-s}" =~ ^[Ss]$ ]]; then
         export USE_CHATWOOT="s"
+        export USE_N8N="s"
         sed -i 's/^USE_CHATWOOT=.*/USE_CHATWOOT="s"/' "$env_path" 2>/dev/null || true
+        sed -i 's/^USE_N8N=.*/USE_N8N="s"/' "$env_path" 2>/dev/null || true
     fi
 
     local cpus="${SYSTEM_TOTAL_CPUS:-${TOTAL_CPUS:-4}}"
@@ -377,6 +381,11 @@ build_envs() {
         res_wpp="512M"
     fi
 
+    local wpp_webhook=""
+    if [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]]; then
+        wpp_webhook="http://${PREFIXO_CONTAINER:-loja}_n8n:5678/webhook/wppconnect"
+    fi
+
     cat << EOF >> "$env_path"
 
 # ===============================================================================
@@ -385,6 +394,7 @@ build_envs() {
 USE_WPPCONNECT="${USE_WPPCONNECT:-s}"
 HOST_WPPCONNECT_PORT="\${HOST_WPPCONNECT_PORT:-18081}"
 WPPCONNECT_SECRET_KEY="${WPPCONNECT_SECRET_KEY:-${API_KEY}}"
+WPPCONNECT_WEBHOOK_URL="${wpp_webhook}"
 CPU_WPPCONNECT="${cpu_wpp}"
 MEM_WPPCONNECT="${mem_wpp}"
 RES_WPPCONNECT="${res_wpp}"

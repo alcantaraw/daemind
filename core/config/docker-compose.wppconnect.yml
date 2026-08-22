@@ -22,11 +22,13 @@ services:
       - NODE_OPTIONS=--max-old-space-size=1024
       - CHROME_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-accelerated-2d-canvas,--no-first-run,--no-zygote,--single-process,--disable-gpu
       - WEBHOOK_ALL_UNREAD_MESSAGES=true
-      - WEBHOOK_URL=http://${PREFIXO_CONTAINER}_n8n:5678/webhook/wppconnect
-      - WEBHOOK_LISTEN_AWAIT_WEBHOOK=true
+      - WEBHOOK_URL=${WPPCONNECT_WEBHOOK_URL:-}
+      - WEBHOOK_LISTEN_AWAIT_WEBHOOK=false
       - CHATWOOT_ACCOUNT_ID=1
-      - CHATWOOT_TOKEN=${CHATWOOT_API_TOKEN:-}
+      - CHATWOOT_INBOX_ID=1
+      - CHATWOOT_TOKEN=${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}
       - CHATWOOT_URL=http://${PREFIXO_CONTAINER}_chatwoot:3000
+      - CHATWOOT_BASE_URL=http://${PREFIXO_CONTAINER}_chatwoot:3000
       - CHATWOOT_SIGN_MSG=true
       - CHATWOOT_REOPEN_CONVERSATION=true
       - CHATWOOT_CONVERSATION_PENDING=false
@@ -40,6 +42,8 @@ services:
       - '/etc/localtime:/etc/localtime:ro'
     depends_on:
       chatwoot:
+        condition: service_started
+      n8n:
         condition: service_started
       redis:
         condition: service_healthy

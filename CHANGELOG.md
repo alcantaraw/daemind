@@ -21,10 +21,10 @@
   - Banco lógico dedicado `umami_db` e proxy reverso Caddy em porta `:3008`.
 - **[REPLACE] WPPConnect Server (`install_wppconnect.sh` + `docker-compose.wppconnect.yml`):**
   - Substituição integral do antigo Evolution API pelo **WPPConnect Server (`latest`)**, eliminando o risco de estagnação de repositório.
-  - **[NEW] Interface Web Multi-Sessões Integrada (`core/html/wppconnect.html`):** Painel nativo moderno e reativo com suporte a múltiplas instâncias e números simultâneos de WhatsApp, zero atrito de autenticação (consome a Senha Mestra `$DB_PASSWORD` do SSOT), listagem em tempo real de instâncias conectadas (`/api/all-sessions`), gerador dinâmico de tokens por sessão, ações de gerenciamento/desconexão e projeção de **QR Code com auto-polling de status de conexão**.
-  - **Auto-Integração Zero-Touch com Chatwoot CRM**: Captura automatizada do `CHATWOOT_API_TOKEN` via Rails Runner durante o bootstrap, provisionando inboxes e roteando mensagens automaticamente sem necessidade de configuração manual pelo usuário final.
+  - **[NEW] Interface Web Multi-Sessões Integrada (`core/html/wppconnect.html`):** Painel nativo moderno e reativo com suporte a múltiplas instâncias e números simultâneos de WhatsApp, zero atrito de autenticação (consome a Senha Mestra `$DB_PASSWORD` do SSOT), listagem em tempo real de instâncias conectadas (`/api/{secretkey}/show-all-sessions`), gerador dinâmico de tokens por sessão, ações de gerenciamento via "QR Code" e desconexão cirúrgica (`clear-session-data`).
+  - **Auto-Integração Zero-Touch com Chatwoot CRM**: Sincronização automática do `AccessToken`, `Identifier` e `Secret` da Inbox de WhatsApp com a **Senha Mestra Unificada (`$DB_PASSWORD`)**, provisionando inboxes do tipo `Channel::Api` e vinculando agentes automaticamente sem nenhuma configuração manual no primeiro acesso.
   - Integração nativa de eventos e webhooks em tempo real no **n8n** (`/webhook/wppconnect`).
-  - Documentação Swagger integrada em `:18081/api-docs/` e gerenciamento de sessões com persistência local e cache em Redis.
+  - Documentação Swagger integrada em `:18081/api-docs/` e gerenciamento de sessões com persistência local em `/usr/src/wpp-server/` e cache em Redis.
 
 ---
 

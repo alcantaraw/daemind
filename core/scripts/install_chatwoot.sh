@@ -265,8 +265,6 @@ provision_user() {
 
     local CHATWOOT_STATUS=$(sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
       if User.exists?(uid: '${TS_EMAIL:-admin@localhost}', provider: 'email') || User.exists?(email: '${TS_EMAIL:-admin@localhost}')
-        user = User.find_by(uid: '${TS_EMAIL:-admin@localhost}', provider: 'email') || User.find_by(email: '${TS_EMAIL:-admin@localhost}')
-        user.update!(password: '${DB_PASSWORD:-******}', password_confirmation: '${DB_PASSWORD:-******}')
         puts 'EXISTE'
       else
         puts 'CRIAR'
@@ -294,6 +292,9 @@ provision_user() {
             AccountUser.find_or_create_by!(account_id: account.id, user_id: user.id) do |au|
               au.role = :administrator
             end
+            token_obj = AccessToken.find_or_initialize_by(owner: user)
+            token_obj.token = '${SENHA}'
+            token_obj.save!
             InstallationConfig.find_or_create_by!(name: 'INSTALLATION_NAME').update!(value: '${PREFIX}')
             InstallationConfig.find_or_create_by!(name: 'CHATWOOT_INSTANCE_ADMIN_EMAIL').update!(value: '${TS_EMAIL:-admin@localhost}')
             user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
@@ -309,38 +310,16 @@ provision_user() {
         echo "➜ [SUCESSO CHATWOOT] Administrador Chatwoot cadastrado."
     fi
 
-    # ---------------------------------------------------------------------------
-    # SRE AUTO-INTEGRAÇÃO ZERO-TOUCH: Sincroniza o Access Token com a Senha Mestra ($DB_PASSWORD)
-    # ---------------------------------------------------------------------------
-    local CW_TOKEN=$(sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
-      user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.first
-      if user
-        token_obj = AccessToken.find_by(owner: user)
-        if token_obj
-          token_obj.update!(token: '${SENHA}')
+    local env_file="${TARGET_DIR:-/opt/daemind}/.env"
+    if [ -f "$env_file" ]; then
+        if grep -q '^CHATWOOT_API_TOKEN=' "$env_file"; then
+            sudo sed -i "s|^CHATWOOT_API_TOKEN=.*|CHATWOOT_API_TOKEN=\"${SENHA}\"|" "$env_file" 2>/dev/null || true
         else
-          token_obj = AccessToken.create!(owner: user, token: '${SENHA}')
-        end
-        puts token_obj.token
-      end
-    " < /dev/null 2>/dev/null | tr -d '\r\n ' || true)
-
-    if [ -n "$CW_TOKEN" ]; then
-        local env_file="${TARGET_DIR:-/opt/daemind}/.env"
-        if [ -f "$env_file" ]; then
-            if grep -q '^CHATWOOT_API_TOKEN=' "$env_file"; then
-                sudo sed -i "s|^CHATWOOT_API_TOKEN=.*|CHATWOOT_API_TOKEN=\"${CW_TOKEN}\"|" "$env_file" 2>/dev/null || true
-            else
-                echo "CHATWOOT_API_TOKEN=\"${CW_TOKEN}\"" | sudo tee -a "$env_file" > /dev/null 2>&1 || true
-            fi
+            echo "CHATWOOT_API_TOKEN=\"${SENHA}\"" | sudo tee -a "$env_file" > /dev/null 2>&1 || true
         fi
-        export CHATWOOT_API_TOKEN="$CW_TOKEN"
-        echo "✔ [AUTO-INTEGRAÇÃO CHATWOOT] Token de API obtido e persistido com sucesso."
     fi
+    export CHATWOOT_API_TOKEN="${SENHA}"
 
-    # -----------------------------------------------------------------------
-    # SRE ZERO-TOUCH: Provisiona a Inbox API de WhatsApp vinculando o Webhook do WPPConnect
-    # -----------------------------------------------------------------------
     if [ "${USE_WPPCONNECT:-s}" = "s" ]; then
         echo "➜ [AUTO-INTEGRAÇÃO CHATWOOT] Vinculando Webhook do WPPConnect Server na Inbox do Chatwoot..."
         sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
