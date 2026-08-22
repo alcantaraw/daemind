@@ -188,6 +188,7 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 - 🔒 **Hardening Perimetral & Segurança Zero-Trust:** Regras estritas no Firewall IPTables, isolamento de rede privada e proteção contra acessos externos não autorizados.
 - ⚡ **Auto-Tuning Dinâmico de Hardware:** Inspeção autônoma do servidor (CPU, RAM e Disco) com otimização profunda de memória, CPU e I/O de disco aplicada individualmente a cada microsserviço para garantir máxima performance sem estouros.
 - 🐘 **Banco de Dados Escalável:** PostgreSQL 17 com extensão `pgvector` multiplexado via PgBouncer para buscas por IA e webhooks ilimitados.
+- 🔑 **Identidade Global Unificada & SSOT de Credenciais:** Uma única conta universal (`$TS_EMAIL` + `$DB_PASSWORD`) autentica 100% dos painéis e integrações da stack com zero fricção de onboarding manual.
 - 🧼 **Sanitização de Segredos:** Expurgo automático de chaves e credenciais da memória após o boot para zero vazamento.
 
 ---
