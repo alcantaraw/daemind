@@ -336,38 +336,37 @@ provision_user() {
         fi
         export CHATWOOT_API_TOKEN="$CW_TOKEN"
         echo "✔ [AUTO-INTEGRAÇÃO CHATWOOT] Token de API obtido e persistido com sucesso."
+    fi
 
-        # -----------------------------------------------------------------------
-        # SRE ZERO-TOUCH: Provisiona a Inbox API de WhatsApp vinculando o Webhook do WPPConnect
-        # -----------------------------------------------------------------------
-        if [ "${USE_WPPCONNECT:-s}" = "s" ]; then
-            echo "➜ [AUTO-INTEGRAÇÃO CHATWOOT] Vinculando Webhook do WPPConnect Server na Inbox do Chatwoot..."
-            sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
-            begin
-              account = Account.find_by(name: '${PREFIX}') || Account.first
-              admin_user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.first
-              if account && admin_user
-                # 1. Procura ou cria canal API
-                channel = Channel::Api.find_or_create_by!(account_id: account.id) do |c|
-                  c.webhook_url = 'http://${PREFIX}_wppconnect:21465/api/default/chatwoot'
-                end
-                channel.update!(webhook_url: 'http://${PREFIX}_wppconnect:21465/api/default/chatwoot')
+    # -----------------------------------------------------------------------
+    # SRE ZERO-TOUCH: Provisiona a Inbox API de WhatsApp vinculando o Webhook do WPPConnect
+    # -----------------------------------------------------------------------
+    if [ "${USE_WPPCONNECT:-s}" = "s" ]; then
+        echo "➜ [AUTO-INTEGRAÇÃO CHATWOOT] Vinculando Webhook do WPPConnect Server na Inbox do Chatwoot..."
+        sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
+        begin
+          account = Account.first
+          admin_user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.first
+          if account && admin_user
+            channel = Channel::Api.find_or_initialize_by(account_id: account.id)
+            channel.webhook_url = 'http://${PREFIX}_wppconnect:21465/api/default/chatwoot'
+            channel.secret = '${SENHA}'
+            channel.identifier = '${SENHA}'
+            channel.save!
 
-                # 2. Procura ou cria Inbox vinculada ao canal
-                inbox = Inbox.find_or_create_by!(channel: channel, account_id: account.id) do |i|
-                  i.name = 'WhatsApp'
-                end
-                inbox.update!(name: 'WhatsApp')
+            inbox = Inbox.find_or_initialize_by(channel: channel, account_id: account.id)
+            inbox.name = 'WhatsApp'
+            inbox.save!
 
-                # 3. Adiciona permissão do admin à Inbox
-                InboxMember.find_or_create_by!(inbox_id: inbox.id, user_id: admin_user.id) rescue nil
-                puts '➜ [OK CHATWOOT INBOX] Inbox WhatsApp vinculada com sucesso ao WPPConnect!'
-              end
-            rescue => e
-              puts '🚨 [ERRO INBOX CHATWOOT] ' + e.message
-            end
-            " < /dev/null 2>/dev/null || true
-        fi
+            InboxMember.find_or_create_by!(inbox: inbox, user: admin_user) rescue nil
+            
+            Rails.cache.clear
+            puts '➜ [OK CHATWOOT INBOX] Inbox WhatsApp ID: ' + inbox.id.to_s + ' criada com sucesso!'
+          end
+        rescue => e
+          puts '🚨 [ERRO INBOX CHATWOOT] ' + e.message
+        end
+        " < /dev/null 2>/dev/null || true
     fi
 }
 
