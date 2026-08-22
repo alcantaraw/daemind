@@ -283,10 +283,7 @@
             <input type="text" id="sessionName" value="default" placeholder="Ex: default, comercial, suporte">
         </div>
 
-        <div class="actions-group" style="display: flex; gap: 8px; margin-top: 10px;">
-            <button class="btn-action" style="flex: 2;" id="btnConnect" onclick="iniciarConexao()">🚀 Conectar / Gerar QR Code</button>
-            <button class="btn-action btn-danger" style="flex: 1; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171;" id="btnDisconnect" onclick="desconectarSessaoAtual()">🛑 Desconectar</button>
-        </div>
+        <button class="btn-action" id="btnConnect" onclick="iniciarConexao()">🚀 Conectar / Gerar QR Code</button>
 
         <div class="qr-container" id="qrBox">
             <div class="status-badge" id="statusBadge"><div class="status-dot"></div> <span id="statusText">Aguardando Leitura...</span></div>
