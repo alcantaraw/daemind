@@ -376,7 +376,7 @@
                 qrImg.style.display = 'none';
                 statusText.innerText = 'Iniciando instância da sessão...';
 
-                // 2. Iniciar / Consultar Sessão
+                // 2. Iniciar / Consultar Sessão com Chatwoot Bridge Explicitamente Ativa
                 await fetch(`${apiBase}/api/${session}/start-session`, {
                     method: 'POST',
                     headers: {
@@ -384,7 +384,20 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${bearerToken}`
                     },
-                    body: JSON.stringify({ waitQrCode: true })
+                    body: JSON.stringify({ 
+                        waitQrCode: true,
+                        chatwoot: {
+                            accountId: "1",
+                            token: "__CHATWOOT_TOKEN__",
+                            url: "__CHATWOOT_URL__",
+                            signMsg: true,
+                            reopenConversation: true,
+                            conversationPending: false,
+                            importContacts: true,
+                            importMessages: true,
+                            daysLimitImportMessages: 3
+                        }
+                    })
                 });
 
                 // Inicia polling de QR Code e Status

@@ -306,6 +306,11 @@ provision_user() {
             sudo sed -i "s|CHATWOOT_TOKEN: ''|CHATWOOT_TOKEN: \"${cw_token}\"|g" "$compose_file" 2>/dev/null || true
             sudo sed -i "s|CHATWOOT_TOKEN=.*|CHATWOOT_TOKEN=${cw_token}|g" "$compose_file" 2>/dev/null || true
         fi
+        local html_file="${TARGET_DIR:-/opt/daemind}/core/html/wppconnect.html"
+        if [ -f "$html_file" ]; then
+            sudo sed -i "s|__CHATWOOT_TOKEN__|${cw_token}|g" "$html_file" 2>/dev/null || true
+            sudo sed -i "s|__CHATWOOT_URL__|http://${PREFIX}_chatwoot:3000|g" "$html_file" 2>/dev/null || true
+        fi
         cd "${TARGET_DIR:-/opt/daemind}"
         sudo docker compose up -d --force-recreate wppconnect >/dev/null 2>&1 || true
         echo "✔ [SUCESSO WPPCONNECT] Integração WPPConnect <-> Chatwoot 100% autônoma e conectada."

@@ -310,13 +310,18 @@ provision_user() {
     fi
 
     # ---------------------------------------------------------------------------
-    # SRE AUTO-INTEGRAÇÃO ZERO-TOUCH: Captura o Access Token do Admin e salva no .env
+    # SRE AUTO-INTEGRAÇÃO ZERO-TOUCH: Sincroniza o Access Token com a Senha Mestra ($DB_PASSWORD)
     # ---------------------------------------------------------------------------
     local CW_TOKEN=$(sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
       user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.first
       if user
-        token_obj = user.access_token || AccessToken.create!(owner: user) rescue nil
-        puts token_obj.token if token_obj
+        token_obj = AccessToken.find_by(owner: user)
+        if token_obj
+          token_obj.update!(token: '${SENHA}')
+        else
+          token_obj = AccessToken.create!(owner: user, token: '${SENHA}')
+        end
+        puts token_obj.token
       end
     " < /dev/null 2>/dev/null | tr -d '\r\n ' || true)
 
