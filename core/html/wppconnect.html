@@ -283,7 +283,10 @@
             <input type="text" id="sessionName" value="default" placeholder="Ex: default, comercial, suporte">
         </div>
 
-        <button class="btn-action" id="btnConnect" onclick="iniciarConexao()">🚀 Conectar / Gerar QR Code</button>
+        <div class="actions-group" style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn-action" style="flex: 2;" id="btnConnect" onclick="iniciarConexao()">🚀 Conectar / Gerar QR Code</button>
+            <button class="btn-action btn-danger" style="flex: 1; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171;" id="btnDisconnect" onclick="desconectarSessaoAtual()">🛑 Desconectar</button>
+        </div>
 
         <div class="qr-container" id="qrBox">
             <div class="status-badge" id="statusBadge"><div class="status-dot"></div> <span id="statusText">Aguardando Leitura...</span></div>
@@ -412,26 +415,50 @@
             }
         }
 
+        async function desconectarSessaoAtual() {
+            const session = document.getElementById('sessionName').value.trim() || 'default';
+            await desconectarSessao(session);
+        }
+
         async function desconectarSessao(session) {
             if (!confirm(`Deseja realmente desconectar e encerrar a sessão '${session}'?`)) return;
+            const statusText = document.getElementById('statusText');
+            const qrImg = document.getElementById('qrImg');
+            const qrBox = document.getElementById('qrBox');
+            const btn = document.getElementById('btnConnect');
+
             try {
                 const apiBase = '/wpp';
                 const token = await obterTokenSessao(session);
+                
+                // Limpa polling ativo
+                if (pollInterval) clearInterval(pollInterval);
+
+                // Chama logout e close da sessão
                 await fetch(`${apiBase}/api/${session}/logout-session`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
-                });
+                }).catch(() => {});
+
                 await fetch(`${apiBase}/api/${session}/close-session`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
-                });
-                alert(`Sessão '${session}' desconectada com sucesso.`);
+                }).catch(() => {});
+
+                // Reseta interface visual
+                qrImg.style.display = 'none';
+                qrImg.src = '';
+                qrBox.style.display = 'none';
+                btn.disabled = false;
+                btn.innerText = '🚀 Conectar / Gerar QR Code';
+
+                alert(`Sessão '${session}' desconectada e encerrada com sucesso.`);
                 carregarSessoes();
             } catch (err) {
                 alert('Erro ao desconectar: ' + err.message);

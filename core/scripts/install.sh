@@ -1299,11 +1299,17 @@ else
     echo "➜ [SUCESSO INSTALL] Administrador LiteLLM cadastrado."
 fi
 
-# 2. PROVISÃO POLIMÓRFICA DE USUÁRIOS DOS MÓDULOS DESACOPLADOS ATIVOS (PARALELIZADO)
+# 2. PROVISÃO POLIMÓRFICA DE USUÁRIOS DOS MÓDULOS DESACOPLADOS ATIVOS (ORDENADA & PARALELIZADA)
 [ ${#MODULOS_DESACOPLADOS_ATIVOS[@]} -eq 0 ] && resolver_modulos_desacoplados
+
+# SRE Guardrail de Dependência: Se Chatwoot estiver ativo, provisiona-o primeiro para gerar o CHATWOOT_API_TOKEN
+if [[ " ${MODULOS_DESACOPLADOS_ATIVOS[*]} " =~ " chatwoot " ]] && [ -f "$TARGET_DIR/core/scripts/install_chatwoot.sh" ]; then
+    bash "$TARGET_DIR/core/scripts/install_chatwoot.sh" "$TARGET_DIR" provision_user 2>/dev/null || true
+fi
 
 USER_PROV_PIDS=()
 for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
+    [ "$mod" = "chatwoot" ] && continue
     if [ -f "$TARGET_DIR/core/scripts/install_${mod}.sh" ]; then
         (
             bash "$TARGET_DIR/core/scripts/install_${mod}.sh" "$TARGET_DIR" provision_user

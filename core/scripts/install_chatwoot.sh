@@ -315,9 +315,8 @@ provision_user() {
     local CW_TOKEN=$(sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
       user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.first
       if user
-        token = user.access_token&.token || user.create_access_token.token rescue nil
-        token ||= user.tokens.keys.first rescue nil
-        puts token if token
+        token_obj = user.access_token || AccessToken.create!(owner: user) rescue nil
+        puts token_obj.token if token_obj
       end
     " < /dev/null 2>/dev/null | tr -d '\r\n ' || true)
 

@@ -300,8 +300,14 @@ provision_user() {
 
     if [ -n "$cw_token" ]; then
         echo "✔ [AUTO-INTEGRAÇÃO WPPCONNECT] Sincronizando token do Chatwoot no container WPPConnect..."
+        local compose_file="${TARGET_DIR:-/opt/daemind}/docker-compose.yml"
+        if [ -f "$compose_file" ]; then
+            sudo sed -i "s|CHATWOOT_TOKEN: \"\"|CHATWOOT_TOKEN: \"${cw_token}\"|g" "$compose_file" 2>/dev/null || true
+            sudo sed -i "s|CHATWOOT_TOKEN: ''|CHATWOOT_TOKEN: \"${cw_token}\"|g" "$compose_file" 2>/dev/null || true
+            sudo sed -i "s|CHATWOOT_TOKEN=.*|CHATWOOT_TOKEN=${cw_token}|g" "$compose_file" 2>/dev/null || true
+        fi
         cd "${TARGET_DIR:-/opt/daemind}"
-        sudo docker compose up -d wppconnect >/dev/null 2>&1 || true
+        sudo docker compose up -d --force-recreate wppconnect >/dev/null 2>&1 || true
         echo "✔ [SUCESSO WPPCONNECT] Integração WPPConnect <-> Chatwoot 100% autônoma e conectada."
     fi
 
