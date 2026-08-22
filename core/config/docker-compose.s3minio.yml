@@ -50,6 +50,14 @@ services:
   #       condition: service_healthy
   # --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---
 
+
+  # --- INJEÇÃO DECLARATIVA NATIVA NO LISTMONK QUANDO S3MINIO ESTÁ ATIVO ---
+  # listmonk:
+  #   depends_on:
+  #     s3minio:
+  #       condition: service_healthy
+  # --- INJEÇÃO DECLARATIVA NATIVA NO LISTMONK QUANDO S3MINIO ESTÁ ATIVO ---
+
   caddy:
     ports:
       - "9000:9000/tcp" # MinIO S3 API

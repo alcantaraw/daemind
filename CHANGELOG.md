@@ -15,6 +15,7 @@
 - **[ADD] Listmonk (`install_listmonk.sh` + `docker-compose.listmonk.yml`):**
   - Plataforma de e-mail marketing, newsletters e disparo transacional soberano de alta performance.
   - Banco relacional dedicado `listmonk_db`, isolamento perimetral de WAF e porta de borda `:9005`.
+  - **Auto-Integração S3/MinIO**: Auto-provisionamento de bucket dedicado (`listmonk`) no MinIO S3 com injeção automática de credenciais e endpoint via banco (`settings`), permitindo upload e compartilhamento de artes e mídias de campanhas com as outras ferramentas da stack.
 - **[ADD] Umami Analytics (`install_umami.sh` + `docker-compose.umami.yml`):**
   - Web analytics soberano, leve e 100% em conformidade com a LGPD/GDPR (cookieless).
   - Banco lógico dedicado `umami_db` e proxy reverso Caddy em porta `:3008`.

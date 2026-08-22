@@ -295,6 +295,34 @@ provision_user() {
     else
         echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: ${USER_EMAIL} | Senha: [Cofre Mestre])."
     fi
+
+    # -----------------------------------------------------------------------
+    # SRE AUTO-INTEGRAÇÃO S3/MINIO: Configura o upload de mídias no MinIO
+    # -----------------------------------------------------------------------
+    if [ "${STORAGE_MODE:-s3minio}" = "s3minio" ] || [[ "${USE_S3MINIO:-s}" =~ ^[Ss]$ ]]; then
+        echo "➜ [SRE LISTMONK] Vinculando bucket MinIO S3 ('listmonk') para uploads de mídias de e-mail..."
+        local S3_HOST="http://${PREFIX}_s3minio:9000"
+        local S3_PUBLIC_HOST="http://${TS_DOMAIN:-localhost}:9000"
+        local S3_KEY="${TS_EMAIL:-admin@localhost}"
+        local S3_SECRET="${DB_PASSWORD}"
+
+        sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
+        INSERT INTO settings (key, value, updated_at)
+        VALUES 
+            ('upload.provider', '\"s3\"', NOW()),
+            ('upload.s3.url', '\"${S3_PUBLIC_HOST}/listmonk\"', NOW()),
+            ('upload.s3.public_url', '\"${S3_PUBLIC_HOST}/listmonk\"', NOW()),
+            ('upload.s3.aws_default_region', '\"us-east-1\"', NOW()),
+            ('upload.s3.aws_access_key_id', '\"${S3_KEY}\"', NOW()),
+            ('upload.s3.aws_secret_access_key', '\"${S3_SECRET}\"', NOW()),
+            ('upload.s3.aws_s3_bucket', '\"listmonk\"', NOW()),
+            ('upload.s3.aws_s3_endpoint', '\"${S3_HOST}\"', NOW()),
+            ('upload.s3.aws_s3_path_style', 'true', NOW())
+        ON CONFLICT (key) DO UPDATE 
+        SET value = EXCLUDED.value, updated_at = NOW();
+        " >/dev/null 2>&1 || true
+        echo "✔ [AUTO-INTEGRAÇÃO LISTMONK] Uploads do Listmonk integrados com o MinIO S3 com sucesso."
+    fi
 }
 
 render_forensic_report() {

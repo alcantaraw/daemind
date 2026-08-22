@@ -44,6 +44,9 @@ build_structure() {
             if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/nocodb 2>/dev/null || true
             fi
+            if [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]]; then
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/listmonk 2>/dev/null || true
+            fi
             sudo chmod -R 777 "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
             sudo chown -R "$TARGET_OWNER" "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
             echo "➜ [SRE S3MINIO] Permissões de I/O de storage_data alinhadas (Owner: ${TARGET_OWNER}, Mode: 777)."
@@ -63,6 +66,7 @@ use_cw = '${USE_CHATWOOT:-s}'.lower() in ['s', 'true', '1']
 use_pz = '${USE_POSTIZ:-s}'.lower() in ['s', 'true', '1']
 use_evo = '${USE_EVOLUTION:-s}'.lower() in ['s', 'true', '1']
 use_noco = '${USE_NOCODB:-s}'.lower() in ['s', 'true', '1']
+use_lm = '${USE_LISTMONK:-s}'.lower() in ['s', 'true', '1']
 
 try:
     with open(path, 'r+') as f:
@@ -108,6 +112,26 @@ try:
             else:
                 new_lines = ['  # ' + line.lstrip(' #') if line.strip() else line for line in lines]
             content = content[:m_noco.start(1)] + '\n'.join(new_lines) + content[m_noco.end(1):]
+
+        # Listmonk overlay handler
+        lm_tag = '# --- INJEÇÃO DECLARATIVA NATIVA NO LISTMONK QUANDO S3MINIO ESTÁ ATIVO ---'
+        lm_pattern = re.escape(lm_tag) + r'\n([\s\S]*?)\n\s*' + re.escape(lm_tag)
+        m_lm = re.search(lm_pattern, content)
+        if m_lm:
+            block = m_lm.group(1)
+            lines = block.splitlines()
+            if use_lm:
+                new_lines = []
+                for line in lines:
+                    if line.startswith('  # '):
+                        new_lines.append('  ' + line[4:])
+                    elif line.startswith('# '):
+                        new_lines.append('  ' + line[2:])
+                    else:
+                        new_lines.append(line)
+            else:
+                new_lines = ['  # ' + line.lstrip(' #') if line.strip() else line for line in lines]
+            content = content[:m_lm.start(1)] + '\n'.join(new_lines) + content[m_lm.end(1):]
 
         f.seek(0)
         f.write(content)

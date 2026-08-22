@@ -434,7 +434,7 @@
                 // Limpa polling ativo
                 if (pollInterval) clearInterval(pollInterval);
 
-                // Chama logout e close da sessão
+                // 1. Desconecta do WhatsApp se estiver logado
                 await fetch(`${apiBase}/api/${session}/logout-session`, {
                     method: 'POST',
                     headers: {
@@ -443,6 +443,15 @@
                     }
                 }).catch(() => {});
 
+                // 2. Limpa dados de sessão e tokens de forma oficial via Secret Key
+                await fetch(`${apiBase}/api/${session}/${MASTER_KEY}/clear-session-data`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).catch(() => {});
+
+                // 3. Fecha o navegador
                 await fetch(`${apiBase}/api/${session}/close-session`, {
                     method: 'POST',
                     headers: {
@@ -458,7 +467,7 @@
                 btn.disabled = false;
                 btn.innerText = '🚀 Conectar / Gerar QR Code';
 
-                alert(`Sessão '${session}' desconectada e encerrada com sucesso.`);
+                alert(`Sessão '${session}' desconectada e limpa com sucesso.`);
                 carregarSessoes();
             } catch (err) {
                 alert('Erro ao desconectar: ' + err.message);
@@ -469,9 +478,9 @@
             const container = document.getElementById('sessionsContainer');
             try {
                 const apiBase = '/wpp';
-                const token = await obterTokenSessao('default');
-                const res = await fetch(`${apiBase}/api/all-sessions`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                // Endpoint oficial do Swagger: GET /api/{secretkey}/show-all-sessions
+                const res = await fetch(`${apiBase}/api/${MASTER_KEY}/show-all-sessions`, {
+                    headers: { 'Accept': 'application/json' }
                 });
                 const data = await res.json();
                 const sessions = Array.isArray(data) ? data : (data.response || []);
