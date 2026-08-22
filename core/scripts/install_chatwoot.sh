@@ -360,7 +360,7 @@ provision_user() {
                 inbox.update!(name: 'WhatsApp')
 
                 # 3. Adiciona permissão do admin à Inbox
-                InboxMember.find_or_create_by!(inbox_id: inbox.id, user_id: admin_user.id)
+                InboxMember.find_or_create_by!(inbox_id: inbox.id, user_id: admin_user.id) rescue nil
                 puts '➜ [OK CHATWOOT INBOX] Inbox WhatsApp vinculada com sucesso ao WPPConnect!'
               end
             rescue => e
