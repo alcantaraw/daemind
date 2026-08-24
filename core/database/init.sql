@@ -142,3 +142,200 @@ VALUES
 ('Fita Adesiva Acrílica Larga 50mm', 2, 10, 'Distribuidora de Fitas e Lacres', '21977776666'),
 ('Etiqueta Térmica de Expedição 100x150mm', 150, 500, 'Suprimentos de Automacao Ltda', '21966665555')
 ON CONFLICT (item_nome) DO NOTHING;
+
+-- ===============================================================================
+-- 10. DATA WAREHOUSE & ANALYTICS VIEWS (METABASE / NOCODB / SRE BI)
+-- ===============================================================================
+-- Integração dos bancos dos microsserviços via Foreign Data Wrapper (FDW)
+CREATE EXTENSION IF NOT EXISTS postgres_fdw;
+
+-- Servidores Estrangeiros (Mapeamento interno localhost)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_chatwoot') THEN
+        CREATE SERVER srv_chatwoot FOREIGN DATA WRAPPER postgres_fdw 
+            OPTIONS (host 'localhost', port '5432', dbname 'chatwoot_db');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_shlink') THEN
+        CREATE SERVER srv_shlink FOREIGN DATA WRAPPER postgres_fdw 
+            OPTIONS (host 'localhost', port '5432', dbname 'shlink_db');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_listmonk') THEN
+        CREATE SERVER srv_listmonk FOREIGN DATA WRAPPER postgres_fdw 
+            OPTIONS (host 'localhost', port '5432', dbname 'listmonk_db');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_umami') THEN
+        CREATE SERVER srv_umami FOREIGN DATA WRAPPER postgres_fdw 
+            OPTIONS (host 'localhost', port '5432', dbname 'umami_db');
+    END IF;
+END $$;
+
+-- Criação dos Schemas FDW para isolamento
+CREATE SCHEMA IF NOT EXISTS fdw_chatwoot;
+CREATE SCHEMA IF NOT EXISTS fdw_shlink;
+CREATE SCHEMA IF NOT EXISTS fdw_listmonk;
+CREATE SCHEMA IF NOT EXISTS fdw_umami;
+
+-- Foreign Tables do Listmonk com tipos universais
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.campaigns (
+    id integer,
+    uuid uuid,
+    name text,
+    subject text,
+    from_email text,
+    body text,
+    status text,
+    type text,
+    to_send integer,
+    sent integer,
+    started_at timestamp with time zone,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'campaigns');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.subscribers (
+    id integer,
+    uuid uuid,
+    email text,
+    name text,
+    attribs jsonb,
+    status text,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'subscribers');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.campaign_views (
+    campaign_id integer,
+    subscriber_id integer,
+    created_at timestamp with time zone
+) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'campaign_views');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.link_clicks (
+    campaign_id integer,
+    subscriber_id integer,
+    link_id integer,
+    count integer,
+    created_at timestamp with time zone
+) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'link_clicks');
+
+-- VIEWS ANALÍTICAS UNIFICADAS PARA METABASE & NOCODB
+
+-- A) Métricas Executivas de Atendimento & CSAT (Chatwoot)
+CREATE OR REPLACE VIEW vw_kpi_atendimento AS
+SELECT 
+    c.id AS conversa_id,
+    c.display_id,
+    c.status AS status_codigo,
+    CASE 
+        WHEN c.status = 0 THEN 'Aberto'
+        WHEN c.status = 1 THEN 'Resolvido'
+        WHEN c.status = 2 THEN 'Pendente'
+        WHEN c.status = 3 THEN 'Adiado'
+        ELSE 'Outro'
+    END AS status_descricao,
+    c.created_at AS data_abertura,
+    c.first_reply_created_at AS data_primeira_resposta,
+    ROUND(EXTRACT(EPOCH FROM (c.first_reply_created_at - c.created_at)) / 60.0, 2) AS tempo_primeira_resposta_minutos,
+    c.updated_at AS data_resolucao,
+    ROUND(EXTRACT(EPOCH FROM (c.updated_at - c.created_at)) / 60.0, 2) AS tempo_resolucao_minutos,
+    u.id AS atendente_id,
+    u.name AS atendente_nome,
+    u.email AS atendente_email,
+    ct.id AS contato_id,
+    ct.name AS contato_nome,
+    ct.phone_number AS contato_telefone,
+    csat.rating AS csat_nota,
+    csat.feedback_message AS csat_comentario
+FROM fdw_chatwoot.conversations c
+LEFT JOIN fdw_chatwoot.users u ON c.assignee_id = u.id
+LEFT JOIN fdw_chatwoot.contacts ct ON c.contact_id = ct.id
+LEFT JOIN fdw_chatwoot.csat_survey_responses csat ON csat.conversation_id = c.id;
+
+-- B) Métricas de Marketing & Tráfego de Links Curtos (Shlink)
+CREATE OR REPLACE VIEW vw_kpi_marketing_links AS
+SELECT 
+    s.id AS link_id,
+    s.short_code,
+    s.title AS titulo_campanha,
+    s.original_url AS url_destino,
+    s.date_created AS data_criacao,
+    v.id AS visita_id,
+    v.date AS data_visita,
+    v.referer AS origem_trafego,
+    v.user_agent AS navegador_dispositivo,
+    v.potential_bot AS e_robo,
+    loc.country_name AS pais,
+    loc.city_name AS cidade,
+    loc.region_name AS estado
+FROM fdw_shlink.short_urls s
+LEFT JOIN fdw_shlink.visits v ON v.short_url_id = s.id
+LEFT JOIN fdw_shlink.visit_locations loc ON v.visit_location_id = loc.id;
+
+-- C) Métricas de E-mail Marketing & Campanhas (Listmonk)
+CREATE OR REPLACE VIEW vw_kpi_email_marketing AS
+SELECT 
+    c.id AS campanha_id,
+    c.name AS campanha_nome,
+    c.subject AS assunto,
+    c.status AS status,
+    c.sent AS emails_enviados,
+    c.to_send AS total_destinatarios,
+    c.started_at AS data_inicio_envio,
+    c.created_at AS data_criacao,
+    COUNT(DISTINCT v.subscriber_id) AS total_aberturas_unicas,
+    COUNT(DISTINCT cl.subscriber_id) AS total_cliques_unicos,
+    ROUND((COUNT(DISTINCT v.subscriber_id)::numeric / NULLIF(c.sent, 0)) * 100, 2) AS taxa_abertura_perc,
+    ROUND((COUNT(DISTINCT cl.subscriber_id)::numeric / NULLIF(c.sent, 0)) * 100, 2) AS taxa_clique_perc
+FROM fdw_listmonk.campaigns c
+LEFT JOIN fdw_listmonk.campaign_views v ON v.campaign_id = c.id
+LEFT JOIN fdw_listmonk.link_clicks cl ON cl.campaign_id = c.id
+GROUP BY c.id, c.name, c.subject, c.status, c.sent, c.to_send, c.started_at, c.created_at;
+
+-- D) Métricas de Tráfego Web & UTMs (Umami)
+CREATE OR REPLACE VIEW vw_kpi_trafego_web AS
+SELECT 
+    w.website_id AS site_id,
+    w.name AS site_nome,
+    w.domain AS site_dominio,
+    e.event_id,
+    e.created_at AS data_evento,
+    e.url_path AS pagina_acessada,
+    e.referrer_domain AS dominio_referencia,
+    e.utm_source,
+    e.utm_medium,
+    e.utm_campaign,
+    s.session_id,
+    s.browser AS navegador,
+    s.os AS sistema_operacional,
+    s.device AS tipo_dispositivo,
+    s.country AS pais,
+    s.city AS cidade
+FROM fdw_umami.website_event e
+JOIN fdw_umami.website w ON e.website_id = w.website_id
+JOIN fdw_umami.session s ON e.session_id = s.session_id;
+
+-- E) Cruzamento Completo do Funil de Conversão (OmniChannel)
+CREATE OR REPLACE VIEW vw_funil_executivo_completo AS
+SELECT 
+    cl.id AS cliente_id,
+    cl.nome AS cliente_nome,
+    cl.email AS cliente_email,
+    cl.whatsapp AS cliente_whatsapp,
+    cl.grupo AS cliente_segmento,
+    cl.data_cadastro,
+    l.id AS lead_id,
+    l.origem_captura,
+    l.status_funil,
+    l.data_captura,
+    p.id AS pedido_id,
+    p.numero_pedido,
+    p.valor_total AS pedido_faturamento,
+    p.status_operacional AS pedido_status,
+    p.data_criacao AS data_pedido,
+    cw.conversa_id,
+    cw.atendente_nome,
+    cw.csat_nota
+FROM public.clientes cl
+LEFT JOIN public.leads l ON (l.documento_pj = cl.documento OR l.contato_identificado = cl.whatsapp)
+LEFT JOIN public.pedidos p ON p.cliente_id = cl.id
+LEFT JOIN vw_kpi_atendimento cw ON cw.contato_id = cl.chatwoot_contact_id;

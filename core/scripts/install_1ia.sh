@@ -477,6 +477,26 @@ sync_models() {
         append_payloads "$PAYLOAD_OPENROUTER"
     fi
 
+    # 2.6 OLLAMA (Modelos Locais On-Premise)
+    local PAYLOAD_OLLAMA="[]"
+    local OLLAMA_URL="http://${PREFIXO_CONTAINER}_ollama:11434"
+    if [[ "${USE_OLLAMA:-s}" =~ ^[Ss]$ ]] && [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_ollama 2>/dev/null)" = "true" ]; then
+        PAYLOAD_OLLAMA=$(curl -s --max-time 3 "${OLLAMA_URL}/api/tags" 2>>"$LOG_ERR" | jq -c --arg base "$OLLAMA_URL" '
+        .models // []
+        | map({
+            ID: .name,
+            Family: (.details.family // "ollama"),
+            Provider: "ollama",
+            Category: (["local", "chat"] + (if (.name | test("vision|llava|bakllava|moondream")) then ["vision", "image"] else [] end)) | unique | join(", "),
+            Description: "Modelo Local Ollama \(.name) (\(.details.parameter_size // "Local") - \(.details.quantization_level // "GGUF"))",
+            Free: true,
+            Created: 0,
+            Alias: true,
+            ApiBase: $base
+        })' 2>/dev/null || echo "[]")
+        append_payloads "$PAYLOAD_OLLAMA"
+    fi
+
     # 3. ROTEADOR INTELIGENTE (MATCHMAKING DINÂMICO & À PROVA DE FUTURO)
     local TARGET_MODEL="openrouter/free"
 
@@ -556,17 +576,19 @@ EO_BASE
           def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
           def provider_weight:
             if full_id == $target then "0_target"
-            elif .Provider == "anthropic" then "1_anthropic"
-            elif .Provider == "deepseek" then "2_deepseek"
-            elif .Provider == "google" or .Provider == "gemini" then "3_gemini"
-            elif .Provider == "openai" then "4_openai"
-            else "5_openrouter" end;
+            elif .Provider == "ollama" then "1_ollama"
+            elif .Provider == "anthropic" then "2_anthropic"
+            elif .Provider == "deepseek" then "3_deepseek"
+            elif .Provider == "google" or .Provider == "gemini" then "4_gemini"
+            elif .Provider == "openai" then "5_openai"
+            else "6_openrouter" end;
           sort_by(provider_weight, .ID) |
           .[] |
-          def free_label: if .Free then " (free)" else "" end;
+          def free_label: if .Provider == "ollama" then " (local)" elif .Free then " (free)" else "" end;
           def visual_name: "\(.ID)\(free_label)";
+          def api_base_entry: if .Provider == "ollama" and .ApiBase then "\n      api_base: \(.ApiBase)" else "" end;
 
-          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(litellm_provider)/\(.ID)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
+          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(litellm_provider)/\(.ID)\(api_base_entry)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
         ' >> "$TMP_CONFIG"
         
         if ! grep -q "^model_list:" "$TMP_CONFIG" || [ "$(grep -c "model_name:" "$TMP_CONFIG")" -eq 0 ]; then

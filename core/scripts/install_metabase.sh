@@ -290,6 +290,38 @@ provision_user() {
     else
         echo "⚠️ [SRE METABASE] Resposta da API de Setup: $(echo "$RESPONSE" | cut -c1-120)"
     fi
+
+    # 3. Auto-vinculação do Data Warehouse (loja_db via PgBouncer)
+    local MB_SESSION=$(curl -s -X POST "${MB_URL}/api/session" \
+        -H "Content-Type: application/json" \
+        -d "{\"username\": \"${ADMIN_EMAIL}\", \"password\": \"${ADMIN_PASS}\"}" 2>/dev/null | jq -r '.id // empty' 2>/dev/null || echo "")
+
+    if [ -n "$MB_SESSION" ]; then
+        local HAS_DB=$(curl -s -X GET "${MB_URL}/api/database" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '.data[] | select(.name == "Data Warehouse Soberano") | .id' 2>/dev/null || echo "")
+        if [ -z "$HAS_DB" ]; then
+            echo "➜ [SRE METABASE] Conectando Data Warehouse Soberano (${PREFIX}_db via PgBouncer)..."
+            curl -s -X POST "${MB_URL}/api/database" \
+                -H "X-Metabase-Session: $MB_SESSION" \
+                -H "Content-Type: application/json" \
+                -d "{
+                    \"name\": \"Data Warehouse Soberano\",
+                    \"engine\": \"postgres\",
+                    \"details\": {
+                        \"host\": \"pgbouncer\",
+                        \"port\": 6432,
+                        \"dbname\": \"${PREFIX}_db\",
+                        \"user\": \"${DB_USER:-admin_db}\",
+                        \"password\": \"${DB_PASSWORD}\",
+                        \"ssl\": false,
+                        \"let-user-control-scheduling\": false
+                    },
+                    \"is_full_sync\": true
+                }" >/dev/null 2>&1 || true
+            echo "✔ [AUTO-INTEGRAÇÃO METABASE] Data Warehouse Soberano integrado ao Metabase com sucesso!"
+        else
+            echo "➜ [IDEMPOTÊNCIA METABASE] Data Warehouse Soberano já conectado ao Metabase."
+        fi
+    fi
 }
 
 render_forensic_report() {

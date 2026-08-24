@@ -337,14 +337,15 @@ provision_user() {
             echo "➜ [IDEMPOTÊNCIA NOCODB] Workspace já nomeado como 'Painel de Controle'. Preservando."
         fi
 
-        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[]? | select(.title == "daemind_db" or .title == "Loja_db") | .id // empty' 2>/dev/null | head -n 1 || true)
+        local BASE_NAME="${PREFIX}_db"
+        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r --arg bn "$BASE_NAME" '.list[]? | select(.title == $bn or .title == "daemind_db" or .title == "Loja_db" or .title == "loja_db") | .id // empty' 2>/dev/null | head -n 1 || true)
 
         if [ -z "$BASE_EXISTENTE" ] || [ "$BASE_EXISTENTE" = "null" ]; then
-            echo "  ↳ Criando base corporativa (daemind_db)..."
-            local BASE_RESPONSE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d '{"title": "daemind_db"}')
+            echo "  ↳ Criando base corporativa (${BASE_NAME})..."
+            local BASE_RESPONSE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"title\": \"${BASE_NAME}\"}")
             BASE_EXISTENTE=$(echo "$BASE_RESPONSE" | jq -r '.id // empty')
         else
-            sudo docker exec ${PREFIX}_nocodb curl -s -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d '{"title": "daemind_db"}' > /dev/null 2>&1 || true
+            sudo docker exec ${PREFIX}_nocodb curl -s -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"title\": \"${BASE_NAME}\"}" > /dev/null 2>&1 || true
         fi
 
         if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
@@ -352,7 +353,7 @@ provision_user() {
 
             if [ -z "$SOURCE_EXISTENTE" ] || [ "$SOURCE_EXISTENTE" = "null" ]; then
                 echo "  ↳ Conectando Postgres Transacional..."
-                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"type\": \"pg\", \"alias\": \"Postgres Transacional\", \"config\": {\"client\": \"pg\", \"connection\": {\"host\": \"pgbouncer\", \"port\": 6432, \"user\": \"${DB_USER:-admin_db}\", \"password\": \"${DB_PASSWORD:-******}\", \"database\": \"${PREFIX}_db\", \"ssl\": false}}}" > /dev/null
+                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"type\": \"pg\", \"alias\": \"Postgres Transacional\", \"config\": {\"client\": \"pg\", \"connection\": {\"host\": \"pgbouncer\", \"port\": 6432, \"user\": \"${DB_USER:-admin_db}\", \"password\": \"${DB_PASSWORD}\", \"database\": \"${PREFIX}_db\", \"ssl\": false}}}" > /dev/null
             fi
         fi
     fi

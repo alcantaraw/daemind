@@ -33,6 +33,8 @@ build_structure() {
     else
         echo "➜ [SRE LISTMONK] Criando estrutura física de volumes e permissões do Listmonk..."
         sudo mkdir -p "$VOL_PATH" 2>/dev/null || true
+        sudo mkdir -p "$TARGET_DIR/volumes/storage_data/listmonk" 2>/dev/null || true
+        sudo chmod -R 777 "$TARGET_DIR/volumes/storage_data/listmonk" 2>/dev/null || true
         sudo chown -R "$TARGET_OWNER" "$VOL_PATH" 2>/dev/null || true
     fi
 }
@@ -310,12 +312,14 @@ provision_user() {
         INSERT INTO settings (key, value, updated_at)
         VALUES 
             ('upload.provider', '\"s3\"', NOW()),
-            ('upload.s3.url', '\"${S3_PUBLIC_HOST}/listmonk\"', NOW()),
+            ('upload.s3.bucket', '\"listmonk\"', NOW()),
+            ('upload.s3.aws_s3_bucket', '\"listmonk\"', NOW()),
+            ('upload.s3.bucket_type', '\"public\"', NOW()),
+            ('upload.s3.url', '\"${S3_HOST}\"', NOW()),
             ('upload.s3.public_url', '\"${S3_PUBLIC_HOST}/listmonk\"', NOW()),
             ('upload.s3.aws_default_region', '\"us-east-1\"', NOW()),
             ('upload.s3.aws_access_key_id', '\"${S3_KEY}\"', NOW()),
             ('upload.s3.aws_secret_access_key', '\"${S3_SECRET}\"', NOW()),
-            ('upload.s3.aws_s3_bucket', '\"listmonk\"', NOW()),
             ('upload.s3.aws_s3_endpoint', '\"${S3_HOST}\"', NOW()),
             ('upload.s3.aws_s3_path_style', 'true', NOW())
         ON CONFLICT (key) DO UPDATE 
