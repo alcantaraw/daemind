@@ -360,7 +360,7 @@ provision_user() {
     # Auto-Integração Zero-Touch com Chatwoot CRM
     if [ "${USE_CHATWOOT:-s}" = "s" ]; then
         echo "➜ [SRE EVOLUTION] Verificando auto-integração nativa com o Chatwoot CRM..."
-        local CW_URL="http://${IP_CHATWOOT:-${PREFIX}_chatwoot}:3000"
+        local CW_URL="http://${PREFIX}_chatwoot:3000"
         local CW_TOKEN="${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}"
         local INSTANCE_NAME="${PREFIXO_CONTAINER:-loja}"
 
