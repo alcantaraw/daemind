@@ -364,7 +364,46 @@ provision_user() {
         local CW_TOKEN="${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}"
         local INSTANCE_NAME="${PREFIXO_CONTAINER:-loja}"
 
-        # Registra / configura a integração com o Chatwoot na instância padrão
+        # 1. Purgar caixas legadas de WPPConnect do Chatwoot caso existam
+        sudo docker exec -i "${PREFIX}_chatwoot" bundle exec rails runner "
+        begin
+          Channel::Api.where('webhook_url LIKE ?', '%wppconnect%').each do |channel|
+            channel.inbox&.destroy!
+            channel.destroy!
+          end
+        rescue => e
+        end
+        " < /dev/null 2>/dev/null || true
+
+        # 2. Cria a instância no Evolution API caso ainda não exista
+        local INST_EXISTS
+        INST_EXISTS=$(curl -s -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_num}/instance/fetchInstances" 2>/dev/null || echo "[]")
+        if ! echo "$INST_EXISTS" | grep -q "\"name\":\"${INSTANCE_NAME}\""; then
+            echo "  ↳ Criando instância padrão '${INSTANCE_NAME}' com integração Chatwoot..."
+            curl -s -X POST "http://127.0.0.1:${port_num}/instance/create" \
+                -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" \
+                -H "Content-Type: application/json" \
+                -d "{
+                    \"instanceName\": \"${INSTANCE_NAME}\",
+                    \"qrcode\": true,
+                    \"integration\": \"WHATSAPP-BAILEYS\",
+                    \"chatwootAccountId\": \"1\",
+                    \"chatwootToken\": \"${CW_TOKEN}\",
+                    \"chatwootUrl\": \"${CW_URL}\",
+                    \"chatwootSignMsg\": true,
+                    \"chatwootReopenConversation\": true,
+                    \"chatwootConversationPending\": false,
+                    \"chatwootImportContacts\": true,
+                    \"chatwootNameInbox\": \"WhatsApp\",
+                    \"chatwootMergeBrazilContacts\": true,
+                    \"chatwootImportMessages\": true,
+                    \"chatwootDaysLimitImportMessages\": 3,
+                    \"chatwootOrganization\": \"${PREFIXO_CONTAINER:-loja}\",
+                    \"chatwootAutoCreate\": true
+                }" > /dev/null 2>&1 || true
+        fi
+
+        # 3. Registra / atualiza a integração com o Chatwoot na instância padrão
         local CW_INT_RES
         CW_INT_RES=$(curl -s -X POST "http://127.0.0.1:${port_num}/chatwoot/set/${INSTANCE_NAME}" \
             -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" \
@@ -377,7 +416,7 @@ provision_user() {
                 \"signMsg\": true,
                 \"reopenConversation\": true,
                 \"conversationPending\": false,
-                \"nameInbox\": \"${INSTANCE_NAME}\",
+                \"nameInbox\": \"WhatsApp\",
                 \"mergeBrazilContacts\": true,
                 \"importContacts\": true,
                 \"importMessages\": true,
