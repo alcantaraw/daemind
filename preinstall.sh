@@ -1232,6 +1232,21 @@ EOF
                         continue
                     fi
                 fi
+
+                # Execução polimórfica de sub-telas TUI de módulos ativos (ex: install_evolution.sh)
+                for m_active in "${SORTED_MOD_FILES[@]}"; do
+                    [ "$m_active" = "s3minio" ] && continue
+                    var_use="USE_$(echo "$m_active" | tr '[:lower:]' '[:upper:]')"
+                    if [[ "${!var_use:-n}" =~ ^(s|S|true|TRUE|1)$ ]]; then
+                        mod_s="${SCRIPTS_DIR}/install_${m_active}.sh"
+                        if [ -f "$mod_s" ] && grep -q "collect_wizard_inputs_tui" "$mod_s"; then
+                            source "$mod_s" "${TARGET_DIR}" "load_only" 2>/dev/null || true
+                            if declare -f collect_wizard_inputs_tui >/dev/null; then
+                                collect_wizard_inputs_tui || true
+                            fi
+                        fi
+                    fi
+                done
                 W_STEP=5
                 ;;
 
@@ -2298,7 +2313,7 @@ done
     printf 'ROUTING_CHOICE="%s"\n' "${ROUTING_CHOICE:-1}"
     if [ "${ROUTING_CHOICE:-1}" != "1" ]; then
         printf 'CUSTOM_DOMAIN="%s"\n'     "${CUSTOM_DOMAIN:-}"
-        printf 'CUSTOM_WPP_DOMAIN="%s"\n' "${CUSTOM_WPP_DOMAIN:-}"
+        printf 'CUSTOM_EVO_DOMAIN="%s"\n' "${CUSTOM_EVO_DOMAIN:-}"
         printf 'CADDY_PROTOCOL="%s"\n'    "${CADDY_PROTOCOL:-https}"
     fi
     printf '\n# --- Provedores de Inteligência Artificial (Wizard Selections) ---\n'
