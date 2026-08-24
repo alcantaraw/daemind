@@ -36,6 +36,8 @@ services:
       - DEL_INSTANCE=false
       - SWAGGER_ENABLED=true
       - DOCS_ENABLED=true
+      - WEBSOCKET_ENABLED=true
+      - WEBSOCKET_GLOBAL_EVENTS=true
       - LANGUAGE=pt-BR
       - DATABASE_ENABLED=true
       - DATABASE_PROVIDER=postgresql
