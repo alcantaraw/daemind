@@ -280,9 +280,23 @@ provision_user() {
             token_obj = AccessToken.find_or_initialize_by(owner: user)
             token_obj.token = '${DB_PASSWORD}'
             token_obj.save!
-            Rails.cache.clear
-            GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)
           end
+
+          # SRE Self-Healing: Purga conversas e caixas de entrada órfãs (sem canal) para evitar 500 no painel geral
+          Conversation.all.each do |c|
+            if c.inbox.nil? || c.inbox.channel.nil?
+              c.messages.destroy_all rescue nil
+              c.destroy! rescue nil
+            end
+          end
+          Inbox.all.each do |i|
+            if i.channel.nil?
+              i.destroy! rescue nil
+            end
+          end
+
+          Rails.cache.clear
+          GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)
         rescue => e
         end
         " < /dev/null 2>/dev/null || true
