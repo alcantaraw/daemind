@@ -51,6 +51,18 @@
   - **Sincronização de Banco:** Alinhamento das credenciais de importação de contatos e conversas apontando diretamente para o `chatwoot_db`.
   - **Hardening Chatwoot Community Edition:** Configuração de `DISABLE_ENTERPRISE=true`, `ENABLE_ENTERPRISE=false` e `RUBYOPT=-W0`, eliminando polling de licença empresarial e silenciando avisos de depreciação do Redis.
 
+- **[ADD] Integração Plena de IA nas Aplicações (AI Mesh Soberana via LiteLLM):**
+  - **SRE Health Prober em Paralelo:** O motor de sincronização (`sync_ia_models.sh` e `install_1ia.sh`) dispara testes ativos de saúde (micro-probes de 1 token) para todos os modelos candidatos em subshells assíncronos simultâneos, medindo a latência real em milissegundos e expurgando automaticamente endpoints instáveis ou sem créditos (ex: provedores com erro 502/402).
+  - **Ranking de Fallback & Auto-Healing:** O modelo online mais rápido e estável é eleito como `TARGET_MODEL` (atendendo o padrão `gpt-4.1`), enquanto todos os demais modelos saudáveis formam uma esteira de fallback resiliente no `router_settings.fallbacks` do LiteLLM.
+  - **Virtualização de Aliases sem Poluição Visual:** Os aliases universais (`gpt-4.1`, `gpt-4`, `gpt-4o`, `gpt-4o-mini`, `gpt-3.5-turbo`, `openrouter/free`) foram isolados no `router_settings.model_alias_map`, garantindo que Chatwoot, Postiz, n8n e Evolution operem silenciosamente com qualquer modelo padrão, enquanto a rota pública `/v1/models` no OpenWebUI permanece 100% limpa, exibindo apenas modelos reais e funcionais.
+  - **Wildcard Fallback Universal (`*`):** Implementação de regra coringa `{"*": $FALLBACK_JSON}` no LiteLLM, tornando a infraestrutura imune a futuras atualizações de bibliotecas ou modelos internos das aplicações parceiras.
+  - **Auditoria 360° com 100% de Sucesso:** Validação ponta a ponta com resposta `HTTP 200` direta a partir do interior de todos os 5 contêineres consumidores:
+    1. **Chatwoot (`loja_chatwoot`):** Copiloto do Atendente e Resumos de Chamados via Rails Runner.
+    2. **Postiz (`loja_postiz`):** Geração de Legendas, Posts e Hashtags para Redes Sociais.
+    3. **Open WebUI (`loja_openwebui`):** Interface de Chat, RAG e Personas.
+    4. **n8n (`loja_n8n`):** Nós de AI Agent, LangChain e Automações de Negócio.
+    5. **Evolution API (`loja_evolution`):** Transcrição de Áudio e Bots de WhatsApp.
+
 ---
 
 ### 🛡️ Engenharia SRE, Resiliência de Rede & Auto-Healing
