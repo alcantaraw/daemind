@@ -524,7 +524,7 @@ step_build_tree_and_files() {
 echo "=== [FASE 1 INSTALL] Arquitetura Físico-Lógica de Volumes e Portal Estático ======="
 # ===============================================================================
     # 1. Estruturação dos volumes exclusivos da infraestrutura CORE
-    mkdir -p "$TARGET_DIR"/volumes/{postgres_data,tailscale_state,caddy_data,litellm_data,pgbouncer_data}
+    mkdir -p "$TARGET_DIR"/volumes/{postgres_data,tailscale_state,caddy_data,litellm_data,pgbouncer_data,redis_data}
     touch "$TARGET_DIR/volumes/pgbouncer_data/pgbouncer-other-databases.ini" 2>/dev/null || true
 
     # SRE PRE-FLIGHT FIX: Garante que config.yaml do LiteLLM seja um ARQUIVO e não um DIRETÓRIO
@@ -539,7 +539,7 @@ EO_BASE
     fi
 
     # SRE Volume Hardening: Restaura permissões estritas dos serviços Core
-    chown -R 999:999 "$TARGET_DIR/volumes/postgres_data" 2>/dev/null || true
+    chown -R 999:999 "$TARGET_DIR/volumes/postgres_data" "$TARGET_DIR/volumes/redis_data" 2>/dev/null || true
     chown -R 1000:1000 "$TARGET_DIR/volumes/litellm_data" "$TARGET_DIR/volumes/pgbouncer_data" 2>/dev/null || true
 
     # --- INVOCAÇÃO DESACOPLADA DE ESTRUTURA DE VOLUMES DOS MÓDULOS (PARALELIZADO) ---

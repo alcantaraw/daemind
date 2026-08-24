@@ -12,7 +12,7 @@ services:
   redis:
     image: 'redis:8-alpine'
     container_name: '${PREFIXO_CONTAINER}_redis'
-    command: [ "redis-server", "--protected-mode", "no", "--loglevel", "warning", "--maxmemory", "${REDIS_MAXMEMORY:-200mb}", "--maxmemory-policy", "volatile-lru" ]
+    command: [ "redis-server", "--protected-mode", "no", "--loglevel", "warning", "--maxmemory", "${REDIS_MAXMEMORY:-200mb}", "--maxmemory-policy", "volatile-lru", "--stop-writes-on-bgsave-error", "no" ]
     networks:
       instancia_net:
         ipv4_address: ${IP_REDIS}
