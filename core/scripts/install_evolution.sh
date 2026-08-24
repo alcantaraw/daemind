@@ -50,6 +50,7 @@ provision_db() {
 
 provision_infra() {
     echo "➜ [SRE EVOLUTION] Aplicando firewall, túnel perimetral e patch de assets no Evolution..."
+    local PREFIX="${PREFIXO_CONTAINER}"
     local use_val="${USE_EVOLUTION:-s}"
     local port_num="${HOST_EVO_PORT:-18081}"
 
@@ -75,10 +76,23 @@ EOF
         sudo rm -f /etc/dnsmasq.d/evolution.conf 2>/dev/null || true
     fi
 
-    docker compose exec -T -u root evolution sh -c '
-        # Copia o logo público como favicon oficial na raiz servida do manager
+    local EVO_CONTAINER="${PREFIX}_evolution"
+    if ! docker ps --format '{{.Names}}' | grep -q "^${EVO_CONTAINER}$"; then
+        EVO_CONTAINER="evolution"
+    fi
+
+    docker exec -u root "$EVO_CONTAINER" sh -c '
+        # Garante pastas físicas no dist do manager
+        mkdir -p /evolution/manager/dist/assets/images 2>/dev/null || true
+
+        # Copia o logo público como favicon e logo oficial na raiz servida do manager
         if [ -f /evolution/public/images/evolution-logo.png ]; then
             cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/favicon.png 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/evolution-logo.png 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/evolution-logo-white.svg 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/evolution-logo.svg 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/assets/evolution-logo.png 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/assets/images/evolution-logo.png 2>/dev/null || true
         fi
 
         # Patch no index.html do manager para carregar o favicon
@@ -89,11 +103,11 @@ EOF
                    -e "s|type=\"image/svg+xml\"|type=\"image/png\"|g" /evolution/manager/dist/index.html 2>/dev/null || true
         fi
 
-        # Patch nos bundles JS para carregar logos e favicons locais em vez de CDN externa
+        # Patch nos bundles JS para carregar logos e favicons locais em vez da CDN externa
         if [ -d /evolution/manager/dist/assets ]; then
             find /evolution/manager/dist/assets -type f -name "*.js" -exec sed -i \
-                -e "s|https://evolution-api.com/files/evo/evolution-logo-white.svg|/assets/images/evolution-logo.png|g" \
-                -e "s|https://evolution-api.com/files/evo/evolution-logo.svg|/assets/images/evolution-logo.png|g" \
+                -e "s|https://evolution-api.com/files/evo/evolution-logo-white.svg|/manager/favicon.png|g" \
+                -e "s|https://evolution-api.com/files/evo/evolution-logo.svg|/manager/favicon.png|g" \
                 -e "s|https://evolution-api.com/files/evo/favicon.svg|/manager/favicon.png|g" {} + 2>/dev/null || true
         fi
     ' 2>/dev/null || true
