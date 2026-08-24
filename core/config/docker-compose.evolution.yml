@@ -16,24 +16,30 @@ services:
     environment:
       - TZ=America/Sao_Paulo
       - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-768} --no-deprecation
-      - LOG_LEVEL=ERROR,WARN
-      - LOG_COLOR=true
       - EVOLUTION_OPERATOR_EMAIL=${TS_EMAIL}
+      - SERVER_NAME=${PREFIXO_CONTAINER}_evolution
       - SERVER_TYPE=http
       - SERVER_PORT=8080
       - SERVER_URL=${SERVER_URL}
+      - TELEMETRY_ENABLED=false
       - CORS_ORIGIN=*
       - CORS_METHODS=GET,POST,PUT,DELETE
       - CORS_CREDENTIALS=true
+      - LOG_LEVEL=ERROR,WARN
+      - LOG_COLOR=true
+      - LOG_BAILEYS=error
+      - EVENT_EMITTER_MAX_LISTENERS=50
       - CONFIG_SESSION_PHONE_CLIENT=${PREFIXO_CONTAINER}
       - CONFIG_SESSION_PHONE_NAME=Chrome
+      - QRCODE_LIMIT=30
+      - QRCODE_COLOR=#175197
       - DEL_INSTANCE=false
       - SWAGGER_ENABLED=true
       - DOCS_ENABLED=true
+      - LANGUAGE=pt-BR
       - DATABASE_ENABLED=true
       - DATABASE_PROVIDER=postgresql
-      - DATABASE_CONNECTION_URI=postgresql://${DB_USER}:${DB_PASSWORD}@pgbouncer:6432/evolution_db?schema=public&connection_limit=50
-      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@pgbouncer:6432/evolution_db?schema=public&connection_limit=50
+      - DATABASE_CONNECTION_URI=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/evolution_db?schema=public
       - DATABASE_CONNECTION_CLIENT_NAME=${PREFIXO_CONTAINER}_evolution
       - DATABASE_SAVE_DATA_INSTANCE=true
       - DATABASE_SAVE_DATA_NEW_MESSAGE=true
@@ -42,6 +48,9 @@ services:
       - DATABASE_SAVE_DATA_CHATS=true
       - DATABASE_SAVE_DATA_LABELS=true
       - DATABASE_SAVE_DATA_HISTORIC=true
+      - DATABASE_SAVE_IS_ON_WHATSAPP=true
+      - DATABASE_SAVE_IS_ON_WHATSAPP_DAYS=7
+      - DATABASE_DELETE_MESSAGE=true
       - AUTHENTICATION_TYPE=apikey
       - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY}
       - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
@@ -62,14 +71,14 @@ services:
       - CHATWOOT_ENABLED=true
       - CHATWOOT_MESSAGE_READ=true
       - CHATWOOT_MESSAGE_DELETE=true
-      - CHATWOOT_IMPORT_DATABASE_CONNECTION_URI=postgresql://${DB_USER}:${DB_PASSWORD}@pgbouncer:6432/chatwoot_production?sslmode=disable
+      - CHATWOOT_IMPORT_DATABASE_CONNECTION_URI=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/chatwoot_production?sslmode=disable
       - CHATWOOT_IMPORT_PLACEHOLDER_MEDIA_MESSAGE=true
     volumes:
       - './volumes/evolution_instances:/evolution/instances'
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
     depends_on:
-      pgbouncer:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
