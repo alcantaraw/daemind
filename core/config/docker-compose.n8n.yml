@@ -23,7 +23,7 @@ services:
         reservations:
           memory: '${RES_N8N:-256M}'
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      host.docker.internal: host-gateway
     environment:
       - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-768} --no-deprecation
       - N8N_PERSONALIZATION_ENABLED=false
