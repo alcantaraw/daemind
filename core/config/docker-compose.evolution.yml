@@ -1,6 +1,6 @@
 services:
   evolution:
-    image: 'evoapicloud/evolution-api:homolog'
+    image: 'evoapicloud/evolution-api:latest'
     container_name: '${PREFIXO_CONTAINER}_evolution'
     networks:
       instancia_net:
