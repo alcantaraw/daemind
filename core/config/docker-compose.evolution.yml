@@ -35,8 +35,9 @@ services:
       - QRCODE_COLOR=#175197
       - DEL_INSTANCE=false
       - SWAGGER_ENABLED=true
-      - DOCS_ENABLED=true
-      - WEBSOCKET_ENABLED=false
+      - WEBSOCKET_ENABLED=true
+      - WEBSOCKET_GLOBAL_EVENTS=true
+      - WEBSOCKET_ALLOWED_HOSTS=*
       - LANGUAGE=pt-BR
       - DATABASE_ENABLED=true
       - DATABASE_PROVIDER=postgresql
