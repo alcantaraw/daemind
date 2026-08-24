@@ -15,10 +15,41 @@
 - **[ADD] Listmonk (`install_listmonk.sh` + `docker-compose.listmonk.yml`):**
   - Plataforma de e-mail marketing, newsletters e disparo transacional soberano de alta performance.
   - Banco relacional dedicado `listmonk_db`, isolamento perimetral de WAF e porta de borda `:9005`.
-  - **Auto-Integração S3/MinIO**: Auto-provisionamento de bucket dedicado (`listmonk`) no MinIO S3 com injeção automática de credenciais e endpoint via banco (`settings`), permitindo upload e compartilhamento de artes e mídias de campanhas com as outras ferramentas da stack.
 - **[ADD] Umami Analytics (`install_umami.sh` + `docker-compose.umami.yml`):**
   - Web analytics soberano, leve e 100% em conformidade com a LGPD/GDPR (cookieless).
   - Banco lógico dedicado `umami_db` e proxy reverso Caddy em porta `:3008`.
+
+---
+
+### 🔗 Integrações Inter-Serviços & Data Warehouse Unificado
+
+- **[ADD] Data Warehouse Soberano & Business Intelligence (Metabase + NocoDB via PgBouncer):**
+  - **Federação Nativa via `postgres_fdw`:** O banco centralizador `loja_db` agora integra em tempo real as bases dos microsserviços (`chatwoot_db`, `shlink_db`, `listmonk_db`, `umami_db`) em schemas isolados (`fdw_*`) sem duplicação de dados nem consumo extra de disco.
+  - **5 Views Analíticas Executivas:** Provisionadas diretamente no `init.sql`:
+    - `vw_kpi_atendimento`: Tempo médio de 1ª resposta, tempo de resolução e CSAT por atendente/canal.
+    - `vw_kpi_marketing_links`: Volume de cliques reais (anti-bot), UTMs, referrers e geolocalização.
+    - `vw_kpi_email_marketing`: Taxas de abertura (Open Rate), cliques (CTR) e crescimento de base.
+    - `vw_kpi_trafego_web`: Visitantes únicos, pageviews, UTMs de campanhas e dispositivos.
+    - `vw_funil_executivo_completo`: Cruzamento ponta a ponta (Tráfego Web/Links ➔ Leads Chatwoot ➔ Clientes Loja ➔ Pedidos/Faturamento).
+  - **Auto-Conexão Zero-Touch:** Provisionamento automático da fonte de dados `Data Warehouse Soberano` no Metabase (`install_metabase.sh`) e auto-sincronização de metadados de Views no NocoDB (`install_nocodb.sh`).
+
+- **[ADD] Integração Plena de IA Local: Ollama ➔ LiteLLM ➔ OpenWebUI:**
+  - **Auto-Discovery Dinâmico:** Os motores `sync_ia_models.sh` e `install_1ia.sh` inspecionam a API local do Ollama (`/api/tags`) e catalogam automaticamente novos modelos baixados (`ollama pull`) com quantização GGUF, tamanho em bilhões de parâmetros e tags.
+  - **Roteamento Híbrido:** O LiteLLM roteia modelos locais para o container do Ollama via rede interna (`:11434`), permitindo chat 100% offline e sem custos.
+  - **Polimento Visual OpenWebUI:** Remoção de prefixos redundantes de provedores, garantindo renderização limpa no dropdown do OpenWebUI sem truncamento com reticências.
+
+- **[ADD] Integração Plena de Storage S3 (MinIO Object Storage):**
+  - **Storage Centralizado & Desacoplado:** Padronização e auto-criação de buckets dedicados com permissões ajustadas:
+    - `chatwoot`: Gravações, anexos e mídias de suporte.
+    - `evolution`: Áudios, vídeos, imagens e documentos trafegados via WhatsApp.
+    - `listmonk`: Imagens, banners de templates e mídias de campanhas de e-mail marketing com URLs públicas rápidas.
+    - `postiz`: Uploads de artes e vídeos para agendamento de posts em redes sociais.
+  - **Resiliência Local e Cloud:** Suporte transparente tanto para o MinIO local (`STORAGE_PROVIDER=local`) quanto para S3 externo/cloud (`AWS_S3`, `Wasabi`, `Cloudflare R2`) sem regressão de código.
+
+- **[ADD] Integração Plena Evolution API ➔ Chatwoot:**
+  - **WebSockets Globais & Handshake:** Configuração de `WEBSOCKET_ENABLED=true`, `WEBSOCKET_GLOBAL_EVENTS=true` e `WEBSOCKET_ALLOWED_HOSTS=*`, eliminando rejeições de conexão e garantindo status conectado no Evolution Manager.
+  - **Sincronização de Banco:** Alinhamento das credenciais de importação de contatos e conversas apontando diretamente para o `chatwoot_db`.
+  - **Hardening Chatwoot Community Edition:** Configuração de `DISABLE_ENTERPRISE=true`, `ENABLE_ENTERPRISE=false` e `RUBYOPT=-W0`, eliminando polling de licença empresarial e silenciando avisos de depreciação do Redis.
 
 ---
 

@@ -497,8 +497,25 @@ sync_models() {
         append_payloads "$PAYLOAD_OLLAMA"
     fi
 
-    # 3. ROTEADOR INTELIGENTE (MATCHMAKING DINÂMICO & À PROVA DE FUTURO)
-    local TARGET_MODEL="openrouter/free"
+    # 3. SRE HEALTH PROBER & RANKING DE FALLBACK (Zero-Hardcode & Auto-Healing)
+    echo "➜ [SRE HEALTH PROBER] Testando e ranqueando a saúde dos modelos candidatos em tempo real..."
+    local TARGET_MODEL=""
+    local HEALTHY_FALLBACKS=()
+
+    probe_openrouter_candidate() {
+        local m_id="$1"
+        local response
+        response=$(curl -s -m 5 "https://openrouter.ai/api/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENROUTER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\": \"${m_id}\", \"messages\": [{\"role\": \"user\", \"content\": \"1\"}], \"max_tokens\": 1}" 2>/dev/null || echo "")
+        
+        if echo "$response" | grep -q '"choices"'; then
+            return 0
+        else
+            return 1
+        fi
+    }
 
     if [ -n "${ANTHROPIC_API_KEY:-}" ] && [ "$PAYLOAD_ANTHROPIC" != "[]" ]; then
         local EXTRACTED
@@ -520,7 +537,59 @@ sync_models() {
         [ -n "$EXTRACTED" ] && TARGET_MODEL="gemini/${EXTRACTED}"
 
     elif [ -n "${OPENROUTER_API_KEY:-}" ]; then
-        TARGET_MODEL="openrouter/free"
+        local CANDIDATES
+        CANDIDATES=$(echo "$PAYLOADS_TOTAIS" | jq -r '[.[] | select(.Provider == "openrouter")] | .[].ID')
+        local TMP_PROBE_DIR
+        TMP_PROBE_DIR=$(mktemp -d)
+
+        for cand in $CANDIDATES; do
+            (
+                local PROBE_ID="$cand"
+                if [ "$cand" != "openrouter/free" ] && ! echo "$cand" | grep -q ":free"; then
+                    PROBE_ID="${cand}:free"
+                fi
+                local START_TS
+                START_TS=$(date +%s%N 2>/dev/null | cut -b1-13)
+                [ -z "$START_TS" ] && START_TS=$(date +%s)
+                local RESP
+                RESP=$(curl -s -m 5 "https://openrouter.ai/api/v1/chat/completions" \
+                    -H "Authorization: Bearer ${OPENROUTER_API_KEY}" \
+                    -H "Content-Type: application/json" \
+                    -d "{\"model\": \"${PROBE_ID}\", \"messages\": [{\"role\": \"user\", \"content\": \"1\"}], \"max_tokens\": 1}" 2>/dev/null || echo "")
+                local END_TS
+                END_TS=$(date +%s%N 2>/dev/null | cut -b1-13)
+                [ -z "$END_TS" ] && END_TS=$(date +%s)
+                local LATENCY=$(( END_TS - START_TS ))
+                [ "$LATENCY" -lt 0 ] && LATENCY=0
+
+                if echo "$RESP" | grep -q '"choices"'; then
+                    printf "%06d:%s\n" "$LATENCY" "$cand" > "${TMP_PROBE_DIR}/${cand//\//_}.ok"
+                fi
+            ) &
+        done
+        wait
+
+        if ls "${TMP_PROBE_DIR}"/*.ok >/dev/null 2>&1; then
+            while IFS=: read -r lat_raw c_name || [ -n "$lat_raw" ]; do
+                [ -z "$c_name" ] && continue
+                local lat
+                lat=$(echo "$lat_raw" | sed 's/^0*//')
+                [ -z "$lat" ] && lat=0
+                echo "  ↳ Modelo saudável verificado: $c_name (${lat}ms)"
+                [ -z "$TARGET_MODEL" ] && TARGET_MODEL="$c_name"
+                HEALTHY_FALLBACKS+=("$c_name")
+            done < <(sort "${TMP_PROBE_DIR}"/*.ok 2>/dev/null)
+        fi
+        rm -rf "$TMP_PROBE_DIR"
+
+        # SRE PURGE: Remove do catálogo global todos os modelos que não responderam ao probe
+        if [ "${#HEALTHY_FALLBACKS[@]}" -gt 0 ]; then
+            local HEALTHY_IDS_JSON
+            HEALTHY_IDS_JSON=$(printf '%s\n' "${HEALTHY_FALLBACKS[@]}" | jq -R . | jq -s .)
+            PAYLOADS_TOTAIS=$(echo "$PAYLOADS_TOTAIS" | jq -c --argjson ok "$HEALTHY_IDS_JSON" '
+                map(select((.Provider != "openrouter") or (.ID as $id | $ok | contains([$id]))))
+            ')
+        fi
 
     elif [ -n "${GEMINI_API_KEY:-}" ] && [ "$PAYLOAD_GOOGLE" != "[]" ]; then
         local EXTRACTED
@@ -536,7 +605,22 @@ sync_models() {
         [ -n "$EXTRACTED" ] && TARGET_MODEL="deepseek/${EXTRACTED}"
     fi
 
-    echo "  ↳ Target Model resolvido dinamicamente: $TARGET_MODEL"
+    [ -z "$TARGET_MODEL" ] && TARGET_MODEL="openrouter/free"
+    echo "  ↳ Target Model eleito por auditoria de saúde: $TARGET_MODEL"
+    echo "  ↳ Fallback Ranking: ${HEALTHY_FALLBACKS[*]:-openrouter/free}"
+
+    # Resolve o target visual completo (incluindo (free) ou (local) se aplicável)
+    local TARGET_VISUAL
+    TARGET_VISUAL=$(echo "$PAYLOADS_TOTAIS" | jq -r --arg tm "$TARGET_MODEL" '
+        def litellm_provider: if .Provider == "google" then "gemini" else .Provider end;
+        def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
+        [.[] | select(full_id == $tm or .ID == $tm)] | first | 
+        if . == null then $tm else
+          "\(.ID)\(if .Provider == "ollama" then " (local)" elif .Free then " (free)" else "" end)"
+        end
+    ' 2>/dev/null || echo "$TARGET_MODEL")
+
+    [ -z "$TARGET_VISUAL" ] && TARGET_VISUAL="$TARGET_MODEL"
 
     # 4. FORJA DO YAML (Gravação Definitiva no LiteLLM)
     local TOTAL
@@ -548,11 +632,22 @@ sync_models() {
         local TMP_CONFIG
         TMP_CONFIG=$(mktemp)
 
+        # Constrói array JSON com o ranking de fallbacks saudáveis
+        local FALLBACK_JSON
+        FALLBACK_JSON=$(printf '%s\n' "${HEALTHY_FALLBACKS[@]}" | jq -R . 2>/dev/null | jq -s --arg tm "$TARGET_VISUAL" '([$tm] + .) | unique | map(select(length > 0))' 2>/dev/null || echo "[\"$TARGET_VISUAL\"]")
+        [ "$FALLBACK_JSON" = "[]" ] && FALLBACK_JSON="[\"$TARGET_VISUAL\"]"
+
         cat << EO_BASE > "$TMP_CONFIG"
 general_settings:
   store_model_in_db: false
   model_alias_map:
-    "$POSTIZ_MODEL": "$TARGET_MODEL"
+    "$POSTIZ_MODEL": "$TARGET_VISUAL"
+    "gpt-4.1": "$TARGET_VISUAL"
+    "gpt-4": "$TARGET_VISUAL"
+    "gpt-4o": "$TARGET_VISUAL"
+    "gpt-4o-mini": "$TARGET_VISUAL"
+    "gpt-3.5-turbo": "$TARGET_VISUAL"
+    "openrouter/free": "$TARGET_VISUAL"
 
 litellm_settings:
   drop_params: true
@@ -565,7 +660,7 @@ router_settings:
   num_retries: 2
   timeout: 30
   fallbacks:
-    - {"*": ["openrouter/free"]}
+    - {"*": $FALLBACK_JSON}
 
 model_list:
 EO_BASE
@@ -588,8 +683,37 @@ EO_BASE
           def visual_name: "\(.ID)\(free_label)";
           def api_base_entry: if .Provider == "ollama" and .ApiBase then "\n      api_base: \(.ApiBase)" else "" end;
 
-          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(litellm_provider)/\(.ID)\(api_base_entry)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
+          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(full_id)\(api_base_entry)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
         ' >> "$TMP_CONFIG"
+
+        # Injeta aliases universais diretamente no model_list garantindo compatibilidade absoluta
+        local TARGET_FULL_ID
+        TARGET_FULL_ID=$(echo "$PAYLOADS_TOTAIS" | jq -r --arg tm "$TARGET_MODEL" '
+            def litellm_provider: if .Provider == "google" then "gemini" else .Provider end;
+            def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
+            [.[] | select(full_id == $tm or .ID == $tm)] | first | 
+            if . == null then $tm else full_id end
+        ' 2>/dev/null || echo "$TARGET_MODEL")
+
+        [ -z "$TARGET_FULL_ID" ] && TARGET_FULL_ID="$TARGET_MODEL"
+
+        cat << EO_ALIASES >> "$TMP_CONFIG"
+  - model_name: "gpt-4.1"
+    litellm_params:
+      model: ${TARGET_FULL_ID}
+  - model_name: "gpt-4"
+    litellm_params:
+      model: ${TARGET_FULL_ID}
+  - model_name: "gpt-4o"
+    litellm_params:
+      model: ${TARGET_FULL_ID}
+  - model_name: "gpt-3.5-turbo"
+    litellm_params:
+      model: ${TARGET_FULL_ID}
+  - model_name: "openrouter/free"
+    litellm_params:
+      model: ${TARGET_FULL_ID}
+EO_ALIASES
         
         if ! grep -q "^model_list:" "$TMP_CONFIG" || [ "$(grep -c "model_name:" "$TMP_CONFIG")" -eq 0 ]; then
             echo "  ↳ [ERRO CRÍTICO AI GATEWAY] Geração do model_list falhou (jq retornou vazio/erro). Abortando gravação para não corromper o config em produção." >&2

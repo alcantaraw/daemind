@@ -354,6 +354,9 @@ provision_user() {
             if [ -z "$SOURCE_EXISTENTE" ] || [ "$SOURCE_EXISTENTE" = "null" ]; then
                 echo "  ↳ Conectando Postgres Transacional..."
                 sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"type\": \"pg\", \"alias\": \"Postgres Transacional\", \"config\": {\"client\": \"pg\", \"connection\": {\"host\": \"pgbouncer\", \"port\": 6432, \"user\": \"${DB_USER:-admin_db}\", \"password\": \"${DB_PASSWORD}\", \"database\": \"${PREFIX}_db\", \"ssl\": false}}}" > /dev/null
+            else
+                echo "  ↳ Sincronizando novas Views e tabelas no NocoDB (Zero-Touch Sync)..."
+                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources/${SOURCE_EXISTENTE}/sync" -H "xc-auth: $AUTH_TOKEN" > /dev/null 2>&1 || true
             fi
         fi
     fi
