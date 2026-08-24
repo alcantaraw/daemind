@@ -258,9 +258,9 @@ wait_readiness() {
     # SRE UNIFIED READINESS: Validação simultânea dos 3 processos internos:
     # 1. Nginx Gateway (:5000)
     # 2. Next.js Frontend (:4200)
-    # 3. NestJS Backend / Temporal (:3002)
+    # 3. NestJS Backend / Temporal (:3000)
     # -----------------------------------------------------------------------
-    echo "➜ [SRE POSTIZ] Validando prontidão das 3 portas internas (:5000 Nginx, :4200 NextJS, :3002 NestJS)..."
+    echo "➜ [SRE POSTIZ] Validando prontidão das 3 portas internas (:5000 Nginx, :4200 NextJS, :3000 NestJS)..."
     local ALL_PORTS_READY=false
 
     for i in {1..25}; do
@@ -268,18 +268,18 @@ wait_readiness() {
         
         local has_5000=false
         local has_4200=false
-        local has_3002=false
+        local has_3000=false
 
         echo "$sockets_postiz" | grep -q ':5000' && has_5000=true || true
         echo "$sockets_postiz" | grep -q ':4200' && has_4200=true || true
-        echo "$sockets_postiz" | grep -q ':3002' && has_3002=true || true
+        echo "$sockets_postiz" | grep -q ':3000' && has_3000=true || true
 
-        if [ "$has_5000" = "true" ] && [ "$has_4200" = "true" ] && [ "$has_3002" = "true" ]; then
+        if [ "$has_5000" = "true" ] && [ "$has_4200" = "true" ] && [ "$has_3000" = "true" ]; then
             # Valida handshake HTTP final de ponta a ponta
             local HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
             HTTP_CODE=$(echo "$HTTP_CODE" | tr -dc '0-9')
             if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "307" ] || [ "$HTTP_CODE" = "302" ]; then
-                echo "✔ [OK POSTIZ] As 3 portas (:5000, :4200, :3002) e o HTTP /auth estão 100% operantes!"
+                echo "✔ [OK POSTIZ] As 3 portas (:5000, :4200, :3000) e o HTTP /auth estão 100% operantes!"
                 ALL_PORTS_READY=true
                 break
             fi
@@ -459,7 +459,7 @@ FRONTEND_URL="http://${domain}:5000"
 MAIN_URL="http://${domain}:5000"
 NEXT_PUBLIC_BACKEND_URL="http://${domain}:5000"
 BACKEND_URL="http://${domain}:5000"
-BACKEND_INTERNAL_URL="http://localhost:3002"
+BACKEND_INTERNAL_URL="http://localhost:3000"
 CPU_POSTIZ=${CPU_POSTIZ:-${cpu_postiz}}
 MEM_POSTIZ=${MEM_POSTIZ:-${mem_postiz}}
 RES_POSTIZ=${RES_POSTIZ:-${res_postiz}}
