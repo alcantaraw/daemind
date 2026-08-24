@@ -30,7 +30,7 @@ services:
       - RAILS_ENV=production
       - REDIS_URL=redis://${PREFIXO_CONTAINER}_redis:6379
       - RUBY_YJIT_ENABLE=1
-      - RUBYOPT=-W:no-deprecated
+      - RUBYOPT=-W0
       - SECRET_KEY_BASE=${CHATWOOT_SECRET_KEY}
       - TZ=America/Sao_Paulo
       - WEB_CONCURRENCY=${CHATWOOT_WEB_CONCURRENCY:-2}
