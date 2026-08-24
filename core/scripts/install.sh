@@ -322,9 +322,12 @@ gerar_relatorio_versoes_stack() {
                         versao=$(docker exec "$container" postgres --version 2>/dev/null | awk '{print $3}' || echo "")
                         ;;
                     pgbouncer)
-                        local tag_imagem="${imagem##*:}"
-                        if [ -n "$tag_imagem" ] && [ "$tag_imagem" != "$imagem" ]; then
-                            versao="${tag_imagem}"
+                        versao=$(docker exec "$container" pgbouncer -V 2>/dev/null | head -n 1 | awk '{print $2}' || echo "")
+                        if [ -z "$versao" ]; then
+                            local tag_imagem="${imagem##*:}"
+                            if [ -n "$tag_imagem" ] && [ "$tag_imagem" != "$imagem" ]; then
+                                versao="${tag_imagem}"
+                            fi
                         fi
                         ;;
                     redis)
