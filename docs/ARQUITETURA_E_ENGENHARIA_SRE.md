@@ -139,7 +139,7 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | Variável | Opções / Formato | Descrição |
 | :--- | :--- | :--- |
 | `USE_CHATWOOT` | `s` / `n` | Chatwoot CRM (Atendimento Omnichannel Multiatendente) |
-| `USE_WPPCONNECT`| `s` / `n` | WPPConnect Server (Gateway Open Source WhatsApp & Chatwoot Bridge) |
+| `USE_EVOLUTION` | `s` / `n` | Evolution API (Gateway WhatsApp Webhooks & Chatwoot Bridge) |
 | `USE_N8N` | `s` / `n` | n8n (Orquestrador & Automação de Workflows Ilimitados) |
 | `USE_NOCODB` | `s` / `n` | NocoDB (Smart Database & Interface Relacional/ERP) |
 | `USE_OPENWEBUI` | `s` / `n` | Open WebUI (Interface Web de IA Corporativa & MCP) |
@@ -463,7 +463,7 @@ A infraestrutura do **daemind.** opera com a matriz de imagens e versões audita
 | `${PREFIXO_CONTAINER}_temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Orquestrador de Workflows (Postiz) |
 | `${PREFIXO_CONTAINER}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `v2.23.0` | **2.23.0** | Agendador de Redes Sociais *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_chatwoot` | `chatwoot/chatwoot` | `v4.16.2` | **4.16.2** | Inbox Omnichannel & Atendimento *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_wppconnect` | `wppconnect/wppconnect-server` | `latest` *(dinâmica)* | **2.10.4** | Gateway WhatsApp & Chatwoot Bridge *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_evolution` | `evoapicloud/evolution-api` | `homolog` | **homolog** | Gateway WhatsApp & Chatwoot Bridge *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_nocodb` | `nocodb/nocodb` | `2026.08.0` | **2026.08.0** | CRM e Planilhas Inteligentes *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` *(dinâmica)* | **0.11.0** | Interface Gráfica de IA *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_ollama` | `ollama/ollama` | `latest` *(dinâmica)* | **0.32.15** | Motor de Inferência Local Soberano *(Módulo Opcional Desacoplado)* |

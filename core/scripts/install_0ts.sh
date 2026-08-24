@@ -25,7 +25,7 @@ EMAIL="${TS_EMAIL:-}"
 CLIENT_ID="${TS_OAUTH_ID:-}"
 CLIENT_SECRET="${TS_OAUTH_SECRET:-}"
 CADDY_PORT="${HOST_CADDY_PORT:-80}"
-WPP_PORT_EXT="${HOST_WPPCONNECT_PORT:-18081}"
+EVO_PORT_EXT="${HOST_EVO_PORT:-18081}"
 
 # ===============================================================================
 # 0. collect_wizard_inputs (CLI) & collect_wizard_inputs_tui (TUI) & build_envs
@@ -103,17 +103,17 @@ collect_wizard_inputs_tui() {
                     BYODNS_OUT=$(tui_dialog_step --title "Domínio Próprio (BYODNS)" \
                         --mixedform "Configure os domínios FQDN e o protocolo para a stack:" 17 88 0 \
                         "Domínio Painel Mestre (Ex: painel.loja.com):" 1 1 "${CUSTOM_DOMAIN:-}" 1 46 36 80 0 \
-                        "Domínio API WhatsApp (Ex: api.loja.com):"     2 1 "${CUSTOM_WPP_DOMAIN:-}" 2 46 36 80 0 \
+                        "Domínio API WhatsApp (Ex: api.loja.com):"     2 1 "${CUSTOM_EVO_DOMAIN:-}" 2 46 36 80 0 \
                         )
                     if [ $? -ne 0 ]; then
                         ts_substep=1
                         continue
                     fi
                     CUSTOM_DOMAIN=$(clean_tui_field "$(echo "$BYODNS_OUT" | sed -n '1p')")
-                    CUSTOM_WPP_DOMAIN=$(clean_tui_field "$(echo "$BYODNS_OUT" | sed -n '2p')")
+                    CUSTOM_EVO_DOMAIN=$(clean_tui_field "$(echo "$BYODNS_OUT" | sed -n '2p')")
                     [ -z "$CUSTOM_DOMAIN" ] && CUSTOM_DOMAIN="localhost"
                     save_wizard_cache "CUSTOM_DOMAIN" "$CUSTOM_DOMAIN"
-                    save_wizard_cache "CUSTOM_WPP_DOMAIN" "$CUSTOM_WPP_DOMAIN"
+                    save_wizard_cache "CUSTOM_EVO_DOMAIN" "$CUSTOM_EVO_DOMAIN"
 
                     local TLS_OPT1="on"
                     local TLS_OPT2="off"
@@ -189,7 +189,7 @@ collect_wizard_inputs() {
         echo ""
         echo -e "\e[33m=== [SRE TAILSCALE] Configuração BYODNS (Traga seu próprio DNS) ===\e[0m"
         coletar_input "Domínio do Painel Mestre (Ex: painel.empresa.com)" CUSTOM_DOMAIN "false" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ""
-        coletar_input "Domínio da API WhatsApp (Ex: api.empresa.com)" CUSTOM_WPP_DOMAIN "false" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ""
+        coletar_input "Domínio da API WhatsApp (Ex: api.empresa.com)" CUSTOM_EVO_DOMAIN "false" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ""
         
         echo -e "\e[36mComo o tráfego chegará no servidor local?\e[0m"
         echo "1) Offload Externo (Cloudflare Proxy / Nginx Proxy Manager) -> Caddy sobe em HTTP."
@@ -202,7 +202,7 @@ collect_wizard_inputs() {
     save_wizard_cache "ROUTING_CHOICE" "$ROUTING_CHOICE"
     save_wizard_cache "USE_TAILSCALE" "$USE_TAILSCALE"
     save_wizard_cache "CUSTOM_DOMAIN" "$CUSTOM_DOMAIN"
-    save_wizard_cache "CUSTOM_WPP_DOMAIN" "$CUSTOM_WPP_DOMAIN"
+    save_wizard_cache "CUSTOM_EVO_DOMAIN" "$CUSTOM_EVO_DOMAIN"
 }
 
 build_envs() {
@@ -449,16 +449,16 @@ configure_funnels() {
 
     local FUNNEL_STATUS=$(sudo tailscale funnel status 2>/dev/null || echo "")
     if echo "$FUNNEL_STATUS" | grep -q "https://.*:443" && echo "$FUNNEL_STATUS" | grep -q "${CADDY_PORT}"; then
-        if echo "$FUNNEL_STATUS" | grep -q "https://.*:8443" && echo "$FUNNEL_STATUS" | grep -q "${WPP_PORT_EXT}"; then
-            echo "➜ [IDEMPOTÊNCIA TAILSCALE] Túneis Funnel já ativos e roteando (Porta 443 -> ${CADDY_PORT} e Porta 8443 -> ${WPP_PORT_EXT})."
+        if echo "$FUNNEL_STATUS" | grep -q "https://.*:8443" && echo "$FUNNEL_STATUS" | grep -q "${EVO_PORT_EXT}"; then
+            echo "➜ [IDEMPOTÊNCIA TAILSCALE] Túneis Funnel já ativos e roteando (Porta 443 -> ${CADDY_PORT} e Porta 8443 -> ${EVO_PORT_EXT})."
             return 0
         fi
     fi
 
-    echo "➜ [CONFIGURANDO TAILSCALE] Ativando túneis de borda do Tailscale Funnel (Portas ${CADDY_PORT} e ${WPP_PORT_EXT})..."
+    echo "➜ [CONFIGURANDO TAILSCALE] Ativando túneis de borda do Tailscale Funnel (Portas ${CADDY_PORT} e ${EVO_PORT_EXT})..."
     sudo tailscale funnel --bg "${CADDY_PORT}" > /dev/null 2>&1 || true
-    sudo tailscale funnel --bg --https=8443 "${WPP_PORT_EXT}" > /dev/null 2>&1 || true
-    echo "✔ [SUCESSO TAILSCALE] Túneis Funnel ativados em background (Porta 443 -> ${CADDY_PORT} e Porta 8443 -> ${WPP_PORT_EXT})."
+    sudo tailscale funnel --bg --https=8443 "${EVO_PORT_EXT}" > /dev/null 2>&1 || true
+    echo "✔ [SUCESSO TAILSCALE] Túneis Funnel ativados em background (Porta 443 -> ${CADDY_PORT} e Porta 8443 -> ${EVO_PORT_EXT})."
 }
 
 # ===============================================================================
@@ -550,13 +550,13 @@ audit_health() {
     local HTTP_GATEWAY_FUNNEL
     HTTP_GATEWAY_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}/healthz" || echo "000")
 
-    local HTTP_WPP_FUNNEL
-    HTTP_WPP_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}:8443/api-docs/" || echo "000")
+    local HTTP_EVO_FUNNEL
+    HTTP_EVO_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}:8443/" || echo "000")
 
     echo "====================================================================="
     echo "➜ FQDN Canônico:            https://${FQDN}"
     echo "➜ Portal Gateway (443):     Status [${HTTP_GATEWAY_FUNNEL}]"
-    echo "➜ WPPConnect Server (8443): Status [${HTTP_WPP_FUNNEL}]"
+    echo "➜ Evolution API (8443):     Status [${HTTP_EVO_FUNNEL}]"
     echo "====================================================================="
 
     # Inspeção de logs ACME/Let's Encrypt para detecção proativa de Rate Limits

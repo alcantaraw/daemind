@@ -163,7 +163,7 @@ Consolidado em um manifesto de alta coesão e performance, o Core garante a base
 Cada aplicação opera como um módulo 100% desacoplado (`docker-compose.<modulo>.yml` + `install_<modulo>.sh`), permitindo ativação sob demanda para economia extrema de memória:
 - ⚡ **n8n (Automation)**: Motor de automações ilimitadas de vendas, webhooks e workflows.
 - 🧠 **Open WebUI (Chat & RAG)**: Interface gráfica corporativa de Inteligência Artificial e MCP.
-- 🗣️ **Chatwoot & WPPConnect Server**: Inbox Omnichannel de atendimento multiatendente e Gateway Open Source de WhatsApp.
+- 🗣️ **Chatwoot & Evolution API**: Inbox Omnichannel de atendimento multiatendente e Gateway Open Source de WhatsApp.
 - 📊 **NocoDB**: CRM e banco de dados relacional estilo planilha inteligente.
 - 🚀 **Postiz Planner & Temporal Engine**: Agendador e publicador de mídias sociais.
 - ✉️ **Listmonk Mailer**: Disparador de e-mail marketing, newsletters e transacionais soberanos.
@@ -209,7 +209,7 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 - 🛒 **2. Templates de Automação Prontos para E-commerce & Marketplaces (n8n)**
   - Criação de templates de automação prontos para uso no **n8n** integrando lojas virtuais (**Shopify, WooCommerce, Nuvemshop, Loja Integrada**) e marketplaces (**Mercado Livre, Amazon, Shopee**).
-  - Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX pendentes** e **Notificações de Rastreamento de Envio** diretamente via WhatsApp (*WPPConnect / Chatwoot*).
+  - Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX pendentes** e **Notificações de Rastreamento de Envio** diretamente via WhatsApp (*Evolution API / Chatwoot*).
   - Algoritmos de **Throttling e Rate Limiting** nas esteiras para proteger as contas e chaves de API contra bloqueios nas plataformas parceiras.
 
 - 🤖 **3. Agentes de IA Especialistas & Protocolo MCP para Negócios**

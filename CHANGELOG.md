@@ -19,12 +19,6 @@
 - **[ADD] Umami Analytics (`install_umami.sh` + `docker-compose.umami.yml`):**
   - Web analytics soberano, leve e 100% em conformidade com a LGPD/GDPR (cookieless).
   - Banco lógico dedicado `umami_db` e proxy reverso Caddy em porta `:3008`.
-- **[REPLACE] WPPConnect Server (`install_wppconnect.sh` + `docker-compose.wppconnect.yml`):**
-  - Substituição integral do antigo Evolution API pelo **WPPConnect Server (`latest`)**, eliminando o risco de estagnação de repositório.
-  - **[NEW] Interface Web Multi-Sessões Integrada (`core/html/wppconnect.html`):** Painel nativo moderno e reativo com suporte a múltiplas instâncias e números simultâneos de WhatsApp, zero atrito de autenticação (consome a Senha Mestra `$DB_PASSWORD` do SSOT), listagem em tempo real de instâncias conectadas (`/api/{secretkey}/show-all-sessions`), gerador dinâmico de tokens por sessão, ações de gerenciamento via "QR Code" e desconexão cirúrgica (`clear-session-data`).
-  - **Auto-Integração Zero-Touch com Chatwoot CRM**: Sincronização automática do `AccessToken`, `Identifier` e `Secret` da Inbox de WhatsApp com a **Senha Mestra Unificada (`$DB_PASSWORD`)**, provisionando inboxes do tipo `Channel::Api` e vinculando agentes automaticamente sem nenhuma configuração manual no primeiro acesso.
-  - Integração nativa de eventos e webhooks em tempo real no **n8n** (`/webhook/wppconnect`).
-  - Documentação Swagger integrada em `:18081/api-docs/` e gerenciamento de sessões com persistência local em `/usr/src/wpp-server/` e cache em Redis.
 
 ---
 
@@ -68,7 +62,7 @@ Cada um com script próprio, overlay compose, rotas Caddy e card do portal:
 | LiteLLM + IA Sync | `install_1ia.sh` | Novo |
 | Chatwoot CRM | `install_chatwoot.sh` | Desacoplado |
 | Docling OCR | `install_docling.sh` | **Novo** |
-| WPPConnect Server | `install_wppconnect.sh` | **Substituição (Evolution)** |
+| Evolution API | `install_evolution.sh` | Desacoplado |
 | Metabase BI | `install_metabase.sh` | Desacoplado |
 | n8n Automações | `install_n8n.sh` | Desacoplado |
 | NocoDB | `install_nocodb.sh` | Desacoplado |

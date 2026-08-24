@@ -319,34 +319,6 @@ provision_user() {
         fi
     fi
     export CHATWOOT_API_TOKEN="${SENHA}"
-
-    if [ "${USE_WPPCONNECT:-s}" = "s" ]; then
-        echo "➜ [AUTO-INTEGRAÇÃO CHATWOOT] Vinculando Webhook do WPPConnect Server na Inbox do Chatwoot..."
-        sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
-        begin
-          account = Account.first
-          admin_user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.first
-          if account && admin_user
-            channel = Channel::Api.find_or_initialize_by(account_id: account.id)
-            channel.webhook_url = 'http://${PREFIX}_wppconnect:21465/api/default/chatwoot'
-            channel.secret = '${SENHA}'
-            channel.identifier = '${SENHA}'
-            channel.save!
-
-            inbox = Inbox.find_or_initialize_by(channel: channel, account_id: account.id)
-            inbox.name = 'WhatsApp'
-            inbox.save!
-
-            InboxMember.find_or_create_by!(inbox: inbox, user: admin_user) rescue nil
-            
-            Rails.cache.clear
-            puts '➜ [OK CHATWOOT INBOX] Inbox WhatsApp ID: ' + inbox.id.to_s + ' criada com sucesso!'
-          end
-        rescue => e
-          puts '🚨 [ERRO INBOX CHATWOOT] ' + e.message
-        end
-        " < /dev/null 2>/dev/null || true
-    fi
 }
 
 collect_wizard_inputs() {
