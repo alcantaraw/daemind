@@ -360,7 +360,7 @@ provision_user() {
     # Auto-Integração Zero-Touch com Chatwoot CRM
     if [ "${USE_CHATWOOT:-s}" = "s" ]; then
         echo "➜ [SRE EVOLUTION] Verificando auto-integração nativa com o Chatwoot CRM..."
-        local CW_URL="http://${IP_CHATWOOT:-172.25.0.8}:3000"
+        local CW_URL="http://${IP_CHATWOOT:-${PREFIX}_chatwoot}:3000"
         local CW_TOKEN="${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}"
         local INSTANCE_NAME="${PREFIXO_CONTAINER:-loja}"
 
@@ -375,9 +375,11 @@ provision_user() {
         end
         " < /dev/null 2>/dev/null || true
 
-        # 2. Cria a instância no Evolution API caso ainda não exista
+        # 2. Busca instâncias existentes no Evolution API
         local INST_EXISTS
         INST_EXISTS=$(curl -s -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_num}/instance/fetchInstances" 2>/dev/null || echo "[]")
+
+        # 3. Cria a instância padrão caso não exista
         if ! echo "$INST_EXISTS" | grep -q "\"name\":\"${INSTANCE_NAME}\""; then
             echo "  ↳ Criando instância padrão '${INSTANCE_NAME}' com integração Chatwoot..."
             curl -s -X POST "http://127.0.0.1:${port_num}/instance/create" \
@@ -385,6 +387,7 @@ provision_user() {
                 -H "Content-Type: application/json" \
                 -d "{
                     \"instanceName\": \"${INSTANCE_NAME}\",
+                    \"token\": \"${EVOLUTION_API_KEY:-${DB_PASSWORD}}\",
                     \"qrcode\": true,
                     \"integration\": \"WHATSAPP-BAILEYS\",
                     \"chatwootAccountId\": \"1\",
@@ -403,32 +406,50 @@ provision_user() {
                 }" > /dev/null 2>&1 || true
         fi
 
-        # 3. Registra / atualiza a integração com o Chatwoot na instância padrão
-        local CW_INT_RES
-        CW_INT_RES=$(curl -s -X POST "http://127.0.0.1:${port_num}/chatwoot/set/${INSTANCE_NAME}" \
-            -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" \
-            -H "Content-Type: application/json" \
-            -d "{
-                \"enabled\": true,
-                \"accountId\": \"1\",
-                \"token\": \"${CW_TOKEN}\",
-                \"url\": \"${CW_URL}\",
-                \"signMsg\": true,
-                \"reopenConversation\": true,
-                \"conversationPending\": false,
-                \"nameInbox\": \"WhatsApp\",
-                \"mergeBrazilContacts\": true,
-                \"importContacts\": true,
-                \"importMessages\": true,
-                \"daysLimitImportMessages\": 3,
-                \"signDelimiter\": \"\\n\",
-                \"autoCreate\": true,
-                \"organization\": \"${PREFIXO_CONTAINER:-loja}\"
-            }" 2>/dev/null || echo "")
+        # 4. SRE Zero-Touch Sync: Sincroniza o token e URL do Chatwoot em todas as instâncias ativas
+        local ALL_INSTANCES_NAMES
+        ALL_INSTANCES_NAMES=$(python3 -c "
+import json
+try:
+    data = json.loads('''$INST_EXISTS''')
+    names = set(['${INSTANCE_NAME}'])
+    if isinstance(data, list):
+        for item in data:
+            name = item.get('name') or item.get('instanceName') or (item.get('instance', {}).get('instanceName') if isinstance(item.get('instance'), dict) else None)
+            if name:
+                names.add(name)
+    print(' '.join(names))
+except Exception:
+    print('${INSTANCE_NAME}')
+" 2>/dev/null || echo "${INSTANCE_NAME}")
 
-        if [ -n "$CW_INT_RES" ]; then
-            echo "✔ [SUCESSO EVOLUTION] Auto-integração Chatwoot configurada para instância '${INSTANCE_NAME}'."
-        fi
+        for inst in $ALL_INSTANCES_NAMES; do
+            local CW_INT_RES
+            CW_INT_RES=$(curl -s -X POST "http://127.0.0.1:${port_num}/chatwoot/set/${inst}" \
+                -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" \
+                -H "Content-Type: application/json" \
+                -d "{
+                    \"enabled\": true,
+                    \"accountId\": \"1\",
+                    \"token\": \"${CW_TOKEN}\",
+                    \"url\": \"${CW_URL}\",
+                    \"signMsg\": true,
+                    \"reopenConversation\": true,
+                    \"conversationPending\": false,
+                    \"nameInbox\": \"WhatsApp\",
+                    \"mergeBrazilContacts\": true,
+                    \"importContacts\": true,
+                    \"importMessages\": true,
+                    \"daysLimitImportMessages\": 3,
+                    \"signDelimiter\": \"\\n\",
+                    \"autoCreate\": true,
+                    \"organization\": \"${PREFIXO_CONTAINER:-loja}\"
+                }" 2>/dev/null || echo "")
+
+            if [ -n "$CW_INT_RES" ]; then
+                echo "✔ [SUCESSO EVOLUTION] Auto-integração Chatwoot sincronizada (Zero-Touch) para instância '${inst}'."
+            fi
+        done
     fi
 }
 

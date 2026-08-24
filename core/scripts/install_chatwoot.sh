@@ -272,7 +272,20 @@ provision_user() {
     " < /dev/null 2>/dev/null | grep -E "EXISTE|CRIAR" || echo "CRIAR")
 
     if [ "$CHATWOOT_STATUS" = "EXISTE" ]; then
-        echo "➜ [IDEMPOTÊNCIA CHATWOOT] O Administrador mestre já existe no Chatwoot. Credenciais mantidas."
+        echo "➜ [IDEMPOTÊNCIA CHATWOOT] O Administrador mestre já existe no Chatwoot. Sincronizando AccessToken com DB_PASSWORD..."
+        sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
+        begin
+          user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.find_by(uid: '${TS_EMAIL:-admin@localhost}') || User.first
+          if user
+            token_obj = AccessToken.find_or_initialize_by(owner: user)
+            token_obj.token = '${DB_PASSWORD}'
+            token_obj.save!
+            Rails.cache.clear
+            GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)
+          end
+        rescue => e
+        end
+        " < /dev/null 2>/dev/null || true
     else
         sudo docker exec -i ${PREFIX}_redis redis-cli FLUSHALL > /dev/null 2>&1 < /dev/null || true
         sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
@@ -293,7 +306,7 @@ provision_user() {
               au.role = :administrator
             end
             token_obj = AccessToken.find_or_initialize_by(owner: user)
-            token_obj.token = '${SENHA}'
+            token_obj.token = '${DB_PASSWORD}'
             token_obj.save!
             InstallationConfig.find_or_create_by!(name: 'INSTALLATION_NAME').update!(value: '${PREFIX}')
             InstallationConfig.find_or_create_by!(name: 'CHATWOOT_INSTANCE_ADMIN_EMAIL').update!(value: '${TS_EMAIL:-admin@localhost}')
@@ -313,12 +326,12 @@ provision_user() {
     local env_file="${TARGET_DIR:-/opt/daemind}/.env"
     if [ -f "$env_file" ]; then
         if grep -q '^CHATWOOT_API_TOKEN=' "$env_file"; then
-            sudo sed -i "s|^CHATWOOT_API_TOKEN=.*|CHATWOOT_API_TOKEN=\"${SENHA}\"|" "$env_file" 2>/dev/null || true
+            sudo sed -i "s|^CHATWOOT_API_TOKEN=.*|CHATWOOT_API_TOKEN=\"${DB_PASSWORD}\"|" "$env_file" 2>/dev/null || true
         else
-            echo "CHATWOOT_API_TOKEN=\"${SENHA}\"" | sudo tee -a "$env_file" > /dev/null 2>&1 || true
+            echo "CHATWOOT_API_TOKEN=\"${DB_PASSWORD}\"" | sudo tee -a "$env_file" > /dev/null 2>&1 || true
         fi
     fi
-    export CHATWOOT_API_TOKEN="${SENHA}"
+    export CHATWOOT_API_TOKEN="${DB_PASSWORD}"
 }
 
 collect_wizard_inputs() {
