@@ -38,6 +38,9 @@ build_structure() {
             if [[ "${USE_CHATWOOT:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/chatwoot 2>/dev/null || true
             fi
+            if [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]]; then
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/evolution 2>/dev/null || true
+            fi
             if [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/postiz 2>/dev/null || true
             fi

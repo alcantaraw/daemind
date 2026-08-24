@@ -67,13 +67,13 @@ services:
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
       - S3_BUCKET=${S3_EVOLUTION_BUCKET:-evolution}
       - S3_PORT=${S3_PORT:-9000}
-      - S3_ENDPOINT=${S3_ENDPOINT_HOST:-${TS_DOMAIN:-localhost}}
+      - S3_ENDPOINT=s3minio
       - S3_USE_SSL=${S3_USE_SSL:-false}
-      - S3_REGION=${S3_REGION:-us-east-1}
+      - S3_REGION=us-east-1
       - CHATWOOT_ENABLED=true
       - CHATWOOT_MESSAGE_READ=true
       - CHATWOOT_MESSAGE_DELETE=true
-      - CHATWOOT_IMPORT_DATABASE_CONNECTION_URI=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/chatwoot_production?sslmode=disable
+      - CHATWOOT_IMPORT_DATABASE_CONNECTION_URI=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${PREFIXO_CONTAINER}_db?sslmode=disable
       - CHATWOOT_IMPORT_PLACEHOLDER_MEDIA_MESSAGE=true
     volumes:
       - './volumes/evolution_instances:/evolution/instances'

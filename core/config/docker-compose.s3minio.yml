@@ -21,6 +21,8 @@ services:
       - TZ=America/Sao_Paulo
       - MINIO_ROOT_USER=${TS_EMAIL}
       - MINIO_ROOT_PASSWORD=${DB_PASSWORD}
+      - MINIO_REGION=us-east-1
+      - MINIO_REGION_NAME=us-east-1
       - MINIO_SERVER_DEBUG=off
       - MINIO_NOTIFY_AMQP_ENABLE=off
       - MINIO_BROWSER_LOGIN_ANIMATION=off
