@@ -283,13 +283,23 @@ router_settings:
 model_list:
 EO_BASE
 
-    echo "$PAYLOADS_TOTAIS" | jq -r '
-      .[] |
+    echo "$PAYLOADS_TOTAIS" | jq -r --arg target "$TARGET_MODEL" '
+      unique_by(.ID) |
       def litellm_provider: if .Provider == "google" then "gemini" else .Provider end;
-      def prefix_id: if .Free then "FREE-" else "" end;
-      def visual_name: if .Free then "🟢 FREE: \(.ID)" else .ID end;
+      def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
+      def provider_weight:
+        if full_id == $target then "0_target"
+        elif .Provider == "anthropic" then "1_anthropic"
+        elif .Provider == "deepseek" then "2_deepseek"
+        elif .Provider == "google" or .Provider == "gemini" then "3_gemini"
+        elif .Provider == "openai" then "4_openai"
+        else "5_openrouter" end;
+      sort_by(provider_weight, .ID) |
+      .[] |
+      def free_label: if .Free then " (free)" else "" end;
+      def visual_name: "\(.ID)\(free_label)";
 
-      "  - model_name: \(litellm_provider)/\(prefix_id)\(.ID)\n    litellm_params:\n      model: \(litellm_provider)/\(.ID)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | tojson)"
+      "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(litellm_provider)/\(.ID)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
     ' >> "$TMP_CONFIG"
 
     if cmp -s "$TMP_CONFIG" ./volumes/litellm_data/config.yaml 2>/dev/null; then

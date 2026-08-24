@@ -563,15 +563,8 @@ EO_BASE
             else "5_openrouter" end;
           sort_by(provider_weight, .ID) |
           .[] |
-          def provider_label:
-            if .Provider == "google" or .Provider == "gemini" then "Gemini"
-            elif .Provider == "openrouter" then "OpenRouter"
-            elif .Provider == "deepseek" then "DeepSeek"
-            elif .Provider == "openai" then "OpenAI"
-            elif .Provider == "anthropic" then "Anthropic"
-            else (.Provider | ascii_upcase) end;
           def free_label: if .Free then " (free)" else "" end;
-          def visual_name: "\(provider_label) - \(.ID)\(free_label)";
+          def visual_name: "\(.ID)\(free_label)";
 
           "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(litellm_provider)/\(.ID)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
         ' >> "$TMP_CONFIG"
