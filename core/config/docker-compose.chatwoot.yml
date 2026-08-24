@@ -18,6 +18,8 @@ services:
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@postgres:5432/chatwoot_db?pool=30
       - DEFAULT_LOCALE=pt_BR
       - DISABLE_TELEMETRY=true
+      - DISABLE_ENTERPRISE=true
+      - ENABLE_ENTERPRISE=false
       - FRONTEND_URL=${CHATWOOT_FRONTEND_URL}
       - INSTALLATION_ENV=docker
       - LOG_LEVEL=error
