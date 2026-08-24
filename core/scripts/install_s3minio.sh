@@ -734,7 +734,7 @@ build_envs() {
     if [ "$STORAGE_MODE" = "s3minio" ] || [ "$STORAGE_MODE" = "minio" ]; then
         evo_s3_enabled="true"
         noco_storage_type="s3"
-        active_storage="amazon"
+        active_storage="s3_compatible"
         pz_storage="local"
         s3_endpoint_val="http://s3minio:9000"
         s3_access_val="${TS_EMAIL}"
@@ -743,7 +743,7 @@ build_envs() {
     elif [ "$STORAGE_MODE" = "s3_external" ]; then
         evo_s3_enabled="true"
         noco_storage_type="s3"
-        active_storage="amazon"
+        active_storage="s3_compatible"
         pz_storage="local"
         s3_endpoint_host=$(echo "${S3_ENDPOINT_EXT}" | sed -E 's|^https?://||; s|:[0-9]+.*||; s|/.*||')
     fi
@@ -783,6 +783,12 @@ S3_NOCODB_BUCKET="${s3_noco_bucket}"
 EVOLUTION_S3_ENABLED="${evo_s3_enabled}"
 NOCODB_STORAGE_TYPE="${noco_storage_type}"
 ACTIVE_STORAGE_SERVICE="${active_storage}"
+STORAGE_BUCKET_NAME="${s3_cw_bucket}"
+STORAGE_ACCESS_KEY_ID="${s3_access_val}"
+STORAGE_SECRET_ACCESS_KEY="${s3_secret_val}"
+STORAGE_REGION="us-east-1"
+STORAGE_ENDPOINT="${s3_endpoint_val}"
+STORAGE_FORCE_PATH_STYLE="true"
 POSTIZ_STORAGE_PROVIDER="${pz_storage}"
 EOF
 }
