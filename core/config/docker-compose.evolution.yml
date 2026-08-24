@@ -67,7 +67,7 @@ services:
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
       - S3_BUCKET=${S3_EVOLUTION_BUCKET:-evolution}
       - S3_PORT=${S3_PORT:-9000}
-      - S3_ENDPOINT=${S3_ENDPOINT_EXT:-s3minio}
+      - S3_ENDPOINT=${S3_ENDPOINT_HOST:-${TS_DOMAIN:-localhost}}
       - S3_USE_SSL=${S3_USE_SSL:-false}
       - S3_REGION=${S3_REGION:-us-east-1}
       - CHATWOOT_ENABLED=true

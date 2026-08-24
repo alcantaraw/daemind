@@ -727,6 +727,7 @@ build_envs() {
     local active_storage="local"
     local pz_storage="local"
 
+    local s3_endpoint_host="${TS_DOMAIN:-localhost}"
     if [ "$STORAGE_MODE" = "s3minio" ] || [ "$STORAGE_MODE" = "minio" ]; then
         evo_s3_enabled="true"
         noco_storage_type="s3"
@@ -735,11 +736,13 @@ build_envs() {
         s3_endpoint_val="http://s3minio:9000"
         s3_access_val="${TS_EMAIL}"
         s3_secret_val="${DB_PASSWORD}"
+        s3_endpoint_host="${TS_DOMAIN:-localhost}"
     elif [ "$STORAGE_MODE" = "s3_external" ]; then
         evo_s3_enabled="true"
         noco_storage_type="s3"
         active_storage="amazon"
         pz_storage="local"
+        s3_endpoint_host=$(echo "${S3_ENDPOINT_EXT}" | sed -E 's|^https?://||; s|:[0-9]+.*||; s|/.*||')
     fi
 
     cat << EOF >> "$env_path"
@@ -764,7 +767,7 @@ S3_POSTIZ_BUCKET_EXT="${s3_pz_bucket}"
 S3_EVOLUTION_BUCKET_EXT="${s3_evo_bucket}"
 S3_NOCODB_BUCKET_EXT="${s3_noco_bucket}"
 S3_ENDPOINT="${s3_endpoint_val}"
-S3_ENDPOINT_HOST="s3minio"
+S3_ENDPOINT_HOST="${s3_endpoint_host}"
 S3_PORT="9000"
 S3_USE_SSL="false"
 S3_REGION="${s3_region_val}"
