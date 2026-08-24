@@ -640,6 +640,13 @@ sync_models() {
         cat << EO_BASE > "$TMP_CONFIG"
 general_settings:
   store_model_in_db: false
+
+litellm_settings:
+  drop_params: true
+  turn_off_message_logging: true
+  set_verbose: false
+  webhook_url: "http://${PREFIXO_CONTAINER}_n8n:5678/webhook/litellm-falhas"
+  failure_callback: ["webhook"]
   model_alias_map:
     "$POSTIZ_MODEL": "$TARGET_VISUAL"
     "gpt-4.1": "$TARGET_VISUAL"
@@ -648,17 +655,18 @@ general_settings:
     "gpt-4o-mini": "$TARGET_VISUAL"
     "gpt-3.5-turbo": "$TARGET_VISUAL"
     "openrouter/free": "$TARGET_VISUAL"
-
-litellm_settings:
-  drop_params: true
-  turn_off_message_logging: true
-  set_verbose: false
-  webhook_url: "http://${PREFIXO_CONTAINER}_n8n:5678/webhook/litellm-falhas"
-  failure_callback: ["webhook"]
  
 router_settings:
   num_retries: 2
   timeout: 30
+  model_alias_map:
+    "$POSTIZ_MODEL": "$TARGET_VISUAL"
+    "gpt-4.1": "$TARGET_VISUAL"
+    "gpt-4": "$TARGET_VISUAL"
+    "gpt-4o": "$TARGET_VISUAL"
+    "gpt-4o-mini": "$TARGET_VISUAL"
+    "gpt-3.5-turbo": "$TARGET_VISUAL"
+    "openrouter/free": "$TARGET_VISUAL"
   fallbacks:
     - {"*": $FALLBACK_JSON}
 
@@ -685,35 +693,6 @@ EO_BASE
 
           "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(full_id)\(api_base_entry)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
         ' >> "$TMP_CONFIG"
-
-        # Injeta aliases universais diretamente no model_list garantindo compatibilidade absoluta
-        local TARGET_FULL_ID
-        TARGET_FULL_ID=$(echo "$PAYLOADS_TOTAIS" | jq -r --arg tm "$TARGET_MODEL" '
-            def litellm_provider: if .Provider == "google" then "gemini" else .Provider end;
-            def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
-            [.[] | select(full_id == $tm or .ID == $tm)] | first | 
-            if . == null then $tm else full_id end
-        ' 2>/dev/null || echo "$TARGET_MODEL")
-
-        [ -z "$TARGET_FULL_ID" ] && TARGET_FULL_ID="$TARGET_MODEL"
-
-        cat << EO_ALIASES >> "$TMP_CONFIG"
-  - model_name: "gpt-4.1"
-    litellm_params:
-      model: ${TARGET_FULL_ID}
-  - model_name: "gpt-4"
-    litellm_params:
-      model: ${TARGET_FULL_ID}
-  - model_name: "gpt-4o"
-    litellm_params:
-      model: ${TARGET_FULL_ID}
-  - model_name: "gpt-3.5-turbo"
-    litellm_params:
-      model: ${TARGET_FULL_ID}
-  - model_name: "openrouter/free"
-    litellm_params:
-      model: ${TARGET_FULL_ID}
-EO_ALIASES
         
         if ! grep -q "^model_list:" "$TMP_CONFIG" || [ "$(grep -c "model_name:" "$TMP_CONFIG")" -eq 0 ]; then
             echo "  ↳ [ERRO CRÍTICO AI GATEWAY] Geração do model_list falhou (jq retornou vazio/erro). Abortando gravação para não corromper o config em produção." >&2
