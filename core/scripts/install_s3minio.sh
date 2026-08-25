@@ -316,6 +316,9 @@ provision_infra() {
     local PZ_BUCKET="${S3_POSTIZ_BUCKET_EXT:-${S3_POSTIZ_BUCKET:-postiz}}"
     local EVO_BUCKET="${S3_EVOLUTION_BUCKET_EXT:-${S3_EVOLUTION_BUCKET:-evolution}}"
     local NOCO_BUCKET="${S3_NOCODB_BUCKET_EXT:-${S3_NOCODB_BUCKET:-nocodb}}"
+    local OW_BUCKET="${S3_OPENWEBUI_BUCKET_EXT:-${S3_OPENWEBUI_BUCKET:-openwebui}}"
+    local N8N_BUCKET="${S3_N8N_BUCKET_EXT:-${S3_N8N_BUCKET:-n8n}}"
+    local LM_BUCKET="${S3_LISTMONK_BUCKET_EXT:-${S3_LISTMONK_BUCKET:-listmonk}}"
 
     if [[ "${USE_S3MINIO:-s}" =~ ^[Ss]$ ]]; then
         echo "➜ [SRE S3MINIO] Garantindo buckets condicionados aos módulos ativos no MinIO S3..."
@@ -381,6 +384,35 @@ provision_infra() {
             fi
         fi
 
+        # 5. Bucket e política do Open WebUI (RAG & Knowledge Base)
+        if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]]; then
+            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${OW_BUCKET}" >/dev/null 2>&1; then
+                sudo docker exec "$MINIO_CTR" mc mb "local/${OW_BUCKET}" >/dev/null 2>&1 || true
+                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${OW_BUCKET}" >/dev/null 2>&1 || true
+            else
+                local OW_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${OW_BUCKET}" 2>/dev/null || echo "")
+                if ! echo "$OW_POLICY" | grep -qi "download"; then
+                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${OW_BUCKET}" >/dev/null 2>&1 || true
+                fi
+            fi
+        fi
+
+        # 6. Bucket e política do n8n
+        if [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]]; then
+            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${N8N_BUCKET}" >/dev/null 2>&1; then
+                sudo docker exec "$MINIO_CTR" mc mb "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
+                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
+            fi
+        fi
+
+        # 7. Bucket e política do Listmonk
+        if [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]]; then
+            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${LM_BUCKET}" >/dev/null 2>&1; then
+                sudo docker exec "$MINIO_CTR" mc mb "local/${LM_BUCKET}" >/dev/null 2>&1 || true
+                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${LM_BUCKET}" >/dev/null 2>&1 || true
+            fi
+        fi
+
         echo "✔ [SUCESSO S3MINIO] Buckets de módulos ativos verificados e políticas aplicadas."
 
     elif [ "${STORAGE_MODE:-}" = "s3_external" ]; then
@@ -412,6 +444,21 @@ provision_infra() {
             if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]] && [ -n "$NOCO_BUCKET" ]; then
                 echo "  ↳ Tentando provisionar bucket S3 externo para NocoDB: ${NOCO_BUCKET}..."
                 aws s3 mb "s3://${NOCO_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
+            fi
+
+            if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]] && [ -n "$OW_BUCKET" ]; then
+                echo "  ↳ Tentando provisionar bucket S3 externo para Open WebUI: ${OW_BUCKET}..."
+                aws s3 mb "s3://${OW_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
+            fi
+
+            if [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]] && [ -n "$N8N_BUCKET" ]; then
+                echo "  ↳ Tentando provisionar bucket S3 externo para n8n: ${N8N_BUCKET}..."
+                aws s3 mb "s3://${N8N_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
+            fi
+
+            if [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]] && [ -n "$LM_BUCKET" ]; then
+                echo "  ↳ Tentando provisionar bucket S3 externo para Listmonk: ${LM_BUCKET}..."
+                aws s3 mb "s3://${LM_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
             fi
         fi
     fi

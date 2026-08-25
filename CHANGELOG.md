@@ -45,13 +45,21 @@
   - **Roteamento Híbrido:** O LiteLLM roteia modelos locais para o container do Ollama via rede interna (`:11434`), permitindo chat 100% offline e sem custos.
   - **Polimento Visual OpenWebUI:** Remoção de prefixos redundantes de provedores, garantindo renderização limpa no dropdown do OpenWebUI sem truncamento com reticências.
 
-- **[ADD] Integração Plena de Storage S3 (MinIO Object Storage):**
-  - **Storage Centralizado & Desacoplado:** Padronização e auto-criação de buckets dedicados com permissões ajustadas:
-    - `chatwoot`: Gravações, anexos e mídias de suporte.
+- **[ADD] Integração Plena de Storage S3 (MinIO Object Storage & S3 Remoto):**
+  - **Storage Centralizado & Desacoplado:** Padronização e auto-criação de buckets dedicados com políticas de download anônimo e isolamento seguro:
+    - `chatwoot`: Gravações, anexos e mídias de chamados.
     - `evolution`: Áudios, vídeos, imagens e documentos trafegados via WhatsApp.
     - `listmonk`: Imagens, banners de templates e mídias de campanhas de e-mail marketing com URLs públicas rápidas.
     - `postiz`: Uploads de artes e vídeos para agendamento de posts em redes sociais.
+    - `openwebui`: Documentos, uploads de usuários e bases de arquivos RAG.
+    - `n8n`: Relatórios gerados, PDFs e artefatos de fluxos de automação.
+    - `nocodb`: Anexos de tabelas e arquivos de bancos relacionais.
   - **Resiliência Local e Cloud:** Suporte transparente tanto para o MinIO local (`STORAGE_PROVIDER=local`) quanto para S3 externo/cloud (`AWS_S3`, `Wasabi`, `Cloudflare R2`) sem regressão de código.
+
+- **[ADD] Pipeline Soberano de RAG & Docling OCR (IBM Research):**
+  - **Validação Estrita de Consumidores & Hardware:** O Docling só é oferecido e ativado se houver consumidores de IA ativos (`USE_OPENWEBUI=s` ou `USE_N8N=s`), além de cumprir os requisitos de hardware (> 4 vCPUs e >= 16 GB RAM), evitando desperdício de recursos computacionais.
+  - **Content Extraction Engine:** O OpenWebUI foi integrado diretamente ao microserviço do Docling (`loja_docling:5001`), permitindo extração de PDFs complexos, escaneamentos com OCR, planilhas e DOCX com reconstrução semântica de tabelas Markdown.
+  - **Embeddings & pgvector:** Provisionamento condicional da extensão `pgvector` no `openwebui_db` (apenas quando o Docling estiver ativo) e roteamento de embeddings vetoriais via LiteLLM (`loja_litellm:4000/v1`).
 
 - **[ADD] Integração Plena Evolution API ➔ Chatwoot:**
   - **WebSockets Globais & Handshake:** Configuração de `WEBSOCKET_ENABLED=true`, `WEBSOCKET_GLOBAL_EVENTS=true` e `WEBSOCKET_ALLOWED_HOSTS=*`, eliminando rejeições de conexão e garantindo status conectado no Evolution Manager.
@@ -69,6 +77,12 @@
     3. **Open WebUI (`loja_openwebui`):** Interface de Chat, RAG e Personas.
     4. **n8n (`loja_n8n`):** Nós de AI Agent, LangChain e Automações de Negócio.
     5. **Evolution API (`loja_evolution`):** Transcrição de Áudio e Bots de WhatsApp.
+
+- **[ADD] Service Mesh de Variáveis de Ambiente no n8n:**
+  - Injeção automática dos endpoints e credenciais de todos os microsserviços da stack (`DOCLING_API_URL`, `SHLINK_API_URL`, `EVOLUTION_API_URL`, `CHATWOOT_API_URL`, `MINIO_ENDPOINT`, `LISTMONK_API_URL`, `POSTIZ_API_URL`), permitindo que nós e Agentes de IA do n8n interoperem instantaneamente sem configuração manual de IPs ou tokens.
+
+- **[ADD] Auto-Sincronização do Shlink Web Client:**
+  - Alinhamento da rota pública (`:8081`) e sincronização da `SHLINK_API_KEY` ativa no provisionamento, garantindo que o painel web abra conectado e pronto para uso imediato.
 
 ---
 

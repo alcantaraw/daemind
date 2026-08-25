@@ -42,8 +42,17 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [6.4. Motor de Sincronização Inteligente de Modelos de IA (`install_1ia.sh`)](#64-motor-de-sincronização-inteligente-de-modelos-de-ia-install_1iash)
   - [6.5. Disaster Recovery, Backup Criptografado & Restauração (`backup_diario.sh` e `restore_production.sh`)](#65-disaster-recovery-backup-criptografado--restauração-backup_diariosh-e-restore_productionsh)
   - [6.6. Atualização Remota Declarativa da Stack (`upgrade_stack.sh`)](#66-atualização-remota-declarativa-da-stack-upgrade_stacksh)
-  - [6.7. Bateria de Testes de Fumaça & Recuperação Perimetral (`ci_smoke_test.sh` e `install_0ts.sh`)](#67-bateria-de-testes-de-fumaça--recuperação-perimetral-ci_smoke_testsh-e-install_0tssh)
 - [7. Padrões Avançados de Arquitetura de Dados, LGPD & Integração Física](#7-padrões-avançados-de-arquitetura-de-dados-lgpd--integração-física)
+  - [7.1. Staging Area Soberana (Proteção contra Rate-Limits HTTP 429)](#71-staging-area-soberana-proteção-contra-rate-limits-http-429)
+  - [7.2. Isolamento Relacional vs. Base Vetorial (`pgvector`)](#72-isolamento-relacional-vs-base-vetorial-pgvector)
+  - [7.3. Privacy-by-Design & Conformidade Nativa LGPD](#73-privacy-by-design--conformidade-nativa-lgpd)
+  - [7.4. Interface Físico-Digital com Hardware HID (Leitor de Código de Barras USB)](#74-interface-físico-digital-com-hardware-hid-leitor-de-código-de-barras-usb)
+  - [7.5. Deduplicação por Hash de Payload SHA-256 (n8n Webhook Fallback)](#75-deduplicação-por-hash-de-payload-sha-256-n8n-webhook-fallback)
+  - [7.6. Data Warehouse Soberano & Federação Multi-Bancos (`postgres_fdw`)](#76-data-warehouse-soberano--federação-multi-bancos-postgres_fdw)
+  - [7.7. AI Mesh Soberana via LiteLLM (SRE Health Prober & Virtual Aliases)](#77-ai-mesh-soberana-via-litellm-sre-health-prober--virtual-aliases)
+  - [7.8. Pipeline de RAG Soberano com Docling OCR, pgvector e S3 Storage](#78-pipeline-de-rag-soberano-com-docling-ocr-pgvector-e-s3-storage)
+  - [7.9. Service Mesh de Variáveis de Ambiente no n8n](#79-service-mesh-de-variáveis-de-ambiente-no-n8n)
+  - [7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)](#710-rastreamento-ponta-a-ponta--atribuição-de-tráfego-shlink--listmonk--umami)
 
 ---
 
@@ -452,25 +461,25 @@ A infraestrutura do **daemind.** opera com a matriz de imagens e versões audita
 
 | Container | Imagem Docker | Tag no Compose | Versão Interna Auditada | Função na Stack |
 | :--- | :--- | :--- | :--- | :--- |
+| `${PREFIXO_CONTAINER}_caddy` | `caddy:alpine` | `alpine` | **2.11.4** | Reverse Proxy & WAF com SSL Automático |
+| `${PREFIXO_CONTAINER}_chatwoot` | `chatwoot/chatwoot` | `latest` | **4.17.0** | Inbox Omnichannel & Atendimento *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` | **2.121.0** | Motor de OCR & Parsing de Documentos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_evolution` | `evoapicloud/evolution-api` | `latest` | **2.3.7** | Gateway WhatsApp & Chatwoot Bridge *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_listmonk` | `listmonk/listmonk` | `latest` | **6.2.0** | E-mail Marketing & Transacional *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` | **1.99.0** | Gateway & Roteador de Modelos de IA |
+| `${PREFIXO_CONTAINER}_metabase` | `metabase/metabase` | `latest` | **0.63.14.2** | Painéis e Dashboards de BI *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_n8n` | `n8nio/n8n` | `latest` | **2.35.7** | Motor de Automação de Processos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_nocodb` | `nocodb/nocodb` | `latest` | **2026.08.1** | CRM e Planilhas Inteligentes *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_ollama` | `ollama/ollama` | `latest` | **0.32.15** | Motor de Inferência Local Soberano *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` | **0.11.0** | Interface Gráfica de IA *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_pgbouncer` | `edoburu/pgbouncer` | `latest` | **1.25.2** | Multiplexador de Conexões Postgres |
 | `${PREFIXO_CONTAINER}_postgres` | `pgvector/pgvector` | `pg17` | **17.11** | Banco de Dados Relacional & Vetorial |
-| `${PREFIXO_CONTAINER}_pgbouncer` | `edoburu/pgbouncer` | `v1.25.2-p0` | **1.25.2-p0** | Multiplexador de Conexões Postgres |
-| `${PREFIXO_CONTAINER}_caddy` | `caddy` | `2.11.4-alpine` | **2.11.4** | Reverse Proxy & WAF com SSL Automático |
-| `${PREFIXO_CONTAINER}_redis` | `redis` | `8.10-alpine` | **8.10.1** | Cache & Fila de Automações em Memória |
-| `${PREFIXO_CONTAINER}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` *(dinâmica)* | **1.99.0** | Gateway & Roteador de Modelos de IA |
-| `${PREFIXO_CONTAINER}_s3minio` | `alpine/minio` | `latest-release` *(dinâmica)* | **2025-10-25** | Armazenamento S3 Soberano *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_metabase` | `metabase/metabase` | `latest` *(dinâmica)* | **0.63.14.1** | Painéis e Dashboards de BI *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_n8n` | `n8nio/n8n` | `latest` *(dinâmica)* | **2.35.7** | Motor de Automação de Processos *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Orquestrador de Workflows (Postiz) |
-| `${PREFIXO_CONTAINER}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `v2.23.0` | **2.23.0** | Agendador de Redes Sociais *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_chatwoot` | `chatwoot/chatwoot` | `v4.16.2` | **4.16.2** | Inbox Omnichannel & Atendimento *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_evolution` | `evoapicloud/evolution-api` | `homolog` | **homolog** | Gateway WhatsApp & Chatwoot Bridge *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_nocodb` | `nocodb/nocodb` | `2026.08.0` | **2026.08.0** | CRM e Planilhas Inteligentes *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` *(dinâmica)* | **0.11.0** | Interface Gráfica de IA *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_ollama` | `ollama/ollama` | `latest` *(dinâmica)* | **0.32.15** | Motor de Inferência Local Soberano *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` *(dinâmica)* | **2.121.0** | Motor de OCR & Parsing de Documentos *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_listmonk` | `listmonk/listmonk` | `latest` *(dinâmica)* | **6.2.0** | E-mail Marketing & Transacional *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `latest` | **2.23.0** | Agendador de Redes Sociais *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_redis` | `redis` | `8-alpine` | **8.10.1** | Cache & Fila de Automações em Memória |
+| `${PREFIXO_CONTAINER}_s3minio` | `alpine/minio` | `latest-release` | **2025-10-25** | Armazenamento S3 Soberano *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_shlink` | `shlinkio/shlink` | `stable` | **5.1.5** | Encurtador de Links & API UTM *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_shlink_web` | `shlinkio/shlink-web-client` | `latest` *(dinâmica)* | **4.8.1** | Interface Web do Shlink *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_shlink_web` | `shlinkio/shlink-web-client` | `latest` | **4.8.1** | Interface Web do Shlink *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Orquestrador de Workflows (Postiz) |
 | `${PREFIXO_CONTAINER}_umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` | **3.3.1** | Web Analytics Soberano LGPD *(Módulo Opcional Desacoplado)* |
 
 ---
@@ -594,6 +603,33 @@ Para garantir tempos de resposta de consulta otimizados e evitar inchaço no ban
 ### 🔄 7.5. Deduplicação por Hash de Payload SHA-256 (n8n Webhook Fallback)
 - **Mitigação de Retentativas Indevidas:** Quando a infraestrutura externa reenviar webhooks modificando metadados como `event_id`, a primeira etapa do workflow do n8n executa uma função JavaScript (*Code Node*) que gera o `dedup_hash` (SHA-256 do corpo do payload + `LOJA_APP_KEY`).
 - **Validação com TTL de 5 Minutos:** O n8n registra o hash com expiração automática de 5 minutos. Se o mesmo hash colidir dentro dessa janela, o fluxo responde HTTP 200 e interrompe o processamento redundante.
+
+### 🏛️ 7.6. Data Warehouse Soberano & Federação Multi-Bancos (`postgres_fdw`)
+- **Arquitetura de Federação Zero-ETL:** O PostgreSQL 17 atua como Data Warehouse unificado através da extensão `postgres_fdw`. O banco centralizador `loja_db` mapeia os schemas externos `fdw_chatwoot`, `fdw_shlink`, `fdw_listmonk`, `fdw_umami`, `fdw_evolution` e `fdw_postiz` diretamente sobre os bancos operacionais via PgBouncer.
+- **7 Views Analíticas Executivas:**
+  1. `vw_kpi_atendimento`: Desempenho de agentes de suporte, SLA de primeira resposta e resolução.
+  2. `vw_kpi_marketing_links`: Desempenho de links encurtados, cliques únicos reais e tags UTM.
+  3. `vw_kpi_email_marketing`: Engajamento de newsletters, aberturas, cliques e bounces.
+  4. `vw_kpi_trafego_web`: Métricas de navegação, referrers, geolocalização e navegadores.
+  5. `vw_kpi_whatsapp_disparos`: Telemetria de envios de WhatsApp, confirmações de entrega e leitura.
+  6. `vw_kpi_redes_sociais`: Acompanhamento de posts agendados e publicados em redes sociais.
+  7. `vw_funil_executivo_completo`: Cruzamento transacional do ciclo de vida do cliente (Tráfego ➔ Atendimento ➔ Vendas).
+
+### 🤖 7.7. AI Mesh Soberana via LiteLLM (SRE Health Prober & Virtual Aliases)
+- **SRE Probing Paralelo:** O motor de descoberta (`sync_ia_models.sh` e `install_1ia.sh`) dispara probes assíncronos de 1 token para validar saúde, créditos e latência em milissegundos de cada provedor configurado.
+- **Isolamento no `model_alias_map`:** Os modelos padrão exigidos por bibliotecas parceiras (`gpt-4.1`, `gpt-4o`, `gpt-3.5-turbo`) são traduzidos internamente pelo LiteLLM, mantendo o dropdown público do Open WebUI limpo e imune a truncamento visual.
+- **Wildcard Fallback Universal (`*`):** A esteira de fallback configurada no LiteLLM redireciona requisições de modelos desconhecidos ou offline para o modelo saudável eleito, garantindo zero paradas em robôs e copilotos.
+
+### 📑 7.8. Pipeline de RAG Soberano com Docling OCR, pgvector e S3 Storage
+- **IBM Docling Serve:** Microserviço dedicado em `:5001` responsável pelo parsing visual de PDFs, DOCX e escaneamentos, transformando documentos complexos e tabelas em Markdown estruturado.
+- **Vetorização no PostgreSQL (`pgvector`):** Extensão `vector` ativada condicionalmente no `openwebui_db` para indexação matemática de embeddings vetoriais com busca semântica de alta velocidade.
+- **Desacoplamento de Armazenamento:** Uploads e bases de conhecimento do Open WebUI são persistidos no bucket `openwebui` no MinIO S3.
+
+### ⚡ 7.9. Service Mesh de Variáveis de Ambiente no n8n
+- Injeção declarativa de variáveis inter-serviços no container `n8n` (`DOCLING_API_URL`, `SHLINK_API_URL`, `EVOLUTION_API_URL`, `CHATWOOT_API_URL`, `MINIO_ENDPOINT`, `LISTMONK_API_URL`, `POSTIZ_API_URL`), permitindo que nós de automação e Agentes LangChain se comuniquem com qualquer ferramenta da stack via `$env.NOME_VAR`.
+
+### 🔗 7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)
+- **Atribuição UTM Unificada:** Disparos de campanhas pelo Listmonk utilizam o template padrão auto-formatado com UTMs (`utm_source=listmonk`, `utm_medium=email`, `utm_campaign`), integrados aos links encurtados do Shlink e monitorados pelo Umami Analytics, consolidando a atribuição no Data Warehouse sem rastreadores invasivos de terceiros.
 
 ---
 

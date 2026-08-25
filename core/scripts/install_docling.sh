@@ -185,7 +185,7 @@ get_version() {
 }
 
 provision_user() {
-    echo "➜ [SRE DOCLING] Microserviço Docling pronto para processamento assíncrono."
+    echo "➜ [SRE DOCLING] Microserviço Docling pronto para processamento de documentos e RAG."
 }
 
 render_forensic_report() {
@@ -216,6 +216,17 @@ collect_wizard_inputs() {
     local cpus="${OVERRIDE_TOTAL_CPUS:-${SYSTEM_TOTAL_CPUS:-${TOTAL_CPUS:-4}}}"
     local ram_gb="${OVERRIDE_TOTAL_RAM_GB:-${SYSTEM_TOTAL_RAM_GB:-${TOTAL_RAM_GB:-8}}}"
 
+    # 1. Validação de Consumidores Ativos (Docling só tem utilidade se Open WebUI ou n8n estiverem ativos)
+    local use_ow="${USE_OPENWEBUI:-s}"
+    local use_n8n="${USE_N8N:-s}"
+    if ! [[ "$use_ow" =~ ^[Ss]$ ]] && ! [[ "$use_n8n" =~ ^[Ss]$ ]]; then
+        echo -e "\e[33m⚠️ [SRE DOCLING] Docling OCR desativado: requer pelo menos um consumidor de IA ativo (Open WebUI ou n8n).\e[0m"
+        USE_DOCLING="n"
+        save_wizard_cache "USE_DOCLING" "$USE_DOCLING"
+        return 0
+    fi
+
+    # 2. Validação de Hardware Mínimo (> 4 vCPUs e >= 16 GB RAM)
     if ! is_hardware_supported; then
         echo -e "\e[33m⚠️ [SRE FinOps DOCLING] Docling OCR desativado: requer host com > 4 vCPUs e >= 16 GB RAM (Detectado pelo autotune: ${cpus} Cores, ${ram_gb} GB RAM).\e[0m"
         USE_DOCLING="n"
@@ -248,10 +259,17 @@ build_envs() {
         res_docling="2048M"
     fi
 
+    local use_ow="${USE_OPENWEBUI:-s}"
+    local use_n8n="${USE_N8N:-s}"
+    local use_dc="${USE_DOCLING:-s}"
+    if ! [[ "$use_ow" =~ ^[Ss]$ ]] && ! [[ "$use_n8n" =~ ^[Ss]$ ]]; then
+        use_dc="n"
+    fi
+
     cat << EOF >> "$env_path"
 
 # --- Docling Decoupled Env & Tuning ---
-USE_DOCLING="${USE_DOCLING:-s}"
+USE_DOCLING="${use_dc}"
 HOST_DOCLING_PORT="5001"
 CPU_DOCLING=${CPU_DOCLING:-${cpu_docling}}
 MEM_DOCLING=${MEM_DOCLING:-${mem_docling}}

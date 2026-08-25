@@ -187,7 +187,8 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 - 🔒 **Hardening Perimetral & Segurança Zero-Trust:** Regras estritas no Firewall IPTables, isolamento de rede privada e proteção contra acessos externos não autorizados.
 - ⚡ **Auto-Tuning Dinâmico de Hardware:** Inspeção autônoma do servidor (CPU, RAM e Disco) com otimização profunda de memória, CPU e I/O de disco aplicada individualmente a cada microsserviço para garantir máxima performance sem estouros.
-- 🐘 **Banco de Dados Escalável:** PostgreSQL 17 com extensão `pgvector` multiplexado via PgBouncer para buscas por IA e webhooks ilimitados.
+- 🐘 **Banco de Dados Escalável & Data Warehouse:** PostgreSQL 17 com `pgvector` e federação `postgres_fdw` unificando 100% dos microsserviços com 7 Views Analíticas Executivas auto-conectadas ao Metabase e NocoDB.
+- 🤖 **AI Mesh Soberana & RAG com Docling:** Roteador de IA com failover resiliente via LiteLLM, inferência local soberana (Ollama) e motor de OCR avançado para documentos (Docling).
 - 🔑 **Identidade Global Unificada & SSOT de Credenciais:** Uma única conta universal (`$TS_EMAIL` + `$DB_PASSWORD`) autentica 100% dos painéis e integrações da stack com zero fricção de onboarding manual.
 - 🧼 **Sanitização de Segredos:** Expurgo automático de chaves e credenciais da memória após o boot para zero vazamento.
 
@@ -195,32 +196,20 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 ## 📌 Roadmap de Engenharia & Futuras Evoluções (TODO)
 
-- 🚀 **1. Integrações Transversais de Alto Impacto (Zero-Touch Inter-App Ecosystem)**
-  - 📊 **BI & Analytics Unificados (Metabase Auto-Connect):**
-    - Auto-provisionamento de conexões no **Metabase** para todas as fontes de dados ativas da stack (`listmonk_db`, `shlink_db`, `umami_db`, `chatwoot_production`) via API/bootstrap, disponibilizando dashboards analíticos pré-construídos de vendas, cliques, tráfego e atendimento com zero configuração manual.
-  - 🔗 **Rastreamento de Campanhas em Tempo Real (Shlink + Umami):**
-    - Configuração integrada do **Shlink** para padronização automática de tags e parâmetros UTM reconhecidos nativamente pelo **Umami Analytics**, unificando o funil de atribuição de tráfego.
-  - ✉️ **Auto-Encurtamento & Rastreamento em Newsletters (Listmonk + Shlink):**
-    - Integração de disparos do **Listmonk** consumindo a API do **Shlink** para auto-encurtamento de links de campanhas, analytics de taxa de clique e proteção de entregabilidade.
-  - 🗃️ **NocoDB como Painel de Gestão Visual (Listmonk & Shlink):**
-    - Vinculação declarativa das bases `listmonk_db` e `shlink_db` no **NocoDB**, permitindo visualização, segmentação e gestão de inscritos e links encurtados em formato de planilha visual (Airtable soberano).
-  - 🗄️ **Armazenamento Desacoplado no NocoDB (MinIO S3 Attachments):**
-    - Injeção das variáveis de S3 (`NC_S3_BUCKET`, `NC_S3_KEY`, `NC_S3_SECRET`) para que todos os uploads de anexos e mídias de tabelas do NocoDB sejam roteados diretamente ao bucket dedicado `nocodb` do MinIO.
-
-- 🛒 **2. Templates de Automação Prontos para E-commerce & Marketplaces (n8n)**
+- 🛒 **1. Templates de Automação Prontos para E-commerce & Marketplaces (n8n)**
   - Criação de templates de automação prontos para uso no **n8n** integrando lojas virtuais (**Shopify, WooCommerce, Nuvemshop, Loja Integrada**) e marketplaces (**Mercado Livre, Amazon, Shopee**).
   - Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX pendentes** e **Notificações de Rastreamento de Envio** diretamente via WhatsApp (*Evolution API / Chatwoot*).
   - Algoritmos de **Throttling e Rate Limiting** nas esteiras para proteger as contas e chaves de API contra bloqueios nas plataformas parceiras.
 
-- 🤖 **3. Agentes de IA Especialistas & Protocolo MCP para Negócios**
+- 🤖 **2. Agentes de IA Especialistas & Protocolo MCP para Negócios**
   - Configuração de **Servidores MCP (Model Context Protocol)** para que os agentes de IA consultem produtos, estoques, status de pedidos e tabelas de frete em tempo real no PostgreSQL e NocoDB.
   - Criação de **Agentes SDR (Pré-vendas) e Suporte N1** treinados com RAG na base de dados da empresa para atender clientes no Chatwoot de forma autônoma e humanizada.
 
-- 📈 **4. Painéis Executivos de BI & Gestão de Lucro Real (Metabase)**
+- 📈 **3. Painéis Executivos de BI & Gestão de Lucro Real (Metabase)**
   - Dashboards pré-configurados no **Metabase** cruzando vendas, custos de produtos (CMV), despesas de anúncios/marketing e taxas de gateways de pagamento.
   - Relatórios automatizados diários e semanais enviados direto no WhatsApp ou e-mail dos gestores com métricas-chave de faturamento e estoque crítico.
 
-- 🎯 **5. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
+- 🎯 **4. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
   - O **daemind.** nasce especialista em **Vendas Online & Marketing Digital**, mas sua esteira modular permite rápida expansão para outros setores:
     - 🩺 **Saúde & Clínicas:** Agendamentos inteligentes via WhatsApp, confirmação de consultas, triagem pré-atendimento e retenção de pacientes.
     - 👥 **Recursos Humanos & Departamento Pessoal:** Triagem automática de currículos por IA, onboarding de novos colaboradores e gestão de solicitações internas.
@@ -228,6 +217,13 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 - ~~❌ **[DESCONTINUADO / ABANDONADO] 🔐 Gestão de Credenciais via Cofre Externo (Infisical)**~~
   - ~~Substituição do `.env` por cofre Infisical descartada em favor do modelo **SSOT com Permissões Estritas (chmod 600)**, âncora `SRE HOME ANCHOR` e sanitização atômica de memória no boot, mantendo a arquitetura simples, independente de terceiros e com zero overhead computacional.~~
+
+- ~~✅ **[CONCLUÍDO] 🚀 Integrações Transversais de Alto Impacto (Zero-Touch Inter-App Ecosystem)**~~
+  - ~~📊 **BI & Analytics Unificados (Data Warehouse Soberano com Metabase & NocoDB Auto-Connect):** Federação nativa via `postgres_fdw` integrando em tempo real todos os 6 bancos de microsserviços (`chatwoot_db`, `shlink_db`, `listmonk_db`, `umami_db`, `evolution_db`, `postiz_db`) no `loja_db`, com 7 Views Analíticas Executivas pré-construídas e auto-conectadas ao Metabase e NocoDB com zero configuração manual.~~
+  - ~~🔗 **Rastreamento de Campanhas em Tempo Real (Shlink + Umami):** Configuração integrada do **Shlink** para padronização automática de tags e parâmetros UTM reconhecidos nativamente pelo **Umami Analytics**, unificando o funil de atribuição de tráfego.~~
+  - ~~✉️ **Auto-Encurtamento & Rastreamento em Newsletters (Listmonk + Shlink):** Provisionamento do `Template Executivo Auto-UTM` diretamente no `listmonk_db`, gerando tags UTM automáticas e links rastreáveis em 100% dos disparos de e-mail marketing.~~
+  - ~~🗃️ **NocoDB como Painel de Gestão Visual (Listmonk & Shlink):** Vinculação declarativa das bases e views analíticas no **NocoDB**, permitindo visualização, segmentação e gestão de inscritos e links encurtados em formato de planilha visual (Airtable soberano).~~
+  - ~~🗄️ **Armazenamento Desacoplado no NocoDB (MinIO S3 Attachments):** Injeção das variáveis de S3 (`NC_S3_BUCKET`, `NC_S3_KEY`, `NC_S3_SECRET`) roteando todos os uploads de anexos e mídias diretamente ao bucket dedicado `nocodb` do MinIO S3.~~
 
 - ~~✅ **[CONCLUÍDO] 🧠 IA Local Soberana & Parsing Avançado de Documentos (Open WebUI + Ollama + Docling)**~~
   - ~~(Módulo Opcional de Alto Desempenho - Host com > 4 Cores e > 16GB RAM)~~

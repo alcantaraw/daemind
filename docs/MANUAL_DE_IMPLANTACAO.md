@@ -240,6 +240,15 @@ O provisionamento do **daemind.** é **Low-Touch / Assistido**: em vez de exigir
 - Exibe o resumo consolidado de governança da empresa e dispara a esteira de deploy em segundo plano (`install.sh`), com acompanhamento dos logs em tempo real.
 
 
+### 🖥️ 4.2. Execução Passo a Passo no Modo CLI Interativo (`preinstall.sh --cli`)
+
+Caso o terminal não suporte interface Dialog TUI, o `preinstall.sh` opera em modo de linha de comando sequencial estruturado:
+
+#### 1️⃣ Topologia de Rede & Roteamento de Borda
+- Pergunta se o acesso será via **Tailscale Mesh VPN Soberana** (Opção 1) ou **Domínio Próprio BYODNS** (Opção 2).
+- Se Tailscale: solicita o **Tailscale OAuth Client Secret**.
+- Se BYODNS: solicita os FQDNs e o modo de SSL (Let's Encrypt / Cloudflare).
+
 #### 2️⃣ Identidade do Cliente e Empresa
 - **`ID da Empresa (PREFIXO_CONTAINER)`:** Identificador curto da empresa (max 12 caracteres, ex: `loja1`, `empresaA`). Usado para nomear contêineres, subredes e certificados.
 - **`Nome do Responsável`:** Nome do administrador (ex: `Joao`).
@@ -263,7 +272,7 @@ O wizard solicita e valida a **Senha Mestra do Sistema** (usada para bancos de d
 O sistema analisa automaticamente a capacidade de hardware do host e sugere a melhor opção de armazenamento:
 - **`[1] Armazenamento Local Direto`:** Recomendado automaticamente para servidores modestos (< 4 Cores ou < 8GB RAM). Salva anexos em disco local (`./volumes/storage_data/*`), economizando ~1GB de RAM ao desativar o MinIO.
 - **`[2] MinIO S3 Soberano`:** Recomendado para servidores de alta performance (>= 4 Cores e >= 8GB RAM). Sobe o container dedicado do MinIO com API S3 nas portas `9000` (API) e `9001` (Console UI).
-- **`[3] Provedor S3 Cloud Externo (BYOS)`:** Conecta a stack a provedores em nuvem (AWS S3, Cloudflare R2, DigitalOcean Spaces). O wizard solicitará o Endpoint, Região, Access Key, Secret Key e os nomes dos buckets do Chatwoot e Postiz.
+- **`[3] Provedor S3 Cloud Externo (BYOS)`:** Conecta a stack a provedores em nuvem (AWS S3, Cloudflare R2, DigitalOcean Spaces). O wizard solicitará o Endpoint, Região, Access Key, Secret Key e os nomes dos buckets dedicados.
 
 #### 6️⃣ Seleção de Módulos & Aplicações Opcionais (SRE FinOps)
 O wizard consulta interativamente se o operador deseja instalar cada uma das aplicações opcionais desacopladas da stack:
@@ -274,8 +283,11 @@ O wizard consulta interativamente se o operador deseja instalar cada uma das apl
 - **`Chatwoot (CRM Omnichannel)`** [`[S/n]`]: Central de atendimento multiatendente (Padrão: `S`).
 - **`NocoDB (Smart Databases)`** [`[S/n]`]: Interface de planilhas inteligentes e CRM de estoque (Padrão: `S`).
 - **`Metabase (BI & Analytics)`** [`[S/n]`]: Painéis analíticos e dashboards executivos (Padrão: `S`).
+- **`Listmonk (E-mail Marketing)`** [`[S/n]`]: Campanhas de e-mail e disparos transacionais (Padrão: `S`).
+- **`Umami (Web Analytics)`** [`[S/n]`]: Telemetria web e privacidade sem cookies (Padrão: `S`).
+- **`Shlink (Encurtador de Links)`** [`[S/n]`]: Links encurtados, QR Codes e tags UTM (Padrão: `S`).
 - **`Ollama (Local AI Engine)`** [`[S/n]`]: Motor local de modelos de linguagem soberanos (Ativação condicionada a hosts/notebooks com **> 4 Cores, >= 16 GB RAM e GPU dedicada compatível > 4 GB VRAM**: NVIDIA RTX, Radeon RX 6000-9000 ou Intel Arc).
-- **`Docling (Document Parsing)`** [`[S/n]`]: Extração e OCR avançado de documentos e PDFs (Ativação condicionada a hosts de alta performance: **> 4 Cores e >= 16 GB RAM**).
+- **`Docling (Document Parsing)`** [`[S/n]`]: Extração e OCR avançado de documentos e PDFs (Ativação condicionada a hosts com **> 4 Cores e >= 16 GB RAM** e com Open WebUI ou n8n ativos).
 
 > [!TIP]
 > **Normalização Estrita:** Todas as respostas são normalizadas automaticamente para `s` ou `n`. Caso o usuário desative um módulo (`N`), a esteira omitirá os containers, rotas de proxy WAF Caddy, cards no portal web e volume de dados do serviço, otimizando o consumo de RAM do servidor. O **Núcleo Core** (`PostgreSQL 17`, `PgBouncer`, `Redis`, `Caddy WAF` e `LiteLLM`) permanece sempre ativo e imutável.
@@ -322,24 +334,25 @@ O **daemind.** orquestra microsserviços organizados de forma desacoplada e aut�
 | Serviço | Nome do Container | Imagem Docker | Tag no Compose | Versão Interna | Porta do WAF (Caddy) | Status na Stack |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **PostgreSQL 17** | `${PREFIXO}_postgres` | `pgvector/pgvector` | `pg17` | **17.11** | Interna (5432) | Core Obrigatório |
-| **PgBouncer** | `${PREFIXO}_pgbouncer` | `edoburu/pgbouncer` | `v1.25.2-p0` | **1.25.2-p0** | Interna (6432) / 5432 | Core Obrigatório |
-| **Redis 8.10** | `${PREFIXO}_redis` | `redis` | `8.10-alpine` | **8.10.0** | Interna (6379) | Core Obrigatório |
-| **n8n** | `${PREFIXO}_n8n` | `n8nio/n8n` | `latest` *(dinâmica)* | **latest** | `5678` | Core Obrigatório |
-| **Evolution API** | `${PREFIXO}_evolution` | `evoapicloud/evolution-api` | `v2.3.7` | **2.3.7** | `8081` | Opcional Desacoplado |
-| **Chatwoot** | `${PREFIXO}_chatwoot` | `chatwoot/chatwoot` | `v4.16.2` | **4.16.2** | `3000` | Opcional Desacoplado |
-| **NocoDB** | `${PREFIXO}_nocodb` | `nocodb/nocodb` | `2026.08.0` | **2026.08.0** | `18080` (8080) | Opcional Desacoplado |
-| **Postiz** | `${PREFIXO}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `v2.23.0` | **2.23.0** | `5000` | Opcional Desacoplado |
+| **PgBouncer** | `${PREFIXO}_pgbouncer` | `edoburu/pgbouncer` | `latest` | **1.25.2** | Interna (6432) / 5432 | Core Obrigatório |
+| **Redis 8** | `${PREFIXO}_redis` | `redis` | `8-alpine` | **8.10.1** | Interna (6379) | Core Obrigatório |
+| **n8n** | `${PREFIXO}_n8n` | `n8nio/n8n` | `latest` | **2.35.7** | `5678` | Opcional Desacoplado |
+| **Evolution API** | `${PREFIXO}_evolution` | `evoapicloud/evolution-api` | `latest` | **2.3.7** | `8081` | Opcional Desacoplado |
+| **Chatwoot** | `${PREFIXO}_chatwoot` | `chatwoot/chatwoot` | `latest` | **4.17.0** | `3000` | Opcional Desacoplado |
+| **NocoDB** | `${PREFIXO}_nocodb` | `nocodb/nocodb` | `latest` | **2026.08.1** | `18080` (8080) | Opcional Desacoplado |
+| **Postiz** | `${PREFIXO}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `latest` | **2.23.0** | `5000` | Opcional Desacoplado |
 | **Temporal** | `${PREFIXO}_temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Interna (7233) | Sub-módulo Postiz |
-| **S3MinIO** | `${PREFIXO}_s3minio` | `alpine/minio` | `latest-release` *(dinâmica)* | **2025-10-25** | `9000` (API) / `9001` (UI) | Opcional Desacoplado |
-| **Metabase BI** | `${PREFIXO}_metabase` | `metabase/metabase` | `latest` *(dinâmica)* | **0.50.0** | `3030` | Opcional Desacoplado |
-| **Ollama AI** | `${PREFIXO}_ollama` | `ollama/ollama` | `latest` *(dinâmica)* | **0.5.0** | `11434` | Opcional Desacoplado |
-| **Docling OCR** | `${PREFIXO}_docling` | `ds4sd/docling-serve` | `latest` *(dinâmica)* | **1.0.0** | `5001` | Opcional Desacoplado |
-| **Listmonk Mailer** | `${PREFIXO}_listmonk` | `listmonk/listmonk` | `latest` *(dinâmica)* | **latest** | `9005` (9000) | Opcional Desacoplado |
-| **Umami Analytics** | `${PREFIXO}_umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` *(dinâmica)* | **latest** | `3008` (3000) | Opcional Desacoplado |
-| **Dub Links** | `${PREFIXO}_dub` | `dubinc/dub` | `latest` *(dinâmica)* | **latest** | `3009` (3000) | Opcional Desacoplado |
-| **LiteLLM Gateway** | `${PREFIXO}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` *(dinâmica)* | **1.98.0** | `4000` | Core Obrigatório |
-| **Open WebUI** | `${PREFIXO}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` *(dinâmica)* | **0.11.0** | `3001` | Core Obrigatório |
-| **Caddy WAF** | `${PREFIXO}_caddy` | `caddy` | `2.11.4-alpine` | **2.11.4** | `80` / `443` | Core Obrigatório |
+| **S3MinIO** | `${PREFIXO}_s3minio` | `alpine/minio` | `latest-release` | **2025-10-25** | `9000` (API) / `9001` (UI) | Opcional Desacoplado |
+| **Metabase BI** | `${PREFIXO}_metabase` | `metabase/metabase` | `latest` | **0.63.14.2** | `3000` / `3030` | Opcional Desacoplado |
+| **Ollama AI** | `${PREFIXO}_ollama` | `ollama/ollama` | `latest` | **0.32.15** | `11434` | Opcional Desacoplado |
+| **Docling OCR** | `${PREFIXO}_docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` | **2.121.0** | `5001` | Opcional Desacoplado |
+| **Listmonk Mailer** | `${PREFIXO}_listmonk` | `listmonk/listmonk` | `latest` | **6.2.0** | `9005` (9000) | Opcional Desacoplado |
+| **Umami Analytics** | `${PREFIXO}_umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` | **3.3.1** | `3008` (3000) | Opcional Desacoplado |
+| **Shlink API** | `${PREFIXO}_shlink` | `shlinkio/shlink` | `stable` | **5.1.5** | `8081` (8080) | Opcional Desacoplado |
+| **Shlink Web** | `${PREFIXO}_shlink_web` | `shlinkio/shlink-web-client` | `latest` | **4.8.1** | `8082` (8080) | Opcional Desacoplado |
+| **LiteLLM Gateway** | `${PREFIXO}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` | **1.99.0** | `4000` | Core Obrigatório |
+| **Open WebUI** | `${PREFIXO}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` | **0.11.0** | `3001` (8080) | Opcional Desacoplado |
+| **Caddy WAF** | `${PREFIXO}_caddy` | `caddy:alpine` | `alpine` | **2.11.4** | `80` / `443` | Core Obrigatório |
 
 > [!NOTE]
 > As imagens que utilizam tags flutuantes ou dinâmicas no `docker-compose.yml` (`latest`, `main`, `main-latest`) são inspecionadas dinamicamente durante a inicialização, garantindo transparência completa da versão binária em execução no servidor.

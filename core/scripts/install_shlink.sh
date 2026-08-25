@@ -249,7 +249,17 @@ get_version() {
 }
 
 provision_user() {
-    echo "➜ [SRE SHLINK] API Key e credenciais de dashboard vinculadas ao cofre seguro da stack."
+    local PREFIX="${PREFIXO_CONTAINER}"
+    echo "➜ [SRE SHLINK] Verificando e vinculando API Key ativa do Shlink..."
+    local KEY=$(sudo docker exec -i "${PREFIX}_shlink" shlink api-key:list 2>/dev/null | grep -E "^[a-f0-9-]{36}" | head -n 1 || echo "")
+    if [ -n "$KEY" ] && [ -f "$ENV_FILE" ]; then
+        if ! grep -q "SHLINK_API_KEY=" "$ENV_FILE"; then
+            echo "SHLINK_API_KEY=\"${KEY}\"" >> "$ENV_FILE"
+        else
+            sed -i "s/^SHLINK_API_KEY=.*/SHLINK_API_KEY=\"${KEY}\"/" "$ENV_FILE"
+        fi
+    fi
+    echo "✔ [SUCESSO SHLINK] API Key do Shlink sincronizada com sucesso."
 }
 
 render_forensic_report() {

@@ -46,6 +46,12 @@ provision_db() {
         echo "  ↳ Criando banco de dados 'openwebui_db'..."
         docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -q -c "CREATE DATABASE openwebui_db;" > /dev/null 2>&1 || true
     fi
+
+    # Habilita pgvector para busca semântica e RAG apenas se o Docling estiver ativo
+    if [[ "${USE_DOCLING:-s}" =~ ^[Ss]$ ]]; then
+        echo "  ↳ [RAG SRE] Habilitando extensão 'vector' (pgvector) no openwebui_db..."
+        docker compose exec -T postgres psql -U "${DB_USER}" -d "openwebui_db" -q -c "CREATE EXTENSION IF NOT EXISTS vector;" > /dev/null 2>&1 || true
+    fi
 }
 
 provision_infra() {
