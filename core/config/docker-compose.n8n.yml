@@ -1,4 +1,8 @@
 services:
+  caddy:
+    ports:
+      - "5678:5678/tcp"
+
   n8n:
     image: 'n8nio/n8n:latest'
     container_name: '${PREFIXO_CONTAINER}_n8n'
@@ -43,7 +47,7 @@ services:
       - N8N_DISABLED_MODULES=${N8N_DISABLED_MODULES:-instance-ai}
       - DB_POSTGRESDB_SCHEMA=n8n_schema
       - DB_POSTGRESDB_POOL_MAX=50
-      # [SRE DOC] Ativação obrigatória do servidor MCP nativo do n8n
+      ## [SRE DOC] Ativação obrigatória do servidor MCP nativo do n8n
       - N8N_MCP_ACCESS_ENABLED=true
       - TZ=America/Sao_Paulo
       - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
@@ -51,7 +55,7 @@ services:
       - OPENAI_API_BASE=http://litellm:4000/v1
       - OPENAI_API_BASE_URL=http://litellm:4000/v1
       - OPENAI_BASE_URL=http://litellm:4000/v1
-      # --- INTEGRAÇÃO BANCO DE DADOS PARA ARMAZENAMENTO DINÂMICO ---
+      ## --- INTEGRAÇÃO BANCO DE DADOS PARA ARMAZENAMENTO DINÂMICO ---
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
       - X_LOJISTA_ID=${PREFIXO_CONTAINER}
       - DB_TYPE=postgresdb
@@ -69,7 +73,7 @@ services:
       - LOJA_APP_KEY=${LOJA_APP_KEY}
       - EVOLUTION_API_KEY=${EVOLUTION_API_KEY}
 
-      # --- SERVICE MESH INTEGRATION (DAEMIND INTER-SERVICE BUS) ---
+      ## --- SERVICE MESH INTEGRATION (DAEMIND INTER-SERVICE BUS) ---
       - DOCLING_API_URL=http://${PREFIXO_CONTAINER}_docling:5001
       - SHLINK_API_URL=http://${PREFIXO_CONTAINER}_shlink:8080
       - SHLINK_API_KEY=${SHLINK_API_KEY:-${DB_PASSWORD}}
@@ -79,7 +83,7 @@ services:
       - LISTMONK_API_URL=http://${PREFIXO_CONTAINER}_listmonk:9000
       - POSTIZ_API_URL=http://${PREFIXO_CONTAINER}_postiz:5000
 
-      # --- S3 / MINIO OBJECT STORAGE (PADRÃO CHATWOOT / POSTIZ) ---
+      ## --- S3 / MINIO OBJECT STORAGE (PADRÃO CHATWOOT / POSTIZ) ---
       - MINIO_ENDPOINT=http://s3minio:9000
       - MINIO_ACCESS_KEY=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
       - MINIO_SECRET_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
@@ -92,8 +96,7 @@ services:
       - STORAGE_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
       - STORAGE_BUCKET_NAME=${S3_N8N_BUCKET:-n8n}
       - AWS_REGION=us-east-1
-
-      # --- N8N AI ASSISTANT DEV CAPABILITIES (ATIVADO VIA N8N_DEV_AI_ASSISTANT=s) ---
+      ## --- N8N AI ASSISTANT DEV CAPABILITIES (ATIVADO VIA N8N_DEV_AI_ASSISTANT=s) ---
       # - N8N_INSTANCE_AI_MODEL_URL=http://litellm:4000/v1
       # - N8N_INSTANCE_AI_MODEL_API_KEY=${LITELLM_MASTER_KEY}
       # - N8N_INSTANCE_AI_MODEL=gpt-4.1
@@ -113,12 +116,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      ## --- N8N AI ASSISTANT ADVANCED CONTAINERS (DEV / INTEGRATIONS BUILDER) ---
       # searxng:
       #   condition: service_healthy
       # n8n_sandbox:
       #   condition: service_healthy
 
-  # --- N8N AI ASSISTANT ADVANCED CONTAINERS (DEV / INTEGRATIONS BUILDER) ---
   # n8n_sandbox:
   #   image: ghcr.io/n8n-io/n8n-sandbox-service-api:latest
   #   container_name: '${PREFIXO_CONTAINER}_n8n_sandbox'
@@ -150,7 +153,7 @@ services:
   #     interval: 15s
   #     timeout: 5s
   #     retries: 3
-  #
+
   # searxng:
   #   image: searxng/searxng:latest
   #   container_name: '${PREFIXO_CONTAINER}_searxng'
@@ -178,6 +181,3 @@ services:
   #     timeout: 5s
   #     retries: 3
 
-  caddy:
-    ports:
-      - "5678:5678/tcp"

@@ -107,32 +107,10 @@ EOF
         [ ! -f "$N8N_COMPOSE" ] && N8N_COMPOSE="$TARGET_DIR/docker-compose.n8n.yml"
         if [ -f "$N8N_COMPOSE" ]; then
             echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (Sandbox + SearXNG) no compose..."
-            sed -i 's/# - N8N_INSTANCE_AI_/- N8N_INSTANCE_AI_/g' "$N8N_COMPOSE" 2>/dev/null || true
-            sed -i 's/# - N8N_SANDBOX_SERVICE_/- N8N_SANDBOX_SERVICE_/g' "$N8N_COMPOSE" 2>/dev/null || true
-            sed -i 's/#   image: ghcr.io\/n8n-io\/n8n-sandbox/  image: ghcr.io\/n8n-io\/n8n-sandbox/g' "$N8N_COMPOSE" 2>/dev/null || true
-            sed -i 's/#   image: searxng\/searxng/  image: searxng\/searxng/g' "$N8N_COMPOSE" 2>/dev/null || true
-            python3 -c "
-path = '$N8N_COMPOSE'
-try:
-    with open(path, 'r+') as f:
-        content = f.read()
-        import re
-        content = re.sub(r'#\s*(n8n_sandbox:|searxng:)', r'\1', content)
-        content = re.sub(r'#\s*(\s{2,}[a-zA-Z0-9_\-\.\:\/]+)', r'\1', content)
-        content = re.sub(r'#\s*(\s{2,}\- [^\n]+)', r'\1', content)
-        content = re.sub(r'#\s*(\s{2,}\[[^\n]+\])', r'\1', content)
-        if 'searxng:' in content and 'searxng:\n        condition: service_healthy' not in content:
-            dep_block = '''      searxng:
-        condition: service_healthy
-      n8n_sandbox:
-        condition: service_healthy\n'''
-            content = content.replace('      redis:\n        condition: service_healthy\n', '      redis:\n        condition: service_healthy\n' + dep_block)
-        f.seek(0)
-        f.write(content)
-        f.truncate()
-except Exception:
-    pass
-" 2>/dev/null || true
+            # 1. Descomenta todas as linhas marcadas com '# '
+            sed -i 's/# //g' "$N8N_COMPOSE" 2>/dev/null || true
+            # 2. Habilita o módulo instance-ai liberando a UI do assistente no n8n
+            sed -i 's/- N8N_DISABLED_MODULES=.*/- N8N_DISABLED_MODULES=/g' "$N8N_COMPOSE" 2>/dev/null || true
         fi
     fi
 }
