@@ -840,6 +840,7 @@ done
     printf 'STORAGE_MODE="%s"\n'  "${STORAGE_MODE:-local}"
     printf 'USE_S3MINIO="%s"\n'   "${USE_S3MINIO:-n}"
     printf 'USE_TAILSCALE="%s"\n' "${USE_TAILSCALE:-false}"
+    printf 'N8N_DEV_AI_ASSISTANT="%s"\n' "${N8N_DEV_AI_ASSISTANT:-n}"
 } >> .env
 # Guardrail de Segurança: Oculta o arquivo de outros usuários do Linux
 chmod 600 .env
@@ -857,7 +858,7 @@ cd "$TARGET_DIR" 2>/dev/null || true
 
 preparar_compose_monolitico() {
     cd "$TARGET_DIR" 2>/dev/null || true
-    
+
     # 1. Inicia a topologia base no docker-compose.yml a partir do arquivo base do Core
     cp "$TARGET_DIR/core/config/docker-compose.yml" "$TARGET_DIR/docker-compose.yml"
     

@@ -17,7 +17,7 @@ CLR_BLUE="\e[34m"
 
 # SRE OVERRIDE IMMUTABILITY GUARD: Preserva export do operador durante todo o ciclo
 INITIAL_USER_OVERRIDES=()
-for _v in $(compgen -v | grep -E '^(USE_|OVERRIDE_|EMPRESA|ROUTING_|STORAGE_|S3_|OPENAI_|ANTHROPIC_|GEMINI_|DEEPSEEK_|OPENROUTER_)'); do
+for _v in $(compgen -v | grep -E '^(USE_|OVERRIDE_|EMPRESA|ROUTING_|STORAGE_|S3_|N8N_DEV_|OPENAI_|ANTHROPIC_|GEMINI_|DEEPSEEK_|OPENROUTER_)'); do
     [ -n "${!_v:-}" ] && INITIAL_USER_OVERRIDES+=("$_v=${!_v}")
 done
 
