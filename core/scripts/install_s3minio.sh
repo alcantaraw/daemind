@@ -402,6 +402,11 @@ provision_infra() {
             if ! sudo docker exec "$MINIO_CTR" mc ls "local/${N8N_BUCKET}" >/dev/null 2>&1; then
                 sudo docker exec "$MINIO_CTR" mc mb "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
                 sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
+            else
+                local N8N_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${N8N_BUCKET}" 2>/dev/null || echo "")
+                if ! echo "$N8N_POLICY" | grep -qi "download"; then
+                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
+                fi
             fi
         fi
 
@@ -410,6 +415,11 @@ provision_infra() {
             if ! sudo docker exec "$MINIO_CTR" mc ls "local/${LM_BUCKET}" >/dev/null 2>&1; then
                 sudo docker exec "$MINIO_CTR" mc mb "local/${LM_BUCKET}" >/dev/null 2>&1 || true
                 sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${LM_BUCKET}" >/dev/null 2>&1 || true
+            else
+                local LM_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${LM_BUCKET}" 2>/dev/null || echo "")
+                if ! echo "$LM_POLICY" | grep -qi "download"; then
+                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${LM_BUCKET}" >/dev/null 2>&1 || true
+                fi
             fi
         fi
 

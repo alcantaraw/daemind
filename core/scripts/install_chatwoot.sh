@@ -282,6 +282,14 @@ provision_user() {
             token_obj.save!
           end
 
+          # Auto-ativação da integração OpenAI / LiteLLM nativa para a conta
+          Account.all.each do |acc|
+            hook = Integrations::Hook.find_or_initialize_by(account_id: acc.id, app_id: 'openai')
+            hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
+            hook.status = :enabled
+            hook.save! rescue nil
+          end
+
           # SRE Self-Healing: Purga conversas e caixas de entrada órfãs (sem canal) para evitar 500 no painel geral
           Conversation.all.each do |c|
             if c.inbox.nil? || c.inbox.channel.nil?
@@ -326,6 +334,12 @@ provision_user() {
             InstallationConfig.find_or_create_by!(name: 'CHATWOOT_INSTANCE_ADMIN_EMAIL').update!(value: '${TS_EMAIL:-admin@localhost}')
             user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
             account.update!(custom_attributes: { 'website' => 'https://${TS_DOMAIN:-localhost}', 'timezone' => 'America/Sao_Paulo' })
+
+            # Auto-ativação da integração OpenAI / LiteLLM nativa para a conta
+            hook = Integrations::Hook.find_or_initialize_by(account_id: account.id, app_id: 'openai')
+            hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
+            hook.status = :enabled
+            hook.save! rescue nil
           end
           Rails.cache.clear
           GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)

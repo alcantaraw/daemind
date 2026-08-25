@@ -60,6 +60,12 @@
     - `nocodb`: Anexos de tabelas e arquivos de bancos relacionais.
   - **Resiliência Local e Cloud:** Suporte transparente tanto para o MinIO local (`STORAGE_PROVIDER=local`) quanto para S3 externo/cloud (`AWS_S3`, `Wasabi`, `Cloudflare R2`) sem regressão de código.
 
+- **[ADD] n8n AI Assistant Avançado sob Demanda (Code Sandbox & SearXNG Web Search):**
+  - **Eficiência de Recursos por Padrão:** Por padrão, a stack roda de forma ultraleve e econômica (`N8N_DEV_AI_ASSISTANT=n`), conectando o AI Assistant do n8n diretamente ao LiteLLM soberano sem overhead de containers extras.
+  - **Modo Desenvolvedor / Integrações (`N8N_DEV_AI_ASSISTANT=s`):** Quando ativado pelo desenvolvedor no `.env`, o instalador desacoplado provisiona automaticamente:
+    - **`n8n-sandbox-api` (`ghcr.io/n8n-io/n8n-sandbox-service-api`):** Ambiente isolado para teste e validação de scripts gerados pela IA sem tocar no container principal.
+    - **`SearXNG` (`searxng/searxng`):** Motor de busca headless auto-hospedado (com `formats: [html, json]`) para o assistente consultar schemas e documentações de APIs externas em tempo real.
+
 - **[ADD] Pipeline Soberano de RAG & Docling OCR (IBM Research):**
   - **Validação Estrita de Consumidores & Hardware:** O Docling só é oferecido e ativado se houver consumidores de IA ativos (`USE_OPENWEBUI=s` ou `USE_N8N=s`), além de cumprir os requisitos de hardware (> 4 vCPUs e >= 16 GB RAM), evitando desperdício de recursos computacionais.
   - **Content Extraction Engine:** O OpenWebUI foi integrado diretamente ao microserviço do Docling (`loja_docling:5001`), permitindo extração de PDFs complexos, escaneamentos com OCR, planilhas e DOCX com reconstrução semântica de tabelas Markdown.
@@ -68,6 +74,7 @@
 - **[ADD] Integração Plena Evolution API ➔ Chatwoot:**
   - **WebSockets Globais & Handshake:** Configuração de `WEBSOCKET_ENABLED=true`, `WEBSOCKET_GLOBAL_EVENTS=true` e `WEBSOCKET_ALLOWED_HOSTS=*`, eliminando rejeições de conexão e garantindo status conectado no Evolution Manager.
   - **Sincronização de Banco:** Alinhamento das credenciais de importação de contatos e conversas apontando diretamente para o `chatwoot_db`.
+  - **Auto-Ativação do Copiloto de IA (Zero-Touch):** No provisionamento de conta (`provision_user`), o hook nativo `Integrations::Hook` do app `openai` é automaticamente criado e habilitado com a `${LITELLM_MASTER_KEY}`, eliminando a necessidade de colar a API key manualmente na interface web.
   - **Hardening Chatwoot Community Edition:** Configuração de `DISABLE_ENTERPRISE=true`, `ENABLE_ENTERPRISE=false` e `RUBYOPT=-W0`, eliminando polling de licença empresarial e silenciando avisos de depreciação do Redis.
 
 - **[ADD] Integração Plena de IA nas Aplicações (AI Mesh Soberana via LiteLLM):**

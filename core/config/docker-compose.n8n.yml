@@ -40,6 +40,7 @@ services:
       - N8N_COMPRESSION_NODE_MAX_DECOMPRESSED_SIZE_BYTES=268435456
       - N8N_COMPRESSION_NODE_MAX_ZIP_ENTRIES=1000
       - N8N_LOG_LEVEL=error
+      - N8N_DISABLED_MODULES=${N8N_DISABLED_MODULES:-instance-ai}
       - DB_POSTGRESDB_SCHEMA=n8n_schema
       - DB_POSTGRESDB_POOL_MAX=50
       # [SRE DOC] Ativação obrigatória do servidor MCP nativo do n8n
@@ -79,6 +80,13 @@ services:
       - MINIO_SECRET_KEY=${DB_PASSWORD}
       - LISTMONK_API_URL=http://${PREFIXO_CONTAINER}_listmonk:9000
       - POSTIZ_API_URL=http://${PREFIXO_CONTAINER}_postiz:5000
+
+      # --- N8N AI ASSISTANT DEV CAPABILITIES (ATIVADO VIA N8N_DEV_AI_ASSISTANT=s) ---
+      # - N8N_INSTANCE_AI_SANDBOX_ENABLED=true
+      # - N8N_INSTANCE_AI_SANDBOX_PROVIDER=n8n-sandbox
+      # - N8N_INSTANCE_AI_SANDBOX_API_URL=http://${PREFIXO_CONTAINER}_n8n_sandbox:8080
+      # - N8N_INSTANCE_AI_SANDBOX_API_KEY=${LITELLM_MASTER_KEY}
+      # - N8N_INSTANCE_AI_SEARXNG_URL=http://${PREFIXO_CONTAINER}_searxng:8080
     volumes:
       - './volumes/n8n_data:/home/node/.n8n'
       - '/etc/timezone:/etc/timezone:ro'
@@ -90,6 +98,31 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+
+  # --- N8N AI ASSISTANT ADVANCED CONTAINERS (DEV / INTEGRATIONS BUILDER) ---
+  # n8n_sandbox:
+  #   image: ghcr.io/n8n-io/n8n-sandbox-service-api:latest
+  #   container_name: '${PREFIXO_CONTAINER}_n8n_sandbox'
+  #   restart: unless-stopped
+  #   networks:
+  #     instancia_net:
+  #       aliases:
+  #         - n8n_sandbox
+  #   environment:
+  #     - SANDBOX_API_KEYS=${LITELLM_MASTER_KEY}
+  #
+  # searxng:
+  #   image: searxng/searxng:latest
+  #   container_name: '${PREFIXO_CONTAINER}_searxng'
+  #   restart: unless-stopped
+  #   networks:
+  #     instancia_net:
+  #       aliases:
+  #         - searxng
+  #   volumes:
+  #     - './volumes/searxng:/etc/searxng'
+  #   environment:
+  #     - SEARXNG_SECRET=${DB_PASSWORD}
 
   caddy:
     ports:

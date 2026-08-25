@@ -332,19 +332,15 @@ provision_user() {
     # SRE AUTO-INTEGRAÇÃO UTM/SHLINK: Injeta Template Executivo com Auto-UTM
     # -----------------------------------------------------------------------
     echo "➜ [SRE LISTMONK] Provisionando Template Executivo com Auto-UTM (Shlink & Umami)..."
-    sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
-    INSERT INTO templates (name, body, type, is_default, created_at, updated_at)
-    VALUES (
-        'Template Executivo Auto-UTM (Shlink & Umami)',
-        '<!doctype html>
+    local TPL_BODY='<!doctype html>
 <html>
 <head>
     <title>{{ .Campaign.Subject }}</title>
-    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1\">
-    <base target=\"_blank\">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <base target="_blank">
     <style>
-        body { background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif; font-size: 15px; line-height: 26px; margin: 0; color: #334155; }
+        body { background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15px; line-height: 26px; margin: 0; color: #334155; }
         .wrap { background-color: #ffffff; padding: 40px; max-width: 600px; margin: 30px auto; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
         .button { background: #2563eb; border-radius: 6px; text-decoration: none !important; color: #ffffff !important; font-weight: 600; padding: 12px 28px; display: inline-block; margin-top: 15px; }
@@ -353,32 +349,45 @@ provision_user() {
         .footer a { color: #64748b; text-decoration: underline; margin: 0 8px; }
     </style>
 </head>
-<body style=\"background-color: #f8fafc;\">
-    <div class=\"wrap\">
-        <div class=\"header\">
-            <h2 style=\"color: #0f172a; margin: 0;\">{{ .Campaign.Subject }}</h2>
+<body style="background-color: #f8fafc;">
+    <div class="wrap">
+        <div class="header">
+            <h2 style="color: #0f172a; margin: 0;">{{ .Campaign.Subject }}</h2>
         </div>
-        <div class=\"content\" style=\"color: #334155;\">
-            {{ template \"content\" . }}
+        <div class="content" style="color: #334155;">
+            {{ template "content" . }}
         </div>
     </div>
-    <div class=\"footer\">
+    <div class="footer">
         <p>
-            <a href=\"{{ UnsubscribeURL }}\">Descadastrar-se</a> | 
-            <a href=\"{{ MessageURL }}\">Visualizar no Navegador</a>
+            <a href="{{ UnsubscribeURL }}">Descadastrar-se</a> | 
+            <a href="{{ MessageURL }}">Visualizar no Navegador</a>
         </p>
-        <p style=\"font-size: 11px;\">Rastreamento Soberano 100% LGPD/GDPR via Daemind Stack</p>
+        <p style="font-size: 11px;">Rastreamento Soberano 100% LGPD/GDPR via Daemind Stack</p>
     </div>
     {{ TrackView }}
 </body>
-</html>',
-        'campaign',
-        false,
-        NOW(),
-        NOW()
-    )
-    ON CONFLICT (name) DO UPDATE 
-    SET body = EXCLUDED.body, updated_at = NOW();
+</html>'
+
+    sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
+    DO \$\$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM templates WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)') THEN
+            INSERT INTO templates (name, body, type, is_default, created_at, updated_at)
+            VALUES (
+                'Template Executivo Auto-UTM (Shlink & Umami)',
+                \$$TPL_BODY\$,
+                'campaign',
+                false,
+                NOW(),
+                NOW()
+            );
+        ELSE
+            UPDATE templates 
+            SET body = \$$TPL_BODY\$, updated_at = NOW() 
+            WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)';
+        END IF;
+    END \$\$;
     " >/dev/null 2>&1 || true
     echo "✔ [AUTO-INTEGRAÇÃO LISTMONK] Template Executivo com Auto-UTM provisionado com sucesso."
 }

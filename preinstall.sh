@@ -2286,7 +2286,7 @@ for script in "$SCRIPTS_DIR"/install_*.sh; do
         export "$_uvar" 2>/dev/null || true
     done
     export OVERRIDE_TOTAL_CPUS OVERRIDE_TOTAL_RAM_GB OVERRIDE_TOTAL_RAM_MB SYSTEM_TOTAL_CPUS SYSTEM_TOTAL_RAM_MB SYSTEM_TOTAL_RAM_GB TOTAL_CPUS TOTAL_RAM_MB TOTAL_RAM_GB 2>/dev/null || true
-    export NOME_ARQUIVO EMPRESA PREFIXO_CONTAINER TARGET_DIR 2>/dev/null || true
+    export NOME_ARQUIVO EMPRESA PREFIXO_CONTAINER TARGET_DIR N8N_DEV_AI_ASSISTANT 2>/dev/null || true
     bash "$script" "$TARGET_DIR" build_envs || true
 done
 
@@ -2306,6 +2306,7 @@ done
         _hvar="USE_$(echo "$_hbname" | tr '[:lower:]' '[:upper:]')"
         printf '%s="%s"\n' "$_hvar" "${!_hvar:-n}"
     done
+    printf 'N8N_DEV_AI_ASSISTANT="%s"\n' "${N8N_DEV_AI_ASSISTANT:-n}"
     printf '\n# --- Controle de Storage e Topologia de Borda ---\n'
     printf 'STORAGE_MODE="%s"\n'   "${STORAGE_MODE:-local}"
     printf 'USE_S3MINIO="%s"\n'    "${USE_S3MINIO:-n}"

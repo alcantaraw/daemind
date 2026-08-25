@@ -36,6 +36,32 @@ build_structure() {
         sudo chown -R "$TARGET_OWNER" "$VOL_PATH" 2>/dev/null || true
         sudo chmod -R 775 "$VOL_PATH" 2>/dev/null || true
     fi
+
+    # Se N8N_DEV_AI_ASSISTANT estiver ativo, cria a estrutura do SearXNG
+    if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
+        local SEARX_DIR="$TARGET_DIR/volumes/searxng"
+        if [ ! -f "$SEARX_DIR/settings.yml" ]; then
+            echo "➜ [SRE N8N DEV] Gerando settings.yml com suporte JSON para o SearXNG..."
+            sudo mkdir -p "$SEARX_DIR" 2>/dev/null || true
+            cat << 'EOF' | sudo tee "$SEARX_DIR/settings.yml" > /dev/null
+use_default_settings: true
+general:
+  debug: false
+  instance_name: "Daemind SearXNG"
+search:
+  safe_search: 0
+  autocomplete: ""
+  formats:
+    - html
+    - json
+server:
+  port: 8080
+  bind_address: "0.0.0.0"
+  secret_key: "daemind_searxng_secret"
+EOF
+            sudo chown -R "$TARGET_OWNER" "$SEARX_DIR" 2>/dev/null || true
+        fi
+    fi
 }
 
 provision_db() {
@@ -104,6 +130,32 @@ EOF
         # Garante publicação caso o workflow já exista
         docker exec -u node ${PREFIX}_n8n n8n publish:workflow --id="$WF_ID" > /dev/null 2>&1 || docker exec -u node ${PREFIX}_n8n n8n update:workflow --id="$WF_ID" --active=true > /dev/null 2>&1 || true
         echo "➜ [IDEMPOTÊNCIA N8N] Workflow de Faxina Reativa de Modelos IA já presente e publicado no n8n."
+    fi
+
+    # Ativação dinâmica dos containers e variáveis do AI Assistant quando solicitado
+    local N8N_COMPOSE="$TARGET_DIR/core/config/docker-compose.n8n.yml"
+    [ ! -f "$N8N_COMPOSE" ] && N8N_COMPOSE="$TARGET_DIR/docker-compose.n8n.yml"
+    if [ -f "$N8N_COMPOSE" ]; then
+        if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
+            echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (Sandbox + SearXNG) no compose..."
+            sed -i 's/# - N8N_INSTANCE_AI_/- N8N_INSTANCE_AI_/g' "$N8N_COMPOSE" 2>/dev/null || true
+            sed -i 's/#   image: ghcr.io\/n8n-io\/n8n-sandbox/  image: ghcr.io\/n8n-io\/n8n-sandbox/g' "$N8N_COMPOSE" 2>/dev/null || true
+            sed -i 's/#   image: searxng\/searxng/  image: searxng\/searxng/g' "$N8N_COMPOSE" 2>/dev/null || true
+            python3 -c "
+path = '$N8N_COMPOSE'
+try:
+    with open(path, 'r+') as f:
+        content = f.read()
+        import re
+        content = re.sub(r'#\s*(n8n_sandbox:|searxng:)', r'\1', content)
+        content = re.sub(r'#\s*(\s{2,}[a-zA-Z0-9_\-\.\:\/]+)', r'\1', content)
+        f.seek(0)
+        f.write(content)
+        f.truncate()
+except Exception:
+    pass
+" 2>/dev/null || true
+        fi
     fi
 }
 
@@ -355,10 +407,17 @@ build_envs() {
         node_heap_default="1536"
     fi
 
+    local disabled_modules="instance-ai"
+    if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
+        disabled_modules=""
+    fi
+
     cat << EOF >> "$env_path"
 
 # --- Configurações e Tuning do Módulo n8n Automation ---
 USE_N8N="${USE_N8N:-s}"
+N8N_DEV_AI_ASSISTANT="${N8N_DEV_AI_ASSISTANT:-n}"
+N8N_DISABLED_MODULES="${disabled_modules}"
 HOST_N8N_PORT="5678"
 CPU_N8N=${CPU_N8N:-${cpu_n8n}}
 MEM_N8N=${MEM_N8N:-${mem_n8n}}
