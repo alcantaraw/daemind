@@ -6,6 +6,8 @@ services:
     networks:
       instancia_net:
         ipv4_address: ${IP_TEMPORAL}
+        aliases:
+          - temporal
     ports:
       - "7233:7233"
     deploy:
@@ -55,6 +57,8 @@ services:
     networks:
       instancia_net:
         ipv4_address: ${IP_POSTIZ}
+        aliases:
+          - postiz
     restart: unless-stopped
     deploy:
       resources:
@@ -73,10 +77,10 @@ services:
       - BACKEND_INTERNAL_URL=http://localhost:3000
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/postiz_db?connection_limit=30
       - REDIS_URL=redis://${IP_REDIS}:6379
-      - REDIS_HOST=${PREFIXO_CONTAINER}_redis
+      - REDIS_HOST=redis
       - REDIS_PORT=6379
       - JWT_SECRET=${POSTIZ_JWT_SECRET}
-      - TEMPORAL_ADDRESS=${PREFIXO_CONTAINER}_temporal:7233
+      - TEMPORAL_ADDRESS=temporal:7233
       - TEMPORAL_TLS=false
       - TEMPORAL_INSECURE=true
       - DISABLE_SEARCH_ATTRIBUTES=true
@@ -84,9 +88,9 @@ services:
       - NODE_ENV=production
       - LOG_LEVEL=error
       - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
-      - OPENAI_API_BASE=http://${PREFIXO_CONTAINER}_litellm:4000/v1
-      - OPENAI_API_BASE_URL=http://${PREFIXO_CONTAINER}_litellm:4000/v1
-      - OPENAI_BASE_URL=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      - OPENAI_API_BASE=http://litellm:4000/v1
+      - OPENAI_API_BASE_URL=http://litellm:4000/v1
+      - OPENAI_BASE_URL=http://litellm:4000/v1
       - STORAGE_PROVIDER=${POSTIZ_STORAGE_PROVIDER:-local}
       - STORAGE_TYPE=${POSTIZ_STORAGE_PROVIDER:-local}
       - UPLOAD_DIRECTORY=/app/uploads

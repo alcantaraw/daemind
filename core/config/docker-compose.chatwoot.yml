@@ -5,6 +5,8 @@ services:
     networks:
       instancia_net:
         ipv4_address: ${IP_CHATWOOT}
+        aliases:
+          - chatwoot
     restart: always
     command: [ "sh", "-c", "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b 0.0.0.0" ]
     deploy:

@@ -42,6 +42,7 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [6.4. Motor de Sincronização Inteligente de Modelos de IA (`install_1ia.sh`)](#64-motor-de-sincronização-inteligente-de-modelos-de-ia-install_1iash)
   - [6.5. Disaster Recovery, Backup Criptografado & Restauração (`backup_diario.sh` e `restore_production.sh`)](#65-disaster-recovery-backup-criptografado--restauração-backup_diariosh-e-restore_productionsh)
   - [6.6. Atualização Remota Declarativa da Stack (`upgrade_stack.sh`)](#66-atualização-remota-declarativa-da-stack-upgrade_stacksh)
+  - [6.7. Bateria de Testes de Fumaça & Recuperação Perimetral (`ci_smoke_test.sh` e `install_0ts.sh`)](#67-bateria-de-testes-de-fumaça--recuperação-perimetral-ci_smoke_testsh-e-install_0tssh)
 - [7. Padrões Avançados de Arquitetura de Dados, LGPD & Integração Física](#7-padrões-avançados-de-arquitetura-de-dados-lgpd--integração-física)
   - [7.1. Staging Area Soberana (Proteção contra Rate-Limits HTTP 429)](#71-staging-area-soberana-proteção-contra-rate-limits-http-429)
   - [7.2. Isolamento Relacional vs. Base Vetorial (`pgvector`)](#72-isolamento-relacional-vs-base-vetorial-pgvector)

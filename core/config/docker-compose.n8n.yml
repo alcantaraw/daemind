@@ -5,6 +5,8 @@ services:
     networks:
       instancia_net:
         ipv4_address: ${IP_N8N}
+        aliases:
+          - n8n
     restart: unless-stopped
     healthcheck:
       test:
