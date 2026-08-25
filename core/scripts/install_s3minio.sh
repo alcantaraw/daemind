@@ -329,99 +329,23 @@ provision_infra() {
             sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp -m multiport --dports 9000,9001 -j ACCEPT 2>/dev/null || true
         fi
 
-        local MINIO_CTR="${PREFIXO_CONTAINER}_s3minio"
-        sudo docker exec "$MINIO_CTR" mc alias set local http://localhost:9000 "${TS_EMAIL}" "${DB_PASSWORD}" >/dev/null 2>&1 || true
+        local ALL_BUCKETS=()
+        [[ "${USE_CHATWOOT:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${CW_BUCKET}")
+        [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${PZ_BUCKET}")
+        [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${EVO_BUCKET}")
+        [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${NOCO_BUCKET}")
+        [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${OW_BUCKET}")
+        [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${N8N_BUCKET}")
+        [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${LM_BUCKET}")
 
-        # 1. Bucket e política do Chatwoot
-        if [[ "${USE_CHATWOOT:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${CW_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${CW_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${CW_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local CW_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${CW_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$CW_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${CW_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 2. Bucket e política do Postiz
-        if [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${PZ_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${PZ_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${PZ_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local PZ_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${PZ_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$PZ_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${PZ_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 3. Bucket e política da Evolution API
-        if [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${EVO_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local EVO_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${EVO_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$EVO_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 4. Bucket e política do NocoDB
-        if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${NOCO_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${NOCO_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${NOCO_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local NOCO_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${NOCO_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$NOCO_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${NOCO_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 5. Bucket e política do Open WebUI (RAG & Knowledge Base)
-        if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${OW_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${OW_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${OW_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local OW_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${OW_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$OW_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${OW_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 6. Bucket e política do n8n
-        if [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${N8N_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local N8N_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${N8N_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$N8N_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${N8N_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 7. Bucket e política do Listmonk
-        if [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${LM_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${LM_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${LM_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local LM_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${LM_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$LM_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${LM_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
+        local BUCKETS_STR="${ALL_BUCKETS[*]}"
+        sudo docker run --rm --entrypoint sh --network "${PREFIXO_CONTAINER}_net" minio/mc -c "
+            mc alias set local http://s3minio:9000 '${TS_EMAIL}' '${DB_PASSWORD}' >/dev/null 2>&1 || true
+            for b in ${BUCKETS_STR}; do
+                mc mb --ignore-existing \"local/\$b\" >/dev/null 2>&1 || true
+                mc anonymous set download \"local/\$b\" >/dev/null 2>&1 || true
+            done
+        " >/dev/null 2>&1 || true
 
         echo "✔ [SUCESSO S3MINIO] Buckets de módulos ativos verificados e políticas aplicadas."
 

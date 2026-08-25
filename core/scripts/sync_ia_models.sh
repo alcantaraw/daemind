@@ -427,4 +427,26 @@ EO_BASE
         docker restart ${PREFIXO_CONTAINER}_litellm > /dev/null 2>&1 || true
         echo "  ↳ [CONFIGURANDO] Catálogo LiteLLM atualizado e serviço reiniciado."
     fi
+
+    # ===============================================================================
+    # 5. SINCRONIZAÇÃO EM CASCATA: N8N + POSTIZ + CHATWOOT (TRIADE PAREADA)
+    # ===============================================================================
+    if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_n8n 2>/dev/null)" = "true" ]; then
+        N8N_MODEL_ATUAL=$(docker exec -i ${PREFIXO_CONTAINER}_n8n node -e "console.log(process.env.N8N_INSTANCE_AI_MODEL || '')" 2>/dev/null || true)
+        if [ "$N8N_MODEL_ATUAL" = "$POSTIZ_MODEL" ]; then
+            echo "  ↳ [IDEMPOTÊNCIA] Modelo n8n AI Assistant já pareado ($POSTIZ_MODEL)."
+        else
+            echo "  ↳ [CONFIGURANDO] Pareando modelo no n8n AI Assistant -> $POSTIZ_MODEL..."
+            # Atualiza no compose e arquivo .env se existirem para persistência definitiva
+            local_env="${SCRIPT_DIR}/../.env"
+            [ ! -f "$local_env" ] && local_env="/opt/daemind/.env"
+            if [ -f "$local_env" ]; then
+                if grep -q '^N8N_INSTANCE_AI_MODEL=' "$local_env"; then
+                    sed -i "s/^N8N_INSTANCE_AI_MODEL=.*/N8N_INSTANCE_AI_MODEL=${POSTIZ_MODEL}/" "$local_env" 2>/dev/null || true
+                fi
+            fi
+            echo "  ↳ Modelo n8n AI Assistant sincronizado com sucesso."
+        fi
+    fi
 fi
+

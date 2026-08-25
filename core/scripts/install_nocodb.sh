@@ -338,38 +338,29 @@ provision_user() {
         fi
 
         local BASE_NAME="${PREFIX}_db"
-        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r --arg bn "$BASE_NAME" '.list[]? | select(.title == $bn or .title == "daemind_db" or .title == "Loja_db" or .title == "loja_db") | .id // empty' 2>/dev/null | head -n 1 || true)
+        # 1. Localiza a base existente (a default criada no boot ou loja_db)
+        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r --arg bn "$BASE_NAME" '.list[]? | select(.title == $bn or .title == "daemind_db" or .title == "Loja_db" or .title == "loja_db" or .title == "Default Project" or .title == "Default Workspace") | .id // empty' 2>/dev/null | head -n 1 || true)
 
         if [ -z "$BASE_EXISTENTE" ] || [ "$BASE_EXISTENTE" = "null" ]; then
-            echo "  ↳ Criando base corporativa (${BASE_NAME})..."
-            local BASE_RESPONSE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"title\": \"${BASE_NAME}\"}")
-            BASE_EXISTENTE=$(echo "$BASE_RESPONSE" | jq -r '.id // empty')
-        else
-            sudo docker exec ${PREFIX}_nocodb curl -s -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"title\": \"${BASE_NAME}\"}" > /dev/null 2>&1 || true
+            # Se não localizou por nome específico, obtém a primeira base existente do workspace
+            BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[0].id // empty' 2>/dev/null || true)
         fi
 
         if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
-            local SOURCE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[]? | select(.alias == "Postgres Transacional") | .id // empty' 2>/dev/null | head -n 1 || true)
+            echo "  ↳ Vinculando e nomeando base corporativa principal (${BASE_NAME})..."
+            sudo docker exec ${PREFIX}_nocodb curl -s -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" \
+                -H "xc-auth: $AUTH_TOKEN" \
+                -H "Content-Type: application/json" \
+                -d "{\"title\": \"${BASE_NAME}\"}" > /dev/null 2>&1 || true
 
-            if [ -z "$SOURCE_EXISTENTE" ] || [ "$SOURCE_EXISTENTE" = "null" ]; then
-                echo "  ↳ Conectando Postgres Transacional..."
-                local SOURCE_RESP=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"type\": \"pg\", \"alias\": \"Postgres Transacional\", \"config\": {\"client\": \"pg\", \"connection\": {\"host\": \"pgbouncer\", \"port\": 6432, \"user\": \"${DB_USER:-admin_db}\", \"password\": \"${DB_PASSWORD}\", \"database\": \"${PREFIX}_db\", \"ssl\": false}}}")
-                SOURCE_EXISTENTE=$(echo "$SOURCE_RESP" | jq -r '.id // empty')
-            fi
-
-            if [ -n "$SOURCE_EXISTENTE" ] && [ "$SOURCE_EXISTENTE" != "null" ]; then
-                echo "  ↳ Sincronizando novas Views e tabelas no NocoDB (Zero-Touch Meta-Sync)..."
-                # 1. Dispara o sync de schemas da base/fonte
-                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources/${SOURCE_EXISTENTE}/sync" -H "xc-auth: $AUTH_TOKEN" > /dev/null 2>&1 || true
-                
-                # 2. Obtém as tabelas/views identificadas no meta-diff e força a sincronização (Sync Now)
-                local DIFF_PAYLOAD=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" -H "xc-auth: $AUTH_TOKEN" 2>/dev/null || echo "")
-                if [ -n "$DIFF_PAYLOAD" ] && [ "$DIFF_PAYLOAD" != "null" ] && [ "$DIFF_PAYLOAD" != "{}" ]; then
-                    sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" \
-                        -H "xc-auth: $AUTH_TOKEN" \
-                        -H "Content-Type: application/json" \
-                        -d "$DIFF_PAYLOAD" > /dev/null 2>&1 || true
-                fi
+            echo "  ↳ Sincronizando novas Views e tabelas no NocoDB (Zero-Touch Meta-Sync)..."
+            # Obtém as tabelas/views identificadas no meta-diff e sincroniza
+            local DIFF_PAYLOAD=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" -H "xc-auth: $AUTH_TOKEN" 2>/dev/null || echo "")
+            if [ -n "$DIFF_PAYLOAD" ] && [ "$DIFF_PAYLOAD" != "null" ] && [ "$DIFF_PAYLOAD" != "{}" ]; then
+                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" \
+                    -H "xc-auth: $AUTH_TOKEN" \
+                    -H "Content-Type: application/json" \
+                    -d "$DIFF_PAYLOAD" > /dev/null 2>&1 || true
             fi
         fi
     fi
