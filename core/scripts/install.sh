@@ -1047,10 +1047,10 @@ for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_post
     docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -c "
         DO \$\$
         BEGIN
-            IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = '$srv' AND usename = '$DB_USER') THEN
+            IF NOT EXISTS (SELECT 1 FROM pg_user_mapping um JOIN pg_foreign_server fs ON fs.oid = um.umserver JOIN pg_roles r ON r.oid = um.umuser WHERE fs.srvname = '$srv' AND r.rolname = '$DB_USER') THEN
                 CREATE USER MAPPING FOR $DB_USER SERVER $srv OPTIONS (user '$DB_USER', password '$DB_PASSWORD');
             END IF;
-            IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = '$srv' AND usename = 'PUBLIC') THEN
+            IF NOT EXISTS (SELECT 1 FROM pg_user_mapping um JOIN pg_foreign_server fs ON fs.oid = um.umserver WHERE fs.srvname = '$srv' AND um.umuser = 0) THEN
                 CREATE USER MAPPING FOR PUBLIC SERVER $srv OPTIONS (user '$DB_USER', password '$DB_PASSWORD');
             END IF;
         END \$\$;

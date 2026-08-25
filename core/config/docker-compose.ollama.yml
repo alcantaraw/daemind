@@ -24,6 +24,8 @@ services:
       - OLLAMA_MAX_LOADED_MODELS=1
       - OLLAMA_FLASH_ATTENTION=1
       - OLLAMA_DEBUG=false
+      - OLLAMA_DEBUG_LOG_REQUESTS=false
+      - GIN_MODE=release
     volumes:
       - './volumes/ollama_models:/root/.ollama'
       - '/etc/timezone:/etc/timezone:ro'
