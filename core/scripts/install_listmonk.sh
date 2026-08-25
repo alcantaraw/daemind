@@ -373,9 +373,10 @@ provision_user() {
     DO \$\$
     BEGIN
         IF NOT EXISTS (SELECT 1 FROM templates WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)') THEN
-            INSERT INTO templates (name, body, type, is_default, created_at, updated_at)
+            INSERT INTO templates (name, subject, body, type, is_default, created_at, updated_at)
             VALUES (
                 'Template Executivo Auto-UTM (Shlink & Umami)',
+                '{{ .Campaign.Subject }}',
                 \$$TPL_BODY\$,
                 'campaign',
                 false,
@@ -384,7 +385,7 @@ provision_user() {
             );
         ELSE
             UPDATE templates 
-            SET body = \$$TPL_BODY\$, updated_at = NOW() 
+            SET subject = '{{ .Campaign.Subject }}', body = \$$TPL_BODY\$, updated_at = NOW() 
             WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)';
         END IF;
     END \$\$;

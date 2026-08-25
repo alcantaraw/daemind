@@ -287,7 +287,7 @@ provision_user() {
             hook = Integrations::Hook.find_or_initialize_by(account_id: acc.id, app_id: 'openai')
             hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
             hook.status = :enabled
-            hook.save! rescue nil
+            hook.save(validate: false) rescue nil
           end
 
           # SRE Self-Healing: Purga conversas e caixas de entrada órfãs (sem canal) para evitar 500 no painel geral
@@ -339,7 +339,7 @@ provision_user() {
             hook = Integrations::Hook.find_or_initialize_by(account_id: account.id, app_id: 'openai')
             hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
             hook.status = :enabled
-            hook.save! rescue nil
+            hook.save(validate: false) rescue nil
           end
           Rails.cache.clear
           GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)

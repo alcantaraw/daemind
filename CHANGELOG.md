@@ -97,6 +97,16 @@
 
 ---
 
+### 🐛 Correções de Bugs & Estabilidade
+
+- **[FIX] NocoDB Meta-Sync Automático:** Ajuste da rota da API REST (`/api/v2/meta/bases/:baseId/meta-diff`) para sincronização atômica de schemas e criação instantânea de views analíticas sem intervenção manual.
+- **[FIX] Listmonk Template Executivo:** Correção da constraint de `subject` obrigatório e substituição de `ON CONFLICT` por bloco transacional atômico no PostgreSQL.
+- **[FIX] Chatwoot Copiloto de IA:** Auto-ativação da integração OpenAI persistida diretamente no bootstrap com o LiteLLM soberano, eliminando bloqueios de chave na interface web.
+- **[FIX] MinIO S3 Idempotência de Buckets:** Alinhamento de sondas e criação garantida dos 7 buckets oficiais da stack com políticas de acesso público.
+- **[FIX] n8n AI Assistant Opcional:** Desativação por padrão do módulo `instance-ai` via `N8N_DISABLED_MODULES` para manter a interface limpa em produção, com ativação sob demanda (`N8N_DEV_AI_ASSISTANT=s`) para provisionamento automático de Sandbox e SearXNG.
+
+---
+
 ### 🛡️ Engenharia SRE, Resiliência de Rede & Auto-Healing
 
 - **[ADD] Auditoria Proativa de IP Drift (Zero-Touch Self-Healing):**
