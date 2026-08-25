@@ -18,6 +18,7 @@ services:
     environment:
       - TZ=America/Sao_Paulo
       - LISTMONK_app__address=0.0.0.0:9000
+      - LISTMONK_app__log_level=error
       - LISTMONK_db__host=pgbouncer
       - LISTMONK_db__port=6432
       - LISTMONK_db__user=${DB_USER}

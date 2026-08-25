@@ -151,6 +151,8 @@ CREATE EXTENSION IF NOT EXISTS postgres_fdw;
 
 -- Servidores Estrangeiros (Mapeamento interno localhost)
 DO $$
+DECLARE
+    srv RECORD;
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_chatwoot') THEN
         CREATE SERVER srv_chatwoot FOREIGN DATA WRAPPER postgres_fdw 
@@ -176,6 +178,13 @@ BEGIN
         CREATE SERVER srv_postiz FOREIGN DATA WRAPPER postgres_fdw 
             OPTIONS (host 'localhost', port '5432', dbname 'postiz_db');
     END IF;
+
+    -- User Mappings automáticos para o usuário atual da sessão
+    FOR srv IN SELECT srvname FROM pg_foreign_server LOOP
+        IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = srv.srvname AND usename = CURRENT_USER) THEN
+            EXECUTE format('CREATE USER MAPPING FOR CURRENT_USER SERVER %I OPTIONS (user %L)', srv.srvname, CURRENT_USER);
+        END IF;
+    END LOOP;
 END $$;
 
 -- Criação dos Schemas FDW para isolamento
@@ -185,6 +194,94 @@ CREATE SCHEMA IF NOT EXISTS fdw_listmonk;
 CREATE SCHEMA IF NOT EXISTS fdw_umami;
 CREATE SCHEMA IF NOT EXISTS fdw_evolution;
 CREATE SCHEMA IF NOT EXISTS fdw_postiz;
+
+-- Foreign Tables do Chatwoot CRM
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.conversations (
+    id integer,
+    display_id integer,
+    status integer,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    first_reply_created_at timestamp with time zone,
+    assignee_id integer,
+    contact_id integer
+) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'conversations');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.users (
+    id integer,
+    name text,
+    email text
+) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'users');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.contacts (
+    id integer,
+    name text,
+    phone_number text,
+    email text
+) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'contacts');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.csat_survey_responses (
+    id integer,
+    conversation_id integer,
+    rating integer,
+    feedback_message text
+) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'csat_survey_responses');
+
+-- Foreign Tables do Shlink (Encurtador de Links)
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_shlink.short_urls (
+    id integer,
+    short_code text,
+    title text,
+    original_url text,
+    date_created timestamp with time zone
+) SERVER srv_shlink OPTIONS (schema_name 'public', table_name 'short_urls');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_shlink.visits (
+    id integer,
+    short_url_id integer,
+    visit_location_id integer,
+    date timestamp with time zone,
+    referer text,
+    user_agent text,
+    potential_bot boolean
+) SERVER srv_shlink OPTIONS (schema_name 'public', table_name 'visits');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_shlink.visit_locations (
+    id integer,
+    country_name text,
+    city_name text,
+    region_name text
+) SERVER srv_shlink OPTIONS (schema_name 'public', table_name 'visit_locations');
+
+-- Foreign Tables do Umami (Analytics)
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_umami.website (
+    website_id uuid,
+    name text,
+    domain text
+) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'website');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_umami.session (
+    session_id uuid,
+    website_id uuid,
+    browser text,
+    os text,
+    device text,
+    country text,
+    city text
+) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'session');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_umami.website_event (
+    event_id uuid,
+    website_id uuid,
+    session_id uuid,
+    created_at timestamp with time zone,
+    url_path text,
+    referrer_domain text,
+    page_title text,
+    utm_source text,
+    utm_medium text,
+    utm_campaign text
+) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'website_event');
 
 -- Foreign Tables do Listmonk com tipos universais
 CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.campaigns (

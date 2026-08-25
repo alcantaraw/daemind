@@ -22,6 +22,10 @@ services:
       
       - USER_AGENT=open-webui
       - GLOBAL_LOG_LEVEL=WARNING
+      - WEBUI_LOG_LEVEL=WARNING
+      - UVICORN_LOG_LEVEL=warning
+      - ALEMBIC_LOG_LEVEL=WARNING
+      - PYTHONWARNINGS=ignore
       - CORS_ALLOW_ORIGIN=http://${TS_DOMAIN:-localhost}:3001,https://${TS_DOMAIN:-localhost},http://localhost:3001
 
       # --- 2. INTEGRAÇÃO REDIS (Sessões e Rate Limit) ---

@@ -27,6 +27,7 @@ services:
       - DOCLING_SERVE_TIMEOUT=300
       - DOCLING_SERVE_ENABLE_UI=true
       - UVICORN_LOG_LEVEL=warning
+      - PYTHONWARNINGS=ignore
     volumes:
       - './volumes/docling_data:/data'
       - '/etc/timezone:/etc/timezone:ro'

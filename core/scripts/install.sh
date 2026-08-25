@@ -1042,6 +1042,21 @@ elif [ -f "$TARGET_DIR/core/database/init.sql" ]; then
     docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < "$TARGET_DIR/core/database/init.sql" > /dev/null 2>&1 || true
 fi
 
+# 1.1. Injeção de User Mappings para Federação FDW (loja_db / Metabase)
+for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_postiz; do
+    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -c "
+        DO \$\$
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = '$srv' AND usename = '$DB_USER') THEN
+                CREATE USER MAPPING FOR $DB_USER SERVER $srv OPTIONS (user '$DB_USER', password '$DB_PASSWORD');
+            END IF;
+            IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = '$srv' AND usename = 'PUBLIC') THEN
+                CREATE USER MAPPING FOR PUBLIC SERVER $srv OPTIONS (user '$DB_USER', password '$DB_PASSWORD');
+            END IF;
+        END \$\$;
+    " > /dev/null 2>&1 || true
+done
+
 # 2. Bancos lógicos do Core
 echo "➜ [SRE CORE INSTALL] Garantindo bancos de dados lógicos do Core (litellm_db)..."
 for db in litellm_db; do
