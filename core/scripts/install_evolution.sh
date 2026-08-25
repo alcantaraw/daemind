@@ -587,8 +587,5 @@ case "$ACTION" in
         provision_db
         ;;
     *)
-        build_structure
-        inject_caddy_routes
-        inject_dashboard_card
         ;;
 esac
