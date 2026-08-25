@@ -54,6 +54,7 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [7.8. Pipeline de RAG Soberano com Docling OCR, pgvector e S3 Storage](#78-pipeline-de-rag-soberano-com-docling-ocr-pgvector-e-s3-storage)
   - [7.9. Service Mesh de Variáveis de Ambiente no n8n](#79-service-mesh-de-variáveis-de-ambiente-no-n8n)
   - [7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)](#710-rastreamento-ponta-a-ponta--atribuição-de-tráfego-shlink--listmonk--umami)
+  - [7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)](#711-padronização-de-aliases-de-rede-rfc-1123-mitigação-de-exceções-em-sdks-estritos)
 
 ---
 
@@ -631,6 +632,10 @@ Para garantir tempos de resposta de consulta otimizados e evitar inchaço no ban
 
 ### 🔗 7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)
 - **Atribuição UTM Unificada:** Disparos de campanhas pelo Listmonk utilizam o template padrão auto-formatado com UTMs (`utm_source=listmonk`, `utm_medium=email`, `utm_campaign`), integrados aos links encurtados do Shlink e monitorados pelo Umami Analytics, consolidando a atribuição no Data Warehouse sem rastreadores invasivos de terceiros.
+
+### 🌐 7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)
+- **O Problema de Nomenclatura Docker (`_` vs RFC 1123):** Por padrão, containers Docker costumam adotar nomes estruturados com prefixos corporativos contendo underlines (ex: `${PREFIXO}_s3minio`, `loja_litellm`). No entanto, bibliotecas e SDKs estritos com validação de hostname conforme as normas **RFC 1123 e RFC 952 (DNS Standards)** — como o **`botocore`** (AWS SDK em Python utilizado por Open WebUI/LiteLLM), **AWS SDK v3** (Node.js/Go/Ruby) e parsers de URL HTTP modernos — rejeitam terminantemente nomes de host com underline (`_`), disparando exceções de inicialização como `ValueError: Invalid endpoint: http://loja_s3minio:9000`.
+- **Solução Arquitetural por Aliases Canônicos:** Todos os 14 arquivos `docker-compose*.yml` da stack declaram explicitamente a propriedade `aliases` dentro do bloco `networks.instancia_net`. Isso estabelece nomes DNS canônicos e limpos (`s3minio`, `litellm`, `docling`, `postgres`, `pgbouncer`, `redis`, `n8n`, `evolution`, `chatwoot`, `metabase`, `nocodb`, `openwebui`, `postiz`, `temporal`, `shlink`, `shlink-web`, `umami`, `caddy`, `listmonk`, `ollama`), garantindo 100% de conformidade RFC 1123 e eliminando qualquer risco de falha de conexão entre os microsserviços.
 
 ---
 

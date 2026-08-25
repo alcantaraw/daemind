@@ -45,6 +45,10 @@
   - **Roteamento Híbrido:** O LiteLLM roteia modelos locais para o container do Ollama via rede interna (`:11434`), permitindo chat 100% offline e sem custos.
   - **Polimento Visual OpenWebUI:** Remoção de prefixos redundantes de provedores, garantindo renderização limpa no dropdown do OpenWebUI sem truncamento com reticências.
 
+- **[ADD] Padronização Global de Aliases de Rede RFC 1123 (Zero Underscore Error):**
+  - **Conformidade DNS Universal:** Injeção explícita da propriedade `aliases` em todos os 14 arquivos `docker-compose*.yml` da stack (`instancia_net`), provendo nomes DNS canônicos e limpos (`s3minio`, `litellm`, `docling`, `postgres`, `pgbouncer`, `redis`, `n8n`, etc.).
+  - **Mitigação em SDKs Estritos:** Elimina 100% de exceções de validação de hostname disparadas por bibliotecas que seguem estritamente as normas RFC 1123/952, como **`botocore`** (AWS SDK Python / Open WebUI), **AWS SDK v3** (Node/Go/Ruby) e parsers HTTP de URLs em endpoints internos com underline.
+
 - **[ADD] Integração Plena de Storage S3 (MinIO Object Storage & S3 Remoto):**
   - **Storage Centralizado & Desacoplado:** Padronização e auto-criação de buckets dedicados com políticas de download anônimo e isolamento seguro:
     - `chatwoot`: Gravações, anexos e mídias de chamados.

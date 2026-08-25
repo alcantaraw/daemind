@@ -331,30 +331,32 @@ sudo ./core/scripts/install.sh
 
 O **daemind.** orquestra microsserviços organizados de forma desacoplada e autônoma (`install_<modulo>.sh`). A tabela abaixo detalha a função de cada componente, suas portas de escuta e as versões de imagem docker configuradas no `docker-compose.yml` cruzadas com a versão interna auditada em tempo de execução:
 
-| Serviço | Nome do Container | Imagem Docker | Tag no Compose | Versão Interna | Porta do WAF (Caddy) | Status na Stack |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **PostgreSQL 17** | `${PREFIXO}_postgres` | `pgvector/pgvector` | `pg17` | **17.11** | Interna (5432) | Core Obrigatório |
-| **PgBouncer** | `${PREFIXO}_pgbouncer` | `edoburu/pgbouncer` | `latest` | **1.25.2** | Interna (6432) / 5432 | Core Obrigatório |
-| **Redis 8** | `${PREFIXO}_redis` | `redis` | `8-alpine` | **8.10.1** | Interna (6379) | Core Obrigatório |
-| **n8n** | `${PREFIXO}_n8n` | `n8nio/n8n` | `latest` | **2.35.7** | `5678` | Opcional Desacoplado |
-| **Evolution API** | `${PREFIXO}_evolution` | `evoapicloud/evolution-api` | `latest` | **2.3.7** | `8081` | Opcional Desacoplado |
-| **Chatwoot** | `${PREFIXO}_chatwoot` | `chatwoot/chatwoot` | `latest` | **4.17.0** | `3000` | Opcional Desacoplado |
-| **NocoDB** | `${PREFIXO}_nocodb` | `nocodb/nocodb` | `latest` | **2026.08.1** | `18080` (8080) | Opcional Desacoplado |
-| **Postiz** | `${PREFIXO}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `latest` | **2.23.0** | `5000` | Opcional Desacoplado |
-| **Temporal** | `${PREFIXO}_temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Interna (7233) | Sub-módulo Postiz |
-| **S3MinIO** | `${PREFIXO}_s3minio` | `alpine/minio` | `latest-release` | **2025-10-25** | `9000` (API) / `9001` (UI) | Opcional Desacoplado |
-| **Metabase BI** | `${PREFIXO}_metabase` | `metabase/metabase` | `latest` | **0.63.14.2** | `3000` / `3030` | Opcional Desacoplado |
-| **Ollama AI** | `${PREFIXO}_ollama` | `ollama/ollama` | `latest` | **0.32.15** | `11434` | Opcional Desacoplado |
-| **Docling OCR** | `${PREFIXO}_docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` | **2.121.0** | `5001` | Opcional Desacoplado |
-| **Listmonk Mailer** | `${PREFIXO}_listmonk` | `listmonk/listmonk` | `latest` | **6.2.0** | `9005` (9000) | Opcional Desacoplado |
-| **Umami Analytics** | `${PREFIXO}_umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` | **3.3.1** | `3008` (3000) | Opcional Desacoplado |
-| **Shlink API** | `${PREFIXO}_shlink` | `shlinkio/shlink` | `stable` | **5.1.5** | `8081` (8080) | Opcional Desacoplado |
-| **Shlink Web** | `${PREFIXO}_shlink_web` | `shlinkio/shlink-web-client` | `latest` | **4.8.1** | `8082` (8080) | Opcional Desacoplado |
-| **LiteLLM Gateway** | `${PREFIXO}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` | **1.99.0** | `4000` | Core Obrigatório |
-| **Open WebUI** | `${PREFIXO}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` | **0.11.0** | `3001` (8080) | Opcional Desacoplado |
-| **Caddy WAF** | `${PREFIXO}_caddy` | `caddy:alpine` | `alpine` | **2.11.4** | `80` / `443` | Core Obrigatório |
+| Serviço | Nome do Container | Alias Canônico (RFC 1123) | Imagem Docker | Tag no Compose | Versão Interna | Porta do WAF (Caddy) | Status na Stack |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **PostgreSQL 17** | `${PREFIXO}_postgres` | `postgres` | `pgvector/pgvector` | `pg17` | **17.11** | Interna (5432) | Core Obrigatório |
+| **PgBouncer** | `${PREFIXO}_pgbouncer` | `pgbouncer` | `edoburu/pgbouncer` | `latest` | **1.25.2** | Interna (6432) / 5432 | Core Obrigatório |
+| **Redis 8** | `${PREFIXO}_redis` | `redis` | `redis` | `8-alpine` | **8.10.1** | Interna (6379) | Core Obrigatório |
+| **n8n** | `${PREFIXO}_n8n` | `n8n` | `n8nio/n8n` | `latest` | **2.35.7** | `5678` | Opcional Desacoplado |
+| **Evolution API** | `${PREFIXO}_evolution` | `evolution` | `evoapicloud/evolution-api` | `latest` | **2.3.7** | `8081` | Opcional Desacoplado |
+| **Chatwoot** | `${PREFIXO}_chatwoot` | `chatwoot` | `chatwoot/chatwoot` | `latest` | **4.17.0** | `3000` | Opcional Desacoplado |
+| **NocoDB** | `${PREFIXO}_nocodb` | `nocodb` | `nocodb/nocodb` | `latest` | **2026.08.1** | `18080` (8080) | Opcional Desacoplado |
+| **Postiz** | `${PREFIXO}_postiz` | `postiz` | `ghcr.io/gitroomhq/postiz-app` | `latest` | **2.23.0** | `5000` | Opcional Desacoplado |
+| **Temporal** | `${PREFIXO}_temporal` | `temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Interna (7233) | Sub-módulo Postiz |
+| **S3MinIO** | `${PREFIXO}_s3minio` | `s3minio` | `alpine/minio` | `latest-release` | **2025-10-25** | `9000` (API) / `9001` (UI) | Opcional Desacoplado |
+| **Metabase BI** | `${PREFIXO}_metabase` | `metabase` | `metabase/metabase` | `latest` | **0.63.14.3** | `3000` / `3030` | Opcional Desacoplado |
+| **Ollama AI** | `${PREFIXO}_ollama` | `ollama` | `ollama/ollama` | `latest` | **0.32.15** | `11434` | Opcional Desacoplado |
+| **Docling OCR** | `${PREFIXO}_docling` | `docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` | **2.121.0** | `5001` | Opcional Desacoplado |
+| **Listmonk Mailer** | `${PREFIXO}_listmonk` | `listmonk` | `listmonk/listmonk` | `latest` | **6.2.0** | `9005` (9000) | Opcional Desacoplado |
+| **Umami Analytics** | `${PREFIXO}_umami` | `umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` | **3.3.1** | `3008` (3000) | Opcional Desacoplado |
+| **Shlink API** | `${PREFIXO}_shlink` | `shlink` | `shlinkio/shlink` | `stable` | **5.1.5** | `8081` (8080) | Opcional Desacoplado |
+| **Shlink Web** | `${PREFIXO}_shlink_web` | `shlink-web` | `shlinkio/shlink-web-client` | `latest` | **4.8.1** | `8082` (8080) | Opcional Desacoplado |
+| **LiteLLM Gateway** | `${PREFIXO}_litellm` | `litellm` | `ghcr.io/berriai/litellm` | `main-latest` | **1.99.0** | `4000` | Core Obrigatório |
+| **Open WebUI** | `${PREFIXO}_openwebui` | `openwebui` | `ghcr.io/open-webui/open-webui` | `main` | **0.11.0** | `3001` (8080) | Opcional Desacoplado |
+| **Caddy WAF** | `${PREFIXO}_caddy` | `caddy` | `caddy:alpine` | `alpine` | **2.11.4** | `80` / `443` | Core Obrigatório |
 
 > [!NOTE]
+> **Aliases Canônicos (RFC 1123):** Todos os microsserviços possuem aliases DNS limpos e sem underline configurados na rede `instancia_net`, garantindo compatibilidade universal com SDKs estritos (`botocore`, `AWS SDK`, parsers de URL).
+>
 > As imagens que utilizam tags flutuantes ou dinâmicas no `docker-compose.yml` (`latest`, `main`, `main-latest`) são inspecionadas dinamicamente durante a inicialização, garantindo transparência completa da versão binária em execução no servidor.
 
 ---
