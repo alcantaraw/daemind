@@ -24,14 +24,21 @@
 ### 🔗 Integrações Inter-Serviços & Data Warehouse Unificado
 
 - **[ADD] Data Warehouse Soberano & Business Intelligence (Metabase + NocoDB via PgBouncer):**
-  - **Federação Nativa via `postgres_fdw`:** O banco centralizador `loja_db` agora integra em tempo real as bases dos microsserviços (`chatwoot_db`, `shlink_db`, `listmonk_db`, `umami_db`) em schemas isolados (`fdw_*`) sem duplicação de dados nem consumo extra de disco.
-  - **5 Views Analíticas Executivas:** Provisionadas diretamente no `init.sql`:
-    - `vw_kpi_atendimento`: Tempo médio de 1ª resposta, tempo de resolução e CSAT por atendente/canal.
-    - `vw_kpi_marketing_links`: Volume de cliques reais (anti-bot), UTMs, referrers e geolocalização.
-    - `vw_kpi_email_marketing`: Taxas de abertura (Open Rate), cliques (CTR) e crescimento de base.
-    - `vw_kpi_trafego_web`: Visitantes únicos, pageviews, UTMs de campanhas e dispositivos.
-    - `vw_funil_executivo_completo`: Cruzamento ponta a ponta (Tráfego Web/Links ➔ Leads Chatwoot ➔ Clientes Loja ➔ Pedidos/Faturamento).
+  - **Federação Nativa Completa via `postgres_fdw`:** O banco centralizador `loja_db` integra em tempo real as bases de todos os 6 microsserviços da stack (`chatwoot_db`, `shlink_db`, `listmonk_db`, `umami_db`, `evolution_db`, `postiz_db`) em schemas isolados (`fdw_*`) sem duplicação de dados nem consumo extra de disco.
+  - **7 Views Analíticas Executivas:** Provisionadas diretamente no `init.sql`:
+    - `vw_kpi_atendimento`: Tempo médio de 1ª resposta, tempo de resolução e CSAT por atendente/canal (Chatwoot).
+    - `vw_kpi_marketing_links`: Volume de cliques reais (anti-bot), UTMs, referrers e geolocalização (Shlink).
+    - `vw_kpi_email_marketing`: Taxas de abertura (Open Rate), cliques (CTR) e crescimento de base (Listmonk).
+    - `vw_kpi_trafego_web`: Visitantes únicos, pageviews, UTMs de campanhas e dispositivos (Umami).
+    - `vw_kpi_whatsapp_disparos`: Volume de mensagens enviadas/recebidas, status de entrega, lidas e instâncias ativas (Evolution API).
+    - `vw_kpi_redes_sociais`: Publicações agendadas vs postadas por plataforma social (Instagram, LinkedIn, etc.) (Postiz).
+    - `vw_funil_executivo_completo`: Cruzamento ponta a ponta (Tráfego Web/Links ➔ Redes Sociais ➔ WhatsApp ➔ Leads Chatwoot ➔ Clientes Loja ➔ Pedidos/Faturamento).
   - **Auto-Conexão Zero-Touch:** Provisionamento automático da fonte de dados `Data Warehouse Soberano` no Metabase (`install_metabase.sh`) e auto-sincronização de metadados de Views no NocoDB (`install_nocodb.sh`).
+
+- **[ADD] Template Executivo Auto-UTM no Listmonk (Shlink & Umami Ready):**
+  - **Injeção Nativa de Atribuição:** Provisionamento automático do `Template Executivo Auto-UTM (Shlink & Umami)` diretamente no `listmonk_db`.
+  - **Rastreabilidade Soberana:** Garante que qualquer campanha criada por operadores já possua URLs com tags de UTM formatadas (`utm_source=listmonk`, `utm_medium=email`, `utm_campaign={{ .Campaign.Name }}`), 100% integradas com o Shlink e Umami Analytics.
+  - **100% Editável via Web:** O template fica disponível na interface do Listmonk (Campanhas ➔ Modelos), podendo ser personalizado visualmente (cores, logos, fontes e botões) a qualquer momento.
 
 - **[ADD] Integração Plena de IA Local: Ollama ➔ LiteLLM ➔ OpenWebUI:**
   - **Auto-Discovery Dinâmico:** Os motores `sync_ia_models.sh` e `install_1ia.sh` inspecionam a API local do Ollama (`/api/tags`) e catalogam automaticamente novos modelos baixados (`ollama pull`) com quantização GGUF, tamanho em bilhões de parâmetros e tags.
