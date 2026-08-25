@@ -62,6 +62,7 @@ services:
       - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
       - DB_POSTGRESDB_RETRY_ATTEMPTS=10
       - DB_POSTGRESDB_RETRY_TIMEOUT=3000
+
       - EXECUTIONS_DATA_PRUNE=true
       - EXECUTIONS_DATA_MAX_AGE=14
       - LOJA_API_KEY=${LOJA_API_KEY}
@@ -75,11 +76,22 @@ services:
       - EVOLUTION_API_URL=http://${PREFIXO_CONTAINER}_evolution:8080
       - CHATWOOT_API_URL=http://${PREFIXO_CONTAINER}_chatwoot:3000
       - CHATWOOT_API_TOKEN=${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}
-      - MINIO_ENDPOINT=http://${PREFIXO_CONTAINER}_s3minio:9000
-      - MINIO_ACCESS_KEY=${TS_EMAIL}
-      - MINIO_SECRET_KEY=${DB_PASSWORD}
       - LISTMONK_API_URL=http://${PREFIXO_CONTAINER}_listmonk:9000
       - POSTIZ_API_URL=http://${PREFIXO_CONTAINER}_postiz:5000
+
+      # --- S3 / MINIO OBJECT STORAGE (PADRÃO CHATWOOT / POSTIZ) ---
+      - MINIO_ENDPOINT=http://s3minio:9000
+      - MINIO_ACCESS_KEY=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
+      - MINIO_SECRET_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
+      - S3_ENDPOINT=http://s3minio:9000
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
+      - S3_BUCKET_NAME=${S3_N8N_BUCKET:-n8n}
+      - STORAGE_ENDPOINT=http://s3minio:9000
+      - STORAGE_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
+      - STORAGE_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
+      - STORAGE_BUCKET_NAME=${S3_N8N_BUCKET:-n8n}
+      - AWS_REGION=us-east-1
 
       # --- N8N AI ASSISTANT DEV CAPABILITIES (ATIVADO VIA N8N_DEV_AI_ASSISTANT=s) ---
       # - N8N_INSTANCE_AI_MODEL_URL=http://litellm:4000/v1
@@ -116,8 +128,6 @@ services:
   #       limits:
   #         cpus: '0.50'
   #         memory: '256M'
-  #       reservations:
-  #         memory: '64M'
   #   networks:
   #     instancia_net:
   #       aliases:
@@ -150,8 +160,6 @@ services:
   #       limits:
   #         cpus: '0.50'
   #         memory: '256M'
-  #       reservations:
-  #         memory: '64M'
   #   networks:
   #     instancia_net:
   #       aliases:
