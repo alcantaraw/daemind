@@ -4,6 +4,17 @@ Este documento estabelece o **padrão técnico de integração** entre o ecossis
 
 ---
 
+## 📌 Sumário
+
+- [1. Visão Geral da API & Arquitetura REST](#1-visão-geral-da-api--arquitetura-rest)
+- [2. Autenticação Dual-Key & Cabeçalhos HTTP](#2-autenticação-dual-key--cabeçalhos-http)
+- [3. Resiliência, Rate Limiting & Deduplicação de Payloads](#3-resiliência-rate-limiting--deduplicação-de-payloads)
+- [4. Padrão Staging Area Soberana (PostgreSQL)](#4-padrão-staging-area-soberana-postgresql)
+- [5. Mapeamento de Endpoints & Contrato OpenAPI 3.0.3](#5-mapeamento-de-endpoints--contrato-openapi-303)
+- [6. Configuração de Webhooks Inbound](#6-configuração-de-webhooks-inbound)
+
+---
+
 ## 1. Visão Geral da API & Arquitetura REST
 
 A API da Loja Integrada é baseada no padrão **REST**, transmitindo payloads exclusivamente em **JSON** sobre o protocolo **HTTPS**.

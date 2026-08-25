@@ -55,6 +55,7 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [7.9. Service Mesh de Variáveis de Ambiente no n8n](#79-service-mesh-de-variáveis-de-ambiente-no-n8n)
   - [7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)](#710-rastreamento-ponta-a-ponta--atribuição-de-tráfego-shlink--listmonk--umami)
   - [7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)](#711-padronização-de-aliases-de-rede-rfc-1123-mitigação-de-exceções-em-sdks-estritos)
+  - [7.12. Hardening e Supressão Global de Logs (Piso Mínimo WARN/ERROR & Debloat de I/O)](#712-hardening-e-supressão-global-de-logs-piso-mínimo-warnerror--debloat-de-io)
 
 ---
 
@@ -636,6 +637,14 @@ Para garantir tempos de resposta de consulta otimizados e evitar inchaço no ban
 ### 🌐 7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)
 - **O Problema de Nomenclatura Docker (`_` vs RFC 1123):** Por padrão, containers Docker costumam adotar nomes estruturados com prefixos corporativos contendo underlines (ex: `${PREFIXO}_s3minio`, `loja_litellm`). No entanto, bibliotecas e SDKs estritos com validação de hostname conforme as normas **RFC 1123 e RFC 952 (DNS Standards)** — como o **`botocore`** (AWS SDK em Python utilizado por Open WebUI/LiteLLM), **AWS SDK v3** (Node.js/Go/Ruby) e parsers de URL HTTP modernos — rejeitam terminantemente nomes de host com underline (`_`), disparando exceções de inicialização como `ValueError: Invalid endpoint: http://loja_s3minio:9000`.
 - **Solução Arquitetural por Aliases Canônicos:** Todos os 14 arquivos `docker-compose*.yml` da stack declaram explicitamente a propriedade `aliases` dentro do bloco `networks.instancia_net`. Isso estabelece nomes DNS canônicos e limpos (`s3minio`, `litellm`, `docling`, `postgres`, `pgbouncer`, `redis`, `n8n`, `evolution`, `chatwoot`, `metabase`, `nocodb`, `openwebui`, `postiz`, `temporal`, `shlink`, `shlink-web`, `umami`, `caddy`, `listmonk`, `ollama`), garantindo 100% de conformidade RFC 1123 e eliminando qualquer risco de falha de conexão entre os microsserviços.
+
+### 🔇 7.12. Hardening e Supressão Global de Logs (Piso Mínimo WARN/ERROR & Debloat de I/O)
+- **Mitigação de Degradação de I/O em Disco:** Em ambientes de produção, aplicações com logs em níveis `INFO` ou `DEBUG` geram gigabytes de dados desnecessários por mês, competindo por IOPS de disco e poluindo as ferramentas de observabilidade com rotinas rotineiras (ex: healthcheck pings, compilações de assets, introspecção de esquemas e migrações silenciosas).
+- **Calibração de Nível por Microsserviço:**
+  - **Metabase BI:** Utilização de arquivo [core/config/log4j2.metabase.xml](file:///e:/Documenta%C3%A7%C3%A3o/seu-repositorio-git/infra-loja1/core/config/log4j2.metabase.xml) com `Root level="WARN"`, desligando o fingerprinting periódico (`metabase.sync`) e geradores de IA não configurados (`example-question-generator`, `suggested-prompts-generator`).
+  - **Open WebUI:** Parâmetros `GLOBAL_LOG_LEVEL=WARNING`, `WEBUI_LOG_LEVEL=WARNING`, `UVICORN_LOG_LEVEL=warning` e `ALEMBIC_LOG_LEVEL=WARNING`, suprimindo o log das migrações do banco.
+  - **LiteLLM & Ollama:** Flags `UVICORN_LOG_LEVEL=warning`, `LITELLM_BANNER=False`, `DISABLE_BANNER=true`, `GIN_MODE=release` e `OLLAMA_DEBUG_LOG_REQUESTS=false`, silenciando requisições repetitivas de liveliness.
+  - **Serviços de Background (Evolution, Chatwoot, n8n, NocoDB, Listmonk, Postiz, Temporal):** Níveis configurados com `LOG_LEVEL=error`/`warn`, `RUBYOPT=-W0` e `NC_LOGGER_LEVEL=error`, focando estritamente em incidentes reais de sistema.
 
 ---
 

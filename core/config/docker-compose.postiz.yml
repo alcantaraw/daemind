@@ -87,6 +87,11 @@ services:
       - DISABLE_TEMPORAL_SEARCH_ATTRIBUTES=true
       - NODE_ENV=production
       - LOG_LEVEL=error
+      - NEXT_TELEMETRY_DISABLED=1
+      - IS_GENERAL=true
+      - DEBUG=false
+      - SILENT=true
+      - PRISMA_LOG_LEVEL=error
       - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
       - OPENAI_API_BASE=http://litellm:4000/v1
       - OPENAI_API_BASE_URL=http://litellm:4000/v1

@@ -4,6 +4,24 @@ Este documento estabelece o **gabarito técnico, contrato de interfaces e plano 
 
 ---
 
+## 📌 Sumário
+
+- [1. Princípios Fundamentais de Desacoplamento](#-1-princípios-fundamentais-de-desacoplamento)
+- [2. Padrões Obrigatórios para Criação de Manifestos (`docker-compose.<modulo>.yml`)](#-14-padrões-obrigatórios-para-criação-de-manifestos-docker-composemoduloyml)
+- [3. Contrato de Interface Padronizado & Polimórfico (`install_<modulo>.sh`)](#-15-contrato-de-interface-padronizado--polimórfico-install_modulosh)
+  - [3.1. Padrão Estrutural de Cabeçalho dos Scripts Modulares](#-150-padrão-estrutural-de-cabeçalho-dos-scripts-modulares)
+  - [3.2. Regras Estritas de Engenharia e Prevenção de Falhas nos Scripts](#-151-regras-estritas-de-engenharia-e-prevenção-de-falhas-nos-scripts-install_modulosh)
+- [4. Esqueleto Canônico de Manifesto (`core/config/docker-compose.<modulo>.yml`)](#-17-esqueleto-canônico-de-manifesto-coreconfigdocker-composemoduloyml)
+- [5. Esqueleto Canônico de Script de Ciclo de Vida (`core/scripts/install_<modulo>.sh`)](#-18-esqueleto-canônico-de-script-de-ciclo-de-vida-corescriptsinstall_modulosh)
+- [6. Diagnóstico Forense do `index.html`](#-2-diagnóstico-forense-do-indexhtml-anexado)
+- [7. Os 14 Pontos Focais do `install.sh`](#-3-os-14-pontos-focais-do-installsh-mapeamento-completo-de-ciclo-de-vida)
+- [8. Protocolo de Desativação e Teardown Atômico (`<modulo>_disable`)](#-4-protocolo-de-desativação-e-teardown-atômico-modulo_disable)
+- [9. Purga Final de Artefatos no Encerramento com Sucesso](#-5-purga-final-de-artefatos-no-encerramento-com-sucesso)
+- [10. Matriz de Integração com Scripts Satélites e de Suporte SRE](#-6-matriz-de-integração-com-scripts-satélites-e-de-suporte-sre)
+- [11. Checklist de Homologação para Novas Aplicações Desacopladas](#-checklist-de-homologação-para-novas-aplicações-desacopladas)
+
+---
+
 ## 🎯 1. Princípios Fundamentais de Desacoplamento
 
 1. **SSOT (Single Source of Truth)**: O arquivo `${TARGET_DIR}/.env` centraliza 100% das chaves e estados de ativação (`USE_<MODULO>="s/n"`).

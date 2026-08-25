@@ -96,6 +96,12 @@
   - O `install.sh` inspeciona o IP de cada container em execução e compara com o `.env`. Contêineres rodando em IPs desalinhados são desanexados da rede e recriados automaticamente sem intervenção manual.
 - **[ADD] Mitigação de Race Conditions no Docker (`Address already in use`):**
   - Desconexão atômica de endpoints com `docker network disconnect -f` antes de remoções forçadas (`docker rm -f`), liberando imediatamente a interface `veth` no kernel.
+- **[ADD] Hardening & Supressão Global de Logs (Piso Mínimo WARN/ERROR & Debloat de I/O):**
+  - **Debloat & Otimização de I/O em Disco:** Varredura e calibração fina em 100% dos 14 arquivos `docker-compose*.yml` e microsserviços para eliminar logs de DEBUG, INFO, transações rotineiras de sucesso, migrations silenciosas e banners ASCII.
+  - **Metabase BI:** Criação do arquivo de configuração dedicado [core/config/log4j2.metabase.xml](file:///e:/Documenta%C3%A7%C3%A3o/seu-repositorio-git/infra-loja1/core/config/log4j2.metabase.xml) com supressão de logs de sincronização de esquemas (`metabase.sync`), Liquibase e desligamento total de geradores de prompts/Metabot (`level="OFF"`).
+  - **Open WebUI:** Injeção de `GLOBAL_LOG_LEVEL=WARNING`, `WEBUI_LOG_LEVEL=WARNING`, `UVICORN_LOG_LEVEL=warning`, `ALEMBIC_LOG_LEVEL=WARNING` e `PYTHONWARNINGS=ignore` para silenciar migrações automáticas do Alembic e pings de rotas estáticas.
+  - **LiteLLM & Ollama:** Injeção de `UVICORN_LOG_LEVEL=warning`, `LITELLM_BANNER=False`, `DISABLE_BANNER=true`, `GIN_MODE=release` e `OLLAMA_DEBUG_LOG_REQUESTS=false` para expurgar mensagens de healthcheck repetitivas e banners.
+  - **Evolution API, Chatwoot, n8n, NocoDB, Listmonk, Postiz & Temporal:** Padronização com `LOG_LEVEL=error`/`warn`, `RUBYOPT=-W0`, `LOG_COLOR=false` e `NC_LOGGER_LEVEL=error`, focando a observabilidade exclusivamente em falhas reais e alertas operacionais críticos.
 - **[ADD] Inversão de Controle Dinâmica (IoC) para Matriz de Versões (SRE BOM):**
   - Eliminação de `elif` hardcoded no core. O `install.sh` descobre dinamicamente os scripts responsáveis através da Linha 2 de cada `install_*.sh` e delega a extração de versões de forma polimórfica.
   - Suporte universal a labels OCI (`org.opencontainers.image.version` e `version`).
