@@ -48,6 +48,8 @@ provision_db() {
             docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -q -c "CREATE DATABASE $db;" > /dev/null 2>&1 || true
         fi
     done
+    # SRE GUARD: Temporal 1.29+ auto-setup roda 'DROP TABLE tiered_storage_tasks' ao migrar do schema v1.7 para v1.8
+    docker compose exec -T postgres psql -U "${DB_USER}" -d temporal -q -c "CREATE TABLE IF NOT EXISTS tiered_storage_tasks (dummy text);" > /dev/null 2>&1 || true
 }
 
 provision_infra() {
