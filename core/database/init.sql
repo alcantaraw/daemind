@@ -168,6 +168,14 @@ BEGIN
         CREATE SERVER srv_umami FOREIGN DATA WRAPPER postgres_fdw 
             OPTIONS (host 'localhost', port '5432', dbname 'umami_db');
     END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_evolution') THEN
+        CREATE SERVER srv_evolution FOREIGN DATA WRAPPER postgres_fdw 
+            OPTIONS (host 'localhost', port '5432', dbname 'evolution_db');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_postiz') THEN
+        CREATE SERVER srv_postiz FOREIGN DATA WRAPPER postgres_fdw 
+            OPTIONS (host 'localhost', port '5432', dbname 'postiz_db');
+    END IF;
 END $$;
 
 -- Criação dos Schemas FDW para isolamento
@@ -175,6 +183,8 @@ CREATE SCHEMA IF NOT EXISTS fdw_chatwoot;
 CREATE SCHEMA IF NOT EXISTS fdw_shlink;
 CREATE SCHEMA IF NOT EXISTS fdw_listmonk;
 CREATE SCHEMA IF NOT EXISTS fdw_umami;
+CREATE SCHEMA IF NOT EXISTS fdw_evolution;
+CREATE SCHEMA IF NOT EXISTS fdw_postiz;
 
 -- Foreign Tables do Listmonk com tipos universais
 CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.campaigns (
@@ -217,6 +227,50 @@ CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.link_clicks (
     count integer,
     created_at timestamp with time zone
 ) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'link_clicks');
+
+-- Foreign Tables do Evolution API (WhatsApp)
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_evolution.messages (
+    id text,
+    key jsonb,
+    "pushName" text,
+    participant text,
+    "messageType" text,
+    message jsonb,
+    source text,
+    "messageTimestamp" integer,
+    "chatwootMessageId" integer,
+    "chatwootConversationId" integer,
+    "chatwootIsRead" boolean,
+    "instanceId" text,
+    status text
+) SERVER srv_evolution OPTIONS (schema_name 'public', table_name 'Message');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_evolution.instances (
+    id text,
+    name text,
+    status text,
+    "connectionStatus" text
+) SERVER srv_evolution OPTIONS (schema_name 'public', table_name 'Instance');
+
+-- Foreign Tables do Postiz (Social Media Planner)
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_postiz.posts (
+    id text,
+    state text,
+    "publishDate" timestamp without time zone,
+    "organizationId" text,
+    "integrationId" text,
+    content text,
+    title text,
+    "createdAt" timestamp without time zone,
+    "updatedAt" timestamp without time zone
+) SERVER srv_postiz OPTIONS (schema_name 'public', table_name 'Post');
+
+CREATE FOREIGN TABLE IF NOT EXISTS fdw_postiz.integrations (
+    id text,
+    identifier text,
+    name text,
+    "providerIdentifier" text
+) SERVER srv_postiz OPTIONS (schema_name 'public', table_name 'Integration');
 
 -- VIEWS ANALÍTICAS UNIFICADAS PARA METABASE & NOCODB
 
@@ -314,7 +368,38 @@ FROM fdw_umami.website_event e
 JOIN fdw_umami.website w ON e.website_id = w.website_id
 JOIN fdw_umami.session s ON e.session_id = s.session_id;
 
--- E) Cruzamento Completo do Funil de Conversão (OmniChannel)
+-- E) Métricas de Mensageria & Disparos WhatsApp (Evolution API)
+CREATE OR REPLACE VIEW vw_kpi_whatsapp_disparos AS
+SELECT 
+    m.id AS mensagem_id,
+    m."pushName" AS contato_nome,
+    m.participant AS numero_remetente,
+    m."messageType" AS tipo_mensagem,
+    m.source AS dispositivo_origem,
+    to_timestamp(m."messageTimestamp") AS data_envio,
+    m.status AS status_entrega,
+    m."chatwootConversationId" AS chatwoot_conversa_id,
+    m."chatwootIsRead" AS lida_no_chatwoot,
+    i.name AS instancia_nome,
+    i.status AS instancia_status
+FROM fdw_evolution.messages m
+LEFT JOIN fdw_evolution.instances i ON m."instanceId" = i.id;
+
+-- F) Métricas de Redes Sociais & Publicações (Postiz)
+CREATE OR REPLACE VIEW vw_kpi_redes_sociais AS
+SELECT 
+    p.id AS post_id,
+    p.title AS titulo_post,
+    p.content AS conteudo,
+    p.state AS status_publicacao,
+    p."publishDate" AS data_agendamento,
+    p."createdAt" AS data_criacao,
+    i.name AS conta_rede_social,
+    i."providerIdentifier" AS plataforma_social
+FROM fdw_postiz.posts p
+LEFT JOIN fdw_postiz.integrations i ON p."integrationId" = i.id;
+
+-- G) Cruzamento Completo do Funil de Conversão (OmniChannel)
 CREATE OR REPLACE VIEW vw_funil_executivo_completo AS
 SELECT 
     cl.id AS cliente_id,
