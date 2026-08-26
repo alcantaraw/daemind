@@ -368,13 +368,13 @@ provision_user() {
         docker compose up -d --force-recreate evolution > /dev/null 2>&1 || true
         sleep 5
     elif [ "$EVO_STATUS" = "200" ]; then
-        echo "➜ [IDEMPOTÊNCIA EVOLUTION] Evolution API conectada e autenticada com sucesso (HTTP 200)."
+        echo "✔ [SUCESSO EVOLUTION] Evolution API conectada e autenticada com sucesso (HTTP 200)."
     fi
 
     # Auto-Integração Zero-Touch com Chatwoot CRM
     if [ "${USE_CHATWOOT:-s}" = "s" ]; then
         echo "➜ [SRE EVOLUTION] Verificando auto-integração nativa com o Chatwoot CRM..."
-        local CW_URL="http://${PREFIX}_chatwoot:3000"
+        local CW_URL="http://chatwoot:3000"
         local CW_TOKEN="${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}"
         local INSTANCE_NAME="${PREFIXO_CONTAINER:-loja}"
 

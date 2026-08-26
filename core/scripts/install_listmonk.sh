@@ -64,9 +64,6 @@ provision_db() {
             -e LISTMONK_db__ssl_mode=disable \
             listmonk/listmonk:latest ./listmonk --install --idempotent --yes >/dev/null 2>&1 || true
     fi
-
-    # Sempre sincroniza superadmin, integração S3 e templates analíticos
-    provision_user
 }
 
 provision_infra() {

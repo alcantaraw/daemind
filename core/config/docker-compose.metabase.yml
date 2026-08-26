@@ -29,7 +29,7 @@ services:
       - MB_ENABLE_METABOT=false
       - MB_EMOJI_IN_LOGS=false
       - MB_LOG_LEVEL=ERROR
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -XX:+ExitOnOutOfMemoryError -Duser.timezone=America/Sao_Paulo -Dlog4j.configurationFile=file:/etc/metabase/log4j2.xml -Dlog4j2.level=WARN -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxRAMPercentage=60.0 -XX:MinRAMPercentage=40.0 -XX:MaxMetaspaceSize=192m -XX:+ExitOnOutOfMemoryError -Duser.timezone=America/Sao_Paulo -Dlog4j.configurationFile=file:/etc/metabase/log4j2.xml -Dlog4j2.level=WARN -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
     volumes:
       - './core/config/log4j2.metabase.xml:/etc/metabase/log4j2.xml:ro'
       - './volumes/metabase_data:/metabase-data'
