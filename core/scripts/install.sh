@@ -1076,34 +1076,20 @@ for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_post
         -v target_host="$target_host" \
         -v target_port="$target_port" \
         -v target_user="$DB_USER" \
-        -v target_pass="$DB_PASSWORD" \
-        -c "
-        DO \$\$
-        DECLARE
-            v_srv  text := :'target_srv';
-            v_db   text := :'target_db';
-            v_host text := :'target_host';
-            v_port text := :'target_port';
-            v_usr  text := :'target_user';
-            v_pwd  text := :'target_pass';
-        BEGIN
-            -- Garante Servidor Estrangeiro com host e porta parametrizados
-            IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = v_srv) THEN
-                EXECUTE format('CREATE SERVER %I FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host %L, port %L, dbname %L)', v_srv, v_host, v_port, v_db);
-            ELSE
-                EXECUTE format('ALTER SERVER %I OPTIONS (SET host %L, SET port %L, SET dbname %L)', v_srv, v_host, v_port, v_db);
-            END IF;
-            
-            -- SRE Security Fix: Renovação atômica de credenciais com escape seguro (quote_literal / %L)
-            EXECUTE format('DROP USER MAPPING IF EXISTS FOR %I SERVER %I', v_usr, v_srv);
-            EXECUTE format('CREATE USER MAPPING FOR %I SERVER %I OPTIONS (user %L, password %L)', v_usr, v_srv, v_usr, v_pwd);
+        -v target_pass="$DB_PASSWORD" << 'EOF'
+-- Garante Servidor Estrangeiro com host e porta parametrizados
+SELECT format('DO $b$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = %L) THEN CREATE SERVER %I FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host %L, port %L, dbname %L); ELSE ALTER SERVER %I OPTIONS (SET host %L, SET port %L, SET dbname %L); END IF; END $b$;', :'target_srv', :'target_srv', :'target_host', :'target_port', :'target_db', :'target_srv', :'target_host', :'target_port', :'target_db') \gexec
 
-            -- SRE Notice: USER MAPPING FOR PUBLIC permite federação transparente para ferramentas de BI.
-            -- A segurança de isolamento é mantida pelas restrições de permissão nos schemas fdw_*.
-            EXECUTE format('DROP USER MAPPING IF EXISTS FOR PUBLIC SERVER %I', v_srv);
-            EXECUTE format('CREATE USER MAPPING FOR PUBLIC SERVER %I OPTIONS (user %L, password %L)', v_srv, v_usr, v_pwd);
-        END \$\$;
-    "; then
+-- SRE Security Fix: Renovação atômica de credenciais com escape seguro (%I / %L)
+SELECT format('DROP USER MAPPING IF EXISTS FOR %I SERVER %I;', :'target_user', :'target_srv') \gexec
+SELECT format('CREATE USER MAPPING FOR %I SERVER %I OPTIONS (user %L, password %L);', :'target_user', :'target_srv', :'target_user', :'target_pass') \gexec
+
+-- SRE Notice: USER MAPPING FOR PUBLIC permite federação transparente para ferramentas de BI.
+-- A segurança de isolamento é mantida pelas restrições de permissão nos schemas fdw_*.
+SELECT format('DROP USER MAPPING IF EXISTS FOR PUBLIC SERVER %I;', :'target_srv') \gexec
+SELECT format('CREATE USER MAPPING FOR PUBLIC SERVER %I OPTIONS (user %L, password %L);', :'target_srv', :'target_user', :'target_pass') \gexec
+EOF
+    then
         echo "🚨 [ERRO FATAL INSTALL] Falha ao configurar FDW e User Mapping para o servidor '$srv'." >&2
         exit 1
     fi
