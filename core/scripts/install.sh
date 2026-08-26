@@ -1064,7 +1064,15 @@ for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
 done
 
 # 3. Injeção de User Mappings para Federação FDW no Data Warehouse Central (loja_db)
-echo "➜ [SRE CORE INSTALL] Configurando federação FDW e User Mappings com escape seguro de credenciais..."
+echo "➜ [SRE CORE INSTALL] Habilitando extensões (postgres_fdw, pgvector) e configurando federação FDW..."
+if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -v ON_ERROR_STOP=1 -q -c "
+CREATE EXTENSION IF NOT EXISTS postgres_fdw;
+CREATE EXTENSION IF NOT EXISTS vector;
+"; then
+    echo "🚨 [ERRO FATAL INSTALL] Falha ao habilitar extensões postgres_fdw/vector no banco principal." >&2
+    exit 1
+fi
+
 for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_postiz; do
     target_dbname="${srv#srv_}_db"
     target_host="${DB_HOST:-localhost}"
