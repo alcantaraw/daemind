@@ -369,16 +369,19 @@ provision_user() {
 </body>
 </html>'
 
+    local TPL_B64=$(echo "$TPL_BODY" | base64 -w 0 2>/dev/null || echo "$TPL_BODY" | base64 | tr -d '\r\n')
     local TPL_DEBUG_RES
     TPL_DEBUG_RES=$(sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -c "
     DO \$\$
+    DECLARE
+        v_body TEXT := convert_from(decode('${TPL_B64}', 'base64'), 'UTF8');
     BEGIN
         IF NOT EXISTS (SELECT 1 FROM templates WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)') THEN
             INSERT INTO templates (name, subject, body, type, is_default, created_at, updated_at)
             VALUES (
                 'Template Executivo Auto-UTM (Shlink & Umami)',
                 '{{ .Campaign.Subject }}',
-                \$$TPL_BODY\$,
+                v_body,
                 'campaign',
                 false,
                 NOW(),
@@ -387,7 +390,7 @@ provision_user() {
             RAISE NOTICE 'TEMPLATE_CRIADO';
         ELSE
             UPDATE templates 
-            SET subject = '{{ .Campaign.Subject }}', body = \$$TPL_BODY\$, updated_at = NOW() 
+            SET subject = '{{ .Campaign.Subject }}', body = v_body, updated_at = NOW() 
             WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)';
             RAISE NOTICE 'TEMPLATE_ATUALIZADO';
         END IF;

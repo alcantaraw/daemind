@@ -40,28 +40,13 @@ build_structure() {
     # Se N8N_DEV_AI_ASSISTANT estiver ativo, cria a estrutura do SearXNG e descomenta os serviços no compose
     if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
         local SEARX_DIR="$TARGET_DIR/volumes/searxng"
-        if [ ! -f "$SEARX_DIR/settings.yml" ]; then
-            echo "➜ [SRE N8N DEV] Gerando settings.yml canônico e expurgando engines instáveis para o SearXNG..."
-            sudo mkdir -p "$SEARX_DIR" 2>/dev/null || true
-            sudo docker run --rm --entrypoint sh searxng/searxng:latest -c "
-/usr/local/searxng/.venv/bin/python3 -c '
-import yaml
-with open(\"/usr/local/searxng/searx/settings.yml\") as f:
-    cfg = yaml.safe_load(f)
-cfg[\"server\"][\"secret_key\"] = \"${DB_PASSWORD:-daemind_searxng_secret}\"
-cfg[\"server\"][\"limiter\"] = False
-cfg[\"server\"][\"image_proxy\"] = False
-cfg[\"search\"][\"formats\"] = [\"html\", \"json\"]
-# Remover completamente as engines problemáticas da lista
-cfg[\"engines\"] = [
-    eng for eng in cfg.get(\"engines\", [])
-    if not any(k in eng.get(\"name\", \"\").lower() or k in eng.get(\"engine\", \"\").lower()
-               for k in [\"ahmia\", \"torch\", \"wikidata\", \"onion\"])
-]
-with open(\"/tmp/settings.yml\", \"w\") as f:
-    yaml.dump(cfg, f)
-' && cat /tmp/settings.yml
-" | sudo tee "$SEARX_DIR/settings.yml" > /dev/null
+        sudo mkdir -p "$SEARX_DIR" 2>/dev/null || true
+        # Se limiter.toml foi criado como diretório pelo docker, remove
+        if [ -d "$SEARX_DIR/limiter.toml" ]; then
+            sudo rm -rf "$SEARX_DIR/limiter.toml" 2>/dev/null || true
+        fi
+        if [ ! -f "$SEARX_DIR/limiter.toml" ]; then
+            echo "➜ [SRE N8N DEV] Gerando limiter.toml para o SearXNG..."
             cat << 'EOF' | sudo tee "$SEARX_DIR/limiter.toml" > /dev/null
 [botdetection]
 ipv4_prefix = 32
@@ -86,8 +71,31 @@ pass_ip = [
 ]
 pass_searxng_org = true
 EOF
-            sudo chown -R "$TARGET_OWNER" "$SEARX_DIR" 2>/dev/null || true
         fi
+
+        if [ ! -f "$SEARX_DIR/settings.yml" ]; then
+            echo "➜ [SRE N8N DEV] Gerando settings.yml canônico e expurgando engines instáveis para o SearXNG..."
+            sudo docker run --rm --entrypoint sh searxng/searxng:latest -c "
+/usr/local/searxng/.venv/bin/python3 -c '
+import yaml
+with open(\"/usr/local/searxng/searx/settings.yml\") as f:
+    cfg = yaml.safe_load(f)
+cfg[\"server\"][\"secret_key\"] = \"${DB_PASSWORD:-daemind_searxng_secret}\"
+cfg[\"server\"][\"limiter\"] = False
+cfg[\"server\"][\"image_proxy\"] = False
+cfg[\"search\"][\"formats\"] = [\"html\", \"json\"]
+# Remover completamente as engines problemáticas da lista
+cfg[\"engines\"] = [
+    eng for eng in cfg.get(\"engines\", [])
+    if not any(k in eng.get(\"name\", \"\").lower() or k in eng.get(\"engine\", \"\").lower()
+               for k in [\"ahmia\", \"torch\", \"wikidata\", \"onion\"])
+]
+with open(\"/tmp/settings.yml\", \"w\") as f:
+    yaml.dump(cfg, f)
+' && cat /tmp/settings.yml
+" | sudo tee "$SEARX_DIR/settings.yml" > /dev/null
+        fi
+        sudo chown -R "$TARGET_OWNER" "$SEARX_DIR" 2>/dev/null || true
 
         local CERTS_DIR="$TARGET_DIR/volumes/n8n_sandbox_certs"
         if [ ! -f "$CERTS_DIR/server.crt" ]; then
