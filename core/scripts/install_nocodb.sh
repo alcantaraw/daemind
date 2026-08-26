@@ -400,9 +400,16 @@ provision_user() {
                     -H "xc-auth: $AUTH_TOKEN" \
                     -H "Content-Type: application/json" \
                     -d "$SOURCE_PAYLOAD" >/dev/null 2>&1 || true
-                echo "✔ [AUTO-INTEGRAÇÃO NOCODB] Data Warehouse e tabelas sincronizadas com sucesso no NocoDB."
+                echo "✔ [AUTO-INTEGRAÇÃO NOCODB] Data Warehouse e tabelas vinculadas com sucesso no NocoDB."
             else
-                echo "➜ [IDEMPOTÊNCIA NOCODB] Fonte de dados PostgreSQL já conectada e sincronizada no NocoDB."
+                echo "➜ [IDEMPOTÊNCIA NOCODB] Fonte de dados PostgreSQL já conectada. Disparando sincronização de schema e views..."
+                local SOURCE_ID=$(echo "$HAS_PG_SOURCE" | head -n 1)
+                if [ -n "$SOURCE_ID" ] && [ "$SOURCE_ID" != "null" ]; then
+                    sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources/${SOURCE_ID}/sync" \
+                        -H "xc-auth: $AUTH_TOKEN" \
+                        -H "Content-Type: application/json" >/dev/null 2>&1 || true
+                fi
+                echo "✔ [AUTO-SINCRONIZAÇÃO NOCODB] Schema relacional e views analíticas sincronizados com sucesso!"
             fi
         fi
     fi

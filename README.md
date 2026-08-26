@@ -97,13 +97,17 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 - **Integração Completa**: Integre sua loja virtual (Loja Integrada, Shopify, WooCommerce ou Marketplaces) com seu banco de dados, emissor de nota fiscal e inteligência artificial.
 - **Execução Ilimitada**: Execute centenas de milhares de automações mensais sem surpresas na fatura no final do mês.
 
-### 📊 3. CRM, Gestão de Estoque e Insumos em Tempo Real
-- **Visão 360°**: Visualize pedidos, dados de clientes, funis de prospecção B2B e acompanhamento de embalagens/insumos em painéis simples estilo planilha.
-- **Soberania dos Dados**: Mantenha seu histórico de clientes 100% sob seu controle, livre de exportações travadas por SaaS terceirizados.
+### 📊 3. CRM, Gestão de Estoque, Insumos e Pedidos (E-commerce & B2B)
+- **Modelagem Relacional de Pedidos & Itens**: Detalhamento em nível de SKU, CMV unitário, quantidades e faturamento com integridade fiscal restrita (`ON DELETE RESTRICT`).
+- **Baixa 100% Atômica de Insumos**: Monitoramento e consumo automático de caixas e etiquetas de expedição com lock pessimista à prova de concorrência e alertas de ruptura.
+- **Soberania dos Dados**: Histórico unificado de clientes (`clientes.id` identity-enabled para NocoDB), eliminando dependência de exportações manuais.
 
-### 🔗 4. Malha de Integrações Nativas & Data Warehouse Unificado
-- **Data Warehouse Soberano (`postgres_fdw`)**: Todos os microsserviços (`Chatwoot`, `Evolution API`, `Shlink`, `Listmonk`, `Umami`, `Postiz`) alimentam em tempo real o banco centralizador via PgBouncer. Você visualiza KPIs unificados de ponta a ponta (Cliques ➔ WhatsApp ➔ Atendimento ➔ Vendas) sem duplicação de dados no **Metabase BI** e **NocoDB**.
-- **Atribuição & Marketing 360°**: O **Listmonk** provisiona templates com tags UTM automáticas integradas ao **Shlink** (encurtador de links) e ao **Umami Analytics** (conversões sem cookies), gerando rastreabilidade completa de cliques até o checkout.
+### 🔗 4. Data Warehouse Soberano 2.0 & Hub de Integrações Zero-ETL
+- **Data Warehouse Soberano (`postgres_fdw`)**: Todos os microsserviços (`Chatwoot`, `Evolution API`, `Shlink`, `Listmonk`, `Umami`, `Postiz`) alimentam em tempo real o banco centralizador via PgBouncer. Você visualiza **27 Views Analíticas Executivas** sem duplicação de dados, com Dashboards pré-injetados no **Metabase BI** e tabelas sincronizadas no **NocoDB ERP**.
+- **Hub Universal de Ads**: Ingestão centralizada de métricas diárias de anúncios (Meta Ads, Google Ads, TikTok Ads, ChatGPT Ads) com cálculo de **ROAS Real Caixa vs. ROAS Pixel**, CPC, CPM e auditoria contábil de over-attribution.
+- **Módulo de Serviços B2B, SaaS & Retainers**: Gestão completa de contratos recorrentes com cálculo de MRR, ARR anualizado, Churn Rate histórico rigoroso via window functions e pipeline comercial de propostas (Win Rate %).
+- **Radar de Oportunidades Cross-Sell & Upsell 360°**: Algoritmo de identificação automática de clientes híbridos com cálculo de *Share of Wallet* (% produtos vs % serviços) para acionamento de gatilhos no n8n.
+- **Atribuição First-Touch & Marketing 360°**: O **Listmonk** provisiona templates com tags UTM automáticas integradas ao **Shlink** (encurtador de links) e ao **Umami Analytics** (conversões sem cookies), gerando rastreabilidade completa de cliques até o checkout.
 - **WhatsApp ➔ CRM Zero-Touch**: A **Evolution API** auto-cria instâncias e conecta diretamente a Caixa de Entrada no **Chatwoot**, persistindo mídias e áudios no storage **MinIO S3**.
 - **AI Mesh Corporativa**: O **LiteLLM** atua como AI Gateway unificado conectando modelos na nuvem e locais (**Ollama**) para alimentar o Copiloto do **Chatwoot**, geração de posts do **Postiz**, automações do **n8n** e o chat corporativo do **Open WebUI** com OCR avançado via **Docling**.
 
@@ -195,7 +199,7 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 - 🔒 **Hardening Perimetral & Segurança Zero-Trust:** Regras estritas no Firewall IPTables, isolamento de rede privada e proteção contra acessos externos não autorizados.
 - ⚡ **Auto-Tuning Dinâmico de Hardware:** Inspeção autônoma do servidor (CPU, RAM e Disco) com otimização profunda de memória, CPU e I/O de disco aplicada individualmente a cada microsserviço para garantir máxima performance sem estouros.
-- 🐘 **Banco de Dados Escalável & Data Warehouse:** PostgreSQL 17 com `pgvector` e federação `postgres_fdw` unificando 100% dos microsserviços com 7 Views Analíticas Executivas auto-conectadas ao Metabase e NocoDB.
+- 🐘 **Banco de Dados Escalável & Data Warehouse:** PostgreSQL 17 com `pgvector` e federação `postgres_fdw` unificando 100% dos microsserviços com **27 Views Analíticas Executivas** e Cockpit Omnichannel auto-injetado no Metabase e NocoDB.
 - 🤖 **AI Mesh Soberana & RAG com Docling:** Roteador de IA com failover resiliente via LiteLLM, inferência local soberana (Ollama) e motor de OCR avançado para documentos (Docling).
 - 🔑 **Identidade Global Unificada & SSOT de Credenciais:** Uma única conta universal (`$TS_EMAIL` + `$DB_PASSWORD`) autentica 100% dos painéis e integrações da stack com zero fricção de onboarding manual.
 - 🧼 **Sanitização de Segredos:** Expurgo automático de chaves e credenciais da memória após o boot para zero vazamento.
@@ -213,15 +217,16 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
   - Configuração de **Servidores MCP (Model Context Protocol)** para que os agentes de IA consultem produtos, estoques, status de pedidos e tabelas de frete em tempo real no PostgreSQL e NocoDB.
   - Criação de **Agentes SDR (Pré-vendas) e Suporte N1** treinados com RAG na base de dados da empresa para atender clientes no Chatwoot de forma autônoma e humanizada.
 
-- 📈 **3. Painéis Executivos de BI & Gestão de Lucro Real (Metabase)**
-  - Dashboards pré-configurados no **Metabase** cruzando vendas, custos de produtos (CMV), despesas de anúncios/marketing e taxas de gateways de pagamento.
-  - Relatórios automatizados diários e semanais enviados direto no WhatsApp ou e-mail dos gestores com métricas-chave de faturamento e estoque crítico.
-
-- 🎯 **4. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
+- 🎯 **3. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
   - O **daemind.** nasce especialista em **Vendas Online & Marketing Digital**, mas sua esteira modular permite rápida expansão para outros setores:
     - 🩺 **Saúde & Clínicas:** Agendamentos inteligentes via WhatsApp, confirmação de consultas, triagem pré-atendimento e retenção de pacientes.
     - 👥 **Recursos Humanos & Departamento Pessoal:** Triagem automática de currículos por IA, onboarding de novos colaboradores e gestão de solicitações internas.
     - ⚖️ **Jurídico & Consultorias:** Acompanhamento de prazos, triagem de casos, RAG para consulta de contratos e atendimento automatizado a clientes.
+
+- ~~✅ **[CONCLUÍDO] 📈 Painéis Executivos de BI & Gestão de Lucro Real (Metabase & NocoDB)**~~
+  - ~~Injeção REST API automática do Dashboard **"Cockpit Executivo Omnichannel 360°"** com 7 Cards analíticos pré-configurados (DRE Diário, Radar Cross-Sell/Upsell, Estoque Crítico, ROAS Real Caixa vs Pixel, MRR/Churn SaaS, Recuperação WhatsApp e SDR Chatwoot).~~
+  - ~~Data Warehouse 2.0 unificado via `postgres_fdw` com **27 Views Analíticas Executivas**, Hub Universal de Ads, Módulo B2B & Serviços, e Stored Procedure de governança noturna (`sp_manutencao_analitica_diaria`).~~
+  - ~~Disparo automático de **Schema Sync** no NocoDB ERP para disponibilização instantânea de tabelas e views no painel visual.~~
 
 - ~~❌ **[DESCONTINUADO / ABANDONADO] 🔐 Gestão de Credenciais via Cofre Externo (Infisical)**~~
   - ~~Substituição do `.env` por cofre Infisical descartada em favor do modelo **SSOT com Permissões Estritas (chmod 600)**, âncora `SRE HOME ANCHOR` e sanitização atômica de memória no boot, mantendo a arquitetura simples, independente de terceiros e com zero overhead computacional.~~
@@ -297,6 +302,7 @@ Todas as mudanças relevantes entre versões estão documentadas em **[CHANGELOG
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| [`v2.0.0`](CHANGELOG.md#v200--em-desenvolvimento--branch-test) | 2026-08-26 | **Marco 2.0:** Data Warehouse Zero-ETL (27 Views), Hub de Ads, Módulo B2B & Serviços, Dashboards Metabase/NocoDB e Governança Noturna SRE |
 | [`v1.0.0`](CHANGELOG.md#v100--2026-08-18--desacoplamento-completo) | 2026-08-18 | Desacoplamento completo — wizard TUI/CLI, módulos independentes, guardrails SRE |
 | [`v0.5.0`](CHANGELOG.md#v050--2026-08--main-prova-de-conceito) | 2026-08-06 | Prova de conceito — stack monolítica funcional, instalador CLI simples |
 

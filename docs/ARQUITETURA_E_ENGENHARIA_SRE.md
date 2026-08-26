@@ -607,16 +607,17 @@ Para garantir tempos de resposta de consulta otimizados e evitar inchaço no ban
 - **Mitigação de Retentativas Indevidas:** Quando a infraestrutura externa reenviar webhooks modificando metadados como `event_id`, a primeira etapa do workflow do n8n executa uma função JavaScript (*Code Node*) que gera o `dedup_hash` (SHA-256 do corpo do payload + `LOJA_APP_KEY`).
 - **Validação com TTL de 5 Minutos:** O n8n registra o hash com expiração automática de 5 minutos. Se o mesmo hash colidir dentro dessa janela, o fluxo responde HTTP 200 e interrompe o processamento redundante.
 
-### 🏛️ 7.6. Data Warehouse Soberano & Federação Multi-Bancos (`postgres_fdw`)
-- **Arquitetura de Federação Zero-ETL:** O PostgreSQL 17 atua como Data Warehouse unificado através da extensão `postgres_fdw`. O banco centralizador `loja_db` mapeia os schemas externos `fdw_chatwoot`, `fdw_shlink`, `fdw_listmonk`, `fdw_umami`, `fdw_evolution` e `fdw_postiz` diretamente sobre os bancos operacionais via PgBouncer.
-- **7 Views Analíticas Executivas:**
-  1. `vw_kpi_atendimento`: Desempenho de agentes de suporte, SLA de primeira resposta e resolução.
-  2. `vw_kpi_marketing_links`: Desempenho de links encurtados, cliques únicos reais e tags UTM.
-  3. `vw_kpi_email_marketing`: Engajamento de newsletters, aberturas, cliques e bounces.
-  4. `vw_kpi_trafego_web`: Métricas de navegação, referrers, geolocalização e navegadores.
-  5. `vw_kpi_whatsapp_disparos`: Telemetria de envios de WhatsApp, confirmações de entrega e leitura.
-  6. `vw_kpi_redes_sociais`: Acompanhamento de posts agendados e publicados em redes sociais.
-  7. `vw_funil_executivo_completo`: Cruzamento transacional do ciclo de vida do cliente (Tráfego ➔ Atendimento ➔ Vendas).
+### 🏛️ 7.6. Data Warehouse Soberano 2.0 & Federação Multi-Bancos (`postgres_fdw`)
+- **Arquitetura de Federação Zero-ETL:** O PostgreSQL 17 atua como Data Warehouse unificado através da extensão `postgres_fdw`. O banco centralizador `${PREFIX}_db` mapeia os schemas externos `fdw_chatwoot`, `fdw_shlink`, `fdw_listmonk`, `fdw_umami`, `fdw_evolution` e `fdw_postiz` diretamente sobre os bancos operacionais via PgBouncer com `USER MAPPING` idempotente.
+- **Catálogo de 27 Views Analíticas Executivas:**
+  - **Operacionais & BI de Borda:** `vw_kpi_atendimento`, `vw_kpi_marketing_links`, `vw_kpi_email_marketing`, `vw_kpi_trafego_web`, `vw_kpi_whatsapp_disparos`, `vw_kpi_redes_sociais`, `vw_funil_executivo_completo` (com Hash Join O(N)).
+  - **DRE, Contabilidade & Estoque:** `vw_gestao_lucro_real`, `vw_dre_diario_consolidado`, `vw_estoque_critico` (com alerta de ruptura de insumos), `vw_calculadora_leads_metricas` (First-Touch Attribution), `vw_atribuicao_utm_360`, `vw_matriz_rfm_clientes` (LTV Consolidado Híbrido), `vw_recompra_e_ciclo_de_vida` (Lag O(N)), `vw_kpi_recuperacao_vendas`, `vw_social_media_engajamento_conversao`, `vw_performance_comercial_atendentes` (Janela de 30 dias com deduplicação de pedidos), `vw_relatorio_mensal_agencia`.
+  - **Lead Scoring & Triagem de Volume:** `vw_ranking_leads_icp`, `vw_triagem_volume_leads`, `vw_analise_descarte_leads`.
+  - **Hub Universal de Ads:** `vw_performance_ads_gerenciadores`, `vw_correlacao_ads_vendas_reais` (Auditoria de ROAS Real Caixa vs ROAS Pixel e discrepância de atribuição).
+  - **Serviços B2B & MRR:** `vw_kpi_servicos_mrr_arr` (com série temporal resiliente e Churn Rate histórico via LAG), `vw_funil_propostas_servicos` (Win Rate %), `vw_lucro_real_servicos` (DRE de contratos e margem de contribuição).
+  - **Inteligência 360°:** `vw_cliente_visao_360_hibrida` (Radar de Oportunidades Cross-Sell/Upsell e Share of Wallet).
+- **Auto-Provisionamento de Dashboards (Metabase & NocoDB APIs):** Injeção automatizada via REST API do Dashboard *Cockpit Executivo Omnichannel 360°* com 7 cards visuais no Metabase e trigger de *Schema Sync* no NocoDB.
+- **Governança Noturna & Otimização:** Stored Procedure `sp_manutencao_analitica_diaria()` executando `ANALYZE` nas tabelas críticas, `REINDEX INDEX CONCURRENTLY` no grafo HNSW (768d) e expurgo de eventos idempotentes (> 90 dias).
 
 ### 🤖 7.7. AI Mesh Soberana via LiteLLM (SRE Health Prober & Virtual Aliases)
 - **SRE Probing Paralelo:** O motor de descoberta (`sync_ia_models.sh` e `install_1ia.sh`) dispara probes assíncronos de 1 token para validar saúde, créditos e latência em milissegundos de cada provedor configurado.
