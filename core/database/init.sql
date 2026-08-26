@@ -63,8 +63,9 @@
 --    - vw_relatorio_mensal_agencia          : Fechamento Mensal de Gestão de Tráfego & ROI
 -- ===============================================================================
 
--- 1. Define o escopo padrão do restante deste script para o schema public
+-- 1. Define o escopo padrão do restante deste script para o schema public e silencia notices informativos
 SET search_path TO public;
+SET client_min_messages = warning;
 
 -- 2. Ativação da Extensão de Vetores para o RAG da Inteligência Artificial
 CREATE EXTENSION IF NOT EXISTS vector;

@@ -1066,6 +1066,7 @@ done
 # 3. Injeção de User Mappings para Federação FDW no Data Warehouse Central (loja_db)
 echo "➜ [SRE CORE INSTALL] Habilitando extensões (postgres_fdw, pgvector) e configurando federação FDW..."
 if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -v ON_ERROR_STOP=1 -q -c "
+SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS postgres_fdw;
 CREATE EXTENSION IF NOT EXISTS vector;
 "; then
@@ -1078,6 +1079,7 @@ for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_post
     target_host="${DB_HOST:-localhost}"
     target_port="${DB_PORT:-5432}"
     if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" \
+        -q \
         -v ON_ERROR_STOP=1 \
         -v target_srv="$srv" \
         -v target_db="$target_dbname" \
@@ -1085,6 +1087,8 @@ for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_post
         -v target_port="$target_port" \
         -v target_user="$DB_USER" \
         -v target_pass="$DB_PASSWORD" << 'EOF'
+SET client_min_messages = warning;
+
 -- Garante Servidor Estrangeiro com host e porta parametrizados
 SELECT format('DO $b$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = %L) THEN CREATE SERVER %I FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host %L, port %L, dbname %L); ELSE ALTER SERVER %I OPTIONS (SET host %L, SET port %L, SET dbname %L); END IF; END $b$;', :'target_srv', :'target_srv', :'target_host', :'target_port', :'target_db', :'target_srv', :'target_host', :'target_port', :'target_db') \gexec
 
