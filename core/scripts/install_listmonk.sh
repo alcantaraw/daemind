@@ -135,7 +135,7 @@ inject_dashboard_card() {
     if [ -f "$INDEX_PATH" ] && ! grep -q "data-port=\"$port_num\"" "$INDEX_PATH" && ! grep -q 'Listmonk Mailer' "$INDEX_PATH"; then
         python3 -c "
 path = '$INDEX_PATH'
-card = '''            <a href=\"#\" data-port=\"$port_num\" data-path=\"\" class=\"card dynamic-link\">
+card = '''            <a href=\"#\" data-port=\"$port_num\" data-path=\"/admin/login\" class=\"card dynamic-link\">
                 <div class=\"card-content\">
                     <div class=\"card-header\">
                         <div class=\"icon\">✉️</div>
@@ -144,8 +144,8 @@ card = '''            <a href=\"#\" data-port=\"$port_num\" data-path=\"\" class
                     <h3>Listmonk Mailer</h3>
                     <p class=\"description\">Disparador de e-mail marketing, newsletters e e-mails transacionais soberanos.</p>
                     <div class=\"card-footer\">
-                        <span>Gateway: HTTP</span>
-                        <span class=\"port\">:$port_num</span>
+                        <span>Porta $port_num</span>
+                        <span class=\"port\">:$port_num/admin</span>
                     </div>
                 </div>
             </a>\n'''
@@ -299,6 +299,9 @@ provision_user() {
         echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: ${USER_EMAIL} | Senha: [Cofre Mestre])."
     fi
 
+    # Reinicia o container do Listmonk para forçar recarga atômica de cache de usuários e roles da memória
+    cd "$TARGET_DIR" && sudo docker compose restart listmonk >/dev/null 2>&1 || true
+
     # -----------------------------------------------------------------------
     # SRE AUTO-INTEGRAÇÃO S3/MINIO: Configura o upload de mídias no MinIO
     # -----------------------------------------------------------------------
@@ -401,7 +404,7 @@ render_forensic_report() {
     local ts_domain="${1:-localhost}"
     local port_num="${HOST_LISTMONK_PORT:-9005}"
     echo "  ✉️ Listmonk (E-mail Marketing & Transacional)"
-    echo "    ↳ Painel Web & API:                http://${ts_domain}:${port_num}"
+    echo "    ↳ Painel Web & API:                http://${ts_domain}:${port_num}/admin/login"
     echo "    ↳ Administrador Mestre:            ${TS_EMAIL:-admin@localhost}"
     echo "    ↳ Senha de Acesso:                 [Protegida pelo Cofre Mestre]"
     echo ""

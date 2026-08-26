@@ -33,8 +33,10 @@ O **daemind.** é uma infraestrutura empresarial pronta para uso que centraliza 
   - [💬 1. Atendimento Unificado \& WhatsApp sem Bloqueios](#-1-atendimento-unificado--whatsapp-sem-bloqueios)
   - [⚡ 2. Automação de Vendas sem Limites de Execução](#-2-automação-de-vendas-sem-limites-de-execução)
   - [📊 3. CRM, Gestão de Estoque e Insumos em Tempo Real](#-3-crm-gestão-de-estoque-e-insumos-em-tempo-real)
-  - [🧠 4. Inteligência Artificial Corporativa \& RAG Soberano](#-4-inteligência-artificial-corporativa--rag-soberano)
-  - [🔒 5. Blindagem de Dados, Segurança Bancária e Autocura](#-5-blindagem-de-dados-segurança-bancária-e-autocura)
+  - [🔗 4. Malha de Integrações Nativas \& Data Warehouse Unificado](#-4-malha-de-integrações-nativas--data-warehouse-unificado)
+  - [✉️ 5. E-mail Marketing, Campanhas e Atribuição Soberana](#-5-e-mail-marketing-campanhas-e-atribuição-soberana)
+  - [🧠 6. Inteligência Artificial Corporativa \& RAG Soberano](#-6-inteligência-artificial-corporativa--rag-soberano)
+  - [🔒 7. Blindagem de Dados, Segurança Bancária e Autocura](#-7-blindagem-de-dados-segurança-bancária-e-autocura)
 - [🛠️ Como funciona a implementação?](#️-como-funciona-a-implementação)
 - [📦 Matriz de Versões da Stack \& Imagens Docker (SRE BOM)](#-matriz-de-versões-da-stack--imagens-docker-sre-bom)
 - [🛡️ Engenharia de Resiliência \& SRE (Destaques da Arquitetura)](#️-engenharia-de-resiliência--sre-destaques-da-arquitetura)
@@ -99,16 +101,22 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 - **Visão 360°**: Visualize pedidos, dados de clientes, funis de prospecção B2B e acompanhamento de embalagens/insumos em painéis simples estilo planilha.
 - **Soberania dos Dados**: Mantenha seu histórico de clientes 100% sob seu controle, livre de exportações travadas por SaaS terceirizados.
 
-### ✉️ 4. E-mail Marketing, Campanhas e Atribuição Soberana
+### 🔗 4. Malha de Integrações Nativas & Data Warehouse Unificado
+- **Data Warehouse Soberano (`postgres_fdw`)**: Todos os microsserviços (`Chatwoot`, `Evolution API`, `Shlink`, `Listmonk`, `Umami`, `Postiz`) alimentam em tempo real o banco centralizador via PgBouncer. Você visualiza KPIs unificados de ponta a ponta (Cliques ➔ WhatsApp ➔ Atendimento ➔ Vendas) sem duplicação de dados no **Metabase BI** e **NocoDB**.
+- **Atribuição & Marketing 360°**: O **Listmonk** provisiona templates com tags UTM automáticas integradas ao **Shlink** (encurtador de links) e ao **Umami Analytics** (conversões sem cookies), gerando rastreabilidade completa de cliques até o checkout.
+- **WhatsApp ➔ CRM Zero-Touch**: A **Evolution API** auto-cria instâncias e conecta diretamente a Caixa de Entrada no **Chatwoot**, persistindo mídias e áudios no storage **MinIO S3**.
+- **AI Mesh Corporativa**: O **LiteLLM** atua como AI Gateway unificado conectando modelos na nuvem e locais (**Ollama**) para alimentar o Copiloto do **Chatwoot**, geração de posts do **Postiz**, automações do **n8n** e o chat corporativo do **Open WebUI** com OCR avançado via **Docling**.
+
+### ✉️ 5. E-mail Marketing, Campanhas e Atribuição Soberana
 - **Disparos em Massa & Transacionais**: Envie newsletters, fluxos de onboarding e e-mails de confirmação de compra sem pagar por volume de contatos via **Listmonk**.
 - **Encurtador de Links & Tags UTM**: Crie links curtos personalizados com domínio próprio, QR Codes dinâmicos e rastreamento de cliques em campanhas via **Shlink**.
 - **Privacidade & Analytics (LGPD)**: Acompanhe visitas e conversões em tempo real sem banners invasivos de cookies e sem enviar dados dos seus clientes para big techs via **Umami**.
 
-### 🧠 5. Inteligência Artificial Corporativa & RAG Soberano
+### 🧠 6. Inteligência Artificial Corporativa & RAG Soberano
 - **Roteamento Inteligente**: Roteie consultas entre os modelos mais avançados do mercado (Google Gemini, OpenAI ChatGPT, Anthropic Claude, DeepSeek) pelo menor custo disponível.
 - **Cérebro da Empresa (RAG)**: Treine IAs com manuais de produtos, FAQs de atendimento e políticas da empresa para responder dúvidas de clientes e equipe com precisão cirúrgica.
 
-### 🔒 6. Blindagem de Dados, Segurança Bancária e Autocura
+### 🔒 7. Blindagem de Dados, Segurança Bancária e Autocura
 - **Soberania Absoluta**: Seus leads, contatos e faturamento nunca saem do seu servidor privado.
 - **Backup Diário Criptografado**: Cópia de segurança automática dos dados e bancos com criptografia militar.
 - **Disponibilidade 24/7**: Sistema projetado com tecnologia de tolerância a falhas e autocura imediata caso haja oscilações de conexão.
