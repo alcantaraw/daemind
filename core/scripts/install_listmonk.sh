@@ -270,11 +270,15 @@ provision_user() {
         -- Gera o hash bcrypt oficial $2a$ via pgcrypto nativo
         v_hash := crypt('${SENHA}', gen_salt('bf', 10));
 
-        -- Obtém ou cria o role padrão de administrador
+        -- Obtém ou cria o role padrão de administrador com permissão superadmin
         SELECT id INTO v_role_id FROM roles WHERE type = 'user' LIMIT 1;
         IF v_role_id IS NULL THEN
             INSERT INTO roles (name, type, permissions, created_at, updated_at)
-            VALUES ('Admin', 'user', '{}', NOW(), NOW()) RETURNING id INTO v_role_id;
+            VALUES ('Admin', 'user', '{"admin.super"}', NOW(), NOW()) RETURNING id INTO v_role_id;
+        ELSE
+            UPDATE roles
+            SET permissions = '{"admin.super"}', updated_at = NOW()
+            WHERE id = v_role_id;
         END IF;
 
         -- Injeta ou sincroniza o superadmin com o email do cliente como username principal
@@ -283,7 +287,7 @@ provision_user() {
             VALUES ('${USER_EMAIL}', true, v_hash, '${USER_EMAIL}', '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}', 'user', v_role_id, 'enabled', 'none', NOW(), NOW());
         ELSE
             UPDATE users 
-            SET username = '${USER_EMAIL}', password = v_hash, password_login = true, email = '${USER_EMAIL}', type = 'user', status = 'enabled', updated_at = NOW() 
+            SET username = '${USER_EMAIL}', password = v_hash, password_login = true, email = '${USER_EMAIL}', type = 'user', user_role_id = v_role_id, status = 'enabled', updated_at = NOW() 
             WHERE email = '${USER_EMAIL}' OR username = 'admin' OR username = '${USER_EMAIL}';
         END IF;
     END \$\$;

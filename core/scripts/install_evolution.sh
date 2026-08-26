@@ -378,7 +378,7 @@ provision_user() {
         local CW_TOKEN="${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}"
         local INSTANCE_NAME="${PREFIXO_CONTAINER:-loja}"
 
-        # 1. Purgar caixas legadas de WPPConnect do Chatwoot caso existam
+        # 1. Purgar caixas legadas de WPPConnect ou duplicadas de API no Chatwoot caso existam
         sudo docker exec -i "${PREFIX}_chatwoot" bundle exec rails runner "
         begin
           Channel::Api.where('webhook_url LIKE ?', '%wppconnect%').each do |channel|
@@ -418,28 +418,10 @@ provision_user() {
                     \"chatwootOrganization\": \"${PREFIXO_CONTAINER:-loja}\",
                     \"chatwootAutoCreate\": true
                 }" > /dev/null 2>&1 || true
-        fi
-
-        # 4. SRE Zero-Touch Sync: Sincroniza o token e URL do Chatwoot em todas as instâncias ativas
-        local ALL_INSTANCES_NAMES
-        ALL_INSTANCES_NAMES=$(python3 -c "
-import json
-try:
-    data = json.loads('''$INST_EXISTS''')
-    names = set(['${INSTANCE_NAME}'])
-    if isinstance(data, list):
-        for item in data:
-            name = item.get('name') or item.get('instanceName') or (item.get('instance', {}).get('instanceName') if isinstance(item.get('instance'), dict) else None)
-            if name:
-                names.add(name)
-    print(' '.join(names))
-except Exception:
-    print('${INSTANCE_NAME}')
-" 2>/dev/null || echo "${INSTANCE_NAME}")
-
-        for inst in $ALL_INSTANCES_NAMES; do
+        else
+            # SRE Sync: Se a instância já existia, sincroniza parâmetros sem disparar autoCreate duplicado
             local CW_INT_RES
-            CW_INT_RES=$(curl -s -X POST "http://127.0.0.1:${port_num}/chatwoot/set/${inst}" \
+            CW_INT_RES=$(curl -s -X POST "http://127.0.0.1:${port_num}/chatwoot/set/${INSTANCE_NAME}" \
                 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" \
                 -H "Content-Type: application/json" \
                 -d "{
@@ -456,14 +438,14 @@ except Exception:
                     \"importMessages\": true,
                     \"daysLimitImportMessages\": 3,
                     \"signDelimiter\": \"\\n\",
-                    \"autoCreate\": true,
+                    \"autoCreate\": false,
                     \"organization\": \"${PREFIXO_CONTAINER:-loja}\"
                 }" 2>/dev/null || echo "")
 
             if [ -n "$CW_INT_RES" ]; then
-                echo "✔ [SUCESSO EVOLUTION] Auto-integração Chatwoot sincronizada (Zero-Touch) para instância '${inst}'."
+                echo "✔ [SUCESSO EVOLUTION] Auto-integração Chatwoot sincronizada para instância '${INSTANCE_NAME}'."
             fi
-        done
+        fi
     fi
 }
 
