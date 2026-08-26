@@ -39,8 +39,15 @@ build_structure() {
 }
 
 provision_db() {
-    # NocoDB utiliza SQLite/local data storage (banco PostgreSQL dedicado opcional)
-    :
+    local PREFIX="${PREFIXO_CONTAINER}"
+    echo "➜ [SRE NOCODB] Garantindo schema relacional (nocodb_schema) no PostgreSQL..."
+    if docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -c "SELECT 1 FROM information_schema.schemata WHERE schema_name = 'nocodb_schema'" 2>/dev/null | grep -q 1; then
+        echo "➜ [IDEMPOTÊNCIA NOCODB] Schema 'nocodb_schema' já existente no banco principal. Preservando."
+    else
+        echo "  ↳ Criando schema 'nocodb_schema'..."
+        docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -q -c "CREATE SCHEMA IF NOT EXISTS nocodb_schema AUTHORIZATION ${DB_USER};" > /dev/null 2>&1 || true
+        echo "✔ [SUCESSO NOCODB] Schema 'nocodb_schema' provisionado com sucesso."
+    fi
 }
 
 provision_infra() {
