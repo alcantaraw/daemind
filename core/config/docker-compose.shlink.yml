@@ -53,7 +53,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.2'
+          cpus: '${CPU_SHLINK_WEB:-0.5}'
           memory: '128M'
         reservations:
           memory: '32M'

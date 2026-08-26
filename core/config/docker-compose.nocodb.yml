@@ -14,7 +14,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_NOCODB:-0.5}'
+          cpus: '${CPU_NOCODB:-1.5}'
           memory: '${MEM_NOCODB:-1024M}'
         reservations:
           memory: '${RES_NOCODB:-256M}'

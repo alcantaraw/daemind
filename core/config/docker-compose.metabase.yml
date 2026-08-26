@@ -11,7 +11,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_METABASE:-1.0}'
+          cpus: '${CPU_METABASE:-2.0}'
           memory: '${MEM_METABASE:-1536M}'
         reservations:
           memory: '${RES_METABASE:-256M}'

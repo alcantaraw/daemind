@@ -83,7 +83,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_POOLER:-0.2}'
+          cpus: '${CPU_POOLER:-0.5}'
           memory: '${MEM_POOLER:-256M}'
         reservations:
           memory: '${RES_POOLER:-64M}'
