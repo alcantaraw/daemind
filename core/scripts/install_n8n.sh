@@ -390,14 +390,31 @@ render_forensic_report() {
 }
 
 get_version() {
+    local svc="${1:-n8n}"
     local PREFIX="${PREFIXO_CONTAINER}"
-    local VER=$(docker exec "${PREFIX}_n8n" n8n --version 2>/dev/null || echo "")
-    if [ -n "$VER" ]; then
-        echo "$VER"
-    else
-        local IMAGE_TAG=$(docker inspect --format='{{.Config.Image}}' "${PREFIX}_n8n" 2>/dev/null | cut -d':' -f2 || echo "")
-        echo "${IMAGE_TAG:-2.34.6}"
-    fi
+    case "$svc" in
+        searxng)
+            local VER=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "${PREFIX}_searxng" 2>/dev/null || echo "")
+            [ -z "$VER" ] && VER=$(docker exec "${PREFIX}_searxng" python3 -c 'import searx.version; print(searx.version.VERSION_STRING)' 2>/dev/null || echo "")
+            [ -z "$VER" ] && VER=$(docker inspect -f '{{slice .Created 0 10}}' "${PREFIX}_searxng" 2>/dev/null || echo "")
+            echo "${VER:-latest}"
+            ;;
+        n8n_sandbox)
+            local VER=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "${PREFIX}_n8n_sandbox" 2>/dev/null || echo "")
+            [ -z "$VER" ] && VER=$(docker inspect -f '{{index .Config.Labels "version"}}' "${PREFIX}_n8n_sandbox" 2>/dev/null || echo "")
+            [ -z "$VER" ] && VER=$(docker inspect -f '{{slice .Created 0 10}}' "${PREFIX}_n8n_sandbox" 2>/dev/null || echo "")
+            echo "${VER:-latest}"
+            ;;
+        *)
+            local VER=$(docker exec "${PREFIX}_n8n" n8n --version 2>/dev/null || echo "")
+            if [ -n "$VER" ]; then
+                echo "$VER"
+            else
+                local IMAGE_TAG=$(docker inspect --format='{{.Config.Image}}' "${PREFIX}_n8n" 2>/dev/null | cut -d':' -f2 || echo "")
+                echo "${IMAGE_TAG:-latest}"
+            fi
+            ;;
+    esac
 }
 
 provision_user() {
@@ -494,7 +511,7 @@ case "$ACTION" in
     start_container)      start_container ;;
     wait_readiness)       wait_readiness ;;
     audit_health)         audit_health "${3:-localhost}" ;;
-    get_version)          get_version ;;
+    get_version)          get_version "$3" ;;
     render_forensic_report|render_report) render_forensic_report "${3:-localhost}" ;;
     provision_user)       provision_user ;;
     all)
