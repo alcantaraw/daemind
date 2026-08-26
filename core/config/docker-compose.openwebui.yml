@@ -72,6 +72,13 @@ services:
       - S3_BUCKET_NAME=${S3_OPENWEBUI_BUCKET:-openwebui}
       - S3_REGION_NAME=us-east-1
       - S3_USE_SSL=false
+
+      # --- 7. RAG WEB SEARCH & METASEARCH (SearXNG) ---
+      - ENABLE_RAG_WEB_SEARCH=True
+      - RAG_WEB_SEARCH_ENGINE=searxng
+      - RAG_WEB_SEARCH_RESULT_COUNT=3
+      - RAG_WEB_SEARCH_CONCURRENT_REQUESTS=10
+      - SEARXNG_QUERY_URL=http://searxng:8080/search?q=<query>
     depends_on:
       pgbouncer:
         condition: service_healthy
