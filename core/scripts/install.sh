@@ -1036,51 +1036,94 @@ until docker compose exec -T postgres pg_isready -U $DB_USER -d ${PREFIXO_CONTAI
   sleep 2
 done
 
-# 1. Injeção de User Mappings para Federação FDW (loja_db / Metabase) ANTES do DDL
-for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_postiz; do
-    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -c "
-        DO \$\$
-        BEGIN
-            IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = '$srv') THEN
-                CREATE SERVER $srv FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host 'localhost', port '5432', dbname '${srv#srv_}_db');
-            END IF;
-            IF NOT EXISTS (SELECT 1 FROM pg_user_mapping um JOIN pg_foreign_server fs ON fs.oid = um.umserver JOIN pg_roles r ON r.oid = um.umuser WHERE fs.srvname = '$srv' AND r.rolname = '$DB_USER') THEN
-                CREATE USER MAPPING FOR $DB_USER SERVER $srv OPTIONS (user '$DB_USER', password '$DB_PASSWORD');
-            END IF;
-            IF NOT EXISTS (SELECT 1 FROM pg_user_mapping um JOIN pg_foreign_server fs ON fs.oid = um.umserver WHERE fs.srvname = '$srv' AND um.umuser = 0) THEN
-                CREATE USER MAPPING FOR PUBLIC SERVER $srv OPTIONS (user '$DB_USER', password '$DB_PASSWORD');
-            END IF;
-        END \$\$;
-    " > /dev/null 2>&1 || true
-done
-
-# 1.1 Injeção de DDL idempotente (init.sql com IF NOT EXISTS)
-if [ -f "./core/database/init.sql" ]; then
-    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < ./core/database/init.sql > /dev/null 2>&1 || true
-elif [ -f "$TARGET_DIR/core/database/init.sql" ]; then
-    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < "$TARGET_DIR/core/database/init.sql" > /dev/null 2>&1 || true
-fi
-
-# 2. Bancos lógicos do Core
+# 1. Bancos lógicos do Core
 echo "➜ [SRE CORE INSTALL] Garantindo bancos de dados lógicos do Core (litellm_db)..."
 for db in litellm_db; do
-    if docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -c "SELECT 1 FROM pg_database WHERE datname = '$db'" < /dev/null 2>/dev/null | grep -q 1; then
+    if docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -c "SELECT 1 FROM pg_database WHERE datname = '$db'" < /dev/null 2>/dev/null | grep -q 1; then
         echo "➜ [IDEMPOTÊNCIA INSTALL] Banco de dados Core '$db' já existente. Preservando esquema."
     else
         echo "  ↳ Criando banco de dados Core '$db'..."
-        docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q -c "CREATE DATABASE $db;" < /dev/null > /dev/null 2>&1 || true
+        if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -v ON_ERROR_STOP=1 -c "CREATE DATABASE $db;" < /dev/null; then
+            echo "🚨 [ERRO FATAL INSTALL] Falha ao criar banco de dados Core '$db'." >&2
+            exit 1
+        fi
     fi
 done
 
-# 3. Bancos lógicos dos módulos desacoplados (Invocação Polimórfica)
+# 2. Bancos lógicos dos módulos desacoplados (Invocação Polimórfica)
 echo "➜ [SRE MODULOS INSTALL] Garantindo bancos de dados lógicos dos módulos ativos..."
 [ ${#MODULOS_DESACOPLADOS_ATIVOS[@]} -eq 0 ] && resolver_modulos_desacoplados
 
 for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
     if [ -f "$TARGET_DIR/core/scripts/install_${mod}.sh" ]; then
-        bash "$TARGET_DIR/core/scripts/install_${mod}.sh" "$TARGET_DIR" provision_db 2>/dev/null || true
+        if ! bash "$TARGET_DIR/core/scripts/install_${mod}.sh" "$TARGET_DIR" provision_db; then
+            echo "🚨 [ERRO FATAL INSTALL] Falha ao provisionar banco de dados do módulo '$mod'." >&2
+            exit 1
+        fi
     fi
 done
+
+# 3. Injeção de User Mappings para Federação FDW no Data Warehouse Central (loja_db)
+echo "➜ [SRE CORE INSTALL] Configurando federação FDW e User Mappings com escape seguro de credenciais..."
+for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_postiz; do
+    target_dbname="${srv#srv_}_db"
+    target_host="${DB_HOST:-localhost}"
+    target_port="${DB_PORT:-5432}"
+    if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" \
+        -v ON_ERROR_STOP=1 \
+        -v target_srv="$srv" \
+        -v target_db="$target_dbname" \
+        -v target_host="$target_host" \
+        -v target_port="$target_port" \
+        -v target_user="$DB_USER" \
+        -v target_pass="$DB_PASSWORD" \
+        -c "
+        DO \$\$
+        DECLARE
+            v_srv  text := :'target_srv';
+            v_db   text := :'target_db';
+            v_host text := :'target_host';
+            v_port text := :'target_port';
+            v_usr  text := :'target_user';
+            v_pwd  text := :'target_pass';
+        BEGIN
+            -- Garante Servidor Estrangeiro com host e porta parametrizados
+            IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = v_srv) THEN
+                EXECUTE format('CREATE SERVER %I FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host %L, port %L, dbname %L)', v_srv, v_host, v_port, v_db);
+            ELSE
+                EXECUTE format('ALTER SERVER %I OPTIONS (SET host %L, SET port %L, SET dbname %L)', v_srv, v_host, v_port, v_db);
+            END IF;
+            
+            -- SRE Security Fix: Renovação atômica de credenciais com escape seguro (quote_literal / %L)
+            EXECUTE format('DROP USER MAPPING IF EXISTS FOR %I SERVER %I', v_usr, v_srv);
+            EXECUTE format('CREATE USER MAPPING FOR %I SERVER %I OPTIONS (user %L, password %L)', v_usr, v_srv, v_usr, v_pwd);
+
+            -- SRE Notice: USER MAPPING FOR PUBLIC permite federação transparente para ferramentas de BI.
+            -- A segurança de isolamento é mantida pelas restrições de permissão nos schemas fdw_*.
+            EXECUTE format('DROP USER MAPPING IF EXISTS FOR PUBLIC SERVER %I', v_srv);
+            EXECUTE format('CREATE USER MAPPING FOR PUBLIC SERVER %I OPTIONS (user %L, password %L)', v_srv, v_usr, v_pwd);
+        END \$\$;
+    "; then
+        echo "🚨 [ERRO FATAL INSTALL] Falha ao configurar FDW e User Mapping para o servidor '$srv'." >&2
+        exit 1
+    fi
+done
+
+# 4. Injeção de DDL idempotente (init.sql com IF NOT EXISTS)
+echo "➜ [SRE CORE INSTALL] Aplicando DDL idempotente do Data Warehouse e Views Analíticas (init.sql)..."
+INIT_SQL_PATH=""
+if [ -f "./core/database/init.sql" ]; then
+    INIT_SQL_PATH="./core/database/init.sql"
+elif [ -f "$TARGET_DIR/core/database/init.sql" ]; then
+    INIT_SQL_PATH="$TARGET_DIR/core/database/init.sql"
+fi
+
+if [ -n "$INIT_SQL_PATH" ]; then
+    if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -v ON_ERROR_STOP=1 -q < "$INIT_SQL_PATH"; then
+        echo "🚨 [ERRO FATAL INSTALL] Falha na execução do DDL em init.sql." >&2
+        exit 1
+    fi
+fi
 
 # --- PREVENÇÃO SRE: CRIANDO CONFIG PLACEHOLDER ANTES DO BOOT ---
 mkdir -p "$TARGET_DIR/volumes/litellm_data" 2>/dev/null || true

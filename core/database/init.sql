@@ -1004,26 +1004,6 @@ BEGIN
     ELSE
         ALTER SERVER srv_postiz OPTIONS (SET host '/var/run/postgresql');
     END IF;
-
-    -- SRE Fix: USER MAPPING explícito e idempotente para conexões locais seguras
-    IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = 'srv_chatwoot' AND usename = CURRENT_USER) THEN
-        CREATE USER MAPPING FOR CURRENT_USER SERVER srv_chatwoot;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = 'srv_shlink' AND usename = CURRENT_USER) THEN
-        CREATE USER MAPPING FOR CURRENT_USER SERVER srv_shlink;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = 'srv_listmonk' AND usename = CURRENT_USER) THEN
-        CREATE USER MAPPING FOR CURRENT_USER SERVER srv_listmonk;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = 'srv_umami' AND usename = CURRENT_USER) THEN
-        CREATE USER MAPPING FOR CURRENT_USER SERVER srv_umami;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = 'srv_evolution' AND usename = CURRENT_USER) THEN
-        CREATE USER MAPPING FOR CURRENT_USER SERVER srv_evolution;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = 'srv_postiz' AND usename = CURRENT_USER) THEN
-        CREATE USER MAPPING FOR CURRENT_USER SERVER srv_postiz;
-    END IF;
 END $$;
 
 -- Criação dos Schemas FDW para isolamento
@@ -1929,7 +1909,7 @@ WITH posts_dia AS (
         STRING_AGG(SUBSTRING(p.title FROM 1 FOR 40), ' | ') AS titulos_posts
     FROM fdw_postiz.posts p
     JOIN fdw_postiz.integrations i ON p."integrationId" = i.id
-    WHERE p.state IN ('SCHEDULED', 'PUBLISHED')
+    WHERE (p.state = 'SCHEDULED' OR p.state = 'PUBLISHED')
     GROUP BY p."publishDate"::DATE
 ),
 trafego_dia AS (
