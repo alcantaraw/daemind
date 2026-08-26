@@ -56,6 +56,7 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)](#710-rastreamento-ponta-a-ponta--atribuição-de-tráfego-shlink--listmonk--umami)
   - [7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)](#711-padronização-de-aliases-de-rede-rfc-1123-mitigação-de-exceções-em-sdks-estritos)
   - [7.12. Hardening e Supressão Global de Logs (Piso Mínimo WARN/ERROR & Debloat de I/O)](#712-hardening-e-supressão-global-de-logs-piso-mínimo-warnerror--debloat-de-io)
+  - [7.13. Motor de Hidratação, Simulação de Negócios & Validação Contínua (Seed Engine 360°)](#713-motor-de-hidratação-simulação-de-negócios--validação-contínua-seed-engine-360)
 
 ---
 
@@ -576,8 +577,14 @@ echo "   sudo tail -n 50 $LOG_PATH"
 
 ---
 
-### 🧪 6.7. Bateria de Testes de Fumaça & Recuperação Perimetral (`ci_smoke_test.sh` e `install_0ts.sh`)
-- **`ci_smoke_test.sh`:** Suíte automatizada de validação pós-deploy que executa probes HTTP/HTTPS em todos os endpoints, testa portas internas (Postgres 5432, PgBouncer 6432, Redis 6379) e emite relatório com status de cada microsserviço.
+### 🧪 6.7. Suíte Enterprise de Testes Contínuos & Qualidade CI/CD (`ci_smoke_test.sh` e `install_0ts.sh`)
+- **`ci_smoke_test.sh` (Portão de Qualidade em 6 Fases):**
+  1. **Fase 1 (Sanitização & Subida):** Validação de sintaxe e subida determinística de toda a topologia Docker Compose.
+  2. **Fase 2 (Bancos de Dados & PgBouncer):** Checagem de conectividade em todos os 12 bancos lógicos (`loja_db`, `chatwoot_db`, `evolution_db`, `listmonk_db`, `metabase_db`, `openwebui_db`, `postiz_db`, `temporal`, `temporal_visibility`, `shlink_db`, `umami_db`, `litellm_db`), teste de multiplexação na porta `6432` do PgBouncer e transações em memória no Redis 8 (`SET/GET/DEL`).
+  3. **Fase 3 (Hardening de Kernel & Egress):** Validação de restrição de rede perimetral (IPTables + IPSet) garantindo bloqueio determinístico de tráfego não homologado.
+  4. **Fase 4 (Handshakes HTTP & APIs REST):** Checagem de prontidão com timeouts estritos em 13 endpoints (LiteLLM, Chatwoot, Docling, Evolution, Listmonk, Metabase, n8n, NocoDB, Ollama, Open WebUI, Shlink, Umami, MinIO, Caddy Admin).
+  5. **Fase 5 (Varredura Forense de Logs):** Inspeção automatizada de logs dos contêineres ativos procurando termos críticos (`SIGSEGV`, `NullPointerException`, `ERR_DATABASE_OP_FAILED`, `UnhandledPromiseRejection`, `FATAL`).
+  6. **Fase 6 (Seed Engine & 27 Views Analíticas):** Execução do motor de hidratação de dados e validação de integridade de 100% das 27 views analíticas do Data Warehouse.
 - **`install_0ts.sh recovery`:** Utilitário de resgate perimetral que desliga túneis órfãos do Funnel, reseta o daemon `tailscaled`, reaplica a Auth Key do cliente e restabelece a exposição externa sem necessidade de reboot do host.
 
 ---
@@ -646,6 +653,15 @@ Para garantir tempos de resposta de consulta otimizados e evitar inchaço no ban
   - **Open WebUI:** Parâmetros `GLOBAL_LOG_LEVEL=WARNING`, `WEBUI_LOG_LEVEL=WARNING`, `UVICORN_LOG_LEVEL=warning` e `ALEMBIC_LOG_LEVEL=WARNING`, suprimindo o log das migrações do banco.
   - **LiteLLM & Ollama:** Flags `UVICORN_LOG_LEVEL=warning`, `LITELLM_BANNER=False`, `DISABLE_BANNER=true`, `GIN_MODE=release` e `OLLAMA_DEBUG_LOG_REQUESTS=false`, silenciando requisições repetitivas de liveliness.
   - **Serviços de Background (Evolution, Chatwoot, n8n, NocoDB, Listmonk, Postiz, Temporal):** Níveis configurados com `LOG_LEVEL=error`/`warn`, `RUBYOPT=-W0` e `NC_LOGGER_LEVEL=error`, focando estritamente em incidentes reais de sistema.
+
+### 🌱 7.13. Motor de Hidratação, Simulação de Negócios & Validação Contínua (Seed Engine 360°)
+- **Finalidade e Arquitetura (`seed_mock_data.sql` + `seed_demo_data.sh`):**
+  - O ecossistema disponibiliza um motor autônomo de hidratação relacional projetado para testes de carga, simulação de modelos de negócios e validação contínua das **27 Views Analíticas** antes da entrada em produção.
+- **Topologia de Carga Multi-Bancos e FDWs:**
+  - **Data Warehouse Central (`${PREFIX}_db`):** Popula catálogo expandido (20 produtos com CMV e níveis de estoque), insumos com alertas de ruptura, clientes B2C/B2B com histórico de até 400 dias, pedidos com detalhamento por SKU/CMV, funil de prospecção com lead scoring (Tier A, B, C), carrinhos abandonados, hub universal de ads (90 dias contínuos em Meta, Google e TikTok), 18 meses de contratos B2B com múltiplos churns históricos, propostas comerciais com validades futuras, documentos RAG com embeddings vetoriais (768d) e fila outbox com agendamentos futuros.
+  - **Bancos Satélites dos Microsserviços:** Popula simultaneamente o `chatwoot_db` (atendentes SDRs, conversas e CSATs), `shlink_db` (links curtos, geolocalização e visitas), `listmonk_db` (subscribers, campanhas e aberturas), `umami_db` (sessões e eventos com tags UTM), `postiz_db` (posts publicados e agendamentos futuros) e `evolution_db` (instâncias e mensagens).
+- **Portão de Qualidade em CI/CD (`ci_smoke_test.sh`):**
+  - Integrado nativamente à suíte de testes de fumaça, disparando a rotina de validação executiva (`SELECT count(*) FROM public.vw_*`) que assegura que 100% das 27 views analíticas executam sem erro de join ou agregação sobre as foreign tables.
 
 ---
 

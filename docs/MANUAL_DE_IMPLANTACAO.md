@@ -461,3 +461,11 @@ Abaixo estão descritos os principais fluxos de automação pré-configurados no
 ### 🏷️ 8.4. Expedição por Leitor Ótico USB (Hardware HID)
 - O operador abre a View de Expedição no NocoDB (com `Autofocus` ativo).
 - Ao bipar o código de barras da caixa com o leitor USB, a string é enviada instantaneamente com `Enter`, acionando a baixa atômica de estoque e gerando a guia de postagem sem uso de mouse ou teclado.
+
+### 🌱 8.5. Simulação de Negócios, Homologação & Seed Engine
+- Para testes de carga, validação de Dashboards no Metabase, simulação de DRE contábil, campanhas de tráfego e Churn de serviços B2B:
+```bash
+cd /opt/daemind
+sudo ./core/scripts/seed_demo_data.sh
+```
+- O script popula automaticamente 18 meses de histórico nos 7 bancos de dados (`loja_db`, `chatwoot_db`, `shlink_db`, `listmonk_db`, `umami_db`, `postiz_db`, `evolution_db`) e valida em tempo real o retorno de todas as **27 Views Analíticas** do Data Warehouse.

@@ -893,22 +893,23 @@ if [ "$USE_TUI" = "true" ] && command -v dialog &>/dev/null; then
     # =====================================================================
     gerar_dialogrc
 
-    # 🖥️ Tela 0: Boas-vindas & Apresentação Oficial daemind.
+    # 🖥️ Tela 0: Boas-vindas & Apresentação Oficial daemind. v2.0
     BANNER_TEXT=$(cat << 'EOF'
 ============================================================
-                   d a e m i n d .
-     Sistema Operacional Autônomo para Negócios Digitais
+             d a e m i n d .   v 2 . 0
+      Sistema Operacional Autônomo para Negócios Digitais
 ============================================================
 
-• Arquitetura SRE Production-Ready
+• Arquitetura SRE Production-Ready 2.0 (Zero-ETL Data Warehouse)
 • Topologia Zero-Trust & Self-Hosted Soberana
 • Isolamento Perimetral & Virtualização Otimizada
+• Cockpit Executivo 360° & Hub de Inteligência de Negócios
 
-Bem-vindo ao Assistente de Deploy Automatizado do daemind.
+Bem-vindo ao Assistente de Deploy Automatizado do daemind v2.0.
 Navegue usando [Tab], [Setas], [Barra de Espaço] ou [Mouse].
 EOF
 )
-    tui_dialog --title "daemind. - Sistema Operacional Autônomo" --msgbox "$BANNER_TEXT" 15 66 || true
+    tui_dialog --title "daemind. v2.0 - Sistema Operacional Autônomo" --msgbox "$BANNER_TEXT" 16 68 || true
 
     # 🔄 Tela 1: Reutilização de Cache (se existir)
     if [ -f "$CACHE_WIZARD_FILE" ]; then
