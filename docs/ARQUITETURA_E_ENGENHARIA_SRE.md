@@ -578,13 +578,17 @@ echo "   sudo tail -n 50 $LOG_PATH"
 ---
 
 ### 🧪 6.7. Suíte Enterprise de Testes Contínuos & Qualidade CI/CD (`ci_smoke_test.sh` e `install_0ts.sh`)
-- **`ci_smoke_test.sh` (Portão de Qualidade em 6 Fases):**
+- **`ci_smoke_test.sh` (Portão de Qualidade Enterprise em 10 Fases):**
   1. **Fase 1 (Sanitização & Subida):** Validação de sintaxe e subida determinística de toda a topologia Docker Compose.
-  2. **Fase 2 (Bancos de Dados & PgBouncer):** Checagem de conectividade em todos os 12 bancos lógicos (`loja_db`, `chatwoot_db`, `evolution_db`, `listmonk_db`, `metabase_db`, `openwebui_db`, `postiz_db`, `temporal`, `temporal_visibility`, `shlink_db`, `umami_db`, `litellm_db`), teste de multiplexação na porta `6432` do PgBouncer e transações em memória no Redis 8 (`SET/GET/DEL`).
-  3. **Fase 3 (Hardening de Kernel & Egress):** Validação de restrição de rede perimetral (IPTables + IPSet) garantindo bloqueio determinístico de tráfego não homologado.
-  4. **Fase 4 (Handshakes HTTP & APIs REST):** Checagem de prontidão com timeouts estritos em 13 endpoints (LiteLLM, Chatwoot, Docling, Evolution, Listmonk, Metabase, n8n, NocoDB, Ollama, Open WebUI, Shlink, Umami, MinIO, Caddy Admin).
-  5. **Fase 5 (Varredura Forense de Logs):** Inspeção automatizada de logs dos contêineres ativos procurando termos críticos (`SIGSEGV`, `NullPointerException`, `ERR_DATABASE_OP_FAILED`, `UnhandledPromiseRejection`, `FATAL`).
-  6. **Fase 6 (Seed Engine & 27 Views Analíticas):** Execução do motor de hidratação de dados e validação de integridade de 100% das 27 views analíticas do Data Warehouse.
+  2. **Fase 2 (Hardware Host):** Profiling de Load Average, Uptime, Memória RAM, SWAP e ocupação por volume físico em `./volumes/*`.
+  3. **Fase 3 (Containers, Limits & OOM):** Matriz `docker stats` em tempo real (% CPU, % Memória, Net I/O, Block I/O) e auditoria de OOMKilled no Docker e Kernel (`dmesg` e `/proc/pressure/memory`).
+  4. **Fase 4 (Telemetria de Dados):** Conexões no PostgreSQL, Cache Hit Ratio em RAM (>95%), tamanho de cada banco lógico, pools no PgBouncer e métricas no Redis 8.
+  5. **Fase 5 (18 Portas & URLs):** Checagem ponto a ponto de todas as portas e endpoints HTTP das aplicações.
+  6. **Fase 6 (Service Mesh E2E Handshakes):** Simulação cruzada de interações entre microsserviços (LiteLLM ➔ pgvector HNSW 768d, MinIO S3 Object Storage, Evolution ➔ Chatwoot Inter-DNS, Shlink ➔ Umami Tracking).
+  7. **Fase 7 (Saúde Interna PostgreSQL):** Detecção de deadlocks, transações presas há mais de 5 minutos e análise de bloat/dead tuples no Autovacuum.
+  8. **Fase 8 (Time Drift & TLS):** Verificação de sincronização de relógio via NTP e integridade de certificados TLS no Tailscale.
+  9. **Fase 9 (Varredura Forense de Logs):** Inspeção de logs dos contêineres ativos buscando exceções críticas (`SIGSEGV`, `NullPointerException`, `ERR_DATABASE_OP_FAILED`, `UnhandledPromiseRejection`, `FATAL`).
+  10. **Fase 10 (Seed Engine & 27 Views):** Hidratação de 18 meses de dados mock e validação de execução de 100% das 27 views analíticas do Data Warehouse.
 - **`install_0ts.sh recovery`:** Utilitário de resgate perimetral que desliga túneis órfãos do Funnel, reseta o daemon `tailscaled`, reaplica a Auth Key do cliente e restabelece a exposição externa sem necessidade de reboot do host.
 
 ---
