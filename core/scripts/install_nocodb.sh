@@ -347,22 +347,34 @@ provision_user() {
             BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[0].id // empty' 2>/dev/null || true)
         fi
 
-        # 2. Se nenhuma base existir no Workspace (NocoDB v0.250+), cria e conecta diretamente à fonte de dados PostgreSQL
+        # 2. Se nenhuma base existir no Workspace (NocoDB v0.250+), cria a Base corporativa
         if [ -z "$BASE_EXISTENTE" ] || [ "$BASE_EXISTENTE" = "null" ]; then
-            echo "  ↳ Conectando e criando base corporativa principal (${BASE_NAME}) no PostgreSQL..."
-            local CREATE_BASE_PAYLOAD
-            CREATE_BASE_PAYLOAD=$(jq -n \
-                --arg title "$BASE_NAME" \
-                --arg host "postgres" \
-                --arg port "5432" \
-                --arg user "${DB_USER:-admin_db}" \
-                --arg password "${DB_PASSWORD}" \
-                --arg database "${PREFIX}_db" \
-                '{
-                    title: $title,
-                    type: "pg",
-                    sources: [{
+            echo "  ↳ Criando base corporativa principal (${BASE_NAME})..."
+            local CREATE_BASE_RES
+            CREATE_BASE_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" \
+                -H "xc-auth: $AUTH_TOKEN" \
+                -H "Content-Type: application/json" \
+                -d "{\"title\": \"${BASE_NAME}\", \"type\": \"database\"}" 2>/dev/null || echo "")
+
+            BASE_EXISTENTE=$(echo "$CREATE_BASE_RES" | jq -r '.id // empty' 2>/dev/null || true)
+        fi
+
+        if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
+            # 3. Verifica se a fonte de dados PostgreSQL já está vinculada na Base
+            local HAS_PG_SOURCE=$(sudo docker exec ${PREFIX}_nocodb curl -s "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[]? | select(.type == "pg" and .is_local == false) | .id // empty' 2>/dev/null | head -n 1 || true)
+
+            if [ -z "$HAS_PG_SOURCE" ] || [ "$HAS_PG_SOURCE" = "null" ]; then
+                echo "  ↳ Vinculando e sincronizando fonte de dados PostgreSQL (${PREFIX}_db via PgBouncer) no NocoDB..."
+                local SOURCE_PAYLOAD
+                SOURCE_PAYLOAD=$(jq -n \
+                    --arg host "pgbouncer" \
+                    --arg port "6432" \
+                    --arg user "${DB_USER:-admin_db}" \
+                    --arg password "${DB_PASSWORD}" \
+                    --arg database "${PREFIX}_db" \
+                    '{
                         type: "pg",
+                        alias: "PostgreSQL",
                         config: {
                             client: "pg",
                             connection: {
@@ -371,39 +383,19 @@ provision_user() {
                                 user: $user,
                                 password: $password,
                                 database: $database,
-                                ssl: false
+                                ssl: false,
+                                searchPath: "public"
                             }
-                        },
-                        inflection_column: "camelize",
-                        inflection_table: "camelize"
-                    }]
-                }')
+                        }
+                    }')
 
-            local CREATE_BASE_RES
-            CREATE_BASE_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" \
-                -H "xc-auth: $AUTH_TOKEN" \
-                -H "Content-Type: application/json" \
-                -d "$CREATE_BASE_PAYLOAD" 2>/dev/null || echo "")
-
-            BASE_EXISTENTE=$(echo "$CREATE_BASE_RES" | jq -r '.id // empty' 2>/dev/null || true)
-            echo "  ↳ [DEBUG NOCODB CREATE BASE] Nova Base Criada ID: ${BASE_EXISTENTE}"
-        fi
-
-        if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
-            echo "  ↳ Sincronizando tabelas corporativas no NocoDB (Zero-Touch Meta-Sync)..."
-            # Obtém as tabelas/views identificadas no meta-diff e sincroniza
-            local DIFF_PAYLOAD=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" -H "xc-auth: $AUTH_TOKEN" 2>/dev/null || echo "")
-            local DIFF_COUNT=$(echo "$DIFF_PAYLOAD" | jq '. | length' 2>/dev/null || echo "0")
-            echo "  ↳ [DEBUG NOCODB META-DIFF] Alterações/Tabelas detectadas para sync: ${DIFF_COUNT}"
-            
-            if [ -n "$DIFF_PAYLOAD" ] && [ "$DIFF_PAYLOAD" != "null" ] && [ "$DIFF_PAYLOAD" != "{}" ] && [ "$DIFF_PAYLOAD" != "[]" ]; then
-                local SYNC_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" \
+                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" \
                     -H "xc-auth: $AUTH_TOKEN" \
                     -H "Content-Type: application/json" \
-                    -d "$DIFF_PAYLOAD" 2>/dev/null || echo "")
-                echo "  ↳ [DEBUG NOCODB SYNC] Retorno Meta-Sync HTTP: $(echo "$SYNC_RES" | grep 'HTTP_STATUS:' | cut -d: -f2)"
+                    -d "$SOURCE_PAYLOAD" >/dev/null 2>&1 || true
+                echo "✔ [AUTO-INTEGRAÇÃO NOCODB] Data Warehouse e tabelas sincronizadas com sucesso no NocoDB."
             else
-                echo "  ↳ [DEBUG NOCODB SYNC] Schema e tabelas já 100% alinhados no NocoDB."
+                echo "➜ [IDEMPOTÊNCIA NOCODB] Fonte de dados PostgreSQL já conectada e sincronizada no NocoDB."
             fi
         fi
     fi

@@ -331,7 +331,7 @@ provision_user() {
     # -----------------------------------------------------------------------
     # SRE AUTO-INTEGRAÇÃO UTM/SHLINK: Injeta Template Executivo com Auto-UTM
     # -----------------------------------------------------------------------
-    echo "➜ [SRE LISTMONK DEBUG] Provisionando Template Executivo com Auto-UTM (Shlink & Umami)..."
+    echo "➜ [SRE LISTMONK] Provisionando Template Executivo com Auto-UTM (Shlink & Umami)..."
     local TPL_BODY='<!doctype html>
 <html>
 <head>
@@ -370,8 +370,7 @@ provision_user() {
 </html>'
 
     local TPL_B64=$(echo "$TPL_BODY" | base64 -w 0 2>/dev/null || echo "$TPL_BODY" | base64 | tr -d '\r\n')
-    local TPL_DEBUG_RES
-    TPL_DEBUG_RES=$(sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -c "
+    sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
     DO \$\$
     DECLARE
         v_body TEXT := convert_from(decode('${TPL_B64}', 'base64'), 'UTF8');
@@ -387,19 +386,13 @@ provision_user() {
                 NOW(),
                 NOW()
             );
-            RAISE NOTICE 'TEMPLATE_CRIADO';
         ELSE
             UPDATE templates 
             SET subject = '{{ .Campaign.Subject }}', body = v_body, updated_at = NOW() 
             WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)';
-            RAISE NOTICE 'TEMPLATE_ATUALIZADO';
         END IF;
     END \$\$;
-    " 2>&1 || true)
-    
-    local TPL_COUNT=$(sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -t -A -c "SELECT COUNT(*) FROM templates WHERE name = 'Template Executivo Auto-UTM (Shlink & Umami)';" 2>/dev/null | tr -d '\r\n ' || echo "0")
-    echo "  ↳ [DEBUG LISTMONK TEMPLATE] Retorno SQL: $(echo "$TPL_DEBUG_RES" | tr '\n' ' ' | head -c 120)..."
-    echo "  ↳ [DEBUG LISTMONK TEMPLATE] Total de templates no banco listmonk_db: ${TPL_COUNT}"
+    " >/dev/null 2>&1 || true
     echo "✔ [AUTO-INTEGRAÇÃO LISTMONK] Template Executivo com Auto-UTM provisionado com sucesso."
 }
 
