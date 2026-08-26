@@ -28,6 +28,44 @@ build_structure() {
     local VOL_PATH="$TARGET_DIR/volumes/metabase_data"
     local CURRENT_OWNER=$(stat -c '%u:%g' "$VOL_PATH" 2>/dev/null || echo "")
 
+    # SRE Fix: Garante arquivo de configuração do log4j2 (evita colisão de diretório no Docker bind mount)
+    local LOG4J_FILE="$TARGET_DIR/core/config/log4j2.metabase.xml"
+    if [ -d "$LOG4J_FILE" ]; then
+        sudo rm -rf "$LOG4J_FILE" 2>/dev/null || rm -rf "$LOG4J_FILE" || true
+    fi
+    if [ ! -f "$LOG4J_FILE" ]; then
+        sudo mkdir -p "$TARGET_DIR/core/config" 2>/dev/null || mkdir -p "$TARGET_DIR/core/config" || true
+        cat << 'EOF' | sudo tee "$LOG4J_FILE" > /dev/null
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1} :: %m%n" />
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="WARN">
+      <AppenderRef ref="Console" />
+    </Root>
+    <Logger name="metabase" level="WARN" />
+    <Logger name="metabase.sync" level="OFF" />
+    <Logger name="metabase.driver" level="ERROR" />
+    <Logger name="metabase.plugins" level="ERROR" />
+    <Logger name="metabase.server.middleware.log" level="WARN" />
+    <Logger name="metabase.metabot" level="OFF" />
+    <Logger name="metabase.api.card" level="ERROR" />
+    <Logger name="metabase.models.card" level="ERROR" />
+    <Logger name="example-question-generator" level="OFF" />
+    <Logger name="suggested-prompts-generator" level="OFF" />
+    <Logger name="liquibase" level="ERROR" />
+    <Logger name="org.quartz" level="ERROR" />
+    <Logger name="c3p0" level="ERROR" />
+    <Logger name="com.mchange" level="ERROR" />
+  </Loggers>
+</Configuration>
+EOF
+    fi
+
     if [ -d "$VOL_PATH" ] && [ "$CURRENT_OWNER" = "$TARGET_OWNER" ]; then
         echo "➜ [IDEMPOTÊNCIA METABASE] Estrutura de volumes de metabase_data já alinhada (${TARGET_OWNER}). Preservando I/O."
     else
