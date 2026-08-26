@@ -124,7 +124,21 @@ CREATE TABLE IF NOT EXISTS pedidos (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3.5 Criação da Tabela de Itens do Pedido (Detalhamento por SKU / Curva ABC / Estoque)
+-- 3.5 Criação da Tabela de Catálogo Local (Cache Espelho da Loja Integrada)
+-- NOTA DE ORDEM: catalogo deve ser criada antes de pedido_itens (FK catalogo_id)
+CREATE TABLE IF NOT EXISTS catalogo (
+    id_interno BIGINT PRIMARY KEY, -- ID numérico interno exigido pela API
+    sku VARCHAR(100) UNIQUE NOT NULL, -- SKU alfanumérico bipado ou digitado
+    nome VARCHAR(255) NOT NULL,
+    preco_cheio NUMERIC(10,2),
+    custo_unitario NUMERIC(10,2) DEFAULT 0.00, -- Custo de aquisição unitário (CMV base)
+    quantidade_estoque INTEGER NOT NULL DEFAULT 0,
+    estoque_minimo INTEGER NOT NULL DEFAULT 5, -- Nível mínimo para disparo de alerta de estoque
+    data_sincronizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3.7 Criação da Tabela de Itens do Pedido (Detalhamento por SKU / Curva ABC / Estoque)
 CREATE TABLE IF NOT EXISTS pedido_itens (
     id SERIAL PRIMARY KEY,
     pedido_id BIGINT NOT NULL REFERENCES pedidos(id) ON DELETE CASCADE,
@@ -175,18 +189,7 @@ CREATE TABLE IF NOT EXISTS leads (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. Criação da Tabela de Catálogo Local (Cache Espelho da Loja Integrada)
-CREATE TABLE IF NOT EXISTS catalogo (
-    id_interno BIGINT PRIMARY KEY, -- ID numérico interno exigido pela API
-    sku VARCHAR(100) UNIQUE NOT NULL, -- SKU alfanumérico bipado ou digitado
-    nome VARCHAR(255) NOT NULL,
-    preco_cheio NUMERIC(10,2),
-    custo_unitario NUMERIC(10,2) DEFAULT 0.00, -- Custo de aquisição unitário (CMV base)
-    quantidade_estoque INTEGER NOT NULL DEFAULT 0,
-    estoque_minimo INTEGER NOT NULL DEFAULT 5, -- Nível mínimo para disparo de alerta de estoque
-    data_sincronizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- 6. [MOVIDO PARA LINHA ~127] catalogo foi antecipada por dependência de FK em pedido_itens
 
 -- 6.5 Criação da Tabela de Despesas de Marketing e Tráfego Pago
 CREATE TABLE IF NOT EXISTS despesas_marketing (
