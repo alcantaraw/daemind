@@ -56,7 +56,7 @@ provision_infra() {
         fi
     fi
 
-    local NOCO_TABELAS=$(docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -t -c "SELECT count(*) FROM pg_tables WHERE schemaname = 'public' AND tablename LIKE 'nc_%';" 2>/dev/null | tr -dc '0-9' || echo "0")
+    local NOCO_TABELAS=$(docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -t -c "SELECT count(*) FROM pg_tables WHERE schemaname = 'nocodb_schema' AND tablename LIKE 'nc_%';" 2>/dev/null | tr -dc '0-9' || echo "0")
     NOCO_TABELAS=${NOCO_TABELAS:-0}
     local NOCO_ERRORS=$(sudo docker logs ${PREFIX}_nocodb --tail 200 2>&1 | grep -iE "relation.*does not exist|JOB FAILED|ERR_DATABASE_OP_FAILED" || true)
 
@@ -69,14 +69,14 @@ provision_infra() {
         DECLARE 
             r RECORD; 
         BEGIN 
-            FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename LIKE 'nc_%') LOOP 
-                EXECUTE 'DROP TABLE IF EXISTS public.' || quote_ident(r.tablename) || ' CASCADE'; 
+            FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'nocodb_schema' AND tablename LIKE 'nc_%') LOOP 
+                EXECUTE 'DROP TABLE IF EXISTS nocodb_schema.' || quote_ident(r.tablename) || ' CASCADE'; 
             END LOOP; 
-            FOR r IN (SELECT viewname FROM pg_views WHERE schemaname = 'public' AND viewname LIKE 'nc_%') LOOP 
-                EXECUTE 'DROP VIEW IF EXISTS public.' || quote_ident(r.viewname) || ' CASCADE'; 
+            FOR r IN (SELECT viewname FROM pg_views WHERE schemaname = 'nocodb_schema' AND viewname LIKE 'nc_%') LOOP 
+                EXECUTE 'DROP VIEW IF EXISTS nocodb_schema.' || quote_ident(r.viewname) || ' CASCADE'; 
             END LOOP;
-            FOR r IN (SELECT relname FROM pg_class WHERE relkind = 'S' AND relnamespace = 'public'::regnamespace AND relname LIKE 'nc_%') LOOP 
-                EXECUTE 'DROP SEQUENCE IF EXISTS public.' || quote_ident(r.relname) || ' CASCADE'; 
+            FOR r IN (SELECT relname FROM pg_class WHERE relkind = 'S' AND relnamespace = 'nocodb_schema'::regnamespace AND relname LIKE 'nc_%') LOOP 
+                EXECUTE 'DROP SEQUENCE IF EXISTS nocodb_schema.' || quote_ident(r.relname) || ' CASCADE'; 
             END LOOP;
         END \$\$;" > /dev/null 2>&1 || true
 
@@ -88,7 +88,7 @@ provision_infra() {
         cd "$TARGET_DIR" && sudo docker compose up -d --force-recreate nocodb > /dev/null 2>&1 || true
         sleep 5
     else
-        echo "➜ [IDEMPOTÊNCIA NOCODB] Estrutura do NocoDB parece íntegra ($NOCO_TABELAS tabelas). Preservando o estado atual."
+        echo "✔ [SUCESSO NOCODB] Integridade do esquema relacional validada com sucesso."
     fi
 }
 

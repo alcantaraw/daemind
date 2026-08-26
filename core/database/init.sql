@@ -1,8 +1,4 @@
--- 1. Garante a criação dos schemas de sistema para isolamento total dos microsserviços
-CREATE SCHEMA IF NOT EXISTS n8n_schema;
-CREATE SCHEMA IF NOT EXISTS nocodb_schema;
-
--- 2. Define o escopo padrão do restante deste script para o schema public (sua solução)
+-- 1. Define o escopo padrão do restante deste script para o schema public
 SET search_path TO public;
 
 -- 3. Ativação da Extensão de Vetores para o RAG da Inteligência Artificial

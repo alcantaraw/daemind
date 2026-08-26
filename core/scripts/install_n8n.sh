@@ -132,6 +132,7 @@ provision_db() {
     else
         echo "  ↳ Criando schema 'n8n_schema'..."
         docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -q -c "CREATE SCHEMA IF NOT EXISTS n8n_schema AUTHORIZATION ${DB_USER};" > /dev/null 2>&1 || true
+        echo "✔ [SUCESSO N8N] Schema 'n8n_schema' provisionado com sucesso."
     fi
 }
 

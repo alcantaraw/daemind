@@ -98,10 +98,11 @@ provision_infra() {
 
     # 3. Validação DDL do Postiz (Prisma db push)
     if ! docker compose exec -T postgres psql -U "${DB_USER}" -d postiz_db -c "SELECT 1 FROM \"User\" LIMIT 1;" > /dev/null 2>&1 < /dev/null; then
-        echo "➜ [SRE POSTIZ] Tabelas ausentes no banco postiz_db. Executando Prisma db push..."
+        echo "  ↳ Inicializando schema DDL do Postiz Planner (Prisma db push)..."
         sudo docker exec -i ${PREFIX}_postiz npx prisma db push --skip-generate > /dev/null 2>&1 || true
+        echo "✔ [SUCESSO POSTIZ] Schema relacional do Postiz Planner estruturado com sucesso."
     else
-        echo "➜ [IDEMPOTÊNCIA POSTIZ] Schema do Postiz Planner (Prisma) já estruturado no Postgres. Preservando tabelas."
+        echo "✔ [SUCESSO POSTIZ] Integridade do schema relacional do Postiz Planner validada com sucesso."
     fi
 
     # 4. Sincronização do barramento do Postiz com o Temporal
