@@ -12,7 +12,7 @@ services:
       resources:
         limits:
           cpus: '${CPU_METABASE:-2.0}'
-          memory: '${MEM_METABASE:-1536M}'
+          memory: '${MEM_METABASE:-2048M}'
         reservations:
           memory: '${RES_METABASE:-256M}'
     environment:

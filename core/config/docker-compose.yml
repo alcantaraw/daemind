@@ -22,7 +22,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_REDIS:-0.5}'
+          cpus: '${CPU_REDIS:-1.0}'
           memory: '${MEM_REDIS:-256M}'
         reservations:
           memory: '${RES_REDIS:-64M}'
@@ -52,7 +52,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_DB:-1.0}'
+          cpus: '${CPU_DB:-2.0}'
           memory: '${MEM_DB:-1024M}'
         reservations:
           memory: '${RES_DB:-512M}'
@@ -83,7 +83,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_POOLER:-0.5}'
+          cpus: '${CPU_POOLER:-1.0}'
           memory: '${MEM_POOLER:-256M}'
         reservations:
           memory: '${RES_POOLER:-64M}'
@@ -146,7 +146,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_WAF:-0.5}'
+          cpus: '${CPU_WAF:-1.0}'
           memory: '${MEM_WAF:-256M}'
         reservations:
           memory: '${RES_WAF:-64M}'
@@ -164,7 +164,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_LITELLM:-1.0}'
+          cpus: '${CPU_LITELLM:-2.0}'
           memory: '${MEM_LITELLM:-2048M}'
         reservations:
           memory: '${RES_LITELLM:-256M}'

@@ -11,7 +11,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_LISTMONK:-0.5}'
+          cpus: '${CPU_LISTMONK:-1.0}'
           memory: '${MEM_LISTMONK:-512M}'
         reservations:
           memory: '${RES_LISTMONK:-128M}'

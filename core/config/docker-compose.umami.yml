@@ -11,7 +11,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_UMAMI:-0.5}'
+          cpus: '${CPU_UMAMI:-1.0}'
           memory: '${MEM_UMAMI:-512M}'
         reservations:
           memory: '${RES_UMAMI:-128M}'

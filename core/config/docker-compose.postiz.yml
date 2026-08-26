@@ -13,7 +13,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '${CPU_TEMPORAL:-0.5}'
+          cpus: '${CPU_TEMPORAL:-1.5}'
           memory: '${MEM_TEMPORAL:-768M}'
         reservations:
           memory: '${RES_TEMPORAL:-128M}'
@@ -63,7 +63,7 @@ services:
       resources:
         limits:
           cpus: '${CPU_POSTIZ:-2.0}'
-          memory: '${MEM_POSTIZ:-4096M}'
+          memory: '${MEM_POSTIZ:-3584M}'
         reservations:
           memory: '${RES_POSTIZ:-1024M}'
     environment:
