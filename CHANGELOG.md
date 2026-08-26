@@ -25,7 +25,7 @@
 
 - **[ADD] Data Warehouse Soberano & Business Intelligence (Metabase + NocoDB via PgBouncer):**
   - **Federação Nativa Completa via `postgres_fdw`:** O banco centralizador `loja_db` integra em tempo real as bases de todos os 6 microsserviços da stack (`chatwoot_db`, `shlink_db`, `listmonk_db`, `umami_db`, `evolution_db`, `postiz_db`) em schemas isolados (`fdw_*`) sem duplicação de dados nem consumo extra de disco.
-  - **7 Views Analíticas Executivas:** Provisionadas diretamente no `init.sql`:
+  - **23 Views Analíticas Executivas & BI:** Provisionadas diretamente no `init.sql`:
     - `vw_kpi_atendimento`: Tempo médio de 1ª resposta, tempo de resolução e CSAT por atendente/canal (Chatwoot).
     - `vw_kpi_marketing_links`: Volume de cliques reais (anti-bot), UTMs, referrers e geolocalização (Shlink).
     - `vw_kpi_email_marketing`: Taxas de abertura (Open Rate), cliques (CTR) e crescimento de base (Listmonk).
@@ -33,6 +33,31 @@
     - `vw_kpi_whatsapp_disparos`: Volume de mensagens enviadas/recebidas, status de entrega, lidas e instâncias ativas (Evolution API).
     - `vw_kpi_redes_sociais`: Publicações agendadas vs postadas por plataforma social (Instagram, LinkedIn, etc.) (Postiz).
     - `vw_funil_executivo_completo`: Cruzamento ponta a ponta (Tráfego Web/Links ➔ Redes Sociais ➔ WhatsApp ➔ Leads Chatwoot ➔ Clientes Loja ➔ Pedidos/Faturamento).
+    - `vw_gestao_lucro_real`: DRE Unitário por Pedido (Faturamento Bruto - CMV - Taxas Gateway - Frete Real - Ads = Lucro Líquido Real & Margem %).
+    - `vw_dre_diario_consolidado`: DRE Diário Consolidado + ROAS de Marketing por dia de operação.
+    - `vw_estoque_critico`: Alerta Unificado de Ruptura (Produtos de Venda + Insumos de Expedição com tipo indexado).
+    - `vw_calculadora_leads_metricas`: Calculadora de CPL, CAC, Ticket Médio, Lucro Gerado e Tempo Médio de Conversão por Canal.
+    - `vw_ranking_leads_icp`: Ranking dinâmico de leads, Lead Scoring (0-100), Tiers A/B/C, controle de SLA e fila prioritária para SDR/Vendas.
+    - `vw_triagem_volume_leads`: Triagem diária de volume de captura, capacidade de atendimento e gargalos na esteira de qualificação.
+    - `vw_analise_descarte_leads`: Análise de leads desqualificados, motivos de descarte e estimativa de verba de Ads/Marketing desperdiçada.
+    - `vw_performance_ads_gerenciadores`: Performance consolidada de tráfego pago (Meta Ads, Google Ads, TikTok Ads, ChatGPT Ads, LinkedIn) com CPC, CPM, CTR, CPA e ROAS do Pixel.
+    - `vw_correlacao_ads_vendas_reais`: Auditoria executiva cruzando Ads Reportado (Pixel) vs Pedidos Reais Faturados no Banco (ROAS Real vs ROAS Estimado).
+    - `vw_atribuicao_utm_360`: Atribuição direta e precisa de tráfego (Umami) cruzado com vendas e margem por UTM.
+    - `vw_matriz_rfm_clientes`: Segmentação comportamental de clientes (VIP, Leais, Novos, Risco de Churn, Inativos) com score RFM (1-5).
+    - `vw_recompra_e_ciclo_de_vida`: Taxa de recompra, LTV médio e intervalo médio entre compras otimizado em O(N) com `LAG()`.
+    - `vw_kpi_recuperacao_vendas`: Taxa de recuperação de carrinhos abandonados, PIX e boletos pendentes via WhatsApp.
+    - `vw_social_media_engajamento_conversao`: Correlação diária de posts (Postiz) com tráfego web e pageviews (Umami).
+    - `vw_performance_comercial_atendentes`: Produtividade, CSAT e faturamento gerado por vendedor/SDR no Chatwoot.
+    - `vw_relatorio_mensal_agencia`: DRE mensal consolidado de agência de marketing com `DATE_TRUNC` e range scan otimizado.
+  - **Hub Universal de Mídia Paga & Ingestão Automatizada de Ads:**
+    - Tabela dedicada `metricas_ads_diarias` com chave de idempotência diária para ingestão via n8n (Meta Ads, Google Ads, TikTok Ads, ChatGPT Ads, LinkedIn Ads, etc.).
+    - Trigger autônoma `fn_calcular_metricas_ads_diarias` calculando automaticamente CPC, CPM, CTR e normalizando UTMs.
+  - **Automação Nativa de Lead Scoring & Qualificação no PostgreSQL:**
+    - Trigger autônoma `fn_sanitizar_e_qualificar_leads` que calcula score de 0 a 100 ponderando CNPJ, WhatsApp, origem de alta conversão (Inbound vs Outbound), link corporativo e atendimento ativo no Chatwoot.
+    - Auto-descarte e triagem inteligente para leads sem contatos válidos com timestamp de descarte e motivo estruturado.
+    - Processamento autônomo de pedidos com isolamento de leads e consumo unitário de insumos com bloqueio pessimista `FOR UPDATE SKIP LOCKED`.
+    - Trigger global de timestamp `updated_at` em todas as 9 tabelas transacionais.
+    - User Mappings provisionados no `install.sh` antes do DDL com credenciais reais (Zero-Touch para FDW).
   - **Auto-Conexão Zero-Touch:** Provisionamento automático da fonte de dados `Data Warehouse Soberano` no Metabase (`install_metabase.sh`) e auto-sincronização de metadados de Views no NocoDB (`install_nocodb.sh`).
 
 - **[ADD] Template Executivo Auto-UTM no Listmonk (Shlink & Umami Ready):**

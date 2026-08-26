@@ -1036,18 +1036,14 @@ until docker compose exec -T postgres pg_isready -U $DB_USER -d ${PREFIXO_CONTAI
   sleep 2
 done
 
-# 1. Injeção de DDL idempotente (init.sql com IF NOT EXISTS)
-if [ -f "./core/database/init.sql" ]; then
-    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < ./core/database/init.sql > /dev/null 2>&1 || true
-elif [ -f "$TARGET_DIR/core/database/init.sql" ]; then
-    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < "$TARGET_DIR/core/database/init.sql" > /dev/null 2>&1 || true
-fi
-
-# 1.1. Injeção de User Mappings para Federação FDW (loja_db / Metabase)
+# 1. Injeção de User Mappings para Federação FDW (loja_db / Metabase) ANTES do DDL
 for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_postiz; do
     docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -c "
         DO \$\$
         BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = '$srv') THEN
+                CREATE SERVER $srv FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host 'localhost', port '5432', dbname '${srv#srv_}_db');
+            END IF;
             IF NOT EXISTS (SELECT 1 FROM pg_user_mapping um JOIN pg_foreign_server fs ON fs.oid = um.umserver JOIN pg_roles r ON r.oid = um.umuser WHERE fs.srvname = '$srv' AND r.rolname = '$DB_USER') THEN
                 CREATE USER MAPPING FOR $DB_USER SERVER $srv OPTIONS (user '$DB_USER', password '$DB_PASSWORD');
             END IF;
@@ -1057,6 +1053,13 @@ for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_post
         END \$\$;
     " > /dev/null 2>&1 || true
 done
+
+# 1.1 Injeção de DDL idempotente (init.sql com IF NOT EXISTS)
+if [ -f "./core/database/init.sql" ]; then
+    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < ./core/database/init.sql > /dev/null 2>&1 || true
+elif [ -f "$TARGET_DIR/core/database/init.sql" ]; then
+    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < "$TARGET_DIR/core/database/init.sql" > /dev/null 2>&1 || true
+fi
 
 # 2. Bancos lógicos do Core
 echo "➜ [SRE CORE INSTALL] Garantindo bancos de dados lógicos do Core (litellm_db)..."
