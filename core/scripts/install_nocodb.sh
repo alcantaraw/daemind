@@ -348,19 +348,26 @@ provision_user() {
 
         if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
             echo "  ↳ Vinculando e nomeando base corporativa principal (${BASE_NAME})..."
-            sudo docker exec ${PREFIX}_nocodb curl -s -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" \
+            local PATCH_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -w "\nHTTP_STATUS:%{http_code}" -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" \
                 -H "xc-auth: $AUTH_TOKEN" \
                 -H "Content-Type: application/json" \
-                -d "{\"title\": \"${BASE_NAME}\"}" > /dev/null 2>&1 || true
+                -d "{\"title\": \"${BASE_NAME}\"}" 2>/dev/null || echo "")
+            echo "  ↳ [DEBUG NOCODB BASE] Base ID: ${BASE_EXISTENTE} | Patch HTTP: $(echo "$PATCH_RES" | grep 'HTTP_STATUS:' | cut -d: -f2)"
 
             echo "  ↳ Sincronizando novas Views e tabelas no NocoDB (Zero-Touch Meta-Sync)..."
             # Obtém as tabelas/views identificadas no meta-diff e sincroniza
             local DIFF_PAYLOAD=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" -H "xc-auth: $AUTH_TOKEN" 2>/dev/null || echo "")
-            if [ -n "$DIFF_PAYLOAD" ] && [ "$DIFF_PAYLOAD" != "null" ] && [ "$DIFF_PAYLOAD" != "{}" ]; then
-                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" \
+            local DIFF_COUNT=$(echo "$DIFF_PAYLOAD" | jq '. | length' 2>/dev/null || echo "0")
+            echo "  ↳ [DEBUG NOCODB META-DIFF] Alterações/Tabelas detectadas para sync: ${DIFF_COUNT}"
+            
+            if [ -n "$DIFF_PAYLOAD" ] && [ "$DIFF_PAYLOAD" != "null" ] && [ "$DIFF_PAYLOAD" != "{}" ] && [ "$DIFF_PAYLOAD" != "[]" ]; then
+                local SYNC_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" \
                     -H "xc-auth: $AUTH_TOKEN" \
                     -H "Content-Type: application/json" \
-                    -d "$DIFF_PAYLOAD" > /dev/null 2>&1 || true
+                    -d "$DIFF_PAYLOAD" 2>/dev/null || echo "")
+                echo "  ↳ [DEBUG NOCODB SYNC] Retorno Meta-Sync HTTP: $(echo "$SYNC_RES" | grep 'HTTP_STATUS:' | cut -d: -f2)"
+            else
+                echo "  ↳ [DEBUG NOCODB SYNC] Schema e tabelas já 100% alinhados no NocoDB."
             fi
         fi
     fi
