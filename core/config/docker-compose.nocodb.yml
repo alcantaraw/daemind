@@ -23,7 +23,7 @@ services:
       - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-768} --no-deprecation
       - NC_DISABLE_TELE=true
       - NC_LOGGER_LEVEL=error
-      - NC_CONNECT_TO_EXTERNAL_DB_DISABLED=true
+      - NC_CONNECT_TO_EXTERNAL_DB_DISABLED=false
       - NC_DB=pg://postgres:5432?u=${DB_USER}&p=${DB_PASSWORD}&d=${DB_NAME}&sslmode=disable&searchPath=nocodb_schema
       - NC_ADMIN_EMAIL=${TS_EMAIL}
       - NC_ADMIN_PASSWORD=${DB_PASSWORD}

@@ -337,24 +337,60 @@ provision_user() {
             echo "➜ [IDEMPOTÊNCIA NOCODB] Workspace já nomeado como 'Painel de Controle'. Preservando."
         fi
 
+        local PREFIX="${EMPRESA:-${PREFIXO_CONTAINER:-loja}}"
         local BASE_NAME="${PREFIX}_db"
-        # 1. Localiza a base existente (a default criada no boot ou loja_db)
-        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r --arg bn "$BASE_NAME" '.list[]? | select(.title == $bn or .title == "daemind_db" or .title == "Loja_db" or .title == "loja_db" or .title == "Default Project" or .title == "Default Workspace") | .id // empty' 2>/dev/null | head -n 1 || true)
+        # 1. Localiza a base existente (${PREFIX}_db ou outra base padrão)
+        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r --arg bn "$BASE_NAME" '.list[]? | select((.title | ascii_downcase) == ($bn | ascii_downcase) or .title == "Default Project" or .title == "Default Workspace") | .id // empty' 2>/dev/null | head -n 1 || true)
 
         if [ -z "$BASE_EXISTENTE" ] || [ "$BASE_EXISTENTE" = "null" ]; then
             # Se não localizou por nome específico, obtém a primeira base existente do workspace
             BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[0].id // empty' 2>/dev/null || true)
         fi
 
-        if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
-            echo "  ↳ Vinculando e nomeando base corporativa principal (${BASE_NAME})..."
-            local PATCH_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -w "\nHTTP_STATUS:%{http_code}" -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" \
+        # 2. Se nenhuma base existir no Workspace (NocoDB v0.250+), cria e conecta diretamente à fonte de dados PostgreSQL
+        if [ -z "$BASE_EXISTENTE" ] || [ "$BASE_EXISTENTE" = "null" ]; then
+            echo "  ↳ Conectando e criando base corporativa principal (${BASE_NAME}) no PostgreSQL..."
+            local CREATE_BASE_PAYLOAD
+            CREATE_BASE_PAYLOAD=$(jq -n \
+                --arg title "$BASE_NAME" \
+                --arg host "postgres" \
+                --arg port "5432" \
+                --arg user "${DB_USER:-admin_db}" \
+                --arg password "${DB_PASSWORD}" \
+                --arg database "${PREFIX}_db" \
+                '{
+                    title: $title,
+                    type: "pg",
+                    sources: [{
+                        type: "pg",
+                        config: {
+                            client: "pg",
+                            connection: {
+                                host: $host,
+                                port: ($port | tonumber),
+                                user: $user,
+                                password: $password,
+                                database: $database,
+                                ssl: false
+                            }
+                        },
+                        inflection_column: "camelize",
+                        inflection_table: "camelize"
+                    }]
+                }')
+
+            local CREATE_BASE_RES
+            CREATE_BASE_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" \
                 -H "xc-auth: $AUTH_TOKEN" \
                 -H "Content-Type: application/json" \
-                -d "{\"title\": \"${BASE_NAME}\"}" 2>/dev/null || echo "")
-            echo "  ↳ [DEBUG NOCODB BASE] Base ID: ${BASE_EXISTENTE} | Patch HTTP: $(echo "$PATCH_RES" | grep 'HTTP_STATUS:' | cut -d: -f2)"
+                -d "$CREATE_BASE_PAYLOAD" 2>/dev/null || echo "")
 
-            echo "  ↳ Sincronizando novas Views e tabelas no NocoDB (Zero-Touch Meta-Sync)..."
+            BASE_EXISTENTE=$(echo "$CREATE_BASE_RES" | jq -r '.id // empty' 2>/dev/null || true)
+            echo "  ↳ [DEBUG NOCODB CREATE BASE] Nova Base Criada ID: ${BASE_EXISTENTE}"
+        fi
+
+        if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
+            echo "  ↳ Sincronizando tabelas corporativas no NocoDB (Zero-Touch Meta-Sync)..."
             # Obtém as tabelas/views identificadas no meta-diff e sincroniza
             local DIFF_PAYLOAD=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/meta-diff" -H "xc-auth: $AUTH_TOKEN" 2>/dev/null || echo "")
             local DIFF_COUNT=$(echo "$DIFF_PAYLOAD" | jq '. | length' 2>/dev/null || echo "0")
