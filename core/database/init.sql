@@ -953,39 +953,59 @@ END $$;
 -- ===============================================================================
 -- 10. DATA WAREHOUSE & ANALYTICS VIEWS (METABASE / NOCODB / SRE BI)
 -- ===============================================================================
+-- 0. COMPATIBILIDADE DE ROLES & SISTEMA
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'postgres') THEN
+        CREATE ROLE postgres WITH SUPERUSER LOGIN;
+    END IF;
+END $$;
+
+-- ===============================================================================
 -- Integração dos bancos dos microsserviços via Foreign Data Wrapper (FDW)
 CREATE EXTENSION IF NOT EXISTS postgres_fdw;
 
--- Servidores Estrangeiros (Mapeamento interno localhost)
+-- Servidores Estrangeiros (Mapeamento via Socket Unix /var/run/postgresql)
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_chatwoot') THEN
         CREATE SERVER srv_chatwoot FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host 'localhost', port '5432', dbname 'chatwoot_db');
+            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'chatwoot_db');
+    ELSE
+        ALTER SERVER srv_chatwoot OPTIONS (SET host '/var/run/postgresql');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_shlink') THEN
         CREATE SERVER srv_shlink FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host 'localhost', port '5432', dbname 'shlink_db');
+            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'shlink_db');
+    ELSE
+        ALTER SERVER srv_shlink OPTIONS (SET host '/var/run/postgresql');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_listmonk') THEN
         CREATE SERVER srv_listmonk FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host 'localhost', port '5432', dbname 'listmonk_db');
+            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'listmonk_db');
+    ELSE
+        ALTER SERVER srv_listmonk OPTIONS (SET host '/var/run/postgresql');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_umami') THEN
         CREATE SERVER srv_umami FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host 'localhost', port '5432', dbname 'umami_db');
+            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'umami_db');
+    ELSE
+        ALTER SERVER srv_umami OPTIONS (SET host '/var/run/postgresql');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_evolution') THEN
         CREATE SERVER srv_evolution FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host 'localhost', port '5432', dbname 'evolution_db');
+            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'evolution_db');
+    ELSE
+        ALTER SERVER srv_evolution OPTIONS (SET host '/var/run/postgresql');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_postiz') THEN
         CREATE SERVER srv_postiz FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host 'localhost', port '5432', dbname 'postiz_db');
+            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'postiz_db');
+    ELSE
+        ALTER SERVER srv_postiz OPTIONS (SET host '/var/run/postgresql');
     END IF;
 
     -- SRE Fix: USER MAPPING explícito e idempotente para conexões locais seguras
-    -- Garante que o FDW autentique formalmente com o usuário da sessão corrente (CURRENT_USER)
     IF NOT EXISTS (SELECT 1 FROM pg_user_mappings WHERE srvname = 'srv_chatwoot' AND usename = CURRENT_USER) THEN
         CREATE USER MAPPING FOR CURRENT_USER SERVER srv_chatwoot;
     END IF;
@@ -1169,18 +1189,20 @@ CREATE FOREIGN TABLE IF NOT EXISTS fdw_evolution.instances (
 ) SERVER srv_evolution OPTIONS (schema_name 'public', table_name 'Instance');
 
 -- Foreign Tables do Postiz (Social Media Planner)
+DROP FOREIGN TABLE IF EXISTS fdw_postiz.posts CASCADE;
 CREATE FOREIGN TABLE IF NOT EXISTS fdw_postiz.posts (
     id text,
     state text,
-    "publishDate" timestamp without time zone,
+    "publishDate" timestamp with time zone,
     "organizationId" text,
     "integrationId" text,
     content text,
     title text,
-    "createdAt" timestamp without time zone,
-    "updatedAt" timestamp without time zone
+    "createdAt" timestamp with time zone,
+    "updatedAt" timestamp with time zone
 ) SERVER srv_postiz OPTIONS (schema_name 'public', table_name 'Post');
 
+DROP FOREIGN TABLE IF EXISTS fdw_postiz.integrations CASCADE;
 CREATE FOREIGN TABLE IF NOT EXISTS fdw_postiz.integrations (
     id text,
     identifier text,
@@ -2368,7 +2390,7 @@ ORDER BY data_referencia DESC;
 -- ===============================================================================
 
 -- X) Painel Executivo de MRR, ARR, Retainers e Churn Rate de Contratos de Serviços
--- SRE Fix (Gemini 3.7): LEFT JOIN condicional suporta tabelas vazias sem colapsar a série temporal
+-- SRE Fix: CTE encadeada para cálculo de MRR inicial e final sem aninhamento de window functions
 CREATE OR REPLACE VIEW vw_kpi_servicos_mrr_arr AS
 WITH meses_serie AS (
     SELECT DISTINCT DATE_TRUNC('month', d)::DATE AS mes_ref
@@ -2379,7 +2401,6 @@ WITH meses_serie AS (
     ) d
 ),
 movimentacao_mensal AS (
-    -- FIX SRE: Substituição do CROSS JOIN por LEFT JOIN para suportar tabela vazia
     SELECT 
         m.mes_ref,
         COALESCE(SUM(CASE WHEN DATE_TRUNC('month', c.data_inicio) = m.mes_ref THEN c.valor_recorrente_mensal ELSE 0.00 END), 0.00) AS novo_mrr_adicionado,
@@ -2392,13 +2413,18 @@ movimentacao_mensal AS (
         DATE_TRUNC('month', c.data_cancelamento) = m.mes_ref
     GROUP BY m.mes_ref
 ),
-mrr_historico AS (
+mrr_acumulado AS (
     SELECT 
         mm.*,
         (mm.novo_mrr_adicionado - mm.mrr_perdido_churn) AS net_growth_mes,
-        SUM(mm.novo_mrr_adicionado - mm.mrr_perdido_churn) OVER (ORDER BY mm.mes_ref) AS mrr_final_mes,
-        LAG(SUM(mm.novo_mrr_adicionado - mm.mrr_perdido_churn) OVER (ORDER BY mm.mes_ref), 1, 0.00) OVER (ORDER BY mm.mes_ref) AS mrr_inicio_mes
+        SUM(mm.novo_mrr_adicionado - mm.mrr_perdido_churn) OVER (ORDER BY mm.mes_ref) AS mrr_final_mes
     FROM movimentacao_mensal mm
+),
+mrr_historico AS (
+    SELECT 
+        ma.*,
+        LAG(ma.mrr_final_mes, 1, 0.00) OVER (ORDER BY ma.mes_ref) AS mrr_inicio_mes
+    FROM mrr_acumulado ma
 )
 SELECT 
     TO_CHAR(h.mes_ref, 'YYYY-MM') AS mes_ano,

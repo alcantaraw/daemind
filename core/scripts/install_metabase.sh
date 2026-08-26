@@ -494,7 +494,7 @@ build_envs() {
         cpu_metabase="2.0"
     fi
 
-    local mem_metabase="1024M"
+    local mem_metabase="1536M"
     local res_metabase="256M"
 
     if [ "$ram_mb" -gt 24576 ]; then
