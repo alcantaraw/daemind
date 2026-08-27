@@ -177,31 +177,38 @@ resolver_containers_ativos() {
     STACK_ACTIVE_CONTAINERS=()
     local prefix="${PREFIXO_CONTAINER}"
     
-    # 1. Se o docker-compose.yml final (unificado) já existe, descobre os containers reais
-    if command -v docker >/dev/null 2>&1 && [ -f "$TARGET_DIR/docker-compose.yml" ]; then
-        local compose_cnts=($(cd "$TARGET_DIR" && docker compose ps -a --format '{{.Name}}' 2>/dev/null || true))
-        if [ ${#compose_cnts[@]} -gt 0 ]; then
-            for c in "${compose_cnts[@]}"; do
+    # 1. Se o Docker está disponível, descobre todos os containers reais com o prefixo da stack
+    if command -v docker >/dev/null 2>&1; then
+        local running_cnts=($(docker ps -a --format '{{.Names}}' 2>/dev/null | grep -E "^${prefix}_" | sort -u || true))
+        if [ ${#running_cnts[@]} -gt 0 ]; then
+            for c in "${running_cnts[@]}"; do
                 [ -n "$c" ] && STACK_ACTIVE_CONTAINERS+=("$c")
             done
-        else
-            for svc in $(cd "$TARGET_DIR" && docker compose config --services 2>/dev/null); do
+            return 0
+        fi
+    fi
+
+    # 2. Se o docker-compose.yml final (unificado) já existe, descobre os serviços declarados
+    if command -v docker >/dev/null 2>&1 && [ -f "$TARGET_DIR/docker-compose.yml" ]; then
+        local comp_svcs=($(cd "$TARGET_DIR" && docker compose config --services 2>/dev/null || true))
+        if [ ${#comp_svcs[@]} -gt 0 ]; then
+            for svc in "${comp_svcs[@]}"; do
                 local svc_clean=$(echo "$svc" | tr '-' '_')
                 local c_name=$(docker inspect -f '{{.Name}}' "${prefix}_${svc_clean}" 2>/dev/null | sed 's/^\///' || echo "")
                 [ -z "$c_name" ] && c_name=$(docker inspect -f '{{.Name}}' "${prefix}_${svc}" 2>/dev/null | sed 's/^\///' || echo "")
                 [ -z "$c_name" ] && c_name="${prefix}_${svc_clean}"
                 STACK_ACTIVE_CONTAINERS+=("$c_name")
             done
+            return 0
         fi
     fi
     
-    # 2. Fallback 100% Dinâmico: Varre o docker-compose.yml base + YAMLs dos módulos ativos
-    if [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ]; then
-        local base_compose="$TARGET_DIR/core/config/docker-compose.yml"
-        local base_services=()
-        
-        if [ -f "$base_compose" ]; then
-            base_services=($(python3 -c "
+    # 3. Fallback 100% Dinâmico: Varre o docker-compose.yml base + YAMLs dos módulos ativos
+    local base_compose="$TARGET_DIR/core/config/docker-compose.yml"
+    local base_services=()
+    
+    if [ -f "$base_compose" ]; then
+        base_services=($(python3 -c "
 import yaml
 try:
     with open('$base_compose', 'r') as f:
@@ -211,20 +218,20 @@ try:
 except Exception:
     pass
 " 2>/dev/null || true))
-        fi
-        
-        if [ ${#base_services[@]} -eq 0 ]; then
-            base_services=("postgres" "pgbouncer" "redis" "caddy" "litellm")
-        fi
-        
-        for svc in "${base_services[@]}"; do
-            STACK_ACTIVE_CONTAINERS+=("${prefix}_${svc}")
-        done
-        
-        for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
-            local mod_compose="$TARGET_DIR/core/config/docker-compose.${mod}.yml"
-            if [ -f "$mod_compose" ]; then
-                local mod_services=($(python3 -c "
+    fi
+    
+    if [ ${#base_services[@]} -eq 0 ]; then
+        base_services=("postgres" "pgbouncer" "redis" "caddy" "litellm")
+    fi
+    
+    for svc in "${base_services[@]}"; do
+        STACK_ACTIVE_CONTAINERS+=("${prefix}_${svc}")
+    done
+    
+    for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
+        local mod_compose="$TARGET_DIR/core/config/docker-compose.${mod}.yml"
+        if [ -f "$mod_compose" ]; then
+            local mod_services=($(python3 -c "
 import yaml
 try:
     with open('$mod_compose', 'r') as f:
@@ -234,14 +241,14 @@ try:
 except Exception:
     pass
 " 2>/dev/null || true))
-                for m_svc in "${mod_services[@]}"; do
-                    if [[ ! " ${STACK_ACTIVE_CONTAINERS[*]} " =~ " ${prefix}_${m_svc} " ]]; then
-                        STACK_ACTIVE_CONTAINERS+=("${prefix}_${m_svc}")
-                    fi
-                done
-            fi
-        done
-    fi
+            for m_svc in "${mod_services[@]}"; do
+                local m_clean=$(echo "$m_svc" | tr '-' '_')
+                if [[ ! " ${STACK_ACTIVE_CONTAINERS[*]} " =~ " ${prefix}_${m_clean} " ]]; then
+                    STACK_ACTIVE_CONTAINERS+=("${prefix}_${m_clean}")
+                fi
+            done
+        fi
+    done
 }
 
 diagnosticar_containers_stack() {
@@ -253,7 +260,7 @@ diagnosticar_containers_stack() {
         echo "====================================================================="
         local PREFIXO="${PREFIXO_CONTAINER}"
 
-        [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+        resolver_containers_ativos
 
         for container in "${STACK_ACTIVE_CONTAINERS[@]}"; do
             STATUS=$(docker inspect -f '{{.State.Status}}' "$container" 2>/dev/null || echo "unknown")
@@ -287,7 +294,7 @@ gerar_relatorio_versoes_stack() {
         printf "%-20s | %-50s | %-20s\n" "CONTAINER" "IMAGEM DOCKER" "VERSÃO INTERNA"
         echo "---------------------------------------------------------------------------------------------------"
 
-        [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+        resolver_containers_ativos
 
         for container in "${STACK_ACTIVE_CONTAINERS[@]}"; do
             local imagem=$(docker inspect --format '{{.Config.Image}}' "$container" 2>/dev/null | tr -d '\r\n' || echo "N/A")
@@ -1397,7 +1404,7 @@ if [ "$RAIZ_REPO" = "/tmp/infra-loja-bootstrap" ]; then rm -rf /tmp/infra-loja-b
 # ===============================================================================
 echo "=== [SRE INSTALL] Inicializando Probes Dinâmicas de Prontidão (Readiness Probes) ==="
 
-[ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+resolver_containers_ativos
 
 # SRE IDEMPOTÊNCIA: Validação rápida - se todos já estiverem saudáveis, avança sem loops de espera
 ALL_INSTANT_HEALTHY=true
@@ -1467,7 +1474,7 @@ if [ -f "$TARGET_DIR/core/scripts/install_1ia.sh" ] && [ "$TODO_ECOSSISTEMA_SAUD
         echo "=== [SRE GUARDRAIL INSTALL] Amortecendo e aguardando re-estabilização pós-restart dos microsserviços ==="
 
         # Contêineres ativos da stack resolvidos dinamicamente (SSOT)
-        [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+        resolver_containers_ativos
         RESTARTED_CONTAINERS=("${STACK_ACTIVE_CONTAINERS[@]}")
 
         # Loop de tolerância de até 90 segundos com intervalo de 3s
@@ -1680,7 +1687,7 @@ echo "  ↳ Domínio FQDN Canônico:   $TS_DOMAIN"
 echo ""
 echo ""
 echo "➜ MAPEAMENTO TOPOLÓGICO DE ATIVOS (DOCKER MALHA INTERNA):"
-[ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+resolver_containers_ativos
 
 # Varre e imprime dinamicamente todos os containers da stack em ordem alfabética
 for cnt in $(printf '%s\n' "${STACK_ACTIVE_CONTAINERS[@]}" | sort); do
@@ -1700,7 +1707,7 @@ echo "➜ MATRIZ DE ROTEAMENTO E STATUS DE HANDSHAKES:"
 
 ROUTING_LINES=()
 
-[ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+resolver_containers_ativos
 
 # SRE PERFORMANCE: Auditoria de integridade e handshakes em paralelo (background subshells com pipes temporários)
 AUDIT_TMP_DIR=$(mktemp -d /tmp/sre_audit.XXXXXX 2>/dev/null || echo "/tmp/sre_audit_tmp")
@@ -1828,7 +1835,7 @@ if [ "$ECOSSISTEMA_COM_ALERTAS" = "true" ]; then
     echo "Mapeamento dos caminhos absolutos de logs no host para depuração externa:"
     echo ""
 
-    [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+    resolver_containers_ativos
 
     for container in "${STACK_ACTIVE_CONTAINERS[@]}"; do
         # Captura a saúde em tempo real do componente
