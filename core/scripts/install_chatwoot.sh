@@ -68,7 +68,7 @@ provision_infra() {
     # Validação e execução idempotente de migrações Rails
     if ! docker compose exec -T postgres psql -U "${DB_USER}" -d chatwoot_db -c "SELECT 1 FROM installation_configs LIMIT 1;" > /dev/null 2>&1 < /dev/null; then
         echo "➜ [CONFIGURANDO CHATWOOT] Executando preparação de schema inicial do Chatwoot (db:chatwoot_prepare)..."
-        docker stop ${PREFIX}_chatwoot 2>/dev/null || true
+        docker stop ${PREFIX}_chatwoot > /dev/null 2>&1 || true
         CW_ERR=$(docker compose run --rm --no-deps -T chatwoot bundle exec rails db:chatwoot_prepare 2>&1) || true
         if ! docker compose exec -T postgres psql -U "${DB_USER}" -d chatwoot_db -c "SELECT 1 FROM installation_configs LIMIT 1;" > /dev/null 2>&1 < /dev/null; then
             echo "  ↳ Segunda tentativa via db:schema:load e db:migrate..."

@@ -969,44 +969,32 @@ END $$;
 -- Integração dos bancos dos microsserviços via Foreign Data Wrapper (FDW)
 CREATE EXTENSION IF NOT EXISTS postgres_fdw;
 
--- Servidores Estrangeiros (Mapeamento via Socket Unix /var/run/postgresql)
+-- Servidores Estrangeiros (Mapeamento padrão localhost:5432)
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_chatwoot') THEN
         CREATE SERVER srv_chatwoot FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'chatwoot_db');
-    ELSE
-        ALTER SERVER srv_chatwoot OPTIONS (SET host '/var/run/postgresql');
+            OPTIONS (host 'localhost', port '5432', dbname 'chatwoot_db');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_shlink') THEN
         CREATE SERVER srv_shlink FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'shlink_db');
-    ELSE
-        ALTER SERVER srv_shlink OPTIONS (SET host '/var/run/postgresql');
+            OPTIONS (host 'localhost', port '5432', dbname 'shlink_db');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_listmonk') THEN
         CREATE SERVER srv_listmonk FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'listmonk_db');
-    ELSE
-        ALTER SERVER srv_listmonk OPTIONS (SET host '/var/run/postgresql');
+            OPTIONS (host 'localhost', port '5432', dbname 'listmonk_db');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_umami') THEN
         CREATE SERVER srv_umami FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'umami_db');
-    ELSE
-        ALTER SERVER srv_umami OPTIONS (SET host '/var/run/postgresql');
+            OPTIONS (host 'localhost', port '5432', dbname 'umami_db');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_evolution') THEN
         CREATE SERVER srv_evolution FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'evolution_db');
-    ELSE
-        ALTER SERVER srv_evolution OPTIONS (SET host '/var/run/postgresql');
+            OPTIONS (host 'localhost', port '5432', dbname 'evolution_db');
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = 'srv_postiz') THEN
         CREATE SERVER srv_postiz FOREIGN DATA WRAPPER postgres_fdw 
-            OPTIONS (host '/var/run/postgresql', port '5432', dbname 'postiz_db');
-    ELSE
-        ALTER SERVER srv_postiz OPTIONS (SET host '/var/run/postgresql');
+            OPTIONS (host 'localhost', port '5432', dbname 'postiz_db');
     END IF;
 END $$;
 
@@ -1018,102 +1006,90 @@ CREATE SCHEMA IF NOT EXISTS fdw_umami;
 CREATE SCHEMA IF NOT EXISTS fdw_evolution;
 CREATE SCHEMA IF NOT EXISTS fdw_postiz;
 
--- Foreign Tables do Chatwoot CRM
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.conversations (
-    id integer,
-    display_id integer,
+-- ===============================================================================
+-- Mapeamento das Tabelas Estrangeiras (Foreign Tables)
+-- ===============================================================================
+
+-- 1. CHATWOOT (chatwoot_db)
+DROP FOREIGN TABLE IF EXISTS fdw_chatwoot.conversations CASCADE;
+CREATE FOREIGN TABLE fdw_chatwoot.conversations (
+    id bigint,
+    account_id integer,
+    inbox_id integer,
     status integer,
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone,
-    first_reply_created_at timestamp with time zone,
     assignee_id integer,
-    contact_id integer
+    contact_id bigint,
+    display_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    first_reply_created_at timestamp without time zone
 ) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'conversations');
 
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.users (
-    id integer,
-    name text,
-    email text
-) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'users');
-
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.contacts (
-    id integer,
-    name text,
-    phone_number text,
-    email text
-) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'contacts');
-
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_chatwoot.csat_survey_responses (
-    id integer,
-    conversation_id integer,
+DROP FOREIGN TABLE IF EXISTS fdw_chatwoot.csat_survey_responses CASCADE;
+CREATE FOREIGN TABLE fdw_chatwoot.csat_survey_responses (
+    id bigint,
+    account_id bigint,
+    conversation_id bigint,
     rating integer,
-    feedback_message text
+    feedback_message text,
+    contact_id bigint,
+    assigned_agent_id bigint,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 ) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'csat_survey_responses');
 
--- Foreign Tables do Shlink (Encurtador de Links)
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_shlink.short_urls (
-    id integer,
-    short_code text,
-    title text,
+DROP FOREIGN TABLE IF EXISTS fdw_chatwoot.users CASCADE;
+CREATE FOREIGN TABLE fdw_chatwoot.users (
+    id bigint,
+    name character varying,
+    email character varying,
+    role integer
+) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'users');
+
+DROP FOREIGN TABLE IF EXISTS fdw_chatwoot.contacts CASCADE;
+CREATE FOREIGN TABLE fdw_chatwoot.contacts (
+    id bigint,
+    name character varying,
+    phone_number character varying,
+    email character varying
+) SERVER srv_chatwoot OPTIONS (schema_name 'public', table_name 'contacts');
+
+-- 2. SHLINK (shlink_db)
+DROP FOREIGN TABLE IF EXISTS fdw_shlink.short_urls CASCADE;
+CREATE FOREIGN TABLE fdw_shlink.short_urls (
+    id bigint,
+    short_code character varying,
+    title character varying,
     original_url text,
-    date_created timestamp with time zone
+    date_created timestamp without time zone
 ) SERVER srv_shlink OPTIONS (schema_name 'public', table_name 'short_urls');
 
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_shlink.visits (
-    id integer,
-    short_url_id integer,
-    visit_location_id integer,
-    date timestamp with time zone,
-    referer text,
-    user_agent text,
-    potential_bot boolean
+DROP FOREIGN TABLE IF EXISTS fdw_shlink.visits CASCADE;
+CREATE FOREIGN TABLE fdw_shlink.visits (
+    id bigint,
+    date timestamp without time zone,
+    referer character varying,
+    user_agent character varying,
+    potential_bot boolean,
+    short_url_id bigint,
+    visit_location_id bigint
 ) SERVER srv_shlink OPTIONS (schema_name 'public', table_name 'visits');
 
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_shlink.visit_locations (
-    id integer,
-    country_name text,
-    city_name text,
-    region_name text
+DROP FOREIGN TABLE IF EXISTS fdw_shlink.visit_locations CASCADE;
+CREATE FOREIGN TABLE fdw_shlink.visit_locations (
+    id bigint,
+    country_name character varying,
+    city_name character varying,
+    region_name character varying
 ) SERVER srv_shlink OPTIONS (schema_name 'public', table_name 'visit_locations');
 
--- Foreign Tables do Umami (Analytics)
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_umami.website (
-    website_id uuid,
-    name text,
-    domain text
-) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'website');
-
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_umami.session (
-    session_id uuid,
-    website_id uuid,
-    browser text,
-    os text,
-    device text,
-    country text,
-    city text
-) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'session');
-
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_umami.website_event (
-    event_id uuid,
-    website_id uuid,
-    session_id uuid,
-    created_at timestamp with time zone,
-    url_path text,
-    referrer_domain text,
-    page_title text,
-    utm_source text,
-    utm_medium text,
-    utm_campaign text
-) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'website_event');
-
--- Foreign Tables do Listmonk com tipos universais
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.campaigns (
+-- 3. LISTMONK (listmonk_db)
+DROP FOREIGN TABLE IF EXISTS fdw_listmonk.campaigns CASCADE;
+CREATE FOREIGN TABLE fdw_listmonk.campaigns (
     id integer,
     uuid uuid,
     name text,
     subject text,
-    from_email text,
-    body text,
     status text,
     type text,
     to_send integer,
@@ -1123,7 +1099,16 @@ CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.campaigns (
     updated_at timestamp with time zone
 ) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'campaigns');
 
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.subscribers (
+DROP FOREIGN TABLE IF EXISTS fdw_listmonk.campaign_views CASCADE;
+CREATE FOREIGN TABLE fdw_listmonk.campaign_views (
+    id bigint,
+    campaign_id integer,
+    subscriber_id integer,
+    created_at timestamp with time zone
+) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'campaign_views');
+
+DROP FOREIGN TABLE IF EXISTS fdw_listmonk.subscribers CASCADE;
+CREATE FOREIGN TABLE fdw_listmonk.subscribers (
     id integer,
     uuid uuid,
     email text,
@@ -1134,65 +1119,83 @@ CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.subscribers (
     updated_at timestamp with time zone
 ) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'subscribers');
 
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.campaign_views (
-    campaign_id integer,
-    subscriber_id integer,
-    created_at timestamp with time zone
-) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'campaign_views');
+-- 4. UMAMI (umami_db)
+DROP FOREIGN TABLE IF EXISTS fdw_umami.website CASCADE;
+CREATE FOREIGN TABLE fdw_umami.website (
+    website_id uuid,
+    name character varying,
+    domain character varying
+) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'website');
 
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_listmonk.link_clicks (
-    campaign_id integer,
-    subscriber_id integer,
-    link_id integer,
-    count integer,
-    created_at timestamp with time zone
-) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'link_clicks');
+DROP FOREIGN TABLE IF EXISTS fdw_umami.session CASCADE;
+CREATE FOREIGN TABLE fdw_umami.session (
+    session_id uuid,
+    website_id uuid,
+    browser character varying,
+    os character varying,
+    device character varying,
+    country character(2),
+    city character varying
+) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'session');
 
--- Foreign Tables do Evolution API (WhatsApp)
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_evolution.messages (
+DROP FOREIGN TABLE IF EXISTS fdw_umami.website_event CASCADE;
+CREATE FOREIGN TABLE fdw_umami.website_event (
+    event_id uuid,
+    website_id uuid,
+    session_id uuid,
+    visit_id uuid,
+    created_at timestamp with time zone,
+    url_path character varying,
+    url_query character varying,
+    referrer_domain character varying,
+    page_title character varying,
+    utm_source character varying,
+    utm_medium character varying,
+    utm_campaign character varying
+) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'website_event');
+
+-- 5. EVOLUTION API (evolution_db)
+DROP FOREIGN TABLE IF EXISTS fdw_evolution.instances CASCADE;
+CREATE FOREIGN TABLE fdw_evolution.instances (
     id text,
-    key jsonb,
-    "pushName" text,
-    participant text,
-    "messageType" text,
-    message jsonb,
-    source text,
-    "messageTimestamp" integer,
-    "chatwootMessageId" integer,
-    "chatwootConversationId" integer,
-    "chatwootIsRead" boolean,
-    "instanceId" text,
-    status text
-) SERVER srv_evolution OPTIONS (schema_name 'public', table_name 'Message');
-
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_evolution.instances (
-    id text,
-    name text,
-    status text,
+    name character varying,
     "connectionStatus" text
 ) SERVER srv_evolution OPTIONS (schema_name 'public', table_name 'Instance');
 
--- Foreign Tables do Postiz (Social Media Planner)
+DROP FOREIGN TABLE IF EXISTS fdw_evolution.messages CASCADE;
+CREATE FOREIGN TABLE fdw_evolution.messages (
+    id text,
+    key jsonb,
+    "pushName" character varying,
+    "messageType" character varying,
+    message jsonb,
+    source text,
+    "messageTimestamp" integer,
+    "instanceId" text,
+    status character varying
+) SERVER srv_evolution OPTIONS (schema_name 'public', table_name 'Message');
+
+-- 6. POSTIZ (postiz_db)
+DROP FOREIGN TABLE IF EXISTS fdw_postiz.integrations CASCADE;
+CREATE FOREIGN TABLE fdw_postiz.integrations (
+    id text,
+    name text,
+    "providerIdentifier" text,
+    "organizationId" text,
+    type text
+) SERVER srv_postiz OPTIONS (schema_name 'public', table_name 'Integration');
+
 DROP FOREIGN TABLE IF EXISTS fdw_postiz.posts CASCADE;
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_postiz.posts (
+CREATE FOREIGN TABLE fdw_postiz.posts (
     id text,
     state text,
-    "publishDate" timestamp with time zone,
+    "publishDate" timestamp without time zone,
     "organizationId" text,
     "integrationId" text,
     content text,
     title text,
-    "createdAt" timestamp with time zone,
-    "updatedAt" timestamp with time zone
+    "createdAt" timestamp without time zone
 ) SERVER srv_postiz OPTIONS (schema_name 'public', table_name 'Post');
-
-DROP FOREIGN TABLE IF EXISTS fdw_postiz.integrations CASCADE;
-CREATE FOREIGN TABLE IF NOT EXISTS fdw_postiz.integrations (
-    id text,
-    identifier text,
-    name text,
-    "providerIdentifier" text
-) SERVER srv_postiz OPTIONS (schema_name 'public', table_name 'Integration');
 
 -- VIEWS ANALÍTICAS UNIFICADAS PARA METABASE & NOCODB
 
@@ -1277,9 +1280,9 @@ SELECT
     e.created_at AS data_evento,
     e.url_path AS pagina_acessada,
     e.referrer_domain AS dominio_referencia,
-    e.utm_source,
-    e.utm_medium,
-    e.utm_campaign,
+    substring(e.url_query from 'utm_source=([^&]+)') AS utm_source,
+    substring(e.url_query from 'utm_medium=([^&]+)') AS utm_medium,
+    substring(e.url_query from 'utm_campaign=([^&]+)') AS utm_campaign,
     s.session_id,
     s.browser AS navegador,
     s.os AS sistema_operacional,
@@ -1295,15 +1298,13 @@ CREATE OR REPLACE VIEW vw_kpi_whatsapp_disparos AS
 SELECT 
     m.id AS mensagem_id,
     m."pushName" AS contato_nome,
-    m.participant AS numero_remetente,
+    COALESCE(m.key->>'remoteJid', '') AS numero_remetente,
     m."messageType" AS tipo_mensagem,
     m.source AS dispositivo_origem,
     to_timestamp(m."messageTimestamp") AS data_envio,
     m.status AS status_entrega,
-    m."chatwootConversationId" AS chatwoot_conversa_id,
-    m."chatwootIsRead" AS lida_no_chatwoot,
     i.name AS instancia_nome,
-    i.status AS instancia_status
+    COALESCE(i."connectionStatus", 'ONLINE') AS instancia_status
 FROM fdw_evolution.messages m
 LEFT JOIN fdw_evolution.instances i ON m."instanceId" = i.id;
 
@@ -1658,16 +1659,16 @@ LEFT JOIN despesas_canal d ON LOWER(TRIM(d.origem_captura)) = LOWER(TRIM(b.orige
 CREATE OR REPLACE VIEW vw_atribuicao_utm_360 AS
 WITH eventos_utm AS (
     SELECT 
-        COALESCE(NULLIF(e.utm_source, ''), '(direto/organico)') AS utm_source,
-        COALESCE(NULLIF(e.utm_medium, ''), '(nenhum)') AS utm_medium,
-        COALESCE(NULLIF(e.utm_campaign, ''), '(geral)') AS utm_campaign,
+        COALESCE(NULLIF(substring(e.url_query from 'utm_source=([^&]+)'), ''), '(direto/organico)') AS utm_source,
+        COALESCE(NULLIF(substring(e.url_query from 'utm_medium=([^&]+)'), ''), '(nenhum)') AS utm_medium,
+        COALESCE(NULLIF(substring(e.url_query from 'utm_campaign=([^&]+)'), ''), '(geral)') AS utm_campaign,
         COUNT(DISTINCT e.session_id) AS total_visitas_unicas,
         COUNT(e.event_id) AS total_eventos
     FROM fdw_umami.website_event e
     GROUP BY 
-        COALESCE(NULLIF(e.utm_source, ''), '(direto/organico)'),
-        COALESCE(NULLIF(e.utm_medium, ''), '(nenhum)'),
-        COALESCE(NULLIF(e.utm_campaign, ''), '(geral)')
+        COALESCE(NULLIF(substring(e.url_query from 'utm_source=([^&]+)'), ''), '(direto/organico)'),
+        COALESCE(NULLIF(substring(e.url_query from 'utm_medium=([^&]+)'), ''), '(nenhum)'),
+        COALESCE(NULLIF(substring(e.url_query from 'utm_campaign=([^&]+)'), ''), '(geral)')
 ),
 vendas_utm AS (
     SELECT 

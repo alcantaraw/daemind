@@ -1043,7 +1043,7 @@ for db in litellm_db; do
         echo "➜ [IDEMPOTÊNCIA INSTALL] Banco de dados Core '$db' já existente. Preservando esquema."
     else
         echo "  ↳ Criando banco de dados Core '$db'..."
-        if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -v ON_ERROR_STOP=1 -c "CREATE DATABASE $db;" < /dev/null; then
+        if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -q -v ON_ERROR_STOP=1 -c "CREATE DATABASE $db;" < /dev/null; then
             echo "🚨 [ERRO FATAL INSTALL] Falha ao criar banco de dados Core '$db'." >&2
             exit 1
         fi
@@ -1164,8 +1164,8 @@ for svc in "${RUNNING_SERVICES[@]}"; do
     if [ -n "$expected_ip" ] && [ -n "$current_ip" ] && [ "$current_ip" != "$expected_ip" ]; then
         echo "⚠️ [SRE IP DRIFT DETECTED] O serviço '$svc' está rodando no IP $current_ip, mas o .env espera $expected_ip."
         echo "  ↳ Purgando contêiner desatualizado para realocação determinística de IP..."
-        docker network disconnect -f "instancia_net" "$c_name" 2>/dev/null || true
-        docker rm -f "$c_name" "${PREFIXO_CONTAINER}_${svc}" 2>/dev/null || true
+        docker network disconnect -f "instancia_net" "$c_name" > /dev/null 2>&1 || true
+        docker rm -f "$c_name" "${PREFIXO_CONTAINER}_${svc}" > /dev/null 2>&1 || true
     fi
 done
 
@@ -1192,7 +1192,7 @@ else
             # 1. Pede ao Docker para desconectar forçadamente e remover os serviços offline
             for svc_off in "${APPS_OFFLINE[@]}"; do
                 svc_clean=$(echo "$svc_off" | tr '-' '_')
-                docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" "${PREFIXO_CONTAINER}_${svc_clean}" 2>/dev/null || true
+                docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" "${PREFIXO_CONTAINER}_${svc_clean}" > /dev/null 2>&1 || true
             done
             
             # 2. Se o IP ainda estiver retido por outro container legado/desatualizado, localiza e desanexa
@@ -1202,8 +1202,8 @@ else
                     for svc_off in "${APPS_OFFLINE[@]}"; do
                         svc_clean=$(echo "$svc_off" | tr '-' '_')
                         if [ "$c_name" = "${PREFIXO_CONTAINER}_${svc_off}" ] || [ "$c_name" = "${PREFIXO_CONTAINER}_${svc_clean}" ]; then
-                            docker network disconnect -f "$net_name" "$c_id" 2>/dev/null || true
-                            docker rm -f "$c_id" 2>/dev/null || true
+                            docker network disconnect -f "$net_name" "$c_id" > /dev/null 2>&1 || true
+                            docker rm -f "$c_id" > /dev/null 2>&1 || true
                         fi
                     done
                 done
