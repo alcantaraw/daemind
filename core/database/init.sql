@@ -1119,6 +1119,15 @@ CREATE FOREIGN TABLE fdw_listmonk.subscribers (
     updated_at timestamp with time zone
 ) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'subscribers');
 
+DROP FOREIGN TABLE IF EXISTS fdw_listmonk.link_clicks CASCADE;
+CREATE FOREIGN TABLE fdw_listmonk.link_clicks (
+    id bigint,
+    campaign_id integer,
+    link_id integer,
+    subscriber_id integer,
+    created_at timestamp with time zone
+) SERVER srv_listmonk OPTIONS (schema_name 'public', table_name 'link_clicks');
+
 -- 4. UMAMI (umami_db)
 DROP FOREIGN TABLE IF EXISTS fdw_umami.website CASCADE;
 CREATE FOREIGN TABLE fdw_umami.website (
