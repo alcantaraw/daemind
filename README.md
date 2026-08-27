@@ -217,7 +217,13 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
   - Configuração de **Servidores MCP (Model Context Protocol)** para que os agentes de IA consultem produtos, estoques, status de pedidos e tabelas de frete em tempo real no PostgreSQL e NocoDB.
   - Criação de **Agentes SDR (Pré-vendas) e Suporte N1** treinados com RAG na base de dados da empresa para atender clientes no Chatwoot de forma autônoma e humanizada.
 
-- 🎯 **3. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
+- 🚀 **3. Omnichannel Hub Soberano (CRM, BI & App Unificado em Python/Go)**
+  - Criação de uma aplicação web simplória, ultra-leve (< 40MB RAM) e de alta performance que **substituirá integralmente o NocoDB e o Metabase na stack**, eliminando containers pesados, dependências de terceiros e paywalls.
+  - **Gerador de Views Nativas:** Módulo dinâmico com alternância em 1 clique entre **Kanban (Drag & Drop)**, **Galeria Visual (Cards)**, **Grid Interativa (Planilha com Filtros)**, **Calendário (MRR & Prazos)** e **Formulários**.
+  - **Centralizador de Informações & CRUD Soberano:** Leitura e gravação direta e em tempo real nas tabelas do PostgreSQL (`loja_db`) com zero intermediários.
+  - **Gerador de Dashboards & Métricas:** Cockpit Executivo nativo com gráficos interativos (ApexCharts), relatórios de DRE Diário e exportação automatizada em Excel (`.xlsx`) e PDF.
+
+- 🎯 **4. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
   - O **daemind.** nasce especialista em **Vendas Online & Marketing Digital**, mas sua esteira modular permite rápida expansão para outros setores:
     - 🩺 **Saúde & Clínicas:** Agendamentos inteligentes via WhatsApp, confirmação de consultas, triagem pré-atendimento e retenção de pacientes.
     - 👥 **Recursos Humanos & Departamento Pessoal:** Triagem automática de currículos por IA, onboarding de novos colaboradores e gestão de solicitações internas.

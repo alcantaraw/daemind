@@ -407,24 +407,17 @@ provision_dashboards() {
         return 0
     fi
 
-    # Garante que o dashboard fique fixado como item principal da tela de Início (Coleção Raiz)
-    curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}" \
-        -H "X-Metabase-Session: $MB_SESSION" \
-        -H "Content-Type: application/json" \
-        -d "{\"pinned_at\": \"${PIN_NOW}\", \"collection_position\": 1}" >/dev/null 2>&1 || true
+    echo "  ↳ Injetando Cards Analíticos Nativos no Cockpit Executivo..."
+    local DASH_CARDS_PAYLOAD="[]"
+    local ROW_CURSOR=0
+    local CARD_IDX=0
 
-    echo "  ↳ Injetando e fixando Cards Analíticos Nativos do Data Warehouse..."
-
-    # Helper para criar Card, fixar na tela inicial e adicionar ao Dashboard
-    local CARD_PIN_POS=2
-    create_card_and_pin() {
+    create_card() {
         local NAME="$1"
         local DISPLAY="$2"
         local SQL_QUERY="$3"
-        local ROW="$4"
-        local COL="$5"
-        local SIZE_X="$6"
-        local SIZE_Y="$7"
+        local SIZE_X="$4"
+        local SIZE_Y="$5"
 
         local CARD_PAYLOAD
         CARD_PAYLOAD=$(jq -n \
@@ -432,8 +425,6 @@ provision_dashboards() {
             --arg display "$DISPLAY" \
             --arg query "$SQL_QUERY" \
             --argjson db "$DB_ID" \
-            --arg pin "$PIN_NOW" \
-            --argjson pos "$CARD_PIN_POS" \
             '{
                 name: $name,
                 display: $display,
@@ -444,12 +435,8 @@ provision_dashboards() {
                     },
                     database: $db
                 },
-                visualization_settings: {},
-                collection_position: $pos,
-                pinned_at: $pin
+                visualization_settings: {}
             }')
-
-        CARD_PIN_POS=$((CARD_PIN_POS + 1))
 
         local CARD_RES
         CARD_RES=$(curl -s -X POST "${MB_URL}/api/card" \
@@ -460,79 +447,105 @@ provision_dashboards() {
         CARD_ID=$(echo "$CARD_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
 
         if [ -n "$CARD_ID" ] && [ "$CARD_ID" != "null" ]; then
-            # Fixa o card também com PUT para garantir exibição na Home Page
-            curl -s -X PUT "${MB_URL}/api/card/${CARD_ID}" \
-                -H "X-Metabase-Session: $MB_SESSION" \
-                -H "Content-Type: application/json" \
-                -d "{\"pinned_at\": \"${PIN_NOW}\", \"collection_position\": ${CARD_PIN_POS}}" >/dev/null 2>&1 || true
+            local COL=0
+            if [ "$SIZE_X" -ne 12 ] && [ $((CARD_IDX % 2)) -ne 0 ]; then
+                COL=6
+            fi
+            CARD_IDX=$((CARD_IDX + 1))
 
-            curl -s -X POST "${MB_URL}/api/dashboard/${DASH_ID}/cards" \
-                -H "X-Metabase-Session: $MB_SESSION" \
-                -H "Content-Type: application/json" \
-                -d "{
-                    \"cardId\": ${CARD_ID},
-                    \"row\": ${ROW},
-                    \"col\": ${COL},
-                    \"size_x\": ${SIZE_X},
-                    \"size_y\": ${SIZE_Y}
-                }" >/dev/null 2>&1 || true
+            local TEMP_ID="-$CARD_IDX"
+            DASH_CARDS_PAYLOAD=$(echo "$DASH_CARDS_PAYLOAD" | jq \
+                --argjson tempId "$TEMP_ID" \
+                --argjson cardId "$CARD_ID" \
+                --argjson row "$ROW_CURSOR" \
+                --argjson col "$COL" \
+                --argjson sx "$SIZE_X" \
+                --argjson sy "$SIZE_Y" \
+                '. += [{
+                    id: $tempId,
+                    card_id: $cardId,
+                    row: $row,
+                    col: $col,
+                    size_x: $sx,
+                    size_y: $sy,
+                    visualization_settings: {}
+                }]')
+
+            if [ "$SIZE_X" -eq 12 ] || [ "$COL" -eq 6 ]; then
+                ROW_CURSOR=$((ROW_CURSOR + SIZE_Y))
+            fi
         fi
     }
 
     # 1. DRE & Lucro Líquido Real Diário
-    create_card_and_pin \
+    create_card \
         "📈 Faturamento vs. Lucro Líquido Real (DRE Diário)" \
         "line" \
         "SELECT data_referencia, faturamento_bruto, total_cmv, lucro_liquido_dia, margem_liquida_perc, roas_dia FROM public.vw_dre_diario_consolidado ORDER BY data_referencia DESC LIMIT 30;" \
-        0 0 12 8
+        12 8
 
     # 2. Radar de Oportunidades Cross-Sell & Upsell
-    create_card_and_pin \
+    create_card \
         "🎯 Radar de Oportunidades Cross-Sell & Upsell 360°" \
         "table" \
         "SELECT cliente_nome, cliente_whatsapp, segmento_cliente, ltv_total_consolidado, total_pedidos_produtos, contratos_servicos_ativos, share_produtos_perc, share_servicos_perc, oportunidade_cross_sell FROM public.vw_cliente_visao_360_hibrida ORDER BY ltv_total_consolidado DESC LIMIT 50;" \
-        8 0 12 8
+        12 8
 
     # 3. Alerta de Estoque Crítico & Ruptura de Insumos
-    create_card_and_pin \
+    create_card \
         "⚠️ Estoque Crítico & Ruptura de Insumos de Expedição" \
         "table" \
         "SELECT tipo_item, identificador, item_nome, saldo_atual, nivel_minimo, deficit_reposicao, status_alerta, setor_responsavel FROM public.vw_estoque_critico ORDER BY deficit_reposicao DESC;" \
-        16 0 12 6
+        12 6
 
     # 4. Performance de Marketing & Auditoria de ROAS Real vs Pixel
-    create_card_and_pin \
+    create_card \
         "📊 Performance de Ads: ROAS Real Caixa vs ROAS Pixel" \
         "table" \
         "SELECT data_referencia, plataforma_ads, campanha_ou_utm, valor_investido_ads, faturamento_pixel, faturamento_real_banco, lucro_liquido_real_auditado, roas_pixel_estimado, roas_real_faturado, discrepancia_pixel_vs_real_perc FROM public.vw_correlacao_ads_vendas_reais ORDER BY data_referencia DESC LIMIT 30;" \
-        22 0 12 8
+        12 8
 
     # 5. MRR, ARR & Churn de Serviços B2B e Contratos
-    create_card_and_pin \
+    create_card \
         "💼 Gestão de Serviços B2B: MRR, ARR & Churn Rate" \
         "table" \
         "SELECT mes_ano, novos_contratos_mes, novo_mrr_adicionado, contratos_cancelados_mes, mrr_perdido_churn, mrr_net_growth_mes, mrr_total_ativo_mes, arr_anualizado_estimado, churn_rate_mrr_perc FROM public.vw_kpi_servicos_mrr_arr ORDER BY mes_referencia DESC LIMIT 12;" \
-        30 0 12 6
+        12 6
 
     # 6. Recuperação de Carrinhos & WhatsApp
-    create_card_and_pin \
+    create_card \
         "💬 Recuperação de Carrinhos Abandonados & Boletos" \
         "table" \
-        "SELECT tipo_pendencia, status_recuperacao, total_ocorrencias, valor_total_em_risco, valor_total_recuperado, taxa_recuperacao_perc, media_tentativas_contato FROM public.vw_kpi_recuperacao_vendas;" \
-        36 0 12 6
+        "SELECT tipo_pendencia, status_recuperacao, total_ocorrencias, valor_total_em_risco, valor_total_recuperado, taxa_conversao_recuperacao_perc FROM public.vw_kpi_recuperacao_vendas ORDER BY valor_total_em_risco DESC;" \
+        12 6
 
-    # 7. Produtividade & Conversão de SDRs no Chatwoot
-    create_card_and_pin \
-        "🏆 Produtividade Comercial de Atendentes (Chatwoot + Vendas)" \
+    # 7. Produtividade Comercial & Atendimentos SDR
+    create_card \
+        "👥 Produtividade & Conversão Comercial (Chatwoot + Vendas)" \
         "table" \
-        "SELECT atendente_nome, atendente_email, total_conversas_atendidas, conversas_resolvidas, tempo_medio_primeira_resposta_minutos, tempo_medio_resolucao_minutos, nota_media_csat, vendas_convertidas, faturamento_gerado_atendente, taxa_conversao_atendimento_venda_perc FROM public.vw_performance_comercial_atendentes ORDER BY faturamento_gerado_atendente DESC;" \
-        42 0 12 6
+        "SELECT atendente_nome, email, total_conversas_atendidas, total_mensagens_enviadas, total_leads_qualificados, propostas_apresentadas, vendas_concluidas, faturamento_gerado_total, taxa_conversao_lead_venda_perc, ticket_medio_atendente FROM public.vw_performance_comercial_atendentes ORDER BY faturamento_gerado_total DESC;" \
+        12 8
 
-    echo "✔ [AUTO-PROVISIONAMENTO METABASE] Cockpit Executivo Omnichannel 360° fixado permanentemente na Tela de Início!"
+    # Vincula todos os cards ao Dashboard via PUT
+    curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}/cards" \
+        -H "X-Metabase-Session: $MB_SESSION" \
+        -H "Content-Type: application/json" \
+        -d "{\"cards\": ${DASH_CARDS_PAYLOAD}}" >/dev/null 2>&1 || true
+
+    # Configura Homepage oficial e IA
+    curl -s -X PUT "${MB_URL}/api/setting/custom-homepage" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": true}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/custom-homepage-dashboard" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": ${DASH_ID}}" >/dev/null 2>&1 || true
+
+    local AI_KEY="${OPENROUTER_API_KEY:-${OPENAI_API_KEY:-$GEMINI_API_KEY}}"
+    if [ -n "$AI_KEY" ]; then
+        curl -s -X PUT "${MB_URL}/api/setting/openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${AI_KEY}\"}" >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/openai-base-url" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"http://litellm:4000/v1\"}" >/dev/null 2>&1 || true
+    fi
+
+    echo "✔ [SUCESSO METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' provisionado e fixado na Homepage!"
 }
 
 render_forensic_report() {
-    local ts_domain="${1:-localhost}"
     local MB_PORT="${HOST_METABASE_PORT:-3030}"
     echo "  📊 Metabase Business Intelligence"
     echo "    ↳ Painel Web:                      http://${ts_domain}:${MB_PORT}"

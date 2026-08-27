@@ -441,72 +441,138 @@ def api_post(endpoint, payload):
         req = urllib.request.Request(f"{base_url}{endpoint}", data=data, headers=headers, method="POST")
         with urllib.request.urlopen(req, timeout=10) as resp:
             return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        return None
     except Exception:
         return None
 
-tables_data = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/tables")
-if not tables_data or "list" not in tables_data:
-    sys.exit(0)
+# 1. Busca tabelas na Base e em Sources conectadas
+tables = []
+b_tables = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/tables")
+if b_tables and "list" in b_tables:
+    tables.extend(b_tables["list"])
 
-tables = tables_data["list"]
+if not tables:
+    sources = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/sources")
+    if sources and "list" in sources:
+        for s in sources["list"]:
+            s_id = s.get("id")
+            s_tables = api_get(f"/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/sources/{s_id}/tables")
+            if s_tables and "list" in s_tables:
+                tables.extend(s_tables["list"])
+
+if not tables:
+    print("⚠️ [SRE WARN NOCODB CRM] Nenhuma tabela encontrada na base para criar views.")
+    sys.exit(0)
 
 views_to_create = [
     {
         "table_name": "leads",
         "views": [
-            {"title": "🎯 Funil de Vendas (Kanban)", "type": "kanban", "grp_col": "status_funil"},
-            {"title": "🔥 Leads Quentes (Tier A)", "type": "grid"},
-            {"title": "📝 Formulário de Captação de Leads", "type": "form"}
+            {"title": "🎯 Funil de Vendas (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_funil"},
+            {"title": "🔥 Leads Quentes (Tier A)", "type": "grid", "endpoint_type": "grids"},
+            {"title": "📝 Formulário de Captação de Leads", "type": "form", "endpoint_type": "forms"}
         ]
     },
     {
         "table_name": "propostas_comerciais",
         "views": [
-            {"title": "💼 Pipeline Comercial B2B (Kanban)", "type": "kanban", "grp_col": "status_proposta"},
-            {"title": "📅 Prazos de Validade (Calendário)", "type": "calendar", "from_date_col": "data_envio", "to_date_col": "validade_proposta"}
+            {"title": "💼 Pipeline Comercial B2B (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_proposta"},
+            {"title": "📅 Prazos de Validade (Calendário)", "type": "calendar", "endpoint_type": "calendars", "from_date_col": "data_envio", "to_date_col": "validade_proposta"}
         ]
     },
     {
         "table_name": "pedidos",
         "views": [
-            {"title": "📦 Esteira de Expedição & Entregas (Kanban)", "type": "kanban", "grp_col": "status_operacional"}
+            {"title": "📦 Esteira de Expedição & Entregas (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_operacional"}
         ]
     },
     {
         "table_name": "catalogo",
         "views": [
-            {"title": "🛍️ Vitrine de Produtos (Galeria)", "type": "gallery"}
+            {"title": "🛍️ Vitrine de Produtos (Galeria)", "type": "gallery", "endpoint_type": "galleries"}
         ]
     },
     {
         "table_name": "clientes",
         "views": [
-            {"title": "👥 Base de Clientes (Galeria 360°)", "type": "gallery"},
-            {"title": "👑 Clientes VIP & Recorrentes", "type": "grid"}
+            {"title": "👥 Base de Clientes (Galeria 360°)", "type": "gallery", "endpoint_type": "galleries"},
+            {"title": "👑 Clientes VIP & Recorrentes", "type": "grid", "endpoint_type": "grids"}
         ]
     },
     {
         "table_name": "carrinhos_abandonados",
         "views": [
-            {"title": "🛒 Recuperação de Vendas (Kanban)", "type": "kanban", "grp_col": "status_recuperacao"}
+            {"title": "🛒 Recuperação de Vendas (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_recuperacao"}
         ]
     },
     {
         "table_name": "campanhas_marketing",
         "views": [
-            {"title": "🎯 Hub de Campanhas & Mídia Paga (Galeria)", "type": "gallery"}
+            {"title": "🎯 Hub de Campanhas & Mídia Paga (Galeria)", "type": "gallery", "endpoint_type": "galleries"}
         ]
     },
     {
         "table_name": "contratos_servicos",
         "views": [
-            {"title": "📅 Calendário de Renovações (MRR)", "type": "calendar", "from_date_col": "data_inicio", "to_date_col": "data_renovacao"},
-            {"title": "💼 Gestão de Assinaturas Ativas", "type": "grid"}
+            {"title": "📅 Calendário de Renovações (MRR)", "type": "calendar", "endpoint_type": "calendars", "from_date_col": "data_inicio", "to_date_col": "data_renovacao"},
+            {"title": "💼 Gestão de Assinaturas Ativas", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "vw_cliente_visao_360_hibrida",
+        "views": [
+            {"title": "👑 Clientes 360° (Galeria VIP)", "type": "gallery", "endpoint_type": "galleries"}
+        ]
+    },
+    {
+        "table_name": "vw_estoque_critico",
+        "views": [
+            {"title": "⚠️ Alertas de Ruptura de Estoque", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "vw_kpi_atendimento",
+        "views": [
+            {"title": "💬 Produtividade SDRs (Galeria)", "type": "gallery", "endpoint_type": "galleries"}
+        ]
+    },
+    {
+        "table_name": "vw_correlacao_ads_vendas_reais",
+        "views": [
+            {"title": "📊 Auditoria ROAS Real vs Pixel", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "vw_dre_diario_consolidado",
+        "views": [
+            {"title": "📈 DRE Diário Consolidado", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "vw_kpi_servicos_mrr_arr",
+        "views": [
+            {"title": "💼 Gestão MRR & ARR de Serviços", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "vw_kpi_recuperacao_vendas",
+        "views": [
+            {"title": "🛒 Conversão de Boletos & Carrinhos", "type": "grid", "endpoint_type": "grids"}
         ]
     }
 ]
 
 created_count = 0
+def api_patch(endpoint, payload):
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(f"{base_url}{endpoint}", data=data, headers=headers, method="PATCH")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+
 for target in views_to_create:
     t_name = target["table_name"]
     matching_tables = [t for t in tables if t.get("table_name") == t_name or t.get("title") == t_name]
@@ -515,7 +581,13 @@ for target in views_to_create:
     
     table = matching_tables[0]
     t_id = table["id"]
+    
     columns = table.get("columns", [])
+    if not columns:
+        t_meta = api_get(f"/api/v2/meta/tables/{t_id}")
+        if t_meta and "columns" in t_meta:
+            columns = t_meta["columns"]
+            
     col_map = {c.get("column_name") or c.get("title"): c["id"] for c in columns if "id" in c}
     
     existing_views_data = api_get(f"/api/v2/meta/tables/{t_id}/views")
@@ -528,32 +600,29 @@ for target in views_to_create:
         if v_title in existing_view_titles:
             continue
             
-        v_type = v_def["type"]
-        payload = {"title": v_title, "type": v_type}
+        endpoint_type = v_def["endpoint_type"]
+        payload = {"title": v_title}
         
-        if v_type == "kanban":
+        if v_def["type"] == "kanban":
             grp_col_name = v_def.get("grp_col")
             if grp_col_name in col_map:
                 payload["fk_grp_col_id"] = col_map[grp_col_name]
                 
-        elif v_type == "calendar":
-            from_col = v_def.get("from_date_col")
-            to_col = v_def.get("to_date_col")
-            if from_col in col_map:
-                payload["fk_from_date_col_id"] = col_map[from_col]
-            if to_col in col_map:
-                payload["fk_to_date_col_id"] = col_map[to_col]
-                
-        res = api_post(f"/api/v2/meta/tables/{t_id}/views", payload)
+        res = api_post(f"/api/v2/meta/tables/{t_id}/{endpoint_type}", payload)
         if res and "id" in res:
             created_count += 1
+            v_id = res["id"]
+            if v_def["type"] == "calendar":
+                from_col = v_def.get("from_date_col")
+                if from_col in col_map:
+                    api_patch(f"/api/v2/meta/calendars/{v_id}", {"fk_from_date_col_id": col_map[from_col]})
             print(f"  ↳ View criada: {v_title} ({t_name})")
 
 if created_count > 0:
     print(f"✔ [SUCESSO NOCODB CRM] {created_count} Views de CRM provisionadas com sucesso!")
 else:
-    print("➜ [IDEMPOTÊNCIA NOCODB CRM] Views de CRM já provisionadas. Preservando estado.")
-' 2>/dev/null || true
+    print("➜ [IDEMPOTÊNCIA NOCODB CRM] Views de CRM já provisionadas ou tabelas em sincronia.")
+'
         fi
     fi
 
