@@ -411,6 +411,149 @@ provision_user() {
                 fi
                 echo "✔ [AUTO-SINCRONIZAÇÃO NOCODB] Schema relacional e views analíticas sincronizados com sucesso!"
             fi
+
+            # 4. Auto-Provisionamento de Views de CRM & Apps Visuais no NocoDB (Kanban, Gallery, Calendar, Forms)
+            echo "➜ [SRE NOCODB CRM] Provisionando Views de CRM (Kanban, Galeria, Formulários e Calendário)..."
+            local NOCO_PORT="${HOST_NOCODB_PORT:-18080}"
+            python3 -c '
+import json
+import sys
+import urllib.request
+import urllib.error
+
+base_url = "http://127.0.0.1:'"$NOCO_PORT"'"
+headers = {
+    "xc-auth": "'"$AUTH_TOKEN"'",
+    "Content-Type": "application/json"
+}
+
+def api_get(endpoint):
+    try:
+        req = urllib.request.Request(f"{base_url}{endpoint}", headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+
+def api_post(endpoint, payload):
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(f"{base_url}{endpoint}", data=data, headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+
+tables_data = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/tables")
+if not tables_data or "list" not in tables_data:
+    sys.exit(0)
+
+tables = tables_data["list"]
+
+views_to_create = [
+    {
+        "table_name": "leads",
+        "views": [
+            {"title": "🎯 Funil de Vendas (Kanban)", "type": "kanban", "grp_col": "status_funil"},
+            {"title": "🔥 Leads Quentes (Tier A)", "type": "grid"},
+            {"title": "📝 Formulário de Captação de Leads", "type": "form"}
+        ]
+    },
+    {
+        "table_name": "propostas_comerciais",
+        "views": [
+            {"title": "💼 Pipeline Comercial B2B (Kanban)", "type": "kanban", "grp_col": "status_proposta"},
+            {"title": "📅 Prazos de Validade (Calendário)", "type": "calendar", "from_date_col": "data_envio", "to_date_col": "validade_proposta"}
+        ]
+    },
+    {
+        "table_name": "pedidos",
+        "views": [
+            {"title": "📦 Esteira de Expedição & Entregas (Kanban)", "type": "kanban", "grp_col": "status_operacional"}
+        ]
+    },
+    {
+        "table_name": "catalogo",
+        "views": [
+            {"title": "🛍️ Vitrine de Produtos (Galeria)", "type": "gallery"}
+        ]
+    },
+    {
+        "table_name": "clientes",
+        "views": [
+            {"title": "👥 Base de Clientes (Galeria 360°)", "type": "gallery"},
+            {"title": "👑 Clientes VIP & Recorrentes", "type": "grid"}
+        ]
+    },
+    {
+        "table_name": "carrinhos_abandonados",
+        "views": [
+            {"title": "🛒 Recuperação de Vendas (Kanban)", "type": "kanban", "grp_col": "status_recuperacao"}
+        ]
+    },
+    {
+        "table_name": "campanhas_marketing",
+        "views": [
+            {"title": "🎯 Hub de Campanhas & Mídia Paga (Galeria)", "type": "gallery"}
+        ]
+    },
+    {
+        "table_name": "contratos_servicos",
+        "views": [
+            {"title": "📅 Calendário de Renovações (MRR)", "type": "calendar", "from_date_col": "data_inicio", "to_date_col": "data_renovacao"},
+            {"title": "💼 Gestão de Assinaturas Ativas", "type": "grid"}
+        ]
+    }
+]
+
+created_count = 0
+for target in views_to_create:
+    t_name = target["table_name"]
+    matching_tables = [t for t in tables if t.get("table_name") == t_name or t.get("title") == t_name]
+    if not matching_tables:
+        continue
+    
+    table = matching_tables[0]
+    t_id = table["id"]
+    columns = table.get("columns", [])
+    col_map = {c.get("column_name") or c.get("title"): c["id"] for c in columns if "id" in c}
+    
+    existing_views_data = api_get(f"/api/v2/meta/tables/{t_id}/views")
+    existing_view_titles = set()
+    if existing_views_data and "list" in existing_views_data:
+        existing_view_titles = {v.get("title") for v in existing_views_data["list"]}
+        
+    for v_def in target["views"]:
+        v_title = v_def["title"]
+        if v_title in existing_view_titles:
+            continue
+            
+        v_type = v_def["type"]
+        payload = {"title": v_title, "type": v_type}
+        
+        if v_type == "kanban":
+            grp_col_name = v_def.get("grp_col")
+            if grp_col_name in col_map:
+                payload["fk_grp_col_id"] = col_map[grp_col_name]
+                
+        elif v_type == "calendar":
+            from_col = v_def.get("from_date_col")
+            to_col = v_def.get("to_date_col")
+            if from_col in col_map:
+                payload["fk_from_date_col_id"] = col_map[from_col]
+            if to_col in col_map:
+                payload["fk_to_date_col_id"] = col_map[to_col]
+                
+        res = api_post(f"/api/v2/meta/tables/{t_id}/views", payload)
+        if res and "id" in res:
+            created_count += 1
+            print(f"  ↳ View criada: {v_title} ({t_name})")
+
+if created_count > 0:
+    print(f"✔ [SUCESSO NOCODB CRM] {created_count} Views de CRM provisionadas com sucesso!")
+else:
+    print("➜ [IDEMPOTÊNCIA NOCODB CRM] Views de CRM já provisionadas. Preservando estado.")
+' 2>/dev/null || true
         fi
     fi
 

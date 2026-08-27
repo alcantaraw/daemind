@@ -200,7 +200,7 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 - 🔒 **Hardening Perimetral & Segurança Zero-Trust:** Regras estritas no Firewall IPTables, isolamento de rede privada e proteção contra acessos externos não autorizados.
 - ⚡ **Auto-Tuning Dinâmico de Hardware:** Inspeção autônoma do servidor (CPU, RAM e Disco) com otimização profunda de memória, CPU e I/O de disco aplicada individualmente a cada microsserviço para garantir máxima performance sem estouros.
 - 🐘 **Banco de Dados Escalável & Data Warehouse:** PostgreSQL 17 com `pgvector` e federação `postgres_fdw` unificando 100% dos microsserviços com **27 Views Analíticas Executivas** e Cockpit Omnichannel auto-injetado no Metabase e NocoDB.
-- 🤖 **AI Mesh Soberana & RAG com Docling:** Roteador de IA com failover resiliente via LiteLLM, inferência local soberana (Ollama) e motor de OCR avançado para documentos (Docling).
+- 🤖 **AI Mesh Soberana, Web Search & Text-to-SQL:** Roteador de IA com failover resiliente via LiteLLM (atendendo Chatwoot, Postiz, n8n, Evolution, Open WebUI e Metabase Text-to-SQL), busca na web soberana com SearXNG, inferência local soberana (Ollama) e motor de OCR avançado para documentos (Docling).
 - 🔑 **Identidade Global Unificada & SSOT de Credenciais:** Uma única conta universal (`$TS_EMAIL` + `$DB_PASSWORD`) autentica 100% dos painéis e integrações da stack com zero fricção de onboarding manual.
 - 🧼 **Sanitização de Segredos:** Expurgo automático de chaves e credenciais da memória após o boot para zero vazamento.
 

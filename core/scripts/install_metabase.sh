@@ -379,19 +379,27 @@ provision_dashboards() {
     DASH_ID=$(curl -s -X GET "${MB_URL}/api/dashboard" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '.[] | select(.name == "Cockpit Executivo Omnichannel 360°") | .id' 2>/dev/null || echo "")
 
     if [ -n "$DASH_ID" ] && [ "$DASH_ID" != "null" ]; then
-        echo "➜ [IDEMPOTÊNCIA METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' já provisionado (ID: ${DASH_ID}). Preservando."
+        echo "➜ [IDEMPOTÊNCIA METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' já provisionado (ID: ${DASH_ID}). Garantindo fixação na Tela Inicial..."
+        local PIN_NOW=$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')
+        curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}" \
+            -H "X-Metabase-Session: $MB_SESSION" \
+            -H "Content-Type: application/json" \
+            -d "{\"pinned_at\": \"${PIN_NOW}\", \"collection_position\": 1}" >/dev/null 2>&1 || true
         return 0
     fi
 
     echo "  ↳ Criando Dashboard 'Cockpit Executivo Omnichannel 360°'..."
+    local PIN_NOW=$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')
     local CREATE_DASH_RES
     CREATE_DASH_RES=$(curl -s -X POST "${MB_URL}/api/dashboard" \
         -H "X-Metabase-Session: $MB_SESSION" \
         -H "Content-Type: application/json" \
-        -d '{
-            "name": "Cockpit Executivo Omnichannel 360°",
-            "description": "Painel de Inteligência de Negócios, Vendas, Serviços B2B, Performance de Ads, Estoque Crítico e SDRs em Tempo Real."
-        }' 2>/dev/null || echo "")
+        -d "{
+            \"name\": \"Cockpit Executivo Omnichannel 360°\",
+            \"description\": \"Painel de Inteligência de Negócios, Vendas, Serviços B2B, Performance de Ads, Estoque Crítico e SDRs em Tempo Real.\",
+            \"collection_position\": 1,
+            \"pinned_at\": \"${PIN_NOW}\"
+        }" 2>/dev/null || echo "")
     DASH_ID=$(echo "$CREATE_DASH_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
 
     if [ -z "$DASH_ID" ] || [ "$DASH_ID" = "null" ]; then
@@ -399,9 +407,16 @@ provision_dashboards() {
         return 0
     fi
 
-    echo "  ↳ Injetando Cards Analíticos Nativos do Data Warehouse..."
+    # Garante que o dashboard fique fixado como item principal da tela de Início (Coleção Raiz)
+    curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}" \
+        -H "X-Metabase-Session: $MB_SESSION" \
+        -H "Content-Type: application/json" \
+        -d "{\"pinned_at\": \"${PIN_NOW}\", \"collection_position\": 1}" >/dev/null 2>&1 || true
 
-    # Helper para criar Card e adicionar ao Dashboard
+    echo "  ↳ Injetando e fixando Cards Analíticos Nativos do Data Warehouse..."
+
+    # Helper para criar Card, fixar na tela inicial e adicionar ao Dashboard
+    local CARD_PIN_POS=2
     create_card_and_pin() {
         local NAME="$1"
         local DISPLAY="$2"
@@ -417,6 +432,8 @@ provision_dashboards() {
             --arg display "$DISPLAY" \
             --arg query "$SQL_QUERY" \
             --argjson db "$DB_ID" \
+            --arg pin "$PIN_NOW" \
+            --argjson pos "$CARD_PIN_POS" \
             '{
                 name: $name,
                 display: $display,
@@ -427,8 +444,12 @@ provision_dashboards() {
                     },
                     database: $db
                 },
-                visualization_settings: {}
+                visualization_settings: {},
+                collection_position: $pos,
+                pinned_at: $pin
             }')
+
+        CARD_PIN_POS=$((CARD_PIN_POS + 1))
 
         local CARD_RES
         CARD_RES=$(curl -s -X POST "${MB_URL}/api/card" \
@@ -439,6 +460,12 @@ provision_dashboards() {
         CARD_ID=$(echo "$CARD_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
 
         if [ -n "$CARD_ID" ] && [ "$CARD_ID" != "null" ]; then
+            # Fixa o card também com PUT para garantir exibição na Home Page
+            curl -s -X PUT "${MB_URL}/api/card/${CARD_ID}" \
+                -H "X-Metabase-Session: $MB_SESSION" \
+                -H "Content-Type: application/json" \
+                -d "{\"pinned_at\": \"${PIN_NOW}\", \"collection_position\": ${CARD_PIN_POS}}" >/dev/null 2>&1 || true
+
             curl -s -X POST "${MB_URL}/api/dashboard/${DASH_ID}/cards" \
                 -H "X-Metabase-Session: $MB_SESSION" \
                 -H "Content-Type: application/json" \
@@ -501,7 +528,7 @@ provision_dashboards() {
         "SELECT atendente_nome, atendente_email, total_conversas_atendidas, conversas_resolvidas, tempo_medio_primeira_resposta_minutos, tempo_medio_resolucao_minutos, nota_media_csat, vendas_convertidas, faturamento_gerado_atendente, taxa_conversao_atendimento_venda_perc FROM public.vw_performance_comercial_atendentes ORDER BY faturamento_gerado_atendente DESC;" \
         42 0 12 6
 
-    echo "✔ [AUTO-PROVISIONAMENTO METABASE] Cockpit Executivo Omnichannel 360° com 7 Cards analíticos configurado com sucesso!"
+    echo "✔ [AUTO-PROVISIONAMENTO METABASE] Cockpit Executivo Omnichannel 360° fixado permanentemente na Tela de Início!"
 }
 
 render_forensic_report() {

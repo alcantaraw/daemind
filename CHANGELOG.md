@@ -78,8 +78,14 @@
       5. *Gestão de Serviços B2B: MRR, ARR & Churn Rate* (Table/KPI)
       6. *Recuperação de Carrinhos Abandonados & WhatsApp* (Table/Funnel)
       7. *Produtividade Comercial de Atendentes SDR no Chatwoot* (Table/Rank)
-    - **NocoDB ERP (`install_nocodb.sh`):** Disparo automatizado de sincronização de schema e views analíticas do PostgreSQL via REST API (`/sources/{id}/sync`), indexando tabelas operacionais e de serviços instantaneamente.
-  - **Inteligência Cross-Sell & Visão 360° Híbrida:**
+    - **NocoDB ERP & Smart CRM (`install_nocodb.sh`):** Disparo automatizado de sincronização de schema e views analíticas do PostgreSQL via REST API (`/sources/{id}/sync`) e **auto-provisionamento de Views Visuais de CRM**:
+      - 🎯 *Funil de Vendas (Kanban)* na tabela `leads` agrupado por `status_funil` com cards arrastáveis.
+      - 💼 *Pipeline Comercial B2B (Kanban)* na tabela `propostas_comerciais` agrupado por `status_proposta`.
+      - 📦 *Esteira de Expedição (Kanban)* na tabela `pedidos` agrupado por `status_operacional`.
+      - 🛒 *Recuperação de Vendas (Kanban)* na tabela `carrinhos_abandonados` por `status_recuperacao`.
+      - 🛍️ *Vitrine de Produtos (Gallery)* na tabela `catalogo` e 👥 *Base de Clientes 360° (Gallery)* na tabela `clientes`.
+      - 📅 *Calendário de Renovações (Calendar)* em `contratos_servicos` e *Prazos de Validade* em `propostas_comerciais`.
+      - 📝 *Formulário de Captação (Form View)* para entrada instantânea de leads no CRM.
     - Unificação do cliente como SSOT único para E-commerce, Assinaturas, Consultorias e Propostas B2B.
     - Algoritmo de identificação automática de gatilhos de Upsell/Cross-sell pronto para acionamento via n8n.
   - **Módulo Soberano de Serviços, Assinaturas (SaaS) & Propostas B2B:**
@@ -143,12 +149,21 @@
   - **Ranking de Fallback & Auto-Healing:** O modelo online mais rápido e estável é eleito como `TARGET_MODEL` (atendendo o padrão `gpt-4.1`), enquanto todos os demais modelos saudáveis formam uma esteira de fallback resiliente no `router_settings.fallbacks` do LiteLLM.
   - **Virtualização de Aliases sem Poluição Visual:** Os aliases universais (`gpt-4.1`, `gpt-4`, `gpt-4o`, `gpt-4o-mini`, `gpt-3.5-turbo`, `openrouter/free`) foram isolados no `router_settings.model_alias_map`, garantindo que Chatwoot, Postiz, n8n e Evolution operem silenciosamente com qualquer modelo padrão, enquanto a rota pública `/v1/models` no OpenWebUI permanece 100% limpa, exibindo apenas modelos reais e funcionais.
   - **Wildcard Fallback Universal (`*`):** Implementação de regra coringa `{"*": $FALLBACK_JSON}` no LiteLLM, tornando a infraestrutura imune a futuras atualizações de bibliotecas ou modelos internos das aplicações parceiras.
-  - **Auditoria 360° com 100% de Sucesso:** Validação ponta a ponta com resposta `HTTP 200` direta a partir do interior de todos os 5 contêineres consumidores:
+  - **Auditoria 360° com 100% de Sucesso:** Validação ponta a ponta com resposta `HTTP 200` direta a partir do interior de todos os 6 contêineres consumidores:
     1. **Chatwoot (`loja_chatwoot`):** Copiloto do Atendente e Resumos de Chamados via Rails Runner.
     2. **Postiz (`loja_postiz`):** Geração de Legendas, Posts e Hashtags para Redes Sociais.
     3. **Open WebUI (`loja_openwebui`):** Interface de Chat, RAG e Personas.
     4. **n8n (`loja_n8n`):** Nós de AI Agent, LangChain e Automações de Negócio.
     5. **Evolution API (`loja_evolution`):** Transcrição de Áudio e Bots de WhatsApp.
+    6. **Metabase BI (`loja_metabase`):** Assistente de IA Text-to-SQL e Análise Automatizada de Dados.
+
+- **[ADD] Metabase BI AI Assistant & Text-to-SQL Soberano (LiteLLM Integration):**
+  - **Text-to-SQL & Insights com LLM:** Conexão nativa dos recursos de IA do Metabase diretamente com o gateway soberano LiteLLM (`loja_litellm:4000/v1`), utilizando a `${LITELLM_MASTER_KEY}` e o modelo configurável `${METABASE_AI_MODEL:-openai/gpt-4o-mini}`.
+  - **Zero-Touch Configuration:** Variáveis `MB_OPENAI_API_KEY`, `MB_OPENAI_BASE_URL` e `MB_OPENAI_MODEL` injetadas no `docker-compose.metabase.yml` com dependência explícita do `litellm`, permitindo que analistas e gestores criem perguntas, gráficos e queries SQL em linguagem natural diretamente no Metabase sem vazar chaves de API externas.
+
+- **[ADD] Open WebUI + SearXNG: RAG Web Search & Metasearch Soberano em Tempo Real:**
+  - **Busca na Web Integrada ao Chat de IA:** Configuração nativa de Web Search (`ENABLE_RAG_WEB_SEARCH=True`, `RAG_WEB_SEARCH_ENGINE=searxng`, `SEARXNG_QUERY_URL=http://searxng:8080/search?q=<query>`) no Open WebUI.
+  - **Concorrência & Privacidade Total:** Conexão com o motor headless SearXNG local (`loja_searxng:8080`), permitindo que modelos de IA executem buscas na web, sintetizem notícias e recuperem informações em tempo real com concorrência calibrada (`RAG_WEB_SEARCH_CONCURRENT_REQUESTS=10`), sem anúncios, cookies ou rastreamento de terceiros.
 
 - **[ADD] Service Mesh de Variáveis de Ambiente no n8n:**
   - Injeção automática dos endpoints e credenciais de todos os microsserviços da stack (`DOCLING_API_URL`, `SHLINK_API_URL`, `EVOLUTION_API_URL`, `CHATWOOT_API_URL`, `MINIO_ENDPOINT`, `LISTMONK_API_URL`, `POSTIZ_API_URL`), permitindo que nós e Agentes de IA do n8n interoperem instantaneamente sem configuração manual de IPs ou tokens.
