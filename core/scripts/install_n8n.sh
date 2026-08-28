@@ -471,9 +471,9 @@ build_envs() {
         cpu_n8n="2.0"
     fi
 
-    local mem_n8n="1024M"
+    local mem_n8n="1280M"
     local res_n8n="0M"
-    local node_heap_default="768"
+    local node_heap_default="1024"
 
     if [ "$ram_mb" -gt 24576 ]; then
         mem_n8n="4096M"

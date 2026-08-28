@@ -329,7 +329,7 @@ build_envs() {
         cpu_openwebui="2.0"
     fi
 
-    local mem_openwebui="1024M"
+    local mem_openwebui="1280M"
     local res_openwebui="512M"
 
     if [ "$ram_mb" -gt 24576 ]; then

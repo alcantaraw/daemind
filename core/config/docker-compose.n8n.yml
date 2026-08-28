@@ -25,13 +25,13 @@ services:
       resources:
         limits:
           cpus: '${CPU_N8N:-1.0}'
-          memory: '${MEM_N8N:-1024M}'
+          memory: '${MEM_N8N:-1280M}'
         reservations:
           memory: '${RES_N8N:-256M}'
     extra_hosts:
       host.docker.internal: host-gateway
     environment:
-      - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-768} --no-deprecation
+      - NODE_OPTIONS=--max-old-space-size=${NODE_HEAP_DEFAULT:-1024} --no-deprecation
       - N8N_PERSONALIZATION_ENABLED=false
       - N8N_DIAGNOSTICS_ENABLED=false
       - N8N_METRICS_ENABLED=false
@@ -163,7 +163,7 @@ services:
       # resources:
         # limits:
           # cpus: '1.0'
-          # memory: '256M'
+          # memory: '384M'
     # networks:
       # instancia_net:
         # ipv4_address: ${IP_SEARXNG}

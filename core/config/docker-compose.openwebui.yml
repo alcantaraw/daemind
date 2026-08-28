@@ -12,7 +12,7 @@ services:
       resources:
         limits:
           cpus: '${CPU_OPENWEBUI:-1.0}'
-          memory: '${MEM_OPENWEBUI:-1024M}'
+          memory: '${MEM_OPENWEBUI:-1280M}'
         reservations:
           memory: '${RES_OPENWEBUI:-512M}'
     environment:

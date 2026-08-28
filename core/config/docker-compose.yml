@@ -103,6 +103,8 @@ services:
       - POOL_MODE=transaction
       - LISTEN_PORT=6432
       - AUTH_TYPE=scram-sha-256
+      - ADMIN_USERS=${DB_USER},postgres
+      - STATS_USERS=${DB_USER},postgres
     ports:
       - "127.0.0.1:5432:6432/tcp"
     volumes:
