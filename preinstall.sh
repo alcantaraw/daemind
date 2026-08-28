@@ -764,36 +764,7 @@ EOD
         exit 1
     fi
 
-    if [ -f /etc/netplan/99-static-sre.yaml ] && grep -q "$IP_CIDR" /etc/netplan/99-static-sre.yaml 2>/dev/null; then
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] IP de rede estático já configurado (${IP_CIDR}). Preservando netplan."
-    else
-        echo "➜ [SRE PREINSTALL] Fixando IP de rede estático para a aplicação (${IP_CIDR})..."
-        sudo mkdir -p /etc/netplan/backup
-        sudo mv /etc/netplan/*.yaml /etc/netplan/backup/ 2>/dev/null || true
-
-        sudo cat << EON | sudo tee /etc/netplan/99-static-sre.yaml > /dev/null
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    $INTERFACE:
-      match:
-        macaddress: "$MAC_ADDR"
-      set-name: "$INTERFACE"
-      dhcp4: no
-      addresses:
-        - $IP_CIDR
-      routes:
-        - to: default
-          via: $GATEWAY
-      nameservers:
-        addresses: [1.1.1.1, 8.8.8.8]
-EON
-
-        sudo chmod 600 /etc/netplan/99-static-sre.yaml
-        sudo netplan apply 2>/dev/null || true
-        echo "✔ [SUCESSO PREINSTALL] IP de rede estático fixado e protegido contra trocas."
-    fi
+    echo "✔ [SUCESSO PREINSTALL] Conectividade de rede da interface ($INTERFACE) preservada sem alteração destrutiva de Netplan."
 
     echo "=== [SRE PREINSTALL] Configurando mensagem customizada de boas-vindas no login ==="
     sudo chmod -x /etc/update-motd.d/* 2>/dev/null || true
@@ -2016,36 +1987,7 @@ EOD
         exit 1
     fi
 
-    if [ -f /etc/netplan/99-static-sre.yaml ] && grep -q "$IP_CIDR" /etc/netplan/99-static-sre.yaml 2>/dev/null; then
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] IP de rede estático já configurado (${IP_CIDR}). Preservando netplan."
-    else
-        echo "➜ [SRE PREINSTALL] Fixando IP de rede estático para a aplicação (${IP_CIDR})..."
-        sudo mkdir -p /etc/netplan/backup
-        sudo mv /etc/netplan/*.yaml /etc/netplan/backup/ 2>/dev/null || true
-
-        sudo cat << EON | sudo tee /etc/netplan/99-static-sre.yaml > /dev/null
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    $INTERFACE:
-      match:
-        macaddress: "$MAC_ADDR"
-      set-name: "$INTERFACE"
-      dhcp4: no
-      addresses:
-        - $IP_CIDR
-      routes:
-        - to: default
-          via: $GATEWAY
-      nameservers:
-        addresses: [1.1.1.1, 8.8.8.8]
-EON
-
-        sudo chmod 600 /etc/netplan/99-static-sre.yaml
-        sudo netplan apply 2>/dev/null || true
-        echo "✔ [SUCESSO PREINSTALL] IP de rede estático fixado e protegido contra trocas."
-    fi
+    echo "✔ [SUCESSO PREINSTALL] Conectividade de rede da interface ($INTERFACE) preservada sem alteração destrutiva de Netplan."
 
     echo "=== [SRE PREINSTALL] Configurando mensagem customizada de boas-vindas no login ==="
     sudo chmod -x /etc/update-motd.d/* 2>/dev/null || true
