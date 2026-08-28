@@ -20,9 +20,7 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [3.3. Prevenção de Race Condition no Boot de Cloud (dpkg fuser wait)](#33-prevenção-de-race-condition-no-boot-de-cloud-dpkg-fuser-wait)
   - [3.4. Sincronização de Relógio Atômica & Auto-Healing de DNS do Host](#34-sincronização-de-relógio-atômica--auto-healing-de-dns-do-host)
   - [3.5. Motor Autônomo & Desacoplado de Auto-Tuning de Hardware (`core/scripts/autotune.sh`)](#35-motor-autônomo--desacoplado-de-auto-tuning-de-hardware-corescriptsautotunesh)
-  - [3.6. Cronômetro SRE de Latência com Pausa Interativa de Wizard](#36-cronômetro-sre-de-latência-com-pausa-interativa-de-wizard)
-  - [3.7. Banner Executivo Dinâmico no Login SSH (`/etc/update-motd.d/99-sre-banner`)](#37-banner-executivo-dinâmico-no-login-ssh-etcupdate-motdd99-sre-banner)
-  - [3.8. Fixação Determinística de IP Estático via Netplan (`/etc/netplan/99-static-sre.yaml`)](#38-fixação-determinística-de-ip-estático-via-netplan-etcnetplan99-static-sreyaml)
+  - [3.6. Preservação Não-Destrutiva da Pilha de Rede do Host](#36-preservação-não-destrutiva-da-pilha-de-rede-do-host)
 - [4. Arquitetura da Malha de Contêineres & Tunings por Serviço](#4-arquitetura-da-malha-de-contêineres--tunings-por-serviço)
   - [4.1. PostgreSQL 17 + PGVector + PgBouncer (Transaction Pooling)](#41-postgresql-17--pgvector--pgbouncer-transaction-pooling)
   - [4.2. Chatwoot Omnichannel & Compilação Ruby YJIT](#42-chatwoot-omnichannel--compilação-ruby-yjit)
@@ -328,23 +326,8 @@ Para permitir o desacoplamento e o escalonamento autônomo dos microsserviços s
 3. **Dimensionamento Descentralizado por Módulo (`install_<modulo>.sh -> build_envs`):** Cada script de módulo é soberano e dono do seu próprio dimensionamento. Na execução de `build_envs()`, a aplicação avalia as métricas de hardware exportadas e injeta suas próprias variáveis de limites (`CPU_*`, `MEM_*`, `RES_*`, concorrência web/sidekiq, JVM/Node Heaps) no arquivo `.env` de forma 100% autônoma. Módulos de inferência como o `install_ollama.sh` validam requisitos de CPU (> 4), RAM ($\ge$ 16GB) e GPU dedicada $> 4\text{ GB}$ VRAM via `is_hardware_supported()`.
 4. **Consumo no Docker Compose:** Todos os manifestos consom as variáveis dinâmicas com fallbacks seguros `${VAR:-DEFAULT}`, garantindo idempotência e execução perfeita em instâncias modestas de 4GB até servidores dedicados ou notebooks de alta performance com placas dedicadas.
 
----
-
-### ⏱️ 3.6. Cronômetro SRE de Latência com Pausa Interativa de Wizard
-Para gerar métricas de latência de deploy fiéis e auditáveis:
-- O cronômetro congela o contador durante perguntas interativas que aguardam digitação do operador (`pausar_cronometro` / `retomar_cronometro`).
-- Ao final, o relatório SRE discrimina a **duração líquida real de processamento** do **tempo total decorrido com pausas humanas**, permitindo benchmarks precisos de I/O de disco e velocidade de rede do provedor.
-
----
-
-### 🖥️ 3.7. Banner Executivo Dinâmico no Login SSH (`/etc/update-motd.d/99-sre-banner`)
-- Desativação de scripts verbosos padrão do Ubuntu em `/etc/update-motd.d/*`.
-- Injeção de painel executivo dinâmico que renderiza em tempo real: Sistema Operacional, Kernel, usuário logado, FQDN canônico, IP da interface de rede, modelo da CPU, total de vCPUs, RAM total/usada, Swap e taxa de ocupação da partição raiz (`/`).
-
----
-
-### 🔌 3.8. Fixação Determinística de IP Estático via Netplan (`/etc/netplan/99-static-sre.yaml`)
-- Para evitar a perda de conexão em servidores onde a concessão de DHCP expira ou varia, o `preinstall.sh` descobre a interface física padrão, IP, Gateway e MAC Address atribuídos e gera uma configuração declarativa estática protegida com permissão `600` via `netplan` (`renderer: networkd`).
+### 🔌 3.6. Preservação Não-Destrutiva da Pilha de Rede do Host
+- O `preinstall.sh` inspeciona a interface física de rede padrão e rotas de gateway ativas para aferição de telemetria perimetral, preservando integralmente a configuração declarativa original do Host/VM sem sobrescrita destrutiva de arquivos Netplan, garantindo persistência de conectividade pós-reboot.
 
 ---
 
