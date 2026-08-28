@@ -716,9 +716,10 @@ EOD
     fi
 
     echo "=== [SRE PREINSTALL] Limpeza final antes do install.sh ==="
-    sudo apt-get clean
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo rm -f "$NOSSO_STAMP"
+    # Tratamento resiliente de lock do apt/unattended-upgrades
+    sudo apt-get clean -o Dpkg::Lock::Timeout=10 2>/dev/null || true
+    sudo rm -rf /var/lib/apt/lists/* 2>/dev/null || true
+    sudo rm -f "$NOSSO_STAMP" 2>/dev/null || true
 
     INTERFACE=$(ip -4 route show default 2>/dev/null | awk '{print $5}' | head -n 1)
 
