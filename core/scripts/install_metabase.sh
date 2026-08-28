@@ -290,43 +290,41 @@ provision_user() {
     local PROPERTIES=$(curl -s -m 8 "${MB_URL}/api/session/properties" 2>/dev/null || echo "")
     local SETUP_TOKEN=$(echo "$PROPERTIES" | jq -r '.["setup-token"] // empty' 2>/dev/null || echo "")
 
-    if [ -z "$SETUP_TOKEN" ] || [ "$SETUP_TOKEN" = "null" ]; then
-        # Se não há setup-token, o Metabase já foi provisionado anteriormente (Idempotente)
-        echo "➜ [IDEMPOTÊNCIA METABASE] Metabase já inicializado e com conta administrativa configurada."
-        return 0
-    fi
+    if [ -n "$SETUP_TOKEN" ] && [ "$SETUP_TOKEN" != "null" ]; then
+        # 2. Executa a criação do administrador e parametrização inicial via REST API
+        local PAYLOAD=$(jq -n \
+            --arg token "$SETUP_TOKEN" \
+            --arg email "$ADMIN_EMAIL" \
+            --arg first "$FIRST_NAME" \
+            --arg last "$LAST_NAME" \
+            --arg pass "$ADMIN_PASS" \
+            --arg site "$SITE_NAME" \
+            '{
+                token: $token,
+                user: {
+                    email: $email,
+                    first_name: $first,
+                    last_name: $last,
+                    password: $pass
+                },
+                prefs: {
+                    site_name: $site,
+                    site_locale: "pt_BR",
+                    allow_tracking: false
+                }
+            }')
 
-    # 2. Executa a criação do administrador e parametrização inicial via REST API
-    local PAYLOAD=$(jq -n \
-        --arg token "$SETUP_TOKEN" \
-        --arg email "$ADMIN_EMAIL" \
-        --arg first "$FIRST_NAME" \
-        --arg last "$LAST_NAME" \
-        --arg pass "$ADMIN_PASS" \
-        --arg site "$SITE_NAME" \
-        '{
-            token: $token,
-            user: {
-                email: $email,
-                first_name: $first,
-                last_name: $last,
-                password: $pass
-            },
-            prefs: {
-                site_name: $site,
-                site_locale: "pt_BR",
-                allow_tracking: false
-            }
-        }')
+        local RESPONSE=$(curl -s -X POST "${MB_URL}/api/setup" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" 2>/dev/null || echo "")
 
-    local RESPONSE=$(curl -s -X POST "${MB_URL}/api/setup" \
-        -H "Content-Type: application/json" \
-        -d "$PAYLOAD" 2>/dev/null || echo "")
-
-    if echo "$RESPONSE" | grep -qiE '"id"|"session_id"|"success"|true'; then
-        echo "✔ [SUCESSO METABASE] Administrador provisionado com sucesso (${ADMIN_EMAIL})!"
+        if echo "$RESPONSE" | grep -qiE '"id"|"session_id"|"success"|true'; then
+            echo "✔ [SUCESSO METABASE] Administrador provisionado com sucesso (${ADMIN_EMAIL})!"
+        else
+            echo "⚠️ [SRE METABASE] Resposta da API de Setup: $(echo "$RESPONSE" | cut -c1-120)"
+        fi
     else
-        echo "⚠️ [SRE METABASE] Resposta da API de Setup: $(echo "$RESPONSE" | cut -c1-120)"
+        echo "➜ [IDEMPOTÊNCIA METABASE] Metabase já inicializado com conta administrativa."
     fi
 
     # 3. Auto-vinculação do Data Warehouse (loja_db via PgBouncer)
@@ -335,7 +333,7 @@ provision_user() {
         -d "{\"username\": \"${ADMIN_EMAIL}\", \"password\": \"${ADMIN_PASS}\"}" 2>/dev/null | jq -r '.id // empty' 2>/dev/null || echo "")
 
     if [ -n "$MB_SESSION" ]; then
-        local HAS_DB=$(curl -s -X GET "${MB_URL}/api/database" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '.data[] | select(.name == "Data Warehouse Soberano") | .id' 2>/dev/null || echo "")
+        local HAS_DB=$(curl -s -X GET "${MB_URL}/api/database" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '(.data // .)? | .[]? | select(.name == "Data Warehouse Soberano") | .id' 2>/dev/null || echo "")
         if [ -z "$HAS_DB" ]; then
             echo "➜ [SRE METABASE] Conectando Data Warehouse Soberano (${PREFIX}_db via PgBouncer)..."
             local DB_RES
@@ -379,31 +377,30 @@ provision_dashboards() {
     DASH_ID=$(curl -s -X GET "${MB_URL}/api/dashboard" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '.[] | select(.name == "Cockpit Executivo Omnichannel 360°") | .id' 2>/dev/null || echo "")
 
     if [ -n "$DASH_ID" ] && [ "$DASH_ID" != "null" ]; then
-        echo "➜ [IDEMPOTÊNCIA METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' já provisionado (ID: ${DASH_ID}). Garantindo fixação na Tela Inicial..."
+        echo "➜ [SRE METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' detectado (ID: ${DASH_ID}). Sincronizando cards, layout e gráficos atualizados..."
         local PIN_NOW=$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')
         curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}" \
             -H "X-Metabase-Session: $MB_SESSION" \
             -H "Content-Type: application/json" \
             -d "{\"pinned_at\": \"${PIN_NOW}\", \"collection_position\": 1}" >/dev/null 2>&1 || true
-        return 0
+    else
+        echo "  ↳ Criando Dashboard 'Cockpit Executivo Omnichannel 360°'..."
+        local PIN_NOW=$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')
+        local CREATE_DASH_RES
+        CREATE_DASH_RES=$(curl -s -X POST "${MB_URL}/api/dashboard" \
+            -H "X-Metabase-Session: $MB_SESSION" \
+            -H "Content-Type: application/json" \
+            -d "{
+                \"name\": \"Cockpit Executivo Omnichannel 360°\",
+                \"description\": \"Painel de Inteligência de Negócios, Vendas, Serviços B2B, Performance de Ads, Estoque Crítico e SDRs em Tempo Real.\",
+                \"collection_position\": 1,
+                \"pinned_at\": \"${PIN_NOW}\"
+            }" 2>/dev/null || echo "")
+        DASH_ID=$(echo "$CREATE_DASH_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
     fi
 
-    echo "  ↳ Criando Dashboard 'Cockpit Executivo Omnichannel 360°'..."
-    local PIN_NOW=$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')
-    local CREATE_DASH_RES
-    CREATE_DASH_RES=$(curl -s -X POST "${MB_URL}/api/dashboard" \
-        -H "X-Metabase-Session: $MB_SESSION" \
-        -H "Content-Type: application/json" \
-        -d "{
-            \"name\": \"Cockpit Executivo Omnichannel 360°\",
-            \"description\": \"Painel de Inteligência de Negócios, Vendas, Serviços B2B, Performance de Ads, Estoque Crítico e SDRs em Tempo Real.\",
-            \"collection_position\": 1,
-            \"pinned_at\": \"${PIN_NOW}\"
-        }" 2>/dev/null || echo "")
-    DASH_ID=$(echo "$CREATE_DASH_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
-
     if [ -z "$DASH_ID" ] || [ "$DASH_ID" = "null" ]; then
-        echo "⚠️ [SRE WARN METABASE] Não foi possível criar o Dashboard via API. Prosseguindo..."
+        echo "⚠️ [SRE WARN METABASE] Não foi possível criar ou obter o Dashboard via API. Prosseguindo..."
         return 0
     fi
 
@@ -423,17 +420,19 @@ provision_dashboards() {
         local NAME="$1"
         local DISPLAY="$2"
         local SQL_QUERY="$3"
-        local SIZE_X="$4"
-        local SIZE_Y="$5"
-        local VIZ_SETTINGS="${6:-{}}"
+        local SIZE_X="${4:-12}"
+        local SIZE_Y="${5:-7}"
+        local VIZ_SETTINGS="$6"
+        if [ -z "$VIZ_SETTINGS" ] || [ "$VIZ_SETTINGS" = "null" ]; then
+            VIZ_SETTINGS="{}"
+        fi
 
         local CARD_PAYLOAD
-        CARD_PAYLOAD=$(jq -n \
+        CARD_PAYLOAD=$(echo "$VIZ_SETTINGS" | jq \
             --arg name "$NAME" \
             --arg display "$DISPLAY" \
             --arg query "$SQL_QUERY" \
             --argjson db "$DB_ID" \
-            --argjson viz "$VIZ_SETTINGS" \
             '{
                 name: $name,
                 display: $display,
@@ -444,8 +443,8 @@ provision_dashboards() {
                     },
                     database: $db
                 },
-                visualization_settings: $viz
-            }')
+                visualization_settings: .
+            }' 2>/dev/null || echo "{}")
 
         local CARD_RES
         CARD_RES=$(curl -s -X POST "${MB_URL}/api/card" \
@@ -474,23 +473,25 @@ provision_dashboards() {
             fi
 
             local TEMP_ID="-$CARD_IDX"
-            DASH_CARDS_PAYLOAD=$(echo "$DASH_CARDS_PAYLOAD" | jq \
+            local CARD_ENTRY
+            CARD_ENTRY=$(echo "$VIZ_SETTINGS" | jq \
                 --argjson tempId "$TEMP_ID" \
                 --argjson cardId "$CARD_ID" \
                 --argjson row "$POS_ROW" \
                 --argjson col "$POS_COL" \
                 --argjson sx "$SIZE_X" \
                 --argjson sy "$SIZE_Y" \
-                --argjson viz "$VIZ_SETTINGS" \
-                '. += [{
+                '{
                     id: $tempId,
                     card_id: $cardId,
                     row: $row,
                     col: $col,
                     size_x: $sx,
                     size_y: $sy,
-                    visualization_settings: $viz
-                }]')
+                    visualization_settings: .
+                }' 2>/dev/null || echo "{}")
+
+            DASH_CARDS_PAYLOAD=$(echo "$DASH_CARDS_PAYLOAD" | jq --argjson entry "$CARD_ENTRY" '. += [$entry]')
         fi
     }
 
@@ -539,14 +540,16 @@ provision_dashboards() {
         "🎯 Radar de Oportunidades Cross-Sell & Upsell 360°" \
         "table" \
         "SELECT cliente_nome, cliente_whatsapp, segmento_cliente, ltv_total_consolidado, share_produtos_perc, share_servicos_perc, oportunidade_cross_sell FROM public.vw_cliente_visao_360_hibrida ORDER BY ltv_total_consolidado DESC LIMIT 50;" \
-        12 7
+        12 7 \
+        '{}'
 
     # 7. Alerta de Estoque Crítico & Ruptura de Insumos (Tabela Operacional - 12 cols)
     create_card \
         "⚠️ Estoque Crítico & Ruptura de Insumos de Expedição" \
         "table" \
         "SELECT tipo_item, item_nome, saldo_atual, nivel_minimo, deficit_reposicao, status_alerta, setor_responsavel FROM public.vw_estoque_critico ORDER BY deficit_reposicao DESC;" \
-        12 7
+        12 7 \
+        '{}'
 
     # Vincula todos os cards ao Dashboard via PUT
     curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}/cards" \
@@ -557,6 +560,18 @@ provision_dashboards() {
     # Configura Homepage oficial e IA
     curl -s -X PUT "${MB_URL}/api/setting/custom-homepage" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": true}" >/dev/null 2>&1 || true
     curl -s -X PUT "${MB_URL}/api/setting/custom-homepage-dashboard" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": ${DASH_ID}}" >/dev/null 2>&1 || true
+    
+    # Suprime "Primeiros Passos", Links de Tutoriais e Banco de Exemplos
+    curl -s -X PUT "${MB_URL}/api/setting/show-metabase-links" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": false}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/help-link" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"none\"}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/enable-sample-database" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": false}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/has-user-setup" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": true}" >/dev/null 2>&1 || true
+
+    # Remove o banco de exemplos (Sample Database) se existir para limpar o menu
+    local SAMPLE_DB_ID=$(curl -s -X GET "${MB_URL}/api/database" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '(.data // .)? | .[]? | select(.is_sample == true or .name == "Sample Database" or .name == "Exemplo de banco de dados" or .name == "Examples") | .id' 2>/dev/null || echo "")
+    if [ -n "$SAMPLE_DB_ID" ] && [ "$SAMPLE_DB_ID" != "null" ]; then
+        curl -s -X DELETE "${MB_URL}/api/database/${SAMPLE_DB_ID}" -H "X-Metabase-Session: $MB_SESSION" >/dev/null 2>&1 || true
+    fi
 
     local AI_KEY="${OPENROUTER_API_KEY:-${OPENAI_API_KEY:-$GEMINI_API_KEY}}"
     if [ -n "$AI_KEY" ]; then

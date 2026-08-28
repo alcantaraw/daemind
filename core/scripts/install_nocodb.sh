@@ -461,15 +461,11 @@ if not tables:
             if s_tables and "list" in s_tables:
                 tables.extend(s_tables["list"])
 
-if not tables:
-    print("⚠️ [SRE WARN NOCODB CRM] Nenhuma tabela encontrada na base para criar views.")
-    sys.exit(0)
-
 views_to_create = [
     {
         "table_name": "leads",
         "views": [
-            {"title": "🎯 Funil de Vendas (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_funil"},
+            {"title": "🎯 Funil de Leads & Pipeline", "type": "grid", "endpoint_type": "grids"},
             {"title": "🔥 Leads Quentes (Tier A)", "type": "grid", "endpoint_type": "grids"},
             {"title": "📝 Formulário de Captação de Leads", "type": "form", "endpoint_type": "forms"}
         ]
@@ -477,20 +473,22 @@ views_to_create = [
     {
         "table_name": "propostas_comerciais",
         "views": [
-            {"title": "💼 Pipeline Comercial B2B (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_proposta"},
-            {"title": "📅 Prazos de Validade (Calendário)", "type": "calendar", "endpoint_type": "calendars", "from_date_col": "data_envio", "to_date_col": "validade_proposta"}
+            {"title": "💼 Propostas & Pipeline B2B", "type": "grid", "endpoint_type": "grids"},
+            {"title": "📅 Prazos de Validade & Vencimento", "type": "grid", "endpoint_type": "grids"}
         ]
     },
     {
         "table_name": "pedidos",
         "views": [
-            {"title": "📦 Esteira de Expedição & Entregas (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_operacional"}
+            {"title": "📦 Esteira de Expedição & Entregas", "type": "grid", "endpoint_type": "grids"},
+            {"title": "🛍️ Vitrine de Pedidos", "type": "gallery", "endpoint_type": "galleries"}
         ]
     },
     {
         "table_name": "catalogo",
         "views": [
-            {"title": "🛍️ Vitrine de Produtos (Galeria)", "type": "gallery", "endpoint_type": "galleries"}
+            {"title": "🛍️ Vitrine de Produtos (Galeria)", "type": "gallery", "endpoint_type": "galleries"},
+            {"title": "📋 Tabela de Preços & Estoque", "type": "grid", "endpoint_type": "grids"}
         ]
     },
     {
@@ -503,92 +501,33 @@ views_to_create = [
     {
         "table_name": "carrinhos_abandonados",
         "views": [
-            {"title": "🛒 Recuperação de Vendas (Kanban)", "type": "kanban", "endpoint_type": "kanbans", "grp_col": "status_recuperacao"}
+            {"title": "🛒 Recuperação de Vendas & Checkouts", "type": "grid", "endpoint_type": "grids"},
+            {"title": "💬 Oportunidades WhatsApp Ativas", "type": "grid", "endpoint_type": "grids"}
         ]
     },
     {
         "table_name": "campanhas_marketing",
         "views": [
-            {"title": "🎯 Hub de Campanhas & Mídia Paga (Galeria)", "type": "gallery", "endpoint_type": "galleries"}
+            {"title": "🎯 Hub de Campanhas & Mídia Paga (Galeria)", "type": "gallery", "endpoint_type": "galleries"},
+            {"title": "📊 Performance de Criativos & UTMs", "type": "grid", "endpoint_type": "grids"}
         ]
     },
     {
         "table_name": "contratos_servicos",
         "views": [
-            {"title": "📅 Calendário de Renovações (MRR)", "type": "calendar", "endpoint_type": "calendars", "from_date_col": "data_inicio", "to_date_col": "data_renovacao"},
+            {"title": "📅 Cronograma de Renovações (MRR)", "type": "grid", "endpoint_type": "grids"},
             {"title": "💼 Gestão de Assinaturas Ativas", "type": "grid", "endpoint_type": "grids"}
-        ]
-    },
-    {
-        "table_name": "vw_cliente_visao_360_hibrida",
-        "views": [
-            {"title": "👑 Clientes 360° (Galeria VIP)", "type": "gallery", "endpoint_type": "galleries"}
-        ]
-    },
-    {
-        "table_name": "vw_estoque_critico",
-        "views": [
-            {"title": "⚠️ Alertas de Ruptura de Estoque", "type": "grid", "endpoint_type": "grids"}
-        ]
-    },
-    {
-        "table_name": "vw_kpi_atendimento",
-        "views": [
-            {"title": "💬 Produtividade SDRs (Galeria)", "type": "gallery", "endpoint_type": "galleries"}
-        ]
-    },
-    {
-        "table_name": "vw_correlacao_ads_vendas_reais",
-        "views": [
-            {"title": "📊 Auditoria ROAS Real vs Pixel", "type": "grid", "endpoint_type": "grids"}
-        ]
-    },
-    {
-        "table_name": "vw_dre_diario_consolidado",
-        "views": [
-            {"title": "📈 DRE Diário Consolidado", "type": "grid", "endpoint_type": "grids"}
-        ]
-    },
-    {
-        "table_name": "vw_kpi_servicos_mrr_arr",
-        "views": [
-            {"title": "💼 Gestão MRR & ARR de Serviços", "type": "grid", "endpoint_type": "grids"}
-        ]
-    },
-    {
-        "table_name": "vw_kpi_recuperacao_vendas",
-        "views": [
-            {"title": "🛒 Conversão de Boletos & Carrinhos", "type": "grid", "endpoint_type": "grids"}
         ]
     }
 ]
 
 created_count = 0
-def api_patch(endpoint, payload):
-    try:
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(f"{base_url}{endpoint}", data=data, headers=headers, method="PATCH")
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except Exception:
-        return None
-
 for target in views_to_create:
     t_name = target["table_name"]
-    matching_tables = [t for t in tables if t.get("table_name") == t_name or t.get("title") == t_name]
-    if not matching_tables:
+    matched = [t for t in tables if t.get("title") == t_name or t.get("table_name") == t_name]
+    if not matched:
         continue
-    
-    table = matching_tables[0]
-    t_id = table["id"]
-    
-    columns = table.get("columns", [])
-    if not columns:
-        t_meta = api_get(f"/api/v2/meta/tables/{t_id}")
-        if t_meta and "columns" in t_meta:
-            columns = t_meta["columns"]
-            
-    col_map = {c.get("column_name") or c.get("title"): c["id"] for c in columns if "id" in c}
+    t_id = matched[0]["id"]
     
     existing_views_data = api_get(f"/api/v2/meta/tables/{t_id}/views")
     existing_view_titles = set()
@@ -603,25 +542,15 @@ for target in views_to_create:
         endpoint_type = v_def["endpoint_type"]
         payload = {"title": v_title}
         
-        if v_def["type"] == "kanban":
-            grp_col_name = v_def.get("grp_col")
-            if grp_col_name in col_map:
-                payload["fk_grp_col_id"] = col_map[grp_col_name]
-                
         res = api_post(f"/api/v2/meta/tables/{t_id}/{endpoint_type}", payload)
         if res and "id" in res:
             created_count += 1
-            v_id = res["id"]
-            if v_def["type"] == "calendar":
-                from_col = v_def.get("from_date_col")
-                if from_col in col_map:
-                    api_patch(f"/api/v2/meta/calendars/{v_id}", {"fk_from_date_col_id": col_map[from_col]})
             print(f"  ↳ View criada: {v_title} ({t_name})")
 
 if created_count > 0:
-    print(f"✔ [SUCESSO NOCODB CRM] {created_count} Views de CRM provisionadas com sucesso!")
+    print(f"✔ [SUCESSO NOCODB CRM] {created_count} Views Soberanas (Grid/Galeria/Formulário) provisionadas com sucesso!")
 else:
-    print("➜ [IDEMPOTÊNCIA NOCODB CRM] Views de CRM já provisionadas ou tabelas em sincronia.")
+    print("➜ [IDEMPOTÊNCIA NOCODB CRM] Views Soberanas já provisionadas ou tabelas em sincronia.")
 '
         fi
     fi
