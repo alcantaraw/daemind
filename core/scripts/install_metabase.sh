@@ -412,12 +412,20 @@ provision_dashboards() {
     local ROW_CURSOR=0
     local CARD_IDX=0
 
+    # Layout 24 Colunas (Metabase 0.50+ / 50.x):
+    # Topo: 1 Card de Largura Total (24 cols) para o Gráfico Temporal Principal (DRE)
+    # Demais: Cards Lado a Lado (12 cols cada) em 2 colunas perfeitas
+    local CURSOR_COL=0
+    local ROW_CURSOR=0
+    local ROW_MAX_H=0
+
     create_card() {
         local NAME="$1"
         local DISPLAY="$2"
         local SQL_QUERY="$3"
         local SIZE_X="$4"
         local SIZE_Y="$5"
+        local VIZ_SETTINGS="${6:-{}}"
 
         local CARD_PAYLOAD
         CARD_PAYLOAD=$(jq -n \
@@ -425,6 +433,7 @@ provision_dashboards() {
             --arg display "$DISPLAY" \
             --arg query "$SQL_QUERY" \
             --argjson db "$DB_ID" \
+            --argjson viz "$VIZ_SETTINGS" \
             '{
                 name: $name,
                 display: $display,
@@ -435,7 +444,7 @@ provision_dashboards() {
                     },
                     database: $db
                 },
-                visualization_settings: {}
+                visualization_settings: $viz
             }')
 
         local CARD_RES
@@ -447,20 +456,32 @@ provision_dashboards() {
         CARD_ID=$(echo "$CARD_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
 
         if [ -n "$CARD_ID" ] && [ "$CARD_ID" != "null" ]; then
-            local COL=0
-            if [ "$SIZE_X" -ne 12 ] && [ $((CARD_IDX % 2)) -ne 0 ]; then
-                COL=6
-            fi
             CARD_IDX=$((CARD_IDX + 1))
+
+            # Se o card não couber na linha atual (24 colunas), quebra para a próxima
+            if [ $((CURSOR_COL + SIZE_X)) -gt 24 ]; then
+                ROW_CURSOR=$((ROW_CURSOR + ROW_MAX_H))
+                CURSOR_COL=0
+                ROW_MAX_H=0
+            fi
+
+            local POS_COL="$CURSOR_COL"
+            local POS_ROW="$ROW_CURSOR"
+
+            CURSOR_COL=$((CURSOR_COL + SIZE_X))
+            if [ "$SIZE_Y" -gt "$ROW_MAX_H" ]; then
+                ROW_MAX_H="$SIZE_Y"
+            fi
 
             local TEMP_ID="-$CARD_IDX"
             DASH_CARDS_PAYLOAD=$(echo "$DASH_CARDS_PAYLOAD" | jq \
                 --argjson tempId "$TEMP_ID" \
                 --argjson cardId "$CARD_ID" \
-                --argjson row "$ROW_CURSOR" \
-                --argjson col "$COL" \
+                --argjson row "$POS_ROW" \
+                --argjson col "$POS_COL" \
                 --argjson sx "$SIZE_X" \
                 --argjson sy "$SIZE_Y" \
+                --argjson viz "$VIZ_SETTINGS" \
                 '. += [{
                     id: $tempId,
                     card_id: $cardId,
@@ -468,63 +489,64 @@ provision_dashboards() {
                     col: $col,
                     size_x: $sx,
                     size_y: $sy,
-                    visualization_settings: {}
+                    visualization_settings: $viz
                 }]')
-
-            if [ "$SIZE_X" -eq 12 ] || [ "$COL" -eq 6 ]; then
-                ROW_CURSOR=$((ROW_CURSOR + SIZE_Y))
-            fi
         fi
     }
 
-    # 1. DRE & Lucro Líquido Real Diário
+    # 1. DRE & Lucro Líquido Real Diário (Full Width Topo - Gráfico de Linhas 24 cols)
     create_card \
         "📈 Faturamento vs. Lucro Líquido Real (DRE Diário)" \
         "line" \
         "SELECT data_referencia, faturamento_bruto, total_cmv, lucro_liquido_dia, margem_liquida_perc, roas_dia FROM public.vw_dre_diario_consolidado ORDER BY data_referencia DESC LIMIT 30;" \
-        12 8
+        24 8 \
+        '{"graph.dimensions": ["data_referencia"], "graph.metrics": ["faturamento_bruto", "lucro_liquido_dia", "total_cmv"]}'
 
-    # 2. Radar de Oportunidades Cross-Sell & Upsell
+    # 2. Performance de Ads: ROAS Real vs Pixel (Gráfico de Barras Agrupadas - 12 cols)
+    create_card \
+        "📊 Comparativo de ROAS: Caixa Real vs Pixel" \
+        "bar" \
+        "SELECT data_referencia, plataforma_ads, roas_real_faturado, roas_pixel_estimado FROM public.vw_correlacao_ads_vendas_reais ORDER BY data_referencia DESC LIMIT 15;" \
+        12 7 \
+        '{"graph.dimensions": ["data_referencia", "plataforma_ads"], "graph.metrics": ["roas_real_faturado", "roas_pixel_estimado"]}'
+
+    # 3. Evolução de MRR & ARR B2B (Gráfico de Barras/Área - 12 cols)
+    create_card \
+        "💼 Crescimento de MRR & ARR B2B Recorrente" \
+        "bar" \
+        "SELECT mes_ano, novo_mrr_adicionado, mrr_perdido_churn, mrr_total_ativo_mes FROM public.vw_kpi_servicos_mrr_arr ORDER BY mes_referencia DESC LIMIT 12;" \
+        12 7 \
+        '{"graph.dimensions": ["mes_ano"], "graph.metrics": ["novo_mrr_adicionado", "mrr_total_ativo_mes"]}'
+
+    # 4. Recuperação de Carrinhos & WhatsApp (Gráfico de Rosca/Pizza - 12 cols)
+    create_card \
+        "💬 Distribuição de Valor em Risco por Tipo de Pendência" \
+        "pie" \
+        "SELECT tipo_pendencia, SUM(valor_total_em_risco) AS valor_em_risco FROM public.vw_kpi_recuperacao_vendas GROUP BY tipo_pendencia;" \
+        12 7 \
+        '{"pie.dimension": "tipo_pendencia", "pie.metric": "valor_em_risco"}'
+
+    # 5. Produtividade & Vendas por Atendente Chatwoot (Ranking em Barras Horizontais - 12 cols)
+    create_card \
+        "👥 Faturamento Convertido por Atendente Comercial" \
+        "bar" \
+        "SELECT atendente_nome, faturamento_gerado_atendente FROM public.vw_performance_comercial_atendentes WHERE faturamento_gerado_atendente > 0 ORDER BY faturamento_gerado_atendente DESC;" \
+        12 7 \
+        '{"graph.dimensions": ["atendente_nome"], "graph.metrics": ["faturamento_gerado_atendente"]}'
+
+    # 6. Radar de Oportunidades Cross-Sell & Upsell (Tabela Analítica - 12 cols)
     create_card \
         "🎯 Radar de Oportunidades Cross-Sell & Upsell 360°" \
         "table" \
-        "SELECT cliente_nome, cliente_whatsapp, segmento_cliente, ltv_total_consolidado, total_pedidos_produtos, contratos_servicos_ativos, share_produtos_perc, share_servicos_perc, oportunidade_cross_sell FROM public.vw_cliente_visao_360_hibrida ORDER BY ltv_total_consolidado DESC LIMIT 50;" \
-        12 8
+        "SELECT cliente_nome, cliente_whatsapp, segmento_cliente, ltv_total_consolidado, share_produtos_perc, share_servicos_perc, oportunidade_cross_sell FROM public.vw_cliente_visao_360_hibrida ORDER BY ltv_total_consolidado DESC LIMIT 50;" \
+        12 7
 
-    # 3. Alerta de Estoque Crítico & Ruptura de Insumos
+    # 7. Alerta de Estoque Crítico & Ruptura de Insumos (Tabela Operacional - 12 cols)
     create_card \
         "⚠️ Estoque Crítico & Ruptura de Insumos de Expedição" \
         "table" \
-        "SELECT tipo_item, identificador, item_nome, saldo_atual, nivel_minimo, deficit_reposicao, status_alerta, setor_responsavel FROM public.vw_estoque_critico ORDER BY deficit_reposicao DESC;" \
-        12 6
-
-    # 4. Performance de Marketing & Auditoria de ROAS Real vs Pixel
-    create_card \
-        "📊 Performance de Ads: ROAS Real Caixa vs ROAS Pixel" \
-        "table" \
-        "SELECT data_referencia, plataforma_ads, campanha_ou_utm, valor_investido_ads, faturamento_pixel, faturamento_real_banco, lucro_liquido_real_auditado, roas_pixel_estimado, roas_real_faturado, discrepancia_pixel_vs_real_perc FROM public.vw_correlacao_ads_vendas_reais ORDER BY data_referencia DESC LIMIT 30;" \
-        12 8
-
-    # 5. MRR, ARR & Churn de Serviços B2B e Contratos
-    create_card \
-        "💼 Gestão de Serviços B2B: MRR, ARR & Churn Rate" \
-        "table" \
-        "SELECT mes_ano, novos_contratos_mes, novo_mrr_adicionado, contratos_cancelados_mes, mrr_perdido_churn, mrr_net_growth_mes, mrr_total_ativo_mes, arr_anualizado_estimado, churn_rate_mrr_perc FROM public.vw_kpi_servicos_mrr_arr ORDER BY mes_referencia DESC LIMIT 12;" \
-        12 6
-
-    # 6. Recuperação de Carrinhos & WhatsApp
-    create_card \
-        "💬 Recuperação de Carrinhos Abandonados & Boletos" \
-        "table" \
-        "SELECT tipo_pendencia, status_recuperacao, total_ocorrencias, valor_total_em_risco, valor_total_recuperado, taxa_conversao_recuperacao_perc FROM public.vw_kpi_recuperacao_vendas ORDER BY valor_total_em_risco DESC;" \
-        12 6
-
-    # 7. Produtividade Comercial & Atendimentos SDR
-    create_card \
-        "👥 Produtividade & Conversão Comercial (Chatwoot + Vendas)" \
-        "table" \
-        "SELECT atendente_nome, email, total_conversas_atendidas, total_mensagens_enviadas, total_leads_qualificados, propostas_apresentadas, vendas_concluidas, faturamento_gerado_total, taxa_conversao_lead_venda_perc, ticket_medio_atendente FROM public.vw_performance_comercial_atendentes ORDER BY faturamento_gerado_total DESC;" \
-        12 8
+        "SELECT tipo_item, item_nome, saldo_atual, nivel_minimo, deficit_reposicao, status_alerta, setor_responsavel FROM public.vw_estoque_critico ORDER BY deficit_reposicao DESC;" \
+        12 7
 
     # Vincula todos os cards ao Dashboard via PUT
     curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}/cards" \

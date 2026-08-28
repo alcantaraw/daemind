@@ -471,18 +471,18 @@ build_envs() {
         cpu_n8n="2.0"
     fi
 
-    local mem_n8n="1280M"
+    local mem_n8n="2048M"
     local res_n8n="0M"
-    local node_heap_default="1024"
+    local node_heap_default="1536"
 
     if [ "$ram_mb" -gt 24576 ]; then
         mem_n8n="4096M"
         res_n8n="1024M"
         node_heap_default="3072"
     elif [ "$ram_mb" -gt 12288 ]; then
-        mem_n8n="2048M"
+        mem_n8n="3072M"
         res_n8n="512M"
-        node_heap_default="1536"
+        node_heap_default="2048"
     fi
 
     local disabled_modules="instance-ai"
