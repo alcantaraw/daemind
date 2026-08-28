@@ -75,6 +75,7 @@ EOF
 
         if [ ! -f "$SEARX_DIR/settings.yml" ]; then
             echo "➜ [SRE N8N DEV] Gerando settings.yml canônico e expurgando engines instáveis para o SearXNG..."
+            sudo docker pull -q searxng/searxng:latest >/dev/null 2>&1 || true
             sudo docker run --rm --entrypoint sh searxng/searxng:latest -c "
 /usr/local/searxng/.venv/bin/python3 -c '
 import yaml
@@ -93,7 +94,7 @@ cfg[\"engines\"] = [
 with open(\"/tmp/settings.yml\", \"w\") as f:
     yaml.dump(cfg, f)
 ' && cat /tmp/settings.yml
-" | sudo tee "$SEARX_DIR/settings.yml" > /dev/null
+" 2>/dev/null | sudo tee "$SEARX_DIR/settings.yml" > /dev/null
         fi
         sudo chown -R "$TARGET_OWNER" "$SEARX_DIR" 2>/dev/null || true
 
