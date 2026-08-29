@@ -355,7 +355,7 @@ provision_user() {
             ['INSTALLATION_NAME', '${PREFIX}'],
             ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
             ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
-            ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000/v1'],
+            ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000'],
             ['CAPTAIN_OPEN_AI_MODEL', 'gpt-4.1'],
             ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
             ['OPENAI_MODEL', 'gpt-4.1']
