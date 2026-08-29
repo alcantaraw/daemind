@@ -431,8 +431,15 @@ authenticate_node() {
 }
 
 # ===============================================================================
+# 6. configure_funnels: Ativação dos túneis de borda HTTPS (Tailscale Funnel)
+# ===============================================================================
+configure_funnels() {
+    if [ "${USE_TAILSCALE:-true}" = "false" ]; then
+        echo "➜ [SRE SKIP TAILSCALE] Modo BYODNS Ativado. Omitindo configuração do Funnel."
+        return 0
     fi
 
+    local CADDY_PORT="${HOST_CADDY_PORT:-80}"
     local FUNNEL_STATUS=$(sudo tailscale funnel status 2>/dev/null || echo "")
     if echo "$FUNNEL_STATUS" | grep -q "https://.*:443" && echo "$FUNNEL_STATUS" | grep -q "${CADDY_PORT}"; then
         echo "➜ [IDEMPOTÊNCIA TAILSCALE] Túnel Funnel já ativo e roteando (Porta 443 -> ${CADDY_PORT})."
