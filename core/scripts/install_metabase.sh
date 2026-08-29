@@ -378,20 +378,18 @@ provision_user() {
         sudo docker exec -e PGPASSWORD="${DB_PASSWORD}" "${PREFIX}_postgres" psql -U "${DB_USER:-admin_db}" -d "metabase_db" -c "
             INSERT INTO setting (key, value) VALUES
                 ('llm-enabled', 'true'),
-                ('llm-provider', '\"openai\"'),
-                ('llm-metabot-provider', '\"openai\"'),
-                ('llm-openai-model', '\"gpt-4.1\"'),
-                ('llm-openai-api-base', '\"http://litellm:4000/v1\"'),
-                ('llm-openai-api-key', '\"${LLM_KEY}\"')
+                ('llm-metabot-provider', 'openai/gpt-4.1'),
+                ('llm-openai-model', 'gpt-4.1'),
+                ('llm-openai-api-base-url', 'http://litellm:4000'),
+                ('llm-openai-api-key', '${LLM_KEY}')
             ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
         " >/dev/null 2>&1 || true
 
         # 5.2 Notificação via REST API
         curl -s -X PUT "${MB_URL}/api/setting/llm-enabled" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": true}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-metabot-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai"}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-metabot-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai/gpt-4.1"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-model" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "gpt-4.1"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000/v1"}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base-url" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${LLM_KEY}\"}" >/dev/null 2>&1 || true
     fi
 }

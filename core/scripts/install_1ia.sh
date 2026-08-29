@@ -326,14 +326,34 @@ sync_models() {
         done
     fi
 
-    # 1.3 Varredura Metabase BI
-    if [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_metabase 2>/dev/null)" = "healthy" ]; then
-        local MB_MODEL
-        MB_MODEL=$(curl -s "http://127.0.0.1:3030/api/setting" 2>/dev/null | jq -r '.[] | select(.key == "llm-metabot-provider" or .key == "llm-openai-model") | .value // empty' 2>/dev/null || true)
-        for mm in $MB_MODEL; do
+    # 1.3 Varredura Metabase BI (Catálogo Nativo e Configurações Ativas)
+    if [ "$(docker inspect -f '{{.State.Status}}' ${PREFIXO_CONTAINER}_metabase 2>/dev/null)" = "running" ] || [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_metabase 2>/dev/null)" = "healthy" ]; then
+        local MB_DISCOVERED=""
+        
+        # 1.3.1 Extração dinâmica de todos os modelos homologados no schema de settings do Metabase
+        local MB_SCHEMA_MODELS
+        MB_SCHEMA_MODELS=$(curl -s "http://127.0.0.1:3030/api/setting" 2>/dev/null | grep -oE "['\"][a-zA-Z0-9_./-]+['\"]" | tr -d '"'\'' ' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' | sort -u || true)
+        
+        # 1.3.2 Leitura das variáveis de ambiente ativas do container Metabase
+        local MB_ENV_MODELS
+        MB_ENV_MODELS=$(docker exec -i "${PREFIXO_CONTAINER}_metabase" env 2>/dev/null | grep -iE 'MB_LLM_|MB_OPENAI_' | cut -d= -f2- | tr -d '"\r' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' || true)
+        
+        # 1.3.3 Leitura direta na tabela setting do PostgreSQL metabase_db
+        local MB_DB_MODELS=""
+        if [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_postgres 2>/dev/null)" = "healthy" ]; then
+            MB_DB_MODELS=$(docker exec -i "${PREFIXO_CONTAINER}_postgres" psql -U "${DB_USER:-admin_db}" -d "metabase_db" -t -A -c "
+                SELECT value FROM setting WHERE key LIKE '%llm%' OR key LIKE '%openai%' OR key LIKE '%metabot%';
+            " 2>/dev/null | grep -oE "[a-zA-Z0-9_./-]+" | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' | tr -d '"\r' || true)
+        fi
+
+        for mm in $MB_SCHEMA_MODELS $MB_ENV_MODELS $MB_DB_MODELS; do
+            [ -z "$mm" ] && continue
+            # Registra o modelo exato (ex: openai/gpt-5.4, claude-opus-4-5-20251101, gpt-4.1)
+            add_app_model "$mm"
+            # Registra a versão sem o prefixo do provedor (ex: openai/gpt-5.4 -> gpt-5.4)
             local mm_clean
-            mm_clean=$(echo "$mm" | sed 's|^openai/||')
-            add_app_model "$mm_clean"
+            mm_clean=$(echo "$mm" | sed -E 's|^(openai|anthropic|azure|mistral|openrouter)/||')
+            [ -n "$mm_clean" ] && add_app_model "$mm_clean"
         done
     fi
 
