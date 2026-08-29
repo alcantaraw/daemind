@@ -13,6 +13,11 @@ if [ -f "$ENV_FILE" ]; then
     set -a; source "$ENV_FILE" 2>/dev/null || true; set +a
 fi
 
+PREFIXO_CONTAINER="${PREFIXO_CONTAINER:-${PREFIX_NAME:-${PREFIX:-${COMPOSE_PROJECT_NAME}}}}"
+if [ -z "$PREFIXO_CONTAINER" ] && command -v docker >/dev/null 2>&1; then
+    PREFIXO_CONTAINER=$(docker ps -a --filter "name=_litellm" --format '{{.Names}}' 2>/dev/null | head -n 1 | sed 's/_litellm$//' || true)
+fi
+
 # ===============================================================================
 # 0. collect_wizard_inputs (CLI) & collect_wizard_inputs_tui (TUI) & build_envs
 # ===============================================================================

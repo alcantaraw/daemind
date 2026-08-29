@@ -290,6 +290,21 @@ provision_user() {
             hook.save(validate: false) rescue nil
           end
 
+          # Parametrização do GlobalConfig / InstallationConfig (HashWithIndifferentAccess)
+          [
+            ['INSTALLATION_NAME', '${PREFIX}'],
+            ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
+            ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000'],
+            ['CAPTAIN_OPEN_AI_MODEL', 'gpt-4.1-mini'],
+            ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['OPENAI_MODEL', 'gpt-4.1-mini']
+          ].each do |k, v|
+            cfg = InstallationConfig.find_or_initialize_by(name: k)
+            cfg.serialized_value = ActiveSupport::HashWithIndifferentAccess.new({ 'value' => v })
+            cfg.save! rescue nil
+          end
+
           # SRE Self-Healing: Purga conversas e caixas de entrada órfãs (sem canal) para evitar 500 no painel geral
           Conversation.all.each do |c|
             if c.inbox.nil? || c.inbox.channel.nil?
@@ -356,9 +371,9 @@ provision_user() {
             ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
             ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
             ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000'],
-            ['CAPTAIN_OPEN_AI_MODEL', 'gpt-4.1'],
+            ['CAPTAIN_OPEN_AI_MODEL', 'gpt-4.1-mini'],
             ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
-            ['OPENAI_MODEL', 'gpt-4.1']
+            ['OPENAI_MODEL', 'gpt-4.1-mini']
           ].each do |k, v|
             cfg = InstallationConfig.find_or_initialize_by(name: k)
             cfg.serialized_value = ActiveSupport::HashWithIndifferentAccess.new({ 'value' => v })
