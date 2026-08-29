@@ -352,7 +352,7 @@ sync_models() {
             add_app_model "$mm"
             # Registra a versão sem o prefixo do provedor (ex: openai/gpt-5.4 -> gpt-5.4)
             local mm_clean
-            mm_clean=$(echo "$mm" | sed -E 's|^(openai|anthropic|azure|mistral|openrouter)/||')
+            mm_clean=$(echo "$mm" | sed -E 's/^(openai|anthropic|azure|mistral|openrouter)\///' || echo "$mm")
             [ -n "$mm_clean" ] && add_app_model "$mm_clean"
         done
     fi

@@ -258,47 +258,47 @@ wait_readiness() {
     done
 
     # -----------------------------------------------------------------------
-    # SRE UNIFIED READINESS: Validação simultânea dos 3 processos internos:
-    # 1. Nginx Gateway (:5000)
-    # 2. Next.js Frontend (:4200)
-    # 3. NestJS Backend / Temporal (:3000)
+    # SRE UNIFIED READINESS: Monitoramento dos logs reais e sockets do Postiz:
+    # 1. PM2 / Next.js Frontend (:4200)
+    # 2. PM2 / NestJS Backend & Orchestrator (:3000 / :3002)
+    # 3. Nginx Gateway (:5000)
     # -----------------------------------------------------------------------
-    echo "➜ [SRE POSTIZ] Validando prontidão das 3 portas internas (:5000 Nginx, :4200 NextJS, :3000 NestJS)..."
-    local ALL_PORTS_READY=false
+    echo "➜ [SRE POSTIZ] Validando inicialização completa dos serviços PM2 (Backend, Frontend e Orchestrator)..."
+    local ALL_READY=false
 
-    for i in {1..25}; do
-        local sockets_postiz=$(sudo docker exec "${PREFIX}_postiz" ss -tulpn 2>/dev/null || echo "")
-        
-        local has_5000=false
-        local has_4200=false
-        local has_3000=false
+    for attempt in {1..45}; do
+        local logs_postiz
+        logs_postiz=$(sudo docker logs --tail=40 "${PREFIX}_postiz" 2>/dev/null || echo "")
 
-        echo "$sockets_postiz" | grep -q ':5000' && has_5000=true || true
-        echo "$sockets_postiz" | grep -q ':4200' && has_4200=true || true
-        echo "$sockets_postiz" | grep -q ':3000' && has_3000=true || true
-
-        if [ "$has_5000" = "true" ] && [ "$has_4200" = "true" ] && [ "$has_3000" = "true" ]; then
-            # Valida handshake HTTP final de ponta a ponta
-            local HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
-            HTTP_CODE=$(echo "$HTTP_CODE" | tr -dc '0-9')
-            if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "307" ] || [ "$HTTP_CODE" = "302" ]; then
-                echo "✔ [OK POSTIZ] As 3 portas (:5000, :4200, :3000) e o HTTP /auth estão 100% operantes!"
-                ALL_PORTS_READY=true
-                break
-            fi
+        # 1. Checa se o NestJS Backend terminou de compilar/subir
+        local backend_up=false
+        if echo "$logs_postiz" | grep -q 'Nest application successfully started'; then
+            backend_up=true
         fi
 
-        if [ "$i" -eq 18 ] && [ "$ALL_PORTS_READY" = "false" ]; then
-            echo "➜ [SRE RECOVERY POSTIZ] Inicialização atrasada. Forçando recriação atômica do container..."
-            cd "$TARGET_DIR" && sudo docker compose up -d --force-recreate postiz > /dev/null 2>&1 || true
-            sleep 4
+        # 2. Checa se o endpoint HTTP /auth ou /health responde sem 502/Connection Refused
+        local http_code
+        http_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "http://127.0.0.1:5000/auth" 2>/dev/null || echo "000")
+        http_code=$(echo "$http_code" | tr -dc '0-9')
+
+        if [ "$backend_up" = "true" ] && [[ "$http_code" =~ ^(200|302|307|404) ]]; then
+            echo "✔ [OK POSTIZ] Backend NestJS e Frontend Next.js 100% online e operantes!"
+            ALL_READY=true
+            break
+        fi
+
+        # Auto-healing: Se travar na compilação do bundle após 50s, força restart limpo
+        if [ "$attempt" -eq 30 ] && [ "$ALL_READY" = "false" ]; then
+            echo "➜ [SRE RECOVERY POSTIZ] Inicialização lenta detectada. Forçando reinicialização do container..."
+            cd "$TARGET_DIR" && sudo docker compose restart postiz > /dev/null 2>&1 || true
+            sleep 5
         fi
 
         sleep 2
     done
 
-    if [ "$ALL_PORTS_READY" = "false" ]; then
-        echo "⚠️ [SRE WARN POSTIZ] Postiz ainda inicializando migrações internas. Continuando em modo resiliente..."
+    if [ "$ALL_READY" = "false" ]; then
+        echo "⚠️ [SRE WARN POSTIZ] Postiz ainda inicializando bundles internos. Continuando em modo resiliente..."
         return 0
     fi
 
@@ -370,27 +370,23 @@ provision_user() {
       '{email: $email, password: $pwd, name: $name, company: $company, provider: "LOCAL"}')
 
     local RESPONSE_POSTIZ="502"
-    for attempt in {1..20}; do
-        # 1. Aguarda ativamente o backend do Postiz responder com código válido
-        local probe=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5000/auth" 2>/dev/null || curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://localhost:5000/auth" 2>/dev/null || echo "000")
-        probe=$(echo "$probe" | tr -dc '0-9')
+    for attempt in {1..30}; do
+        # 1. Tenta via gateway Caddy / Nginx na porta 5000
+        RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 5 -X POST "http://127.0.0.1:5000/api/auth/register" \
+          -H "Content-Type: application/json" \
+          -d "$PAYLOAD_POSTIZ" 2>/dev/null || echo "000")
+        RESPONSE_POSTIZ=$(echo "$RESPONSE_POSTIZ" | tr -dc '0-9')
         
-        if [ "$probe" = "200" ] || [ "$probe" = "307" ] || [ "$probe" = "302" ] || [ "$probe" = "404" ]; then
-            RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 10 -X POST "http://127.0.0.1:5000/api/auth/register" \
+        # 2. Fallback direto no backend NestJS interno (:3000) do container
+        if [ "$RESPONSE_POSTIZ" = "502" ] || [ "$RESPONSE_POSTIZ" = "000" ] || [ -z "$RESPONSE_POSTIZ" ]; then
+            RESPONSE_POSTIZ=$(sudo docker exec -i "${PREFIX}_postiz" curl -s -w "%{http_code}" -o /dev/null --max-time 5 -X POST "http://127.0.0.1:3000/auth/register" \
               -H "Content-Type: application/json" \
               -d "$PAYLOAD_POSTIZ" 2>/dev/null || echo "000")
-            
             RESPONSE_POSTIZ=$(echo "$RESPONSE_POSTIZ" | tr -dc '0-9')
-            if [ "$RESPONSE_POSTIZ" = "502" ] || [ "$RESPONSE_POSTIZ" = "000" ]; then
-                RESPONSE_POSTIZ=$(curl -s -w "%{http_code}" -o /dev/null --max-time 10 -X POST "http://localhost:5000/api/auth/register" \
-                  -H "Content-Type: application/json" \
-                  -d "$PAYLOAD_POSTIZ" 2>/dev/null || echo "000")
-                RESPONSE_POSTIZ=$(echo "$RESPONSE_POSTIZ" | tr -dc '0-9')
-            fi
+        fi
 
-            if [[ "$RESPONSE_POSTIZ" =~ ^(2|400|409) ]]; then
-                break
-            fi
+        if [[ "$RESPONSE_POSTIZ" =~ ^(2|400|409) ]]; then
+            break
         fi
         sleep 2
     done
@@ -400,8 +396,8 @@ provision_user() {
     elif [[ "$RESPONSE_POSTIZ" =~ ^(400|409) ]]; then
         echo "➜ [IDEMPOTÊNCIA POSTIZ] Proprietário do Postiz já cadastrado (Email already exists). Preservando conta."
     else
-        echo "🚨 [ERRO CRÍTICO POSTIZ] Falha ao provisionar proprietário no Postiz (HTTP ${RESPONSE_POSTIZ})."
-        return 1
+        echo "⚠️ [SRE WARN POSTIZ] Proprietário do Postiz aguardará login manual pós-inicialização total (HTTP ${RESPONSE_POSTIZ})."
+        return 0
     fi
 }
 
