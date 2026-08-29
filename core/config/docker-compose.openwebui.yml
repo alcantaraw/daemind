@@ -26,7 +26,7 @@ services:
       - UVICORN_LOG_LEVEL=warning
       - ALEMBIC_LOG_LEVEL=WARNING
       - PYTHONWARNINGS=ignore
-      - CORS_ALLOW_ORIGIN=http://${TS_DOMAIN:-localhost}:3001,https://${TS_DOMAIN:-localhost},http://localhost:3001
+      - CORS_ALLOW_ORIGIN=*
 
       # --- 2. INTEGRAÇÃO REDIS (Sessões e Rate Limit) ---
       # - ENABLE_WEBSOCKET_SUPPORT=True
