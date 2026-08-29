@@ -308,7 +308,7 @@ Todas as mudanças relevantes entre versões estão documentadas em **[CHANGELOG
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
-| [`v2.0.0`](CHANGELOG.md#v200--em-desenvolvimento--branch-test) | 2026-08-26 | **Marco 2.0:** Data Warehouse Zero-ETL (27 Views), Hub de Ads, Módulo B2B & Serviços, Dashboards Metabase/NocoDB e Governança Noturna SRE |
+| [`v2.0.0`](CHANGELOG.md#v200--2026-08-29--release-estável-consolidada) | 2026-08-29 | **Marco 2.0:** Data Warehouse Zero-ETL (27 Views), Hub de Ads, Módulo B2B & Serviços, Dashboards Metabase/NocoDB e Governança Noturna SRE |
 | [`v1.0.0`](CHANGELOG.md#v100--2026-08-18--desacoplamento-completo) | 2026-08-18 | Desacoplamento completo — wizard TUI/CLI, módulos independentes, guardrails SRE |
 | [`v0.5.0`](CHANGELOG.md#v050--2026-08--main-prova-de-conceito) | 2026-08-06 | Prova de conceito — stack monolítica funcional, instalador CLI simples |
 

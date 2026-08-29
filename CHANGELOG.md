@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [v2.0.0] — (Em Desenvolvimento — Branch `test`)
+## [v2.0.0] — 2026-08-29 — (RELEASE ESTÁVEL CONSOLIDADA)
 
 > **Marco Arquitetural 2.0:** Transformação da stack em um **Sistema Operacional Autônomo para Negócios Digitais e Híbridos (Produtos + Serviços B2B)**. Inclui Data Warehouse Soberano Zero-ETL com 27 Views Analíticas, Hub Universal de Ads, Módulo de Serviços & MRR, Radar Cross-Sell/Upsell 360°, Blindagem de Concorrência SRE e Auto-Provisionamento de Dashboards Executivos no Metabase e NocoDB.
 
