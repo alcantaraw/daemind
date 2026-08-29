@@ -1500,7 +1500,7 @@ else
         echo -e "Os dados cadastrais e a Senha Mestra estão travados para preservar a"
         echo -e "integridade dos volumes do banco de dados e autenticações ativas."
         echo -e "➜ Administrador: \e[32m${PREV_NOME} ${PREV_SOBRENOME}\e[0m"
-        echo -e "➜ E-mail:        \e[32${PREV_EMAIL}\e[0m"
+        echo -e "➜ E-mail:        \e[32m${PREV_EMAIL}\e[0m"
         echo -e "➜ Senha Mestra:  \e[32m[PRESERVADA]\e[0m"
         echo "---------------------------------------------------------------------"
         CLIENTE_NOME="$PREV_NOME"
