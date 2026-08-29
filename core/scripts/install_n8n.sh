@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# N8N SEARXNG
+# N8N N8N_SANDBOX SEARXNG
 # Motor de Automações & Workflows Ilimitados
 # ===============================================================================
 # DAEMIND SRE MODULE - PROVISIONADOR DINÂMICO N8N AUTOMATION
