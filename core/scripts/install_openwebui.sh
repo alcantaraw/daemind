@@ -67,12 +67,18 @@ ipset=/api-inference.huggingface.co/ALLOWED_DOMAINS
 ipset=/cdn-lfs.huggingface.co/ALLOWED_DOMAINS
 EOF
         if [ "${USE_TAILSCALE:-false}" = "true" ]; then
-            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport 5000 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
         else
-            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5000 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
         fi
     else
         sudo rm -f /etc/dnsmasq.d/openwebui.conf 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     fi
 
     local OWUI_ERRORS=$(docker logs "${PREFIX}_openwebui" --tail 200 2>&1 | grep -iE "UndefinedTable|relation .* does not exist" || true)
@@ -239,7 +245,9 @@ disable() {
 
     # Limpeza de Regras de Firewall e DNS
     sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+    sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+    sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     if [ -f /etc/dnsmasq.d/openwebui.conf ]; then
         sudo rm -f /etc/dnsmasq.d/openwebui.conf 2>/dev/null || true
         sudo systemctl restart dnsmasq 2>/dev/null || true

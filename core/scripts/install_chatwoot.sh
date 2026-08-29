@@ -330,10 +330,21 @@ provision_user() {
             token_obj = AccessToken.find_or_initialize_by(owner: user)
             token_obj.token = '${DB_PASSWORD}'
             token_obj.save!
-            InstallationConfig.find_or_create_by!(name: 'INSTALLATION_NAME').update!(value: '${PREFIX}')
-            InstallationConfig.find_or_create_by!(name: 'CHATWOOT_INSTANCE_ADMIN_EMAIL').update!(value: '${TS_EMAIL:-admin@localhost}')
-            InstallationConfig.find_or_create_by!(name: 'OPENAI_API_KEY').update!(value: '${LITELLM_MASTER_KEY}')
-            InstallationConfig.find_or_create_by!(name: 'OPENAI_MODEL').update!(value: 'gpt-4.1')
+            
+            # Parametrização Zero-Touch no InstallationConfig
+            [
+              ['INSTALLATION_NAME', '${PREFIX}'],
+              ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
+              ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
+              ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000/v1'],
+              ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
+              ['OPENAI_MODEL', 'gpt-4.1']
+            ].each do |k, v|
+              cfg = InstallationConfig.find_or_initialize_by(name: k)
+              cfg.serialized_value = { 'value' => v }
+              cfg.save! rescue nil
+            end
+
             user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
             account.update!(custom_attributes: { 'website' => 'https://${TS_DOMAIN:-localhost}', 'timezone' => 'America/Sao_Paulo' })
 
