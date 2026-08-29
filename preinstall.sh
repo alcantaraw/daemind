@@ -5,30 +5,27 @@
 set -eo pipefail
 
 # =========================================================================
-# PADRONIZAÇÃO VISUAL DE CONSOLE & LOGGER SYSTEM (SRE CLI)
+# PADRONIZAÇÃO DE LOG & CONSOLE
 # =========================================================================
-CLR_BOLD="\e[1m"
-CLR_RESET="\e[0m"
-CLR_GREEN="\e[32m"
-CLR_YELLOW="\e[33m"
-CLR_CYAN="\e[36m"
-CLR_RED="\e[31m"
-CLR_BLUE="\e[34m"
-
+log_header()  { echo -e "\n=====================================================================\n  $1\n====================================================================="; }
+log_info()    { echo "➜ [INFO PREINSTALL] $1"; }
+log_success() { echo "✔ [SUCESSO PREINSTALL] $1"; }
+log_warn()    { echo "⚠️  [ATENÇÃO PREINSTALL] $1"; }
+log_error()   { echo "🚨 [ERRO CRÍTICO PREINSTALL] $1"; }
 # SRE OVERRIDE IMMUTABILITY GUARD: Preserva export do operador durante todo o ciclo
 INITIAL_USER_OVERRIDES=()
-for _v in $(compgen -v | grep -E '^(USE_|OVERRIDE_|EMPRESA|ROUTING_|STORAGE_|S3_|OPENAI_|ANTHROPIC_|GEMINI_|DEEPSEEK_|OPENROUTER_)'); do
+for _v in $(compgen -v | grep -E '^(USE_|OVERRIDE_|EMPRESA|ROUTING_|STORAGE_|S3_|N8N_DEV_|OPENAI_|ANTHROPIC_|GEMINI_|DEEPSEEK_|OPENROUTER_)'); do
     [ -n "${!_v:-}" ] && INITIAL_USER_OVERRIDES+=("$_v=${!_v}")
 done
 
-log_info()    { echo -e "${CLR_CYAN}➜ [INFO PREINSTALL]${CLR_RESET} $1"; }
-log_success() { echo -e "${CLR_GREEN}✔ [SUCESSO PREINSTALL]${CLR_RESET} $1"; }
-log_warn()    { echo -e "${CLR_YELLOW}⚠️  [ATENÇÃO PREINSTALL]${CLR_RESET} $1"; }
-log_error()   { echo -e "${CLR_RED}🚨 [ERRO CRÍTICO PREINSTALL]${CLR_RESET} $1"; }
+TARGET_DIR="${TARGET_DIR:-/opt/daemind}"
+LOCK_FILE="/tmp/preinstall.lock"
+CACHE_WIZARD_FILE="${HOME}/.daemind_wizard_cache.env"
+
 # Tratamento de interrupção graciosa do usuário (Ctrl+C / SIGINT)
 interrupcao_usuario() {
     clear 2>/dev/null || true
-    echo -e "${CLR_YELLOW}➜ Instalação cancelada pelo usuário.${CLR_RESET}"
+    echo "➜ Instalação cancelada pelo usuário."
     exit 130
 }
 trap interrupcao_usuario SIGINT SIGTERM
@@ -70,10 +67,19 @@ if [ -n "$HTTP_NOW" ]; then
     sudo date -s "$HTTP_NOW" >/dev/null 2>&1 || true
 fi
 
-# Instalação silenciosa de ferramentas essenciais de bootstrap (dialog e git)
+# Instalação silenciosa de ferramentas essenciais de bootstrap (dialog e git) com timeout estrito de 60s
 if ! command -v dialog &>/dev/null || ! command -v git &>/dev/null; then
-    sudo apt-get update -qq -o Dpkg::Lock::Timeout=60 > /dev/null 2>&1 || true
-    sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" dialog git > /dev/null 2>&1 || true
+    local_err_apt=0
+    sudo apt-get update -qq -o Dpkg::Lock::Timeout=30 > /dev/null 2>&1 || local_err_apt=1
+    sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=30 -o Dpkg::Options::="--force-confold" dialog git > /dev/null 2>&1 || local_err_apt=1
+
+    if [ "$local_err_apt" -eq 1 ] || ! command -v dialog &>/dev/null; then
+        if [ "$USE_TUI" = "true" ]; then
+            echo "⚠️  [BOOTSTRAP WARN] Não foi possível instalar o pacote 'dialog' via apt (timeout/bloqueio de lock)."
+            echo "  ↳ Alternando automaticamente para o Modo CLI Clássico..."
+            USE_TUI="false"
+        fi
+    fi
 fi
 
 # =========================================================================
@@ -200,13 +206,14 @@ EOF
 
 tui_dialog() {
     [ ! -f "/tmp/.daemind_dialogrc" ] && gerar_dialogrc
-    dialog --clear --ascii-lines --mouse "$@" < /dev/tty
+    dialog --clear --ascii-lines --mouse --tab-correct --cr-wrap --no-collapse "$@" < /dev/tty
     return $?
 }
 
 tui_dialog_out() {
     [ ! -f "/tmp/.daemind_dialogrc" ] && gerar_dialogrc
     dialog --clear --ascii-lines --mouse --stdout "$@" < /dev/tty
+    return $?
 }
 
 # Wrapper Dialog com suporte a navegação [Avançar] e [Voltar]
@@ -336,7 +343,6 @@ coletar_sn() {
         fi
     fi
 
-    pausar_cronometro 2>/dev/null || true
     local prompt_suffix="[s/N]"
     [ "$default_val" = "s" ] && prompt_suffix="[S/n]"
 
@@ -358,7 +364,6 @@ coletar_sn() {
             echo -e "\e[31m[ERRO CRÍTICO PREINSTALL] Resposta inválida! Digite apenas 's' ou 'n' (ou pressione Enter para o padrão '$default_val').\e[0m"
         fi
     done
-    retomar_cronometro 2>/dev/null || true
 }
 
 # SRE FIX: Todas as leituras de input usam < /dev/tty para funcionar em execuções de Stream (curl | bash)
@@ -380,7 +385,6 @@ coletar_input() {
         return 0
     fi
 
-    pausar_cronometro 2>/dev/null || true
     while true; do
         if [ "$is_secret" = "true" ]; then
             echo -ne "➜ $prompt: "
@@ -426,21 +430,19 @@ coletar_input() {
             echo -e "\e[31m[ERRO CRÍTICO PREINSTALL] O campo '$prompt' é obrigatório.\e[0m"
         fi
     done
-    retomar_cronometro 2>/dev/null || true
 }
 
 # =========================================================================
-# FASE 1 (MODO CLI): HIGIENIZAÇÃO E PREPARAÇÃO DO SISTEMA OPERACIONAL
+# ⚙️ SRE ENGINE: PREPARAÇÃO DO SISTEMA OPERACIONAL & RUNTIME HOST
 # =========================================================================
-if [ "$USE_TUI" != "true" ]; then
+preparar_sistema_operacional() {
+    log_info "Iniciando Preparação e Higienização do Host..."
+
     echo "=== [SRE PREINSTALL] Elevando temporariamente o timeout do sudo para 60 minutos ==="
     echo "Defaults timestamp_timeout=60" | sudo tee /etc/sudoers.d/custom_sudo_timeout > /dev/null
     sudo chmod 0440 /etc/sudoers.d/custom_sudo_timeout
 
     cleanup_sudo_timeout() {
-        if [ "$EXECUTAR_INSTALL" != "s" ]; then
-            mostrar_duracao
-        fi
         if [ -f /etc/sudoers.d/custom_sudo_timeout ]; then
             echo "=== [SRE HARDENING PREINSTALL] Revogando timeout estendido do sudo... ==="
             sudo rm -f /etc/sudoers.d/custom_sudo_timeout 2>/dev/null || true
@@ -504,8 +506,6 @@ EOF
 
     if [ -n "$HTTP_NOW" ]; then
         sudo date -s "$HTTP_NOW" >/dev/null
-        INICIO_TS=$(date +%s)
-        export PREINSTALL_START_TS="$INICIO_TS"
         echo "➜ [SUCESSO PREINSTALL] Relógio do Kernel recalibrado via HTTP: $(date)"
     else
         echo "⚠️ [AVISO PREINSTALL] Não foi possível obter o horário via HTTP."
@@ -531,30 +531,22 @@ EOF
     done
 
     echo "=== [SRE PREINSTALL] Detectando e corrigindo dinamicamente pacotes corrompidos ==="
-    PACOTES_QUEBRADOS=$(dpkg -l | awk '/^i[FHRU]/ {print $2}')
+    PACOTES_QUEBRADOS=$(dpkg -l | awk '/^i[FHRU]/ {print $2}' || true)
     if [ -n "$PACOTES_QUEBRADOS" ]; then 
         echo "  ↳ Removendo resíduos de Kernel/Pacotes quebrados silenciosamente..."
-        echo "$PACOTES_QUEBRADOS" | sudo xargs -r env DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y -qq > /dev/null 2>&1 < /dev/null
+        echo "$PACOTES_QUEBRADOS" | sudo xargs -r env DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y -qq > /dev/null 2>&1 < /dev/null || true
     fi
 
-    sudo chmod -x /etc/kernel/prerm.d/vboxadd /etc/kernel/postinst.d/vboxadd 2>/dev/null || true
-    if ! grep -q 'GRUB_DISABLE_OS_PROBER=true' /etc/default/grub 2>/dev/null; then
-        sudo sed -i '/GRUB_DISABLE_OS_PROBER/d' /etc/default/grub 2>/dev/null || true
-        echo "GRUB_DISABLE_OS_PROBER=true" | sudo tee -a /etc/default/grub > /dev/null
-    fi
     sudo dpkg --configure -a --force-confold > /dev/null 2>&1 < /dev/null || true
     sudo apt-get --fix-broken install -y -qq -o Dpkg::Options::="--force-confold" > /dev/null 2>&1 < /dev/null || true
     sudo apt-get autoremove --purge -y -qq > /dev/null 2>&1 < /dev/null || true
     sudo apt-get clean > /dev/null 2>&1 < /dev/null || true
-    ATIVO=$(uname -r)
-
-    for dir in /usr/lib/modules/*-generic; do
-        if [ -d "$dir" ] && [ "$(basename "$dir")" != "$ATIVO" ]; then
-            sudo rm -rf "$dir" 2>/dev/null || true
-        fi
-    done
 
     echo "=== [SRE PREINSTALL] Configurando chaves e repositórios oficiais do Docker ==="
+    sudo mkdir -p /etc/needrestart/conf.d
+    echo '$nrconf{restart} = "a";' | sudo tee /etc/needrestart/conf.d/daemind-auto.conf > /dev/null 2>&1 || true
+    echo '$nrconf{ui} = "NeedRestart::UI::stdio";' | sudo tee -a /etc/needrestart/conf.d/daemind-auto.conf > /dev/null 2>&1 || true
+
     sudo install -m 0755 -d /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -575,6 +567,9 @@ EOF
 
     LISTAS_APT=$(ls /var/lib/apt/lists/ 2>/dev/null | grep -v '^partial$' | head -n 1 || true)
 
+    # SRE GUARDRAIL: Sanitiza pacotes com pós-instalação pendente e recupera dpkg
+    sudo dpkg --configure -a >/dev/null 2>&1 || true
+
     if [ $TEMPO_DECORRIDO -gt $JANELA_CORTE_SEGUNDOS ] || [ -z "$LISTAS_APT" ]; then
         if ! sudo apt-get update -qq -o Dpkg::Lock::Timeout=120 2>/dev/null; then
             sudo killall -9 apt-get apt 2>/dev/null || true
@@ -585,10 +580,10 @@ EOF
     fi
 
     PACOTES_REQUERIDOS=(
-        chrony wget iputils-ping curl openssl iptables ipset cron dnsmasq apt-transport-https
-        ca-certificates gnupg tcpdump net-tools lsb-release jq git vim
+        wget iputils-ping curl openssl iptables ipset cron dnsmasq apt-transport-https
+        ca-certificates gnupg tcpdump net-tools lsb-release jq git vim dialog
         docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-        bind9-utils sysstat htop dnsutils systemd-timesyncd
+        bind9-utils sysstat htop dnsutils
     )
 
     PACOTES_PARA_INSTALAR=()
@@ -611,7 +606,7 @@ EOF
         sudo apt-get update -qq -o Dpkg::Lock::Timeout=120 > /dev/null 2>&1 || true
         sudo touch "$NOSSO_STAMP"
 
-        sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
+        sudo -E env DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
         sudo apt-get clean > /dev/null 2>&1 || true
         sudo systemctl stop dnsmasq 2>/dev/null || true
         echo "✔ [SUCESSO PREINSTALL] Pacotes do sistema instalados com sucesso."
@@ -619,10 +614,8 @@ EOF
         echo "➜ [IDEMPOTÊNCIA PREINSTALL] Pacotes do sistema já estão instalados e atualizados."
     fi
 
-    # =========================================================================
-    # 📥 CLONAGEM DO REPOSITÓRIO OFICIAL (DISCO LOCAL /opt/daemind)
-    # =========================================================================
-    TARGET_DIR="/opt/daemind"
+    # Sincronização e sanitização do repositório
+    TARGET_DIR="${TARGET_DIR:-/opt/daemind}"
     REPO_URL="https://github.com/alcantaraw/daemind.git"
     CURRENT_GIT_BRANCH=""
     if [ -d "${TARGET_DIR}/.git" ]; then
@@ -643,12 +636,14 @@ EOF
         (cd "${TARGET_DIR}" && sudo git fetch --all -q >/dev/null 2>&1 && sudo git checkout -f "${REPO_BRANCH}" >/dev/null 2>&1 || sudo git checkout -b "${REPO_BRANCH}" "origin/${REPO_BRANCH}" >/dev/null 2>&1 || true && sudo git reset --hard "origin/${REPO_BRANCH}" >/dev/null 2>&1)
     elif [ -d "${TARGET_DIR}" ] && [ "$(ls -A "${TARGET_DIR}" 2>/dev/null)" ]; then
         TEMP_CLONE=$(mktemp -d)
-        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TEMP_CLONE}" > /dev/null 2>&1
-        sudo cp -rf "${TEMP_CLONE}"/* "${TARGET_DIR}/" 2>/dev/null || true
-        sudo cp -rf "${TEMP_CLONE}"/.git "${TARGET_DIR}/" 2>/dev/null || true
+        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TEMP_CLONE}" > /dev/null 2>&1 || true
+        if [ -d "${TEMP_CLONE}/core" ]; then
+            sudo cp -rf "${TEMP_CLONE}"/* "${TARGET_DIR}/" 2>/dev/null || true
+            sudo cp -rf "${TEMP_CLONE}"/.git "${TARGET_DIR}/" 2>/dev/null || true
+        fi
         sudo rm -rf "${TEMP_CLONE}"
     else
-        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TARGET_DIR}" > /dev/null 2>&1
+        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TARGET_DIR}" > /dev/null 2>&1 || true
     fi
     echo "✔ [SUCESSO PREINSTALL] Repositório atualizado e pronto para uso."
 
@@ -721,9 +716,10 @@ EOD
     fi
 
     echo "=== [SRE PREINSTALL] Limpeza final antes do install.sh ==="
-    sudo apt-get clean
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo rm -f "$NOSSO_STAMP"
+    # Tratamento resiliente de lock do apt/unattended-upgrades
+    sudo apt-get clean -o Dpkg::Lock::Timeout=10 2>/dev/null || true
+    sudo rm -rf /var/lib/apt/lists/* 2>/dev/null || true
+    sudo rm -f "$NOSSO_STAMP" 2>/dev/null || true
 
     INTERFACE=$(ip -4 route show default 2>/dev/null | awk '{print $5}' | head -n 1)
 
@@ -751,110 +747,11 @@ EOD
         exit 1
     fi
 
-    if [ -f /etc/netplan/99-static-sre.yaml ] && grep -q "$IP_CIDR" /etc/netplan/99-static-sre.yaml 2>/dev/null; then
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] IP de rede estático já configurado (${IP_CIDR}). Preservando netplan."
-    else
-        echo "➜ [SRE PREINSTALL] Fixando IP de rede estático para a aplicação (${IP_CIDR})..."
-        sudo mkdir -p /etc/netplan/backup
-        sudo mv /etc/netplan/*.yaml /etc/netplan/backup/ 2>/dev/null || true
-
-        sudo cat << EON | sudo tee /etc/netplan/99-static-sre.yaml > /dev/null
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    $INTERFACE:
-      match:
-        macaddress: "$MAC_ADDR"
-      set-name: "$INTERFACE"
-      dhcp4: no
-      addresses:
-        - $IP_CIDR
-      routes:
-        - to: default
-          via: $GATEWAY
-      nameservers:
-        addresses: [1.1.1.1, 8.8.8.8]
-EON
-
-        sudo chmod 600 /etc/netplan/99-static-sre.yaml
-        sudo netplan apply 2>/dev/null || true
-        echo "✔ [SUCESSO PREINSTALL] IP de rede estático fixado e protegido contra trocas."
-    fi
-
-    echo "=== [SRE PREINSTALL] Configurando mensagem customizada de boas-vindas no login ==="
-    sudo chmod -x /etc/update-motd.d/* 2>/dev/null || true
-
-    sudo cat << 'EOM' | sudo tee /etc/update-motd.d/99-sre-banner > /dev/null
-#!/bin/bash
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-WHITE='\033[1;37m'
-NC='\033[0m'
-
-USUARIO_LOGADO="${PAM_USER:-$(logname 2>/dev/null || who am i | awk '{print $1}')}"
-[ -z "$USUARIO_LOGADO" ] && USUARIO_LOGADO=$(whoami)
-
-HOST_SHORT=$(hostname -s)
-DOMAIN_NAME=$(dnsdomainname 2>/dev/null || domainname 2>/dev/null || echo "")
-if [ -n "$DOMAIN_NAME" ] && [ "$DOMAIN_NAME" != "(none)" ]; then
-    HOST_FQDN="${HOST_SHORT}.${DOMAIN_NAME}"
-else
-    HOST_FQDN=$(hostname -f 2>/dev/null)
-    [ "$HOST_FQDN" = "$HOST_SHORT" ] && HOST_FQDN="${HOST_SHORT}.local"
-fi
-
-MAIN_IFACE=$(ip -4 route show default 2>/dev/null | awk '{print $5}' | head -n 1)
-[ -z "$MAIN_IFACE" ] && MAIN_IFACE="eth0"
-ETH_IP=$(ip -4 addr show dev "$MAIN_IFACE" 2>/dev/null | grep inet | awk '{print $2}' || echo "Sem Link/Offline")
-
-UBUNTU_VER=$(lsb_release -ds 2>/dev/null || grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"')
-KERNEL_VER=$(uname -r)
-
-CPU_MODEL=$(lscpu | grep "Model name:" | sed 's/Model name:\s*//' | xargs)
-[ -z "$CPU_MODEL" ] && CPU_MODEL="Virtual Processor"
-CPU_CORES=$(nproc)
-
-format_unit() {
-    echo "$1" | sed -E 's/([0-9.]+)[Gg]i?/\1GB/g; s/([0-9.]+)[Mm]i?/\1MB/g'
+    echo "✔ [SUCESSO PREINSTALL] Conectividade de rede da interface ($INTERFACE) preservada sem alteração destrutiva de Netplan."
 }
 
-MEM_TOTAL=$(format_unit "$(free -h | awk '/Mem:/ {print $2}')")
-SWAP_TOTAL=$(format_unit "$(free -h | awk '/Swap:/ {print $2}')")
-DISKO_TOTAL=$(format_unit "$(df -h / | awk 'NR==2 {print $2}')")
-DISKO_DISP=$(format_unit "$(df -h / | awk 'NR==2 {print $4}')")
-DISKO_USADO_PCT=$(df -h / | awk 'NR==2 {print $5}')
-
-echo -e "${CYAN}=====================================================================${NC}"
-echo -e "${WHITE}           🚀 BEM-VINDO AO AMBIENTE DE INFRAESTRUTURA SRE            ${NC}"
-echo -e "${CYAN}=====================================================================${NC}"
-echo -e "${YELLOW} 🐧 Sistema Operacional: ${NC}${WHITE}${UBUNTU_VER} (${KERNEL_VER})${NC}"
-echo -e "${YELLOW} 👤 Usuário Autenticado: ${NC}${WHITE}${USUARIO_LOGADO}${NC}"
-echo -e "${YELLOW} 🖥️  Hostname / FQDN:    ${NC}${WHITE}${HOST_FQDN}${NC}"
-echo -e "${YELLOW} 🌐 Endereço IP (${MAIN_IFACE}): ${NC}${GREEN}${ETH_IP}${NC}"
-echo -e "${CYAN}---------------------------------------------------------------------${NC}"
-echo -e "${YELLOW} 🧩 Processador (CPU):   ${NC}${WHITE}${CPU_MODEL}${NC}"
-echo -e "${YELLOW} ⚡ Núcleos (Cores):      ${NC}${WHITE}${CPU_CORES} vCPUs${NC}"
-echo -e "${YELLOW} 🧠 Memória RAM Total:    ${NC}${WHITE}${MEM_TOTAL}${NC}"
-echo -e "${YELLOW} 🔄 Memória Swap:         ${NC}${WHITE}${SWAP_TOTAL}${NC}"
-echo -e "${YELLOW} 💾 Partição Raiz (/):    ${NC}${WHITE}${DISKO_TOTAL}${NC} Total | ${GREEN}${DISKO_DISP}${NC} Livre (${DISKO_USADO_PCT} usado)"
-echo -e "${CYAN}=====================================================================${NC}"
-echo ""
-EOM
-
-    sudo chmod +x /etc/update-motd.d/99-sre-banner
-
-    echo "=== [SRE PREINSTALL] Limpando rastros da sessão ==="
-    sudo bash -c "cat /dev/null > /root/.bash_history 2>/dev/null || true"
-    if [ -n "$SUDO_USER" ]; then
-        USER_HOME_REAL=$(eval echo "~$SUDO_USER")
-        cat /dev/null > "$USER_HOME_REAL/.bash_history" 2>/dev/null || true
-    fi
-fi
-
 # =========================================================================
-# FASE 2: GERADOR DE AMBIENTE MULTI-CLIENTE (SRE FACTORY)
+# FASE 1: GERADOR DE AMBIENTE MULTI-CLIENTE (SRE FACTORY / WIZARD)
 # =========================================================================
 SCRIPTS_DIR="./core/scripts"
 [ -d "${TARGET_DIR}/core/scripts" ] && SCRIPTS_DIR="${TARGET_DIR}/core/scripts"
@@ -880,22 +777,23 @@ if [ "$USE_TUI" = "true" ] && command -v dialog &>/dev/null; then
     # =====================================================================
     gerar_dialogrc
 
-    # 🖥️ Tela 0: Boas-vindas & Apresentação Oficial daemind.
+    # 🖥️ Tela 0: Boas-vindas & Apresentação Oficial daemind. v2.0
     BANNER_TEXT=$(cat << 'EOF'
 ============================================================
-                   d a e m i n d .
-     Sistema Operacional Autônomo para Negócios Digitais
+             d a e m i n d .   v 2 . 0
+      Sistema Operacional Autônomo para Negócios Digitais
 ============================================================
 
-• Arquitetura SRE Production-Ready
+• Arquitetura SRE Production-Ready 2.0 (Zero-ETL Data Warehouse)
 • Topologia Zero-Trust & Self-Hosted Soberana
 • Isolamento Perimetral & Virtualização Otimizada
+• Cockpit Executivo 360° & Hub de Inteligência de Negócios
 
-Bem-vindo ao Assistente de Deploy Automatizado do daemind.
+Bem-vindo ao Assistente de Deploy Automatizado do daemind v2.0.
 Navegue usando [Tab], [Setas], [Barra de Espaço] ou [Mouse].
 EOF
 )
-    tui_dialog --title "daemind. - Sistema Operacional Autônomo" --msgbox "$BANNER_TEXT" 15 66 || true
+    tui_dialog --title "daemind. v2.0 - Sistema Operacional Autônomo" --msgbox "$BANNER_TEXT" 16 68 || true
 
     # 🔄 Tela 1: Reutilização de Cache (se existir)
     if [ -f "$CACHE_WIZARD_FILE" ]; then
@@ -958,7 +856,7 @@ EOF
                 IS_PROVISIONED=0
 
                 if [ -f "$EXISTING_ENV" ] || (command -v sudo >/dev/null 2>&1 && sudo test -f "$EXISTING_ENV" 2>/dev/null); then
-                    local _env_content=""
+                    _env_content=""
                     if [ -r "$EXISTING_ENV" ]; then
                         _env_content=$(cat "$EXISTING_ENV" 2>/dev/null || true)
                     elif command -v sudo >/dev/null 2>&1; then
@@ -1003,6 +901,7 @@ EOF
                 }
 
                 EMPRESA=$(clean_tui_field "$(echo "$FORM_OUT" | sed -n '1p')")
+                EMPRESA=$(echo "$EMPRESA" | tr '[:upper:]' '[:lower:]')
                 CLIENTE_NOME=$(clean_tui_field "$(echo "$FORM_OUT" | sed -n '2p')")
                 CLIENTE_SOBRENOME=$(clean_tui_field "$(echo "$FORM_OUT" | sed -n '3p')")
                 CLIENTE_EMAIL=$(clean_tui_field "$(echo "$FORM_OUT" | sed -n '4p')")
@@ -1192,7 +1091,7 @@ EOF
                 done
 
                 SEL_MODS=$(tui_dialog_step --title "Passo 3/6: Seleção de Microsserviços da Stack" \
-                    --checklist "Marque com [Espaço] os módulos desejados.\n⚠️  ATENÇÃO: Desmarcar um item ativo irá PARAR o container, remover a rota no Caddy e ocultar o card do portal." 20 78 10 \
+                    --checklist "Marque com [Espaço] os módulos desejados.\n⚠️  ATENÇÃO: Desmarcar um item ativo irá PARAR o container, remover a rota no Caddy e ocultar o card do portal." 24 82 15 \
                     "${CHECKLIST_OPTS[@]}")
                 ST_M=$?
                 if [ "$ST_M" -ne 0 ]; then
@@ -1219,6 +1118,21 @@ EOF
                         continue
                     fi
                 fi
+
+                # Execução polimórfica de sub-telas TUI de módulos ativos (ex: install_evolution.sh)
+                for m_active in "${SORTED_MOD_FILES[@]}"; do
+                    [ "$m_active" = "s3minio" ] && continue
+                    var_use="USE_$(echo "$m_active" | tr '[:lower:]' '[:upper:]')"
+                    if [[ "${!var_use:-n}" =~ ^(s|S|true|TRUE|1)$ ]]; then
+                        mod_s="${SCRIPTS_DIR}/install_${m_active}.sh"
+                        if [ -f "$mod_s" ] && grep -q "collect_wizard_inputs_tui" "$mod_s"; then
+                            source "$mod_s" "${TARGET_DIR}" "load_only" 2>/dev/null || true
+                            if declare -f collect_wizard_inputs_tui >/dev/null; then
+                                collect_wizard_inputs_tui || true
+                            fi
+                        fi
+                    fi
+                done
                 W_STEP=5
                 ;;
 
@@ -1229,6 +1143,12 @@ EOF
                     if ! collect_wizard_inputs_tui; then
                         W_STEP=4
                         continue
+                    fi
+                    # SRE FIX: Recarrega as chaves e provedores exportados pelo wizard de IA
+                    if [ -f "$CACHE_WIZARD_FILE" ]; then
+                        set -a
+                        source "$CACHE_WIZARD_FILE" 2>/dev/null || true
+                        set +a
                     fi
                 fi
                 W_STEP=6
@@ -1283,38 +1203,129 @@ EOF
 
             7)
                 # 📊 Tela 7: Resumo Geral de Governança & Confirmação de Deploy
-                ACTIVE_MODULES_LIST=""
+                active_mods_formatted=""
+                current_line=""
+                local_mod_count=0
+                selected_nodes_list=()
+
                 for m_name in "${SORTED_MOD_FILES[@]}"; do
                     var_use="USE_$(echo "$m_name" | tr '[:lower:]' '[:upper:]')"
                     if [[ "${!var_use}" =~ ^[Ss]$ ]]; then
-                        ACTIVE_MODULES_LIST="${ACTIVE_MODULES_LIST} [X] ${m_name}"
+                        mod_script=""
+                        for cand_dir in "$SCRIPTS_DIR" "./core/scripts" "${TARGET_DIR}/core/scripts" "/opt/daemind/core/scripts"; do
+                            if [ -f "${cand_dir}/install_${m_name}.sh" ]; then
+                                mod_script="${cand_dir}/install_${m_name}.sh"
+                                break
+                            fi
+                        done
+
+                        if [ -n "$mod_script" ] && [ -f "$mod_script" ]; then
+                            nodes=$(sed -n '2p' "$mod_script" 2>/dev/null | sed -e 's/^#[[:space:]]*//' -e 's/\r//g' || true)
+                            for nd in $nodes; do
+                                [ -n "$nd" ] && selected_nodes_list+=("$(echo "$nd" | tr '[:lower:]' '[:upper:]')")
+                            done
+                        else
+                            selected_nodes_list+=("$(echo "$m_name" | tr '[:lower:]' '[:upper:]')")
+                        fi
                     fi
                 done
 
-                AI_PROVIDERS_LIST="[X] OpenRouter (Obrigatório)"
-                [ -n "${OPENAI_API_KEY:-}" ]    && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] OpenAI"
-                [ -n "${ANTHROPIC_API_KEY:-}" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] Anthropic Claude"
-                if [ -n "${GEMINI_API_KEY:-}" ] || [ "${FREE_GEMINI:-0}" = "1" ] || [[ "${RESP_GEMINI_FREE:-}" =~ ^[Ss]$ ]]; then
-                    [ "${FREE_GEMINI:-0}" = "1" ] && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] Gemini (Free Flash/Gemma)" || AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] Gemini (Pro)"
+                # Remove duplicatas e preserva a ordem
+                local_mod_count=${#selected_nodes_list[@]}
+                for node_entry in "${selected_nodes_list[@]}"; do
+                    pad="                   " # 19 chars
+                    entry="[X] ${node_entry}"
+                    len=${#entry}
+                    diff=$(( 22 - len ))
+                    [ $diff -lt 1 ] && diff=1
+                    item_fmt="${entry}${pad:0:$diff}"
+                    
+                    current_line="${current_line}${item_fmt}"
+                    if [ $(( (${#selected_nodes_list[@]} - (local_mod_count - 1)) % 3 )) -eq 0 ] || [ $(( ${#selected_nodes_list[@]} - local_mod_count + 1 )) -eq ${#selected_nodes_list[@]} ]; then
+                        :
+                    fi
+                    local_mod_count=$((local_mod_count - 1))
+                    if [ $(( (${#selected_nodes_list[@]} - local_mod_count) % 3 )) -eq 0 ]; then
+                        if [ -z "$active_mods_formatted" ]; then
+                            active_mods_formatted="  ${current_line}"
+                        else
+                            active_mods_formatted="${active_mods_formatted}
+  ${current_line}"
+                        fi
+                        current_line=""
+                    fi
+                done
+                if [ -n "$current_line" ]; then
+                    if [ -z "$active_mods_formatted" ]; then
+                        active_mods_formatted="  ${current_line}"
+                    else
+                        active_mods_formatted="${active_mods_formatted}
+  ${current_line}"
+                    fi
                 fi
-                [ -n "${DEEPSEEK_API_KEY:-}" ]  && AI_PROVIDERS_LIST="${AI_PROVIDERS_LIST} [X] DeepSeek"
 
-                SUMMARY_MSG=$(cat << EOF
-Identidade da Empresa:    ${EMPRESA}
-Administrador Responsável: ${CLIENTE_NOME} ${CLIENTE_SOBRENOME}
-E-mail Corporativo:        ${CLIENTE_EMAIL}
-Topologia de Borda:        $([ "$ROUTING_CHOICE" = "1" ] && echo "Tailscale VPN Soberana" || echo "BYODNS (${CUSTOM_DOMAIN})")
-Modo de Armazenamento:     ${STORAGE_MODE}
-Sub-rede Privada:          ${BASE_IP}.0/24
-Provedores de IA:
-${AI_PROVIDERS_LIST}
-Módulos Ativos:
-${ACTIVE_MODULES_LIST}
+                local_mod_count=${#selected_nodes_list[@]}
 
-Deseja confirmar e iniciar a instalação imediatamente?
-EOF
-)
-                if tui_dialog --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 20 78; then
+                ai_providers_list=("OpenRouter (Obrigatório)")
+                [ -n "${OPENAI_API_KEY:-}" ]    && ai_providers_list+=("OpenAI")
+                [ -n "${ANTHROPIC_API_KEY:-}" ] && ai_providers_list+=("Anthropic Claude")
+                if [ -n "${GEMINI_API_KEY:-}" ] || [ "${FREE_GEMINI:-0}" = "1" ] || [[ "${RESP_GEMINI_FREE:-}" =~ ^[Ss]$ ]]; then
+                    [ "${FREE_GEMINI:-0}" = "1" ] && ai_providers_list+=("Gemini (Free Flash/Gemma)") || ai_providers_list+=("Gemini (Pro)")
+                fi
+                [ -n "${DEEPSEEK_API_KEY:-}" ]  && ai_providers_list+=("DeepSeek")
+
+                ai_list_formatted=""
+                ai_curr_line=""
+                ai_count=0
+                for ai_entry in "${ai_providers_list[@]}"; do
+                    ai_count=$((ai_count + 1))
+                    pad_ai="                                  " # 34 chars
+                    item_str="[X] ${ai_entry}"
+                    len_ai=${#item_str}
+                    diff_ai=$(( 35 - len_ai ))
+                    [ $diff_ai -lt 1 ] && diff_ai=1
+                    item_ai_fmt="${item_str}${pad_ai:0:$diff_ai}"
+                    
+                    ai_curr_line="${ai_curr_line}${item_ai_fmt}"
+                    if [ $(( ai_count % 2 )) -eq 0 ]; then
+                        if [ -z "$ai_list_formatted" ]; then
+                            ai_list_formatted="  ${ai_curr_line}"
+                        else
+                            ai_list_formatted="${ai_list_formatted}
+  ${ai_curr_line}"
+                        fi
+                        ai_curr_line=""
+                    fi
+                done
+                if [ -n "$ai_curr_line" ]; then
+                    if [ -z "$ai_list_formatted" ]; then
+                        ai_list_formatted="  ${ai_curr_line}"
+                    else
+                        ai_list_formatted="${ai_list_formatted}
+  ${ai_curr_line}"
+                    fi
+                fi
+
+                topologia_str="BYODNS (${CUSTOM_DOMAIN})"
+                [ "$ROUTING_CHOICE" = "1" ] && topologia_str="Tailscale VPN Soberana"
+
+                SUMMARY_MSG="• Identidade da Empresa:    ${EMPRESA}
+• Administrador:            ${CLIENTE_NOME} ${CLIENTE_SOBRENOME}
+• E-mail Corporativo:       ${CLIENTE_EMAIL}
+• Topologia de Borda:       ${topologia_str}
+• Modo de Storage:          ${STORAGE_MODE}
+• Sub-rede Privada:         ${BASE_IP}.0/24
+
+• Provedores de IA (${#ai_providers_list[@]}):
+${ai_list_formatted}
+
+• Módulos & Nós Ativos (${local_mod_count}):
+${active_mods_formatted}
+
+----------------------------------------------------------------------
+Deseja confirmar e iniciar a instalação imediatamente?"
+
+                if tui_dialog --no-collapse --title "Passo 6/6: Confirmação de Deploy da Stack" --yes-label "Sim" --no-label "Não" --yesno "$SUMMARY_MSG" 28 82; then
                     EXECUTAR_INSTALL="s"
                     break
                 else
@@ -1381,7 +1392,7 @@ else
     IS_PROVISIONED=0
 
     if [ -f "$EXISTING_ENV" ] || (command -v sudo >/dev/null 2>&1 && sudo test -f "$EXISTING_ENV" 2>/dev/null); then
-        local _cli_env_content=""
+        _cli_env_content=""
         if [ -r "$EXISTING_ENV" ]; then
             _cli_env_content=$(cat "$EXISTING_ENV" 2>/dev/null || true)
         elif command -v sudo >/dev/null 2>&1; then
@@ -1399,6 +1410,8 @@ else
     fi
 
     coletar_input "ID da Empresa Cliente (Max 12 chars, Ex: microsoft apple nvidia)" EMPRESA "false" "^.{1,12}$" ""
+    EMPRESA=$(echo "$EMPRESA" | tr '[:upper:]' '[:lower:]')
+    save_wizard_cache "EMPRESA" "$EMPRESA"
 
     # 🛡️ SRE GUARDRAIL CASE 2 (CLI): Troca de ID da Empresa em Host com Stack Existente -> Destruição e Reset Transacional
     if [ "$IS_PROVISIONED" -eq 1 ] && [ -n "$EMPRESA" ] && [ "$EMPRESA" != "$PREV_EMPRESA" ]; then
@@ -1487,7 +1500,7 @@ else
         echo -e "Os dados cadastrais e a Senha Mestra estão travados para preservar a"
         echo -e "integridade dos volumes do banco de dados e autenticações ativas."
         echo -e "➜ Administrador: \e[32m${PREV_NOME} ${PREV_SOBRENOME}\e[0m"
-        echo -e "➜ E-mail:        \e[32${PREV_EMAIL}\e[0m"
+        echo -e "➜ E-mail:        \e[32m${PREV_EMAIL}\e[0m"
         echo -e "➜ Senha Mestra:  \e[32m[PRESERVADA]\e[0m"
         echo "---------------------------------------------------------------------"
         CLIENTE_NOME="$PREV_NOME"
@@ -1610,384 +1623,9 @@ LOJA_APP_KEY=""
 fi
 
 # =========================================================================
-# FASE 1 (MODO TUI): PREPARAÇÃO DO SISTEMA OPERACIONAL & GIT CLONE
+# FASE 2: PREPARAÇÃO DO SISTEMA OPERACIONAL & RUNTIME HOST
 # =========================================================================
-if [ "$USE_TUI" = "true" ]; then
-    echo "=== [SRE PREINSTALL] Elevando temporariamente o timeout do sudo para 60 minutos ==="
-    echo "Defaults timestamp_timeout=60" | sudo tee /etc/sudoers.d/custom_sudo_timeout > /dev/null
-    sudo chmod 0440 /etc/sudoers.d/custom_sudo_timeout
-
-    cleanup_sudo_timeout() {
-        if [ "$EXECUTAR_INSTALL" != "s" ]; then
-            mostrar_duracao
-        fi
-        if [ -f /etc/sudoers.d/custom_sudo_timeout ]; then
-            echo "=== [SRE HARDENING PREINSTALL] Revogando timeout estendido do sudo... ==="
-            sudo rm -f /etc/sudoers.d/custom_sudo_timeout 2>/dev/null || true
-        fi
-        rm -f "$LOCK_FILE" 2>/dev/null || true
-    }
-    trap cleanup_sudo_timeout EXIT
-
-    export DEBIAN_FRONTEND=noninteractive
-    export NEEDRESTART_MODE=a
-    export NEEDRESTART_SUSPEND=1
-
-    echo "=== [SRE KERNEL TUNING PREINSTALL] Aplicando Otimizações Avançadas de SO & Network Stack ==="
-
-    if [ ! -f /etc/sysctl.d/99-daemind-sre.conf ] || ! grep -q 'net.core.somaxconn = 65535' /etc/sysctl.d/99-daemind-sre.conf 2>/dev/null; then
-        echo "➜ [CONFIGURANDO PREINSTALL] Aplicando matriz de Kernel Tuning em /etc/sysctl.d/99-daemind-sre.conf..."
-        cat << 'EOF' | sudo tee /etc/sysctl.d/99-daemind-sre.conf > /dev/null
-# --- MEMORY TUNING (REDIS & POSTGRES) ---
-vm.overcommit_memory = 1
-vm.swappiness = 10
-vm.max_map_count = 262144
-
-# --- NETWORK STACK TUNING (CADDY, PGBOUNCER, MINIO) ---
-net.core.somaxconn = 65535
-net.ipv4.tcp_max_syn_backlog = 65535
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_fin_timeout = 15
-
-# --- FILE DESCRIPTORS & INOTIFY (DOCKER & NODE.JS) ---
-fs.file-max = 2097152
-fs.inotify.max_user_watches = 524288
-fs.inotify.max_user_instances = 8192
-EOF
-        sudo sysctl --system > /dev/null 2>&1 || sudo sysctl -p /etc/sysctl.d/99-daemind-sre.conf > /dev/null 2>&1 || true
-        echo "➜ [SUCESSO PREINSTALL] Kernel Tuning SRE aplicado (Memory Overcommit, Network Backlog, Inotify & Limits)."
-    else
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] Matriz de Kernel Tuning já configurada e ativa no sistema."
-    fi
-
-    if [ ! -f /etc/security/limits.d/99-daemind-limits.conf ] || ! grep -q 'soft nofile 1048576' /etc/security/limits.d/99-daemind-limits.conf 2>/dev/null; then
-        cat << 'EOF' | sudo tee /etc/security/limits.d/99-daemind-limits.conf > /dev/null
-* soft nofile 1048576
-* hard nofile 1048576
-* soft nproc 524288
-* hard nproc 524288
-root soft nofile 1048576
-root hard nofile 1048576
-root soft nproc 524288
-root hard nproc 524288
-EOF
-    fi
-
-    echo "=== [SRE PREINSTALL] Verificando se há locks ativos do APT/DPKG no sistema ==="
-    TENTATIVAS_APT_LOCK=0
-    while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 || \
-          sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1 || \
-          sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1 || \
-          sudo fuser /var/cache/apt/archives/lock >/dev/null 2>&1; do
-        TENTATIVAS_APT_LOCK=$((TENTATIVAS_APT_LOCK + 1))
-        echo "  ↳ O APT está ocupado com outro processo em segundo plano (Tentativa ${TENTATIVAS_APT_LOCK}/24). Aguardando 5s..."
-        sleep 5
-        if [ "$TENTATIVAS_APT_LOCK" -ge 24 ]; then
-            echo "  ⚠️ [SRE AUTO-HEALING PREINSTALL] Lock do APT retido por mais de 120s. Finalizando processos zumbis do APT/unattended-upgrades..."
-            sudo systemctl stop unattended-upgrades 2>/dev/null || true
-            sudo killall -9 apt apt-get dpkg 2>/dev/null || true
-            sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/lib/apt/lists/lock /var/cache/apt/archives/lock 2>/dev/null || true
-            sudo dpkg --configure -a 2>/dev/null || true
-            break
-        fi
-    done
-
-    echo "=== [SRE PREINSTALL] Detectando e corrigindo dinamicamente pacotes corrompidos ==="
-    PACOTES_QUEBRADOS=$(dpkg -l | awk '/^i[FHRU]/ {print $2}')
-    if [ -n "$PACOTES_QUEBRADOS" ]; then 
-        echo "  ↳ Removendo resíduos de Kernel/Pacotes quebrados silenciosamente..."
-        echo "$PACOTES_QUEBRADOS" | sudo xargs -r env DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y -qq > /dev/null 2>&1 < /dev/null
-    fi
-
-    sudo chmod -x /etc/kernel/prerm.d/vboxadd /etc/kernel/postinst.d/vboxadd 2>/dev/null || true
-    if ! grep -q 'GRUB_DISABLE_OS_PROBER=true' /etc/default/grub 2>/dev/null; then
-        sudo sed -i '/GRUB_DISABLE_OS_PROBER/d' /etc/default/grub 2>/dev/null || true
-        echo "GRUB_DISABLE_OS_PROBER=true" | sudo tee -a /etc/default/grub > /dev/null
-    fi
-    sudo dpkg --configure -a --force-confold > /dev/null 2>&1 < /dev/null || true
-    sudo apt-get --fix-broken install -y -qq -o Dpkg::Options::="--force-confold" > /dev/null 2>&1 < /dev/null || true
-    sudo apt-get autoremove --purge -y -qq > /dev/null 2>&1 < /dev/null || true
-    sudo apt-get clean > /dev/null 2>&1 < /dev/null || true
-    ATIVO=$(uname -r)
-
-    for dir in /usr/lib/modules/*-generic; do
-        if [ -d "$dir" ] && [ "$(basename "$dir")" != "$ATIVO" ]; then
-            sudo rm -rf "$dir" 2>/dev/null || true
-        fi
-    done
-
-    echo "=== [SRE PREINSTALL] Configurando chaves e repositórios oficiais do Docker ==="
-    sudo install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-    echo "=== [SRE PREINSTALL] Verificando atualizações dos índices do APT ==="
-    JANELA_CORTE_SEGUNDOS=86400 # 24 horas
-    ULTIMA_ATUALIZACAO=0
-    NOSSO_STAMP="/var/log/sre_factory_apt_update.stamp"
-
-    if [ -f "$NOSSO_STAMP" ]; then
-        ULTIMA_ATUALIZACAO=$(stat -c %Y "$NOSSO_STAMP")
-    elif [ -f /var/lib/apt/periodic/update-success-stamp ]; then
-        ULTIMA_ATUALIZACAO=$(stat -c %Y /var/lib/apt/periodic/update-success-stamp)
-    fi
-
-    AGORA=$(date +%s)
-    TEMPO_DECORRIDO=$((AGORA - ULTIMA_ATUALIZACAO))
-
-    LISTAS_APT=$(ls /var/lib/apt/lists/ 2>/dev/null | grep -v '^partial$' | head -n 1 || true)
-
-    if [ $TEMPO_DECORRIDO -gt $JANELA_CORTE_SEGUNDOS ] || [ -z "$LISTAS_APT" ]; then
-        if ! sudo apt-get update -qq -o Dpkg::Lock::Timeout=120 2>/dev/null; then
-            sudo killall -9 apt-get apt 2>/dev/null || true
-            sudo rm -f /var/lib/apt/lists/lock /var/lib/dpkg/lock-frontend 2>/dev/null || true
-            sudo apt-get update -qq -o Dpkg::Lock::Timeout=60 > /dev/null 2>&1 || true
-        fi
-        sudo touch "$NOSSO_STAMP"
-    fi
-
-    PACOTES_REQUERIDOS=(
-        chrony wget iputils-ping curl openssl iptables ipset cron dnsmasq apt-transport-https
-        ca-certificates gnupg tcpdump net-tools lsb-release jq git vim
-        docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-        bind9-utils sysstat htop dnsutils systemd-timesyncd
-    )
-
-    PACOTES_PARA_INSTALAR=()
-    for pacote in "${PACOTES_REQUERIDOS[@]}"; do
-        if ! dpkg -l "$pacote" &>/dev/null; then
-            PACOTES_PARA_INSTALAR+=("$pacote")
-        else
-            VERSAO_INSTALADA=$(dpkg-query -W -f='${Version}' "$pacote" 2>/dev/null)
-            VERSAO_CANDIDATA=$(apt-cache policy "$pacote" 2>/dev/null | grep "Candidate:" | awk '{print $2}')
-            
-            if [ "$VERSAO_INSTALADA" != "$VERSAO_CANDIDATA" ] && [ -n "$VERSAO_CANDIDATA" ] && [ "$VERSAO_CANDIDATA" != "(none)" ]; then
-                PACOTES_PARA_INSTALAR+=("$pacote")
-            fi
-        fi
-    done
-
-    if [ ${#PACOTES_PARA_INSTALAR[@]} -gt 0 ]; then
-        echo "➜ [SRE PREINSTALL] Provisionando ${#PACOTES_PARA_INSTALAR[@]} pacote(s) do sistema..."
-        sudo add-apt-repository universe -y > /dev/null 2>&1 || true
-        sudo apt-get update -qq -o Dpkg::Lock::Timeout=120 > /dev/null 2>&1 || true
-        sudo touch "$NOSSO_STAMP"
-
-        sudo -E apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
-        sudo apt-get clean > /dev/null 2>&1 || true
-        sudo systemctl stop dnsmasq 2>/dev/null || true
-        echo "✔ [SUCESSO PREINSTALL] Pacotes do sistema instalados com sucesso."
-    else
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] Pacotes do sistema já estão instalados e atualizados."
-    fi
-
-    # =========================================================================
-    # 📥 REPOSITÓRIO OFICIAL (DISCO LOCAL /opt/daemind - Já sincronizado)
-    # =========================================================================
-    TARGET_DIR="${TARGET_DIR:-/opt/daemind}"
-    sudo mkdir -p "${TARGET_DIR}"
-    echo "✔ [SUCESSO PREINSTALL] Repositório atualizado e pronto para uso."
-
-    echo "=== [SRE PREINSTALL] Sanitizando ambiente de produção ==="
-    sudo rm -rf "${TARGET_DIR}/docs" "${TARGET_DIR}/README.md" "${TARGET_DIR}/LICENSE" 2>/dev/null || true
-    sudo mkdir -p "${TARGET_DIR}/core/config"
-
-    echo "=== [SRE PREINSTALL] Configurando resolvedor de rede perimetral (dnsmasq) no Host ==="
-    sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/' /etc/systemd/resolved.conf 2>/dev/null || true
-    sudo sed -i 's/DNSStubListener=yes/DNSStubListener=no/' /etc/systemd/resolved.conf 2>/dev/null || true
-    sudo systemctl restart systemd-resolved 2>/dev/null || true
-
-    sudo mkdir -p /etc/dnsmasq.d 2>/dev/null || true
-    cat << EOC | sudo tee /etc/dnsmasq.conf > /dev/null
-listen-address=127.0.0.1,172.17.0.1
-bind-dynamic
-server=8.8.8.8
-server=1.1.1.1
-conf-dir=/etc/dnsmasq.d,*.conf
-
-# IPSET ALLOWED DOMAINS (CORE TLS, CERTIFICADOS & REPOSITÓRIOS DO HOST)
-ipset=/letsencrypt.org/ALLOWED_DOMAINS
-ipset=/lencr.org/ALLOWED_DOMAINS
-ipset=/zerossl.com/ALLOWED_DOMAINS
-ipset=/github.com/ALLOWED_DOMAINS
-ipset=/raw.githubusercontent.com/ALLOWED_DOMAINS
-
-domain-needed
-bogus-priv
-EOC
-
-    IF_DOCKER_ACTIVE=$(systemctl is-active docker 2>/dev/null || echo "inactive")
-    if [ -f /etc/docker/daemon.json ] && grep -q "172.17.0.1" /etc/docker/daemon.json 2>/dev/null && [ "$IF_DOCKER_ACTIVE" = "active" ]; then
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] Docker Engine e dnsmasq já vinculados ao Gateway local. Preservando containers."
-        sudo systemctl restart dnsmasq 2>/dev/null || true
-    else
-        echo "=== [SRE PREINSTALL] Vinculando Docker Engine ao Gateway local ==="
-        cat << EOD | sudo tee /etc/docker/daemon.json > /dev/null
-{ 
-  "dns": ["172.17.0.1", "1.1.1.1"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "10m",
-    "max-file": "3"
-  }
-}
-EOD
-        echo "=== [SRE PREINSTALL] Reiniciando daemons de rede e virtualização do Host ==="
-        sudo systemctl restart dnsmasq docker
-    fi
-
-    if [ -n "$SUDO_USER" ]; then
-        sudo usermod -aG docker "$SUDO_USER"
-    fi
-
-    if [ -f /swapfile ] && grep -q '/swapfile' /etc/fstab 2>/dev/null; then
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] Memória Virtual Swap (4GB) já estruturada e ativa."
-    else
-        echo "=== [SRE PREINSTALL] Criando Memória Virtual de Amortecimento (Swap 4GB) ==="
-        sudo swapoff -a 2>/dev/null || true
-        sudo rm -f /swapfile /swap.img 2>/dev/null || true
-        sudo sed -i '/swap/d' /etc/fstab 2>/dev/null || true
-
-        sudo fallocate -l 4G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=4096
-        sudo chmod 600 /swapfile
-        sudo mkswap /swapfile >/dev/null 2>&1
-        sudo swapon /swapfile >/dev/null 2>&1
-        echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab >/dev/null
-        echo "➜ [SUCESSO PREINSTALL] Swap 4GB criado e registrado no fstab."
-    fi
-
-    echo "=== [SRE PREINSTALL] Limpeza final antes do install.sh ==="
-    sudo apt-get clean
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo rm -f "$NOSSO_STAMP"
-
-    INTERFACE=$(ip -4 route show default 2>/dev/null | awk '{print $5}' | head -n 1)
-
-    if [ -z "$INTERFACE" ]; then
-        INTERFACE=$(ip link show | grep -E '^[0-9]+: e' | cut -d: -f2 | tr -d ' ' | head -n 1)
-        sudo ip link set "$INTERFACE" up || true
-        sudo dhclient -v "$INTERFACE" 2>/dev/null || true
-        sleep 3
-    fi
-
-    IP_CIDR=$(ip -4 addr show dev "$INTERFACE" 2>/dev/null | grep inet | awk '{print $2}' | head -n 1)
-    GATEWAY=$(ip -4 route show default 2>/dev/null | awk '{print $3}' | head -n 1)
-    MAC_ADDR=$(ip link show dev "$INTERFACE" 2>/dev/null | grep link/ether | awk '{print $2}' | head -n 1)
-
-    if [ -z "$IP_CIDR" ]; then
-        sudo dhclient -r "$INTERFACE" 2>/dev/null || true
-        sudo dhclient "$INTERFACE" 2>/dev/null || true
-        sleep 2
-        IP_CIDR=$(ip -4 addr show dev "$INTERFACE" | grep inet | awk '{print $2}' | head -n 1)
-        GATEWAY=$(ip -4 route show default | awk '{print $3}' | head -n 1)
-    fi
-
-    if [ -z "$IP_CIDR" ] || [ -z "$GATEWAY" ]; then
-        echo "🚨 [ERRO CRÍTICO PREINSTALL] A interface $INTERFACE não recebeu IP via DHCP!"
-        exit 1
-    fi
-
-    if [ -f /etc/netplan/99-static-sre.yaml ] && grep -q "$IP_CIDR" /etc/netplan/99-static-sre.yaml 2>/dev/null; then
-        echo "➜ [IDEMPOTÊNCIA PREINSTALL] IP de rede estático já configurado (${IP_CIDR}). Preservando netplan."
-    else
-        echo "➜ [SRE PREINSTALL] Fixando IP de rede estático para a aplicação (${IP_CIDR})..."
-        sudo mkdir -p /etc/netplan/backup
-        sudo mv /etc/netplan/*.yaml /etc/netplan/backup/ 2>/dev/null || true
-
-        sudo cat << EON | sudo tee /etc/netplan/99-static-sre.yaml > /dev/null
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    $INTERFACE:
-      match:
-        macaddress: "$MAC_ADDR"
-      set-name: "$INTERFACE"
-      dhcp4: no
-      addresses:
-        - $IP_CIDR
-      routes:
-        - to: default
-          via: $GATEWAY
-      nameservers:
-        addresses: [1.1.1.1, 8.8.8.8]
-EON
-
-        sudo chmod 600 /etc/netplan/99-static-sre.yaml
-        sudo netplan apply 2>/dev/null || true
-        echo "✔ [SUCESSO PREINSTALL] IP de rede estático fixado e protegido contra trocas."
-    fi
-
-    echo "=== [SRE PREINSTALL] Configurando mensagem customizada de boas-vindas no login ==="
-    sudo chmod -x /etc/update-motd.d/* 2>/dev/null || true
-
-    sudo cat << 'EOM' | sudo tee /etc/update-motd.d/99-sre-banner > /dev/null
-#!/bin/bash
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-WHITE='\033[1;37m'
-NC='\033[0m'
-
-USUARIO_LOGADO="${PAM_USER:-$(logname 2>/dev/null || who am i | awk '{print $1}')}"
-[ -z "$USUARIO_LOGADO" ] && USUARIO_LOGADO=$(whoami)
-
-HOST_SHORT=$(hostname -s)
-DOMAIN_NAME=$(dnsdomainname 2>/dev/null || domainname 2>/dev/null || echo "")
-if [ -n "$DOMAIN_NAME" ] && [ "$DOMAIN_NAME" != "(none)" ]; then
-    HOST_FQDN="${HOST_SHORT}.${DOMAIN_NAME}"
-else
-    HOST_FQDN=$(hostname -f 2>/dev/null)
-    [ "$HOST_FQDN" = "$HOST_SHORT" ] && HOST_FQDN="${HOST_SHORT}.local"
-fi
-
-MAIN_IFACE=$(ip -4 route show default 2>/dev/null | awk '{print $5}' | head -n 1)
-[ -z "$MAIN_IFACE" ] && MAIN_IFACE="eth0"
-ETH_IP=$(ip -4 addr show dev "$MAIN_IFACE" 2>/dev/null | grep inet | awk '{print $2}' || echo "Sem Link/Offline")
-
-UBUNTU_VER=$(lsb_release -ds 2>/dev/null || grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"')
-KERNEL_VER=$(uname -r)
-
-CPU_MODEL=$(lscpu | grep "Model name:" | sed 's/Model name:\s*//' | xargs)
-[ -z "$CPU_MODEL" ] && CPU_MODEL="Virtual Processor"
-CPU_CORES=$(nproc)
-
-format_unit() {
-    echo "$1" | sed -E 's/([0-9.]+)[Gg]i?/\1GB/g; s/([0-9.]+)[Mm]i?/\1MB/g'
-}
-
-MEM_TOTAL=$(format_unit "$(free -h | awk '/Mem:/ {print $2}')")
-SWAP_TOTAL=$(format_unit "$(free -h | awk '/Swap:/ {print $2}')")
-DISKO_TOTAL=$(format_unit "$(df -h / | awk 'NR==2 {print $2}')")
-DISKO_DISP=$(format_unit "$(df -h / | awk 'NR==2 {print $4}')")
-DISKO_USADO_PCT=$(df -h / | awk 'NR==2 {print $5}')
-
-echo -e "${CYAN}=====================================================================${NC}"
-echo -e "${WHITE}           🚀 BEM-VINDO AO AMBIENTE DE INFRAESTRUTURA SRE            ${NC}"
-echo -e "${CYAN}=====================================================================${NC}"
-echo -e "${YELLOW} 🐧 Sistema Operacional: ${NC}${WHITE}${UBUNTU_VER} (${KERNEL_VER})${NC}"
-echo -e "${YELLOW} 👤 Usuário Autenticado: ${NC}${WHITE}${USUARIO_LOGADO}${NC}"
-echo -e "${YELLOW} 🖥️  Hostname / FQDN:    ${NC}${WHITE}${HOST_FQDN}${NC}"
-echo -e "${YELLOW} 🌐 Endereço IP (${MAIN_IFACE}): ${NC}${GREEN}${ETH_IP}${NC}"
-echo -e "${CYAN}---------------------------------------------------------------------${NC}"
-echo -e "${YELLOW} 🧩 Processador (CPU):   ${NC}${WHITE}${CPU_MODEL}${NC}"
-echo -e "${YELLOW} ⚡ Núcleos (Cores):      ${NC}${WHITE}${CPU_CORES} vCPUs${NC}"
-echo -e "${YELLOW} 🧠 Memória RAM Total:    ${NC}${WHITE}${MEM_TOTAL}${NC}"
-echo -e "${YELLOW} 🔄 Memória Swap:         ${NC}${WHITE}${SWAP_TOTAL}${NC}"
-echo -e "${YELLOW} 💾 Partição Raiz (/):    ${NC}${WHITE}${DISKO_TOTAL}${NC} Total | ${GREEN}${DISKO_DISP}${NC} Livre (${DISKO_USADO_PCT} usado)"
-echo -e "${CYAN}=====================================================================${NC}"
-echo ""
-EOM
-
-    sudo chmod +x /etc/update-motd.d/99-sre-banner
-
-    echo "=== [SRE PREINSTALL] Limpando rastros da sessão ==="
-    sudo bash -c "cat /dev/null > /root/.bash_history 2>/dev/null || true"
-    if [ -n "$SUDO_USER" ]; then
-        USER_HOME_REAL=$(eval echo "~$SUDO_USER")
-        cat /dev/null > "$USER_HOME_REAL/.bash_history" 2>/dev/null || true
-    fi
-fi
+preparar_sistema_operacional
 
 # =========================================================================
 # FASE 3: GERAÇÃO DO AMBIENTE, HARDENING E DISPARO DO DEPLOY (SSOT)
@@ -2037,16 +1675,6 @@ for node in "${SORTED_NODES[@]}"; do
 done
 
 NOME_ARQUIVO="${EMPRESA}.env"
-
-echo "  ↳ Ativando persistência de relógio no Hardware (NTP + RTC)..."
-sudo bash -c 'cat << EOF > /etc/systemd/timesyncd.conf
-[Time]
-NTP=a.st1.ntp.br b.st1.ntp.br 1.1.1.1
-FallbackNTP=ntp.ubuntu.com
-EOF'
-sudo systemctl enable --now systemd-timesyncd 2>/dev/null || true
-sudo hwclock --systohc 2>/dev/null || true
-echo "➜ [OK PREINSTALL] Hora oficial gravada na BIOS com sucesso."
 
 echo -e "\e[33m=== [SRE PREINSTALL] Geração Autônoma da Chave Criptográfica (Backups) ===\e[0m"
 echo -e "\e[36m- Inicializando gerador criptográfico nativo...\e[0m"
@@ -2099,7 +1727,9 @@ if [ -f "$CHAVE_PUBLICA_PATH" ]; then
         sudo gpg --batch --yes --import "$CHAVE_PUBLICA_PATH" > /dev/null 2>&1 || true
         echo -e "\e[32m➜ [SUCESSO PREINSTALL] Chave pública importada no keyring do sistema para: $CLIENTE_EMAIL\e[0m"
     fi
+    rm -rf "$GPG_TEMP_HOME" 2>/dev/null || true
 else
+    rm -rf "$GPG_TEMP_HOME" 2>/dev/null || true
     echo -e "\e[31m[ERRO CRÍTICO PREINSTALL] O motor GPG falhou ao tentar forjar o par de chaves de segurança!\e[0m"
     exit 1
 fi
@@ -2114,8 +1744,6 @@ fi
 
 cat << EOF > "$NOME_ARQUIVO"
 
-PREINSTALL_START_TS="$PREINSTALL_START_TS"
-PREINSTALL_PAUSE_SEC="$TEMPO_PAUSA_INTERATIVA"
 PROJETO_DIR="/opt/daemind"
 PREFIXO_CONTAINER="${EMPRESA}"
 DB_USER="admin_db"
@@ -2153,10 +1781,12 @@ fi
 # SRE FIX: usa bash (subshell) com export do ambiente para que ACTION router receba $2="build_envs" corretamente
 for script in "$SCRIPTS_DIR"/install_*.sh; do
     [ ! -f "$script" ] && continue
-    # Exporta as variáveis chave para o subshell (USE_*, OVERRIDE_*, NOME_ARQUIVO, SYSTEM_*)
-    export USE_DOCLING USE_OLLAMA USE_N8N USE_CHATWOOT USE_EVOLUTION USE_METABASE USE_OPENWEBUI USE_NOCODB USE_POSTIZ USE_S3MINIO 2>/dev/null || true
+    # Exporta dinamicamente todas as variáveis de controle (USE_*, OVERRIDE_*, NOME_ARQUIVO, SYSTEM_*)
+    for _uvar in $(compgen -v | grep '^USE_'); do
+        export "$_uvar" 2>/dev/null || true
+    done
     export OVERRIDE_TOTAL_CPUS OVERRIDE_TOTAL_RAM_GB OVERRIDE_TOTAL_RAM_MB SYSTEM_TOTAL_CPUS SYSTEM_TOTAL_RAM_MB SYSTEM_TOTAL_RAM_GB TOTAL_CPUS TOTAL_RAM_MB TOTAL_RAM_GB 2>/dev/null || true
-    export NOME_ARQUIVO EMPRESA PREFIXO_CONTAINER TARGET_DIR 2>/dev/null || true
+    export NOME_ARQUIVO EMPRESA PREFIXO_CONTAINER TARGET_DIR N8N_DEV_AI_ASSISTANT 2>/dev/null || true
     bash "$script" "$TARGET_DIR" build_envs || true
 done
 
@@ -2176,6 +1806,7 @@ done
         _hvar="USE_$(echo "$_hbname" | tr '[:lower:]' '[:upper:]')"
         printf '%s="%s"\n' "$_hvar" "${!_hvar:-n}"
     done
+    printf 'N8N_DEV_AI_ASSISTANT="%s"\n' "${N8N_DEV_AI_ASSISTANT:-n}"
     printf '\n# --- Controle de Storage e Topologia de Borda ---\n'
     printf 'STORAGE_MODE="%s"\n'   "${STORAGE_MODE:-local}"
     printf 'USE_S3MINIO="%s"\n'    "${USE_S3MINIO:-n}"
@@ -2306,15 +1937,16 @@ if [ "$EXECUTAR_INSTALL" = "s" ]; then
     cd "${TARGET_DIR}"
     CURRENT_ACTUAL_USER="${SUDO_USER:-$USER}"
     if [ -f "./core/scripts/install.sh" ]; then
-        sudo true; nohup sudo bash -c "export SUDO_USER='${CURRENT_ACTUAL_USER}'; export PREINSTALL_START_TS='${INICIO_TS}'; export PREINSTALL_PAUSE_SEC='${TEMPO_PAUSA_INTERATIVA}'; cd ${TARGET_DIR} && bash ./core/scripts/install.sh" > /dev/null 2>&1 &
+        sudo true; nohup sudo bash -c "export SUDO_USER='${CURRENT_ACTUAL_USER}'; cd ${TARGET_DIR} && bash ./core/scripts/install.sh" > /dev/null 2>&1 &
     else
-        sudo true; nohup sudo bash -c "export SUDO_USER='${CURRENT_ACTUAL_USER}'; export PREINSTALL_START_TS='${INICIO_TS}'; export PREINSTALL_PAUSE_SEC='${TEMPO_PAUSA_INTERATIVA}'; cd ${TARGET_DIR} && bash ./install.sh" > /dev/null 2>&1 &
+        sudo true; nohup sudo bash -c "export SUDO_USER='${CURRENT_ACTUAL_USER}'; cd ${TARGET_DIR} && bash ./install.sh" > /dev/null 2>&1 &
     fi
+    sudo touch /tmp/debug_install.log 2>/dev/null || touch /tmp/debug_install.log 2>/dev/null || true
     sleep 2
     echo -e "\e[32m➜ Deploy disparado com sucesso! Anexando aos logs em tempo real...\e[0m"
     echo -e "\e[36m➜ (Pressione Ctrl+C a qualquer momento para desacoplar a visualização sem interromper a instalação)\e[0m"
     echo "---------------------------------------------------------------------"
-    tail -n 50 -f /tmp/debug_install.log
+    tail -n 50 --retry -f /tmp/debug_install.log 2>/dev/null || tail -n 50 -f /tmp/debug_install.log
 else
     echo "====================================================================="
     echo "📌 Preparação concluída. Instalação pausada pelo operador."

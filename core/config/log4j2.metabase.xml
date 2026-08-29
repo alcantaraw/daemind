@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1} :: %m%n" />
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="WARN">
+      <AppenderRef ref="Console" />
+    </Root>
+    <Logger name="metabase" level="WARN" />
+    <Logger name="metabase.sync" level="OFF" />
+    <Logger name="metabase.driver" level="ERROR" />
+    <Logger name="metabase.plugins" level="ERROR" />
+    <Logger name="metabase.server.middleware.log" level="WARN" />
+    <Logger name="metabase.metabot" level="OFF" />
+    <Logger name="metabase.api.card" level="ERROR" />
+    <Logger name="metabase.models.card" level="ERROR" />
+    <Logger name="example-question-generator" level="OFF" />
+    <Logger name="suggested-prompts-generator" level="OFF" />
+    <Logger name="liquibase" level="ERROR" />
+    <Logger name="org.quartz" level="ERROR" />
+    <Logger name="c3p0" level="ERROR" />
+    <Logger name="com.mchange" level="ERROR" />
+  </Loggers>
+</Configuration>

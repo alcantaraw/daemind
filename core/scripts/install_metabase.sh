@@ -28,6 +28,44 @@ build_structure() {
     local VOL_PATH="$TARGET_DIR/volumes/metabase_data"
     local CURRENT_OWNER=$(stat -c '%u:%g' "$VOL_PATH" 2>/dev/null || echo "")
 
+    # SRE Fix: Garante arquivo de configuração do log4j2 (evita colisão de diretório no Docker bind mount)
+    local LOG4J_FILE="$TARGET_DIR/core/config/log4j2.metabase.xml"
+    if [ -d "$LOG4J_FILE" ]; then
+        sudo rm -rf "$LOG4J_FILE" 2>/dev/null || rm -rf "$LOG4J_FILE" || true
+    fi
+    if [ ! -f "$LOG4J_FILE" ]; then
+        sudo mkdir -p "$TARGET_DIR/core/config" 2>/dev/null || mkdir -p "$TARGET_DIR/core/config" || true
+        cat << 'EOF' | sudo tee "$LOG4J_FILE" > /dev/null
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1} :: %m%n" />
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="WARN">
+      <AppenderRef ref="Console" />
+    </Root>
+    <Logger name="metabase" level="WARN" />
+    <Logger name="metabase.sync" level="OFF" />
+    <Logger name="metabase.driver" level="ERROR" />
+    <Logger name="metabase.plugins" level="ERROR" />
+    <Logger name="metabase.server.middleware.log" level="WARN" />
+    <Logger name="metabase.metabot" level="OFF" />
+    <Logger name="metabase.api.card" level="ERROR" />
+    <Logger name="metabase.models.card" level="ERROR" />
+    <Logger name="example-question-generator" level="OFF" />
+    <Logger name="suggested-prompts-generator" level="OFF" />
+    <Logger name="liquibase" level="ERROR" />
+    <Logger name="org.quartz" level="ERROR" />
+    <Logger name="c3p0" level="ERROR" />
+    <Logger name="com.mchange" level="ERROR" />
+  </Loggers>
+</Configuration>
+EOF
+    fi
+
     if [ -d "$VOL_PATH" ] && [ "$CURRENT_OWNER" = "$TARGET_OWNER" ]; then
         echo "➜ [IDEMPOTÊNCIA METABASE] Estrutura de volumes de metabase_data já alinhada (${TARGET_OWNER}). Preservando I/O."
     else
@@ -252,48 +290,321 @@ provision_user() {
     local PROPERTIES=$(curl -s -m 8 "${MB_URL}/api/session/properties" 2>/dev/null || echo "")
     local SETUP_TOKEN=$(echo "$PROPERTIES" | jq -r '.["setup-token"] // empty' 2>/dev/null || echo "")
 
-    if [ -z "$SETUP_TOKEN" ] || [ "$SETUP_TOKEN" = "null" ]; then
-        # Se não há setup-token, o Metabase já foi provisionado anteriormente (Idempotente)
-        echo "➜ [IDEMPOTÊNCIA METABASE] Metabase já inicializado e com conta administrativa configurada."
-        return 0
+    if [ -n "$SETUP_TOKEN" ] && [ "$SETUP_TOKEN" != "null" ]; then
+        # 2. Executa a criação do administrador e parametrização inicial via REST API
+        local PAYLOAD=$(jq -n \
+            --arg token "$SETUP_TOKEN" \
+            --arg email "$ADMIN_EMAIL" \
+            --arg first "$FIRST_NAME" \
+            --arg last "$LAST_NAME" \
+            --arg pass "$ADMIN_PASS" \
+            --arg site "$SITE_NAME" \
+            '{
+                token: $token,
+                user: {
+                    email: $email,
+                    first_name: $first,
+                    last_name: $last,
+                    password: $pass
+                },
+                prefs: {
+                    site_name: $site,
+                    site_locale: "pt_BR",
+                    allow_tracking: false
+                }
+            }')
+
+        local RESPONSE=$(curl -s -X POST "${MB_URL}/api/setup" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" 2>/dev/null || echo "")
+
+        if echo "$RESPONSE" | grep -qiE '"id"|"session_id"|"success"|true'; then
+            echo "✔ [SUCESSO METABASE] Administrador provisionado com sucesso (${ADMIN_EMAIL})!"
+        else
+            echo "⚠️ [SRE METABASE] Resposta da API de Setup: $(echo "$RESPONSE" | cut -c1-120)"
+        fi
+    else
+        echo "➜ [IDEMPOTÊNCIA METABASE] Metabase já inicializado com conta administrativa."
     fi
 
-    # 2. Executa a criação do administrador e parametrização inicial via REST API
-    local PAYLOAD=$(jq -n \
-        --arg token "$SETUP_TOKEN" \
-        --arg email "$ADMIN_EMAIL" \
-        --arg first "$FIRST_NAME" \
-        --arg last "$LAST_NAME" \
-        --arg pass "$ADMIN_PASS" \
-        --arg site "$SITE_NAME" \
-        '{
-            token: $token,
-            user: {
-                email: $email,
-                first_name: $first,
-                last_name: $last,
-                password: $pass
-            },
-            prefs: {
-                site_name: $site,
-                site_locale: "pt_BR",
-                allow_tracking: false
-            }
-        }')
+    # 3. Auto-vinculação do Data Warehouse (loja_db via PgBouncer)
+    local MB_SESSION=""
+    for attempt in $(seq 1 10); do
+        MB_SESSION=$(curl -s -X POST "${MB_URL}/api/session" \
+            -H "Content-Type: application/json" \
+            -d "{\"username\": \"${ADMIN_EMAIL}\", \"password\": \"${ADMIN_PASS}\"}" 2>/dev/null | jq -r '.id // empty' 2>/dev/null || echo "")
+        [ -n "$MB_SESSION" ] && [ "$MB_SESSION" != "null" ] && break
+        sleep 2
+    done
 
-    local RESPONSE=$(curl -s -X POST "${MB_URL}/api/setup" \
-        -H "Content-Type: application/json" \
-        -d "$PAYLOAD" 2>/dev/null || echo "")
+    if [ -n "$MB_SESSION" ]; then
+        local HAS_DB=$(curl -s -X GET "${MB_URL}/api/database" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '(.data // .)? | .[]? | select(.name == "Data Warehouse Soberano") | .id' 2>/dev/null || echo "")
+        if [ -z "$HAS_DB" ]; then
+            echo "➜ [SRE METABASE] Conectando Data Warehouse Soberano (${PREFIX}_db via PgBouncer)..."
+            local DB_RES
+            DB_RES=$(curl -s -X POST "${MB_URL}/api/database" \
+                -H "X-Metabase-Session: $MB_SESSION" \
+                -H "Content-Type: application/json" \
+                -d "{
+                    \"name\": \"Data Warehouse Soberano\",
+                    \"engine\": \"postgres\",
+                    \"details\": {
+                        \"host\": \"pgbouncer\",
+                        \"port\": 6432,
+                        \"dbname\": \"${PREFIX}_db\",
+                        \"user\": \"${DB_USER:-admin_db}\",
+                        \"password\": \"${DB_PASSWORD}\",
+                        \"ssl\": false,
+                        \"let-user-control-scheduling\": false
+                    },
+                    \"is_full_sync\": true
+                }" 2>/dev/null || echo "")
+            HAS_DB=$(echo "$DB_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
+            echo "✔ [AUTO-INTEGRAÇÃO METABASE] Data Warehouse Soberano integrado ao Metabase com sucesso!"
+        else
+            echo "➜ [IDEMPOTÊNCIA METABASE] Data Warehouse Soberano já conectado ao Metabase."
+        fi
 
-    if echo "$RESPONSE" | grep -qiE '"id"|"session_id"|"success"|true'; then
-        echo "✔ [SUCESSO METABASE] Administrador provisionado com sucesso (${ADMIN_EMAIL})!"
-    else
-        echo "⚠️ [SRE METABASE] Resposta da API de Setup: $(echo "$RESPONSE" | cut -c1-120)"
+        # 4. Injeção Automática de Dashboards & Cards Analíticos Omnichannel 360° (Zero-Touch)
+        if [ -n "$HAS_DB" ] && [ "$HAS_DB" != "null" ]; then
+            provision_dashboards "$MB_URL" "$MB_SESSION" "$HAS_DB"
+        fi
+
+        # 5. Auto-configuração do Metabot AI Gateway (LiteLLM) no Metabase (Zero-Touch)
+        echo "➜ [SRE METABASE] Configurando Metabot AI via LiteLLM Gateway..."
+        local LLM_KEY="${LITELLM_MASTER_KEY:-sk-admin-${DB_PASSWORD}}"
+        
+        # 5.1 Injeção direta no PostgreSQL interno do Metabase (Garante persistência imediata)
+        sudo docker exec -e PGPASSWORD="${DB_PASSWORD}" "${PREFIX}_postgres" psql -U "${DB_USER:-admin_db}" -d "metabase_db" -c "
+            INSERT INTO setting (key, value) VALUES
+                ('llm-enabled', 'true'),
+                ('llm-metabot-provider', 'openai/gpt-4.1'),
+                ('llm-openai-model', 'gpt-4.1'),
+                ('llm-openai-api-base-url', 'http://litellm:4000'),
+                ('llm-openai-api-key', '${LLM_KEY}')
+            ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+        " >/dev/null 2>&1 || true
+
+        # 5.2 Notificação via REST API
+        curl -s -X PUT "${MB_URL}/api/setting/llm-enabled" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": true}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-metabot-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai/gpt-4.1"}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-model" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "gpt-4.1"}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base-url" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000"}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${LLM_KEY}\"}" >/dev/null 2>&1 || true
     fi
 }
 
+provision_dashboards() {
+    local MB_URL="$1"
+    local MB_SESSION="$2"
+    local DB_ID="$3"
+
+    echo "➜ [SRE METABASE] Verificando Cockpit Executivo Omnichannel 360°..."
+    local DASH_ID
+    DASH_ID=$(curl -s -X GET "${MB_URL}/api/dashboard" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '.[] | select(.name == "Cockpit Executivo Omnichannel 360°") | .id' 2>/dev/null || echo "")
+
+    if [ -n "$DASH_ID" ] && [ "$DASH_ID" != "null" ]; then
+        echo "➜ [SRE METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' detectado (ID: ${DASH_ID}). Sincronizando cards, layout e gráficos atualizados..."
+        local PIN_NOW=$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')
+        curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}" \
+            -H "X-Metabase-Session: $MB_SESSION" \
+            -H "Content-Type: application/json" \
+            -d "{\"pinned_at\": \"${PIN_NOW}\", \"collection_position\": 1}" >/dev/null 2>&1 || true
+    else
+        echo "  ↳ Criando Dashboard 'Cockpit Executivo Omnichannel 360°'..."
+        local PIN_NOW=$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')
+        local CREATE_DASH_RES
+        CREATE_DASH_RES=$(curl -s -X POST "${MB_URL}/api/dashboard" \
+            -H "X-Metabase-Session: $MB_SESSION" \
+            -H "Content-Type: application/json" \
+            -d "{
+                \"name\": \"Cockpit Executivo Omnichannel 360°\",
+                \"description\": \"Painel de Inteligência de Negócios, Vendas, Serviços B2B, Performance de Ads, Estoque Crítico e SDRs em Tempo Real.\",
+                \"collection_position\": 1,
+                \"pinned_at\": \"${PIN_NOW}\"
+            }" 2>/dev/null || echo "")
+        DASH_ID=$(echo "$CREATE_DASH_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
+    fi
+
+    if [ -z "$DASH_ID" ] || [ "$DASH_ID" = "null" ]; then
+        echo "⚠️ [SRE WARN METABASE] Não foi possível criar ou obter o Dashboard via API. Prosseguindo..."
+        return 0
+    fi
+
+    echo "  ↳ Injetando Cards Analíticos Nativos no Cockpit Executivo..."
+    local DASH_CARDS_PAYLOAD="[]"
+    local ROW_CURSOR=0
+    local CARD_IDX=0
+
+    # Layout 24 Colunas (Metabase 0.50+ / 50.x):
+    # Topo: 1 Card de Largura Total (24 cols) para o Gráfico Temporal Principal (DRE)
+    # Demais: Cards Lado a Lado (12 cols cada) em 2 colunas perfeitas
+    local CURSOR_COL=0
+    local ROW_CURSOR=0
+    local ROW_MAX_H=0
+
+    create_card() {
+        local NAME="$1"
+        local DISPLAY="$2"
+        local SQL_QUERY="$3"
+        local SIZE_X="${4:-12}"
+        local SIZE_Y="${5:-7}"
+        local VIZ_SETTINGS="$6"
+        if [ -z "$VIZ_SETTINGS" ] || [ "$VIZ_SETTINGS" = "null" ]; then
+            VIZ_SETTINGS="{}"
+        fi
+
+        local CARD_PAYLOAD
+        CARD_PAYLOAD=$(echo "$VIZ_SETTINGS" | jq \
+            --arg name "$NAME" \
+            --arg display "$DISPLAY" \
+            --arg query "$SQL_QUERY" \
+            --argjson db "$DB_ID" \
+            '{
+                name: $name,
+                display: $display,
+                dataset_query: {
+                    type: "native",
+                    native: {
+                        query: $query
+                    },
+                    database: $db
+                },
+                visualization_settings: .
+            }' 2>/dev/null || echo "{}")
+
+        local CARD_RES
+        CARD_RES=$(curl -s -X POST "${MB_URL}/api/card" \
+            -H "X-Metabase-Session: $MB_SESSION" \
+            -H "Content-Type: application/json" \
+            -d "$CARD_PAYLOAD" 2>/dev/null || echo "")
+        local CARD_ID
+        CARD_ID=$(echo "$CARD_RES" | jq -r '.id // empty' 2>/dev/null || echo "")
+
+        if [ -n "$CARD_ID" ] && [ "$CARD_ID" != "null" ]; then
+            CARD_IDX=$((CARD_IDX + 1))
+
+            # Se o card não couber na linha atual (24 colunas), quebra para a próxima
+            if [ $((CURSOR_COL + SIZE_X)) -gt 24 ]; then
+                ROW_CURSOR=$((ROW_CURSOR + ROW_MAX_H))
+                CURSOR_COL=0
+                ROW_MAX_H=0
+            fi
+
+            local POS_COL="$CURSOR_COL"
+            local POS_ROW="$ROW_CURSOR"
+
+            CURSOR_COL=$((CURSOR_COL + SIZE_X))
+            if [ "$SIZE_Y" -gt "$ROW_MAX_H" ]; then
+                ROW_MAX_H="$SIZE_Y"
+            fi
+
+            local TEMP_ID="-$CARD_IDX"
+            local CARD_ENTRY
+            CARD_ENTRY=$(echo "$VIZ_SETTINGS" | jq \
+                --argjson tempId "$TEMP_ID" \
+                --argjson cardId "$CARD_ID" \
+                --argjson row "$POS_ROW" \
+                --argjson col "$POS_COL" \
+                --argjson sx "$SIZE_X" \
+                --argjson sy "$SIZE_Y" \
+                '{
+                    id: $tempId,
+                    card_id: $cardId,
+                    row: $row,
+                    col: $col,
+                    size_x: $sx,
+                    size_y: $sy,
+                    visualization_settings: .
+                }' 2>/dev/null || echo "{}")
+
+            DASH_CARDS_PAYLOAD=$(echo "$DASH_CARDS_PAYLOAD" | jq --argjson entry "$CARD_ENTRY" '. += [$entry]')
+        fi
+    }
+
+    # 1. DRE & Lucro Líquido Real Diário (Full Width Topo - Gráfico de Linhas 24 cols)
+    create_card \
+        "📈 Faturamento vs. Lucro Líquido Real (DRE Diário)" \
+        "line" \
+        "SELECT data_referencia, faturamento_bruto, total_cmv, lucro_liquido_dia, margem_liquida_perc, roas_dia FROM public.vw_dre_diario_consolidado ORDER BY data_referencia DESC LIMIT 30;" \
+        24 8 \
+        '{"graph.dimensions": ["data_referencia"], "graph.metrics": ["faturamento_bruto", "lucro_liquido_dia", "total_cmv"]}'
+
+    # 2. Performance de Ads: ROAS Real vs Pixel (Gráfico de Barras Agrupadas - 12 cols)
+    create_card \
+        "📊 Comparativo de ROAS: Caixa Real vs Pixel" \
+        "bar" \
+        "SELECT data_referencia, plataforma_ads, roas_real_faturado, roas_pixel_estimado FROM public.vw_correlacao_ads_vendas_reais ORDER BY data_referencia DESC LIMIT 15;" \
+        12 7 \
+        '{"graph.dimensions": ["data_referencia", "plataforma_ads"], "graph.metrics": ["roas_real_faturado", "roas_pixel_estimado"]}'
+
+    # 3. Evolução de MRR & ARR B2B (Gráfico de Barras/Área - 12 cols)
+    create_card \
+        "💼 Crescimento de MRR & ARR B2B Recorrente" \
+        "bar" \
+        "SELECT mes_ano, novo_mrr_adicionado, mrr_perdido_churn, mrr_total_ativo_mes FROM public.vw_kpi_servicos_mrr_arr ORDER BY mes_referencia DESC LIMIT 12;" \
+        12 7 \
+        '{"graph.dimensions": ["mes_ano"], "graph.metrics": ["novo_mrr_adicionado", "mrr_total_ativo_mes"]}'
+
+    # 4. Recuperação de Carrinhos & WhatsApp (Gráfico de Rosca/Pizza - 12 cols)
+    create_card \
+        "💬 Distribuição de Valor em Risco por Tipo de Pendência" \
+        "pie" \
+        "SELECT tipo_pendencia, SUM(valor_total_em_risco) AS valor_em_risco FROM public.vw_kpi_recuperacao_vendas GROUP BY tipo_pendencia;" \
+        12 7 \
+        '{"pie.dimension": "tipo_pendencia", "pie.metric": "valor_em_risco"}'
+
+    # 5. Produtividade & Vendas por Atendente Chatwoot (Ranking em Barras Horizontais - 12 cols)
+    create_card \
+        "👥 Faturamento Convertido por Atendente Comercial" \
+        "bar" \
+        "SELECT atendente_nome, faturamento_gerado_atendente FROM public.vw_performance_comercial_atendentes WHERE faturamento_gerado_atendente > 0 ORDER BY faturamento_gerado_atendente DESC;" \
+        12 7 \
+        '{"graph.dimensions": ["atendente_nome"], "graph.metrics": ["faturamento_gerado_atendente"]}'
+
+    # 6. Radar de Oportunidades Cross-Sell & Upsell (Tabela Analítica - 12 cols)
+    create_card \
+        "🎯 Radar de Oportunidades Cross-Sell & Upsell 360°" \
+        "table" \
+        "SELECT cliente_nome, cliente_whatsapp, segmento_cliente, ltv_total_consolidado, share_produtos_perc, share_servicos_perc, oportunidade_cross_sell FROM public.vw_cliente_visao_360_hibrida ORDER BY ltv_total_consolidado DESC LIMIT 50;" \
+        12 7 \
+        '{}'
+
+    # 7. Alerta de Estoque Crítico & Ruptura de Insumos (Tabela Operacional - 12 cols)
+    create_card \
+        "⚠️ Estoque Crítico & Ruptura de Insumos de Expedição" \
+        "table" \
+        "SELECT tipo_item, item_nome, saldo_atual, nivel_minimo, deficit_reposicao, status_alerta, setor_responsavel FROM public.vw_estoque_critico ORDER BY deficit_reposicao DESC;" \
+        12 7 \
+        '{}'
+
+    # Vincula todos os cards ao Dashboard via PUT
+    curl -s -X PUT "${MB_URL}/api/dashboard/${DASH_ID}/cards" \
+        -H "X-Metabase-Session: $MB_SESSION" \
+        -H "Content-Type: application/json" \
+        -d "{\"cards\": ${DASH_CARDS_PAYLOAD}}" >/dev/null 2>&1 || true
+
+    # Configura Homepage oficial e IA
+    curl -s -X PUT "${MB_URL}/api/setting/custom-homepage" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": true}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/custom-homepage-dashboard" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": ${DASH_ID}}" >/dev/null 2>&1 || true
+    
+    # Suprime "Primeiros Passos", Links de Tutoriais e Banco de Exemplos
+    curl -s -X PUT "${MB_URL}/api/setting/show-metabase-links" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": false}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/help-link" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"none\"}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/enable-sample-database" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": false}" >/dev/null 2>&1 || true
+    curl -s -X PUT "${MB_URL}/api/setting/has-user-setup" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": true}" >/dev/null 2>&1 || true
+
+    # Remove o banco de exemplos (Sample Database) se existir para limpar o menu
+    local SAMPLE_DB_ID=$(curl -s -X GET "${MB_URL}/api/database" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '(.data // .)? | .[]? | select(.is_sample == true or .name == "Sample Database" or .name == "Exemplo de banco de dados" or .name == "Examples") | .id' 2>/dev/null || echo "")
+    if [ -n "$SAMPLE_DB_ID" ] && [ "$SAMPLE_DB_ID" != "null" ]; then
+        curl -s -X DELETE "${MB_URL}/api/database/${SAMPLE_DB_ID}" -H "X-Metabase-Session: $MB_SESSION" >/dev/null 2>&1 || true
+    fi
+
+    echo "✔ [SUCESSO METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' provisionado e fixado na Homepage!"
+}
+
 render_forensic_report() {
-    local ts_domain="${1:-localhost}"
+    local ts_domain="${1:-${TS_DOMAIN:-localhost}}"
     local MB_PORT="${HOST_METABASE_PORT:-3030}"
     echo "  📊 Metabase Business Intelligence"
     echo "    ↳ Painel Web:                      http://${ts_domain}:${MB_PORT}"
@@ -320,14 +631,14 @@ build_envs() {
         cpu_metabase="2.0"
     fi
 
-    local mem_metabase="1024M"
+    local mem_metabase="2048M"
     local res_metabase="256M"
 
     if [ "$ram_mb" -gt 24576 ]; then
         mem_metabase="4096M"
         res_metabase="1024M"
     elif [ "$ram_mb" -gt 12288 ]; then
-        mem_metabase="2048M"
+        mem_metabase="3072M"
         res_metabase="512M"
     fi
 

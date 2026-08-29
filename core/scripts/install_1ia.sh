@@ -13,6 +13,11 @@ if [ -f "$ENV_FILE" ]; then
     set -a; source "$ENV_FILE" 2>/dev/null || true; set +a
 fi
 
+PREFIXO_CONTAINER="${PREFIXO_CONTAINER:-${PREFIX_NAME:-${PREFIX:-${COMPOSE_PROJECT_NAME}}}}"
+if [ -z "$PREFIXO_CONTAINER" ] && command -v docker >/dev/null 2>&1; then
+    PREFIXO_CONTAINER=$(docker ps -a --filter "name=_litellm" --format '{{.Names}}' 2>/dev/null | head -n 1 | sed 's/_litellm$//' || true)
+fi
+
 # ===============================================================================
 # 0. collect_wizard_inputs (CLI) & collect_wizard_inputs_tui (TUI) & build_envs
 # ===============================================================================
@@ -280,33 +285,89 @@ sync_models() {
 
     echo "=== [SRE COMPATIBILITY ENGINE AI GATEWAY] Iniciando Varredura e Matchmaking ==="
 
-    # 1. EXTRAÇÃO ATÔMICA (Descoberta do modelo do Postiz/Chatwoot)
-    local POSTIZ_MODEL=""
-    if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_postiz 2>/dev/null)" = "true" ]; then
-        POSTIZ_MODEL=$(docker exec -i ${PREFIXO_CONTAINER}_postiz grep -oE "model: *['\"]gpt-[0-9a-zA-Z.-]+['\"]" /app/libraries/nestjs-libraries/src/openai/openai.service.ts 2>/dev/null | head -n 1 | grep -oE "gpt-[0-9a-zA-Z.-]+" || true)
-    fi
+    # 1. VARREDURA DINÂMICA DE MODELOS DAS APLICAÇÕES (Postiz, Chatwoot, Metabase, n8n, Evolution)
+    declare -A DETECTED_ALIASES_MAP
+    local APP_DETECTED_MODELS=()
 
-    [ -z "$POSTIZ_MODEL" ] && POSTIZ_MODEL="gpt-4.1"
-    echo "  ↳ Modelo Postiz detectado em runtime: $POSTIZ_MODEL"
-
-    if [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_chatwoot 2>/dev/null)" = "healthy" ]; then
-        local CW_MODEL_ATUAL
-        CW_MODEL_ATUAL=$(docker exec -i ${PREFIXO_CONTAINER}_chatwoot bundle exec rails runner "
-          c = InstallationConfig.find_by(name: 'OPENAI_MODEL')
-          print c.value if c
-        " 2>/dev/null || true)
-
-        if [ "$CW_MODEL_ATUAL" = "$POSTIZ_MODEL" ]; then
-            echo "  ↳ [IDEMPOTÊNCIA AI GATEWAY] Modelo Chatwoot CRM já configurado ($POSTIZ_MODEL)."
-        else
-            echo "  ↳ [CONFIGURANDO AI GATEWAY] Atualizando modelo no Chatwoot CRM -> $POSTIZ_MODEL..."
-            docker exec -i ${PREFIXO_CONTAINER}_chatwoot bundle exec rails runner "
-              c = InstallationConfig.find_or_initialize_by(name: 'OPENAI_MODEL')
-              c.value = '$POSTIZ_MODEL'
-              c.save!
-            " > /dev/null 2>&1 || true
+    add_app_model() {
+        local m="$1"
+        m=$(echo "$m" | tr -d '"'\''\r\n ' || true)
+        if [ -n "$m" ] && [ -z "${DETECTED_ALIASES_MAP[$m]:-}" ]; then
+            DETECTED_ALIASES_MAP["$m"]=1
+            APP_DETECTED_MODELS+=("$m")
         fi
+    }
+
+    echo "➜ [SRE AI DISCOVERY] Executando varredura dinâmica de modelos em uso pelas aplicações..."
+
+    # 1.1 Varredura Postiz (Serviço NestJS + Agent Mastra AI)
+    if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_postiz 2>/dev/null)" = "true" ]; then
+        local POSTIZ_MODELS
+        POSTIZ_MODELS=$(docker exec -i ${PREFIXO_CONTAINER}_postiz grep -roE "(model|modelId): *['\"][a-zA-Z0-9_./-]+['\"]|openai\(['\"][a-zA-Z0-9_./-]+['\"]\)" /app/libraries /app/node_modules/@ag-ui /app/node_modules/@mastra 2>/dev/null | grep -oE "['\"][a-zA-Z0-9_./-]+['\"]" | tr -d '"'\'' ' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' | sort -u || true)
+        for pm in $POSTIZ_MODELS; do
+            add_app_model "$pm"
+        done
     fi
+
+    # 1.2 Varredura Dinâmica Chatwoot CRM (Configurações de Banco e llm.yml / llm_constants.rb)
+    if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_chatwoot 2>/dev/null)" = "true" ]; then
+        local CW_DYNAMIC_MODELS
+        # Consulta direta no banco PostgreSQL do Chatwoot (installation_configs)
+        CW_DYNAMIC_MODELS=$(docker exec -i ${PREFIXO_CONTAINER}_postgres psql -U "${DB_USER:-admin_db}" -d "chatwoot_db" -t -A -c "
+            SELECT serialized_value FROM installation_configs WHERE name ILIKE '%MODEL%' OR name ILIKE '%OPENAI%' OR name ILIKE '%CAPTAIN%';
+        " 2>/dev/null | grep -oE "['\"][a-zA-Z0-9_./-]+['\"]" | tr -d '"'\'' ' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' || true)
+
+        # Varredura direta no arquivo de catálogo nativo do Chatwoot (config/llm.yml e lib/llm_constants.rb)
+        local CW_FILE_MODELS
+        CW_FILE_MODELS=$(docker exec -i ${PREFIXO_CONTAINER}_chatwoot sh -c "cat /app/config/llm.yml /app/lib/llm_constants.rb 2>/dev/null" | grep -oE "[a-zA-Z0-9_.-]+:[0-9a-zA-Z_.-]*|DEFAULT_MODEL *= *['\"][a-zA-Z0-9_./-]+['\"]|models: *\[.*\]|default: *[a-zA-Z0-9_./-]+" | grep -oE "gpt-[a-zA-Z0-9_./-]+|claude-[a-zA-Z0-9_./-]+|gemini-[a-zA-Z0-9_./-]+" | sort -u || true)
+
+        for cwm in $CW_DYNAMIC_MODELS $CW_FILE_MODELS; do
+            [ -n "$cwm" ] && add_app_model "$cwm"
+        done
+    fi
+
+    # 1.3 Varredura Metabase BI (Catálogo Nativo e Configurações Ativas)
+    if [ "$(docker inspect -f '{{.State.Status}}' ${PREFIXO_CONTAINER}_metabase 2>/dev/null)" = "running" ] || [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_metabase 2>/dev/null)" = "healthy" ]; then
+        local MB_DISCOVERED=""
+        
+        # 1.3.1 Extração dinâmica de todos os modelos homologados no schema de settings do Metabase
+        local MB_SCHEMA_MODELS
+        MB_SCHEMA_MODELS=$(curl -s "http://127.0.0.1:3030/api/setting" 2>/dev/null | grep -oE "['\"][a-zA-Z0-9_./-]+['\"]" | tr -d '"'\'' ' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' | sort -u || true)
+        
+        # 1.3.2 Leitura das variáveis de ambiente ativas do container Metabase
+        local MB_ENV_MODELS
+        MB_ENV_MODELS=$(docker exec -i "${PREFIXO_CONTAINER}_metabase" env 2>/dev/null | grep -iE 'MB_LLM_|MB_OPENAI_' | cut -d= -f2- | tr -d '"\r' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' || true)
+        
+        # 1.3.3 Leitura direta na tabela setting do PostgreSQL metabase_db
+        local MB_DB_MODELS=""
+        if [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_postgres 2>/dev/null)" = "healthy" ]; then
+            MB_DB_MODELS=$(docker exec -i "${PREFIXO_CONTAINER}_postgres" psql -U "${DB_USER:-admin_db}" -d "metabase_db" -t -A -c "
+                SELECT value FROM setting WHERE key LIKE '%llm%' OR key LIKE '%openai%' OR key LIKE '%metabot%';
+            " 2>/dev/null | grep -oE "[a-zA-Z0-9_./-]+" | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' | tr -d '"\r' || true)
+        fi
+
+        for mm in $MB_SCHEMA_MODELS $MB_ENV_MODELS $MB_DB_MODELS; do
+            [ -z "$mm" ] && continue
+            # Registra o modelo exato (ex: openai/gpt-5.4, claude-opus-4-5-20251101, gpt-4.1)
+            add_app_model "$mm"
+            # Registra a versão sem o prefixo do provedor (ex: openai/gpt-5.4 -> gpt-5.4)
+            local mm_clean
+            mm_clean=$(echo "$mm" | sed -E 's/^(openai|anthropic|azure|mistral|openrouter)\///' || echo "$mm")
+            [ -n "$mm_clean" ] && add_app_model "$mm_clean"
+        done
+    fi
+
+    # 1.4 Varredura n8n AI Assistant
+    if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_n8n 2>/dev/null)" = "true" ]; then
+        local N8N_AI_M
+        N8N_AI_M=$(docker exec -i ${PREFIXO_CONTAINER}_n8n env 2>/dev/null | grep -E '^N8N_INSTANCE_AI_MODEL=' | cut -d= -f2- | tr -d '"\r' || true)
+        [ -n "$N8N_AI_M" ] && add_app_model "$N8N_AI_M"
+    fi
+
+    # 1.5 Fallback universal garantido
+    add_app_model "openrouter/free"
+
+    echo "  ↳ Total de aliases de compatibilidade ativos: ${#APP_DETECTED_MODELS[@]} [ ${APP_DETECTED_MODELS[*]} ]"
 
     # 2. INTEGRAÇÃO ATÔMICA DOS CATÁLOGOS (Busca os Modelos nas APIs)
     local PAYLOADS_TOTAIS="[]"
@@ -460,25 +521,61 @@ sync_models() {
             (.id | test("content-safety|guardrail|lyria|embedding|moderation") | not)
           ))
         | map(. + {
-            clean_id: (.id | sub(":free$"; "")),
             family: (.id | sub(":free$"; "") | split("-")[0])
           })
         | sort_by(.created) | reverse
         | map({
-            ID: .clean_id,
+            ID: .id,
             Family: .family,
             Provider: "openrouter",
             Category: (["chat"] + (if (.architecture.input_modalities | type == "array") then .architecture.input_modalities else [] end) + (if (.supported_parameters | type == "array" and contains(["tools"])) then ["tools"] else [] end) + (if (.supported_parameters | type == "array" and contains(["reasoning"])) then ["reasoning"] else [] end)) | map(if . == "text" then empty else . end) | unique | join(", "),
             Description: (.description // "Modelo agregado via OpenRouter"),
-            Free: (.pricing.prompt == "0" and .pricing.completion == "0"),
+            Free: true,
             Created: .created,
             Alias: true
         })' || echo "[]")
         append_payloads "$PAYLOAD_OPENROUTER"
     fi
 
-    # 3. ROTEADOR INTELIGENTE (MATCHMAKING DINÂMICO & À PROVA DE FUTURO)
-    local TARGET_MODEL="openrouter/free"
+    # 2.6 OLLAMA (Modelos Locais On-Premise)
+    local PAYLOAD_OLLAMA="[]"
+    local OLLAMA_URL="http://${PREFIXO_CONTAINER}_ollama:11434"
+    if [[ "${USE_OLLAMA:-s}" =~ ^[Ss]$ ]] && [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_ollama 2>/dev/null)" = "true" ]; then
+        PAYLOAD_OLLAMA=$(curl -s --max-time 3 "${OLLAMA_URL}/api/tags" 2>>"$LOG_ERR" | jq -c --arg base "$OLLAMA_URL" '
+        .models // []
+        | map({
+            ID: .name,
+            Family: (.details.family // "ollama"),
+            Provider: "ollama",
+            Category: (["local", "chat"] + (if (.name | test("vision|llava|bakllava|moondream")) then ["vision", "image"] else [] end)) | unique | join(", "),
+            Description: "Modelo Local Ollama \(.name) (\(.details.parameter_size // "Local") - \(.details.quantization_level // "GGUF"))",
+            Free: true,
+            Created: 0,
+            Alias: true,
+            ApiBase: $base
+        })' 2>/dev/null || echo "[]")
+        append_payloads "$PAYLOAD_OLLAMA"
+    fi
+
+    # 3. SRE HEALTH PROBER & RANKING DE FALLBACK (Zero-Hardcode & Auto-Healing)
+    echo "➜ [SRE HEALTH PROBER] Testando e ranqueando a saúde dos modelos candidatos em tempo real..."
+    local TARGET_MODEL=""
+    local HEALTHY_FALLBACKS=()
+
+    probe_openrouter_candidate() {
+        local m_id="$1"
+        local response
+        response=$(curl -s -m 5 "https://openrouter.ai/api/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENROUTER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\": \"${m_id}\", \"messages\": [{\"role\": \"user\", \"content\": \"1\"}], \"max_tokens\": 1}" 2>/dev/null || echo "")
+        
+        if echo "$response" | grep -q '"choices"'; then
+            return 0
+        else
+            return 1
+        fi
+    }
 
     if [ -n "${ANTHROPIC_API_KEY:-}" ] && [ "$PAYLOAD_ANTHROPIC" != "[]" ]; then
         local EXTRACTED
@@ -500,7 +597,58 @@ sync_models() {
         [ -n "$EXTRACTED" ] && TARGET_MODEL="gemini/${EXTRACTED}"
 
     elif [ -n "${OPENROUTER_API_KEY:-}" ]; then
-        TARGET_MODEL="openrouter/free"
+        local CANDIDATES
+        CANDIDATES=$(echo "$PAYLOADS_TOTAIS" | jq -r '[.[] | select(.Provider == "openrouter")] | .[].ID')
+        local TMP_PROBE_DIR
+        TMP_PROBE_DIR=$(mktemp -d)
+
+        for cand in $CANDIDATES; do
+            (
+                local PROBE_ID="$cand"
+                local START_TS
+                START_TS=$(date +%s%N 2>/dev/null | cut -b1-13)
+                [ -z "$START_TS" ] && START_TS=$(date +%s)
+                local RESP
+                RESP=$(curl -s -m 5 "https://openrouter.ai/api/v1/chat/completions" \
+                    -H "Authorization: Bearer ${OPENROUTER_API_KEY}" \
+                    -H "Content-Type: application/json" \
+                    -d "{\"model\": \"${PROBE_ID}\", \"messages\": [{\"role\": \"user\", \"content\": \"1\"}], \"max_tokens\": 1}" 2>/dev/null || echo "")
+                local END_TS
+                END_TS=$(date +%s%N 2>/dev/null | cut -b1-13)
+                [ -z "$END_TS" ] && END_TS=$(date +%s)
+                local LATENCY=$(( END_TS - START_TS ))
+                [ "$LATENCY" -lt 0 ] && LATENCY=0
+
+                if echo "$RESP" | grep -q '"choices"'; then
+                    local clean_file
+                    clean_file=$(echo "$cand" | tr -c 'a-zA-Z0-9' '_')
+                    printf "%06d:%s\n" "$LATENCY" "$cand" > "${TMP_PROBE_DIR}/${clean_file}.ok"
+                fi
+            ) &
+        done
+        wait
+
+        if ls "${TMP_PROBE_DIR}"/*.ok >/dev/null 2>&1; then
+            while IFS=: read -r lat_raw c_name || [ -n "$lat_raw" ]; do
+                [ -z "$c_name" ] && continue
+                local lat
+                lat=$(echo "$lat_raw" | sed 's/^0*//')
+                [ -z "$lat" ] && lat=0
+                echo "  ↳ Modelo saudável verificado: $c_name (${lat}ms)"
+                [ -z "$TARGET_MODEL" ] && TARGET_MODEL="$c_name"
+                HEALTHY_FALLBACKS+=("$c_name")
+            done < <(sort "${TMP_PROBE_DIR}"/*.ok 2>/dev/null)
+        fi
+        rm -rf "$TMP_PROBE_DIR"
+
+        # SRE PURGE: Remove do catálogo global todos os modelos que não responderam ao probe
+        if [ "${#HEALTHY_FALLBACKS[@]}" -gt 0 ]; then
+            local HEALTHY_IDS_JSON
+            HEALTHY_IDS_JSON=$(printf '%s\n' "${HEALTHY_FALLBACKS[@]}" | jq -R . | jq -s .)
+            PAYLOADS_TOTAIS=$(echo "$PAYLOADS_TOTAIS" | jq -c --argjson ok "$HEALTHY_IDS_JSON" '
+                map(select((.Provider != "openrouter") or (.ID as $id | $ok | contains([$id]))))
+            ')
+        fi
 
     elif [ -n "${GEMINI_API_KEY:-}" ] && [ "$PAYLOAD_GOOGLE" != "[]" ]; then
         local EXTRACTED
@@ -516,7 +664,22 @@ sync_models() {
         [ -n "$EXTRACTED" ] && TARGET_MODEL="deepseek/${EXTRACTED}"
     fi
 
-    echo "  ↳ Target Model resolvido dinamicamente: $TARGET_MODEL"
+    [ -z "$TARGET_MODEL" ] && TARGET_MODEL="openrouter/free"
+    echo "  ↳ Target Model eleito por auditoria de saúde: $TARGET_MODEL"
+    echo "  ↳ Fallback Ranking: ${HEALTHY_FALLBACKS[*]:-openrouter/free}"
+
+    # Resolve o target visual completo (incluindo (free) ou (local) se aplicável)
+    local TARGET_VISUAL
+    TARGET_VISUAL=$(echo "$PAYLOADS_TOTAIS" | jq -r --arg tm "$TARGET_MODEL" '
+        def litellm_provider: if .Provider == "google" then "gemini" else .Provider end;
+        def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
+        [.[] | select(full_id == $tm or .ID == $tm)] | first | 
+        if . == null then $tm else
+          "\(.ID)\(if .Provider == "ollama" then " (local)" elif (.Free and (.ID | test(":free$") | not)) then " (free)" else "" end)"
+        end
+    ' 2>/dev/null || echo "$TARGET_MODEL")
+
+    [ -z "$TARGET_VISUAL" ] && TARGET_VISUAL="$TARGET_MODEL"
 
     # 4. FORJA DO YAML (Gravação Definitiva no LiteLLM)
     local TOTAL
@@ -528,24 +691,40 @@ sync_models() {
         local TMP_CONFIG
         TMP_CONFIG=$(mktemp)
 
+        # Constrói array JSON com o ranking de fallbacks saudáveis
+        local FALLBACK_JSON
+        FALLBACK_JSON=$(printf '%s\n' "${HEALTHY_FALLBACKS[@]}" | jq -R . 2>/dev/null | jq -s --arg tm "$TARGET_VISUAL" '([$tm] + .) | unique | map(select(length > 0))' 2>/dev/null || echo "[\"$TARGET_VISUAL\"]")
+        [ "$FALLBACK_JSON" = "[]" ] && FALLBACK_JSON="[\"$TARGET_VISUAL\"]"
+
+        # Gera as entradas do model_alias_map dinamicamente para cada modelo descoberto
+        local MODEL_ALIASES_YAML=""
+        for app_m in "${APP_DETECTED_MODELS[@]}"; do
+            [ -z "$app_m" ] && continue
+            MODEL_ALIASES_YAML="${MODEL_ALIASES_YAML}    \"${app_m}\": \"${TARGET_VISUAL}\"\n"
+        done
+
         cat << EO_BASE > "$TMP_CONFIG"
 general_settings:
   store_model_in_db: false
-  model_alias_map:
-    "$POSTIZ_MODEL": "$TARGET_MODEL"
 
 litellm_settings:
   drop_params: true
   turn_off_message_logging: true
+  suppress_debug_info: true
   set_verbose: false
+  default_max_tokens: 4096
+  max_output_tokens: 4096
   webhook_url: "http://${PREFIXO_CONTAINER}_n8n:5678/webhook/litellm-falhas"
   failure_callback: ["webhook"]
- 
+  model_alias_map:
+$(printf "%b" "$MODEL_ALIASES_YAML")
 router_settings:
   num_retries: 2
   timeout: 30
+  model_alias_map:
+$(printf "%b" "$MODEL_ALIASES_YAML")
   fallbacks:
-    - {"*": ["openrouter/free"]}
+    - {"*": $FALLBACK_JSON}
 
 model_list:
 EO_BASE
@@ -556,24 +735,20 @@ EO_BASE
           def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
           def provider_weight:
             if full_id == $target then "0_target"
-            elif .Provider == "anthropic" then "1_anthropic"
-            elif .Provider == "deepseek" then "2_deepseek"
-            elif .Provider == "google" or .Provider == "gemini" then "3_gemini"
-            elif .Provider == "openai" then "4_openai"
-            else "5_openrouter" end;
+            elif .Provider == "ollama" then "1_ollama"
+            elif .Provider == "anthropic" then "2_anthropic"
+            elif .Provider == "deepseek" then "3_deepseek"
+            elif .Provider == "google" or .Provider == "gemini" then "4_gemini"
+            elif .Provider == "openai" then "5_openai"
+            else "6_openrouter" end;
           sort_by(provider_weight, .ID) |
           .[] |
-          def provider_label:
-            if .Provider == "google" or .Provider == "gemini" then "Gemini"
-            elif .Provider == "openrouter" then "OpenRouter"
-            elif .Provider == "deepseek" then "DeepSeek"
-            elif .Provider == "openai" then "OpenAI"
-            elif .Provider == "anthropic" then "Anthropic"
-            else (.Provider | ascii_upcase) end;
-          def free_label: if .Free then " (free)" else "" end;
-          def visual_name: "\(provider_label) - \(.ID)\(free_label)";
+          def free_label: if .Provider == "ollama" then " (local)" elif (.Free and (.ID | test(":free$") | not)) then " (free)" else "" end;
+          def visual_name: "\(.ID)\(free_label)";
+          def api_base_entry: if .Provider == "ollama" and .ApiBase then "\n      api_base: \(.ApiBase)" else "" end;
+          def openrouter_capping: if .Provider == "openrouter" then "\n      max_tokens: 4096\n      max_output_tokens: 4096" else "" end;
 
-          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(litellm_provider)/\(.ID)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
+          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(full_id)\(api_base_entry)\(openrouter_capping)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
         ' >> "$TMP_CONFIG"
         
         if ! grep -q "^model_list:" "$TMP_CONFIG" || [ "$(grep -c "model_name:" "$TMP_CONFIG")" -eq 0 ]; then
@@ -591,6 +766,25 @@ EO_BASE
             chmod 644 "$DEST_CONFIG" 2>/dev/null || true
             docker restart ${PREFIXO_CONTAINER}_litellm > /dev/null 2>&1 || true
             echo "  ↳ [CONFIGURANDO AI GATEWAY] Catálogo LiteLLM atualizado e serviço reiniciado."
+        fi
+
+        # 5. SINCRONIZAÇÃO EM CASCATA: N8N AI ASSISTANT
+        if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_n8n 2>/dev/null)" = "true" ]; then
+            local N8N_MODEL_ATUAL
+            N8N_MODEL_ATUAL=$(docker exec -i ${PREFIXO_CONTAINER}_n8n node -e "console.log(process.env.N8N_INSTANCE_AI_MODEL || '')" 2>/dev/null || true)
+            local TARGET_N8N="${TARGET_MODEL:-gpt-4.1}"
+            if [ "$N8N_MODEL_ATUAL" = "$TARGET_N8N" ] || [ "$N8N_MODEL_ATUAL" = "gpt-4.1" ]; then
+                echo "  ↳ [IDEMPOTÊNCIA AI GATEWAY] Modelo n8n AI Assistant já pareado com a malha (${N8N_MODEL_ATUAL})."
+            else
+                echo "  ↳ [CONFIGURANDO AI GATEWAY] Pareando modelo no n8n AI Assistant -> ${TARGET_N8N}..."
+                local local_env="${TARGET_DIR_LITE}/.env"
+                if [ -f "$local_env" ]; then
+                    if grep -q '^N8N_INSTANCE_AI_MODEL=' "$local_env"; then
+                        sed -i "s/^N8N_INSTANCE_AI_MODEL=.*/N8N_INSTANCE_AI_MODEL=${TARGET_N8N}/" "$local_env" 2>/dev/null || true
+                    fi
+                fi
+                echo "  ↳ Modelo n8n AI Assistant sincronizado com sucesso."
+            fi
         fi
     fi
 }

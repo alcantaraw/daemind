@@ -38,14 +38,21 @@ build_structure() {
             if [[ "${USE_CHATWOOT:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/chatwoot 2>/dev/null || true
             fi
-            if [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]]; then
-                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/postiz 2>/dev/null || true
-            fi
             if [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/evolution 2>/dev/null || true
             fi
+            if [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]]; then
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/postiz 2>/dev/null || true
+            fi
             if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/nocodb 2>/dev/null || true
+            fi
+            if [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]]; then
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/listmonk 2>/dev/null || true
+            fi
+            if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]]; then
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/openwebui 2>/dev/null || true
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/docling 2>/dev/null || true
             fi
             sudo chmod -R 777 "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
             sudo chown -R "$TARGET_OWNER" "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
@@ -66,6 +73,7 @@ use_cw = '${USE_CHATWOOT:-s}'.lower() in ['s', 'true', '1']
 use_pz = '${USE_POSTIZ:-s}'.lower() in ['s', 'true', '1']
 use_evo = '${USE_EVOLUTION:-s}'.lower() in ['s', 'true', '1']
 use_noco = '${USE_NOCODB:-s}'.lower() in ['s', 'true', '1']
+use_lm = '${USE_LISTMONK:-s}'.lower() in ['s', 'true', '1']
 
 try:
     with open(path, 'r+') as f:
@@ -92,26 +100,6 @@ try:
             content = content[:m_cw.start(1)] + '\n'.join(new_lines) + content[m_cw.end(1):]
 
 
-        # Evolution overlay handler
-        evo_tag = '# --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---'
-        evo_pattern = re.escape(evo_tag) + r'\n([\s\S]*?)\n\s*' + re.escape(evo_tag)
-        m_evo = re.search(evo_pattern, content)
-        if m_evo:
-            block = m_evo.group(1)
-            lines = block.splitlines()
-            if use_evo:
-                new_lines = []
-                for line in lines:
-                    if line.startswith('  # '):
-                        new_lines.append('  ' + line[4:])
-                    elif line.startswith('# '):
-                        new_lines.append('  ' + line[2:])
-                    else:
-                        new_lines.append(line)
-            else:
-                new_lines = ['  # ' + line.lstrip(' #') if line.strip() else line for line in lines]
-            content = content[:m_evo.start(1)] + '\n'.join(new_lines) + content[m_evo.end(1):]
-
         # NocoDB overlay handler
         noco_tag = '# --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---'
         noco_pattern = re.escape(noco_tag) + r'\n([\s\S]*?)\n\s*' + re.escape(noco_tag)
@@ -131,6 +119,26 @@ try:
             else:
                 new_lines = ['  # ' + line.lstrip(' #') if line.strip() else line for line in lines]
             content = content[:m_noco.start(1)] + '\n'.join(new_lines) + content[m_noco.end(1):]
+
+        # Listmonk overlay handler
+        lm_tag = '# --- INJEÇÃO DECLARATIVA NATIVA NO LISTMONK QUANDO S3MINIO ESTÁ ATIVO ---'
+        lm_pattern = re.escape(lm_tag) + r'\n([\s\S]*?)\n\s*' + re.escape(lm_tag)
+        m_lm = re.search(lm_pattern, content)
+        if m_lm:
+            block = m_lm.group(1)
+            lines = block.splitlines()
+            if use_lm:
+                new_lines = []
+                for line in lines:
+                    if line.startswith('  # '):
+                        new_lines.append('  ' + line[4:])
+                    elif line.startswith('# '):
+                        new_lines.append('  ' + line[2:])
+                    else:
+                        new_lines.append(line)
+            else:
+                new_lines = ['  # ' + line.lstrip(' #') if line.strip() else line for line in lines]
+            content = content[:m_lm.start(1)] + '\n'.join(new_lines) + content[m_lm.end(1):]
 
         f.seek(0)
         f.write(content)
@@ -312,6 +320,10 @@ provision_infra() {
     local PZ_BUCKET="${S3_POSTIZ_BUCKET_EXT:-${S3_POSTIZ_BUCKET:-postiz}}"
     local EVO_BUCKET="${S3_EVOLUTION_BUCKET_EXT:-${S3_EVOLUTION_BUCKET:-evolution}}"
     local NOCO_BUCKET="${S3_NOCODB_BUCKET_EXT:-${S3_NOCODB_BUCKET:-nocodb}}"
+    local OW_BUCKET="${S3_OPENWEBUI_BUCKET_EXT:-${S3_OPENWEBUI_BUCKET:-openwebui}}"
+    local DOC_BUCKET="${S3_DOCLING_BUCKET_EXT:-${S3_DOCLING_BUCKET:-docling}}"
+    local N8N_BUCKET="${S3_N8N_BUCKET_EXT:-${S3_N8N_BUCKET:-n8n}}"
+    local LM_BUCKET="${S3_LISTMONK_BUCKET_EXT:-${S3_LISTMONK_BUCKET:-listmonk}}"
 
     if [[ "${USE_S3MINIO:-s}" =~ ^[Ss]$ ]]; then
         echo "➜ [SRE S3MINIO] Garantindo buckets condicionados aos módulos ativos no MinIO S3..."
@@ -322,60 +334,23 @@ provision_infra() {
             sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp -m multiport --dports 9000,9001 -j ACCEPT 2>/dev/null || true
         fi
 
-        local MINIO_CTR="${PREFIXO_CONTAINER}_s3minio"
-        sudo docker exec "$MINIO_CTR" mc alias set local http://localhost:9000 "${TS_EMAIL}" "${DB_PASSWORD}" >/dev/null 2>&1 || true
+        local ALL_BUCKETS=()
+        [[ "${USE_CHATWOOT:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${CW_BUCKET}")
+        [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${PZ_BUCKET}")
+        [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${EVO_BUCKET}")
+        [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${NOCO_BUCKET}")
+        [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${OW_BUCKET}" "${DOC_BUCKET}")
+        [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${N8N_BUCKET}")
+        [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${LM_BUCKET}")
 
-        # 1. Bucket e política do Chatwoot
-        if [[ "${USE_CHATWOOT:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${CW_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${CW_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${CW_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local CW_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${CW_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$CW_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${CW_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 2. Bucket e política do Postiz
-        if [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${PZ_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${PZ_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${PZ_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local PZ_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${PZ_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$PZ_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${PZ_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 3. Bucket e política da Evolution API
-        if [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${EVO_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local EVO_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${EVO_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$EVO_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${EVO_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
-
-        # 4. Bucket e política do NocoDB
-        if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]]; then
-            if ! sudo docker exec "$MINIO_CTR" mc ls "local/${NOCO_BUCKET}" >/dev/null 2>&1; then
-                sudo docker exec "$MINIO_CTR" mc mb "local/${NOCO_BUCKET}" >/dev/null 2>&1 || true
-                sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${NOCO_BUCKET}" >/dev/null 2>&1 || true
-            else
-                local NOCO_POLICY=$(sudo docker exec "$MINIO_CTR" mc anonymous get "local/${NOCO_BUCKET}" 2>/dev/null || echo "")
-                if ! echo "$NOCO_POLICY" | grep -qi "download"; then
-                    sudo docker exec "$MINIO_CTR" mc anonymous set download "local/${NOCO_BUCKET}" >/dev/null 2>&1 || true
-                fi
-            fi
-        fi
+        local BUCKETS_STR="${ALL_BUCKETS[*]}"
+        sudo docker run --rm --entrypoint sh --network "${PREFIXO_CONTAINER}_net" minio/mc -c "
+            mc alias set local http://s3minio:9000 '${TS_EMAIL}' '${DB_PASSWORD}' >/dev/null 2>&1 || true
+            for b in ${BUCKETS_STR}; do
+                mc mb --ignore-existing \"local/\$b\" >/dev/null 2>&1 || true
+                mc anonymous set download \"local/\$b\" >/dev/null 2>&1 || true
+            done
+        " >/dev/null 2>&1 || true
 
         echo "✔ [SUCESSO S3MINIO] Buckets de módulos ativos verificados e políticas aplicadas."
 
@@ -408,6 +383,21 @@ provision_infra() {
             if [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]] && [ -n "$NOCO_BUCKET" ]; then
                 echo "  ↳ Tentando provisionar bucket S3 externo para NocoDB: ${NOCO_BUCKET}..."
                 aws s3 mb "s3://${NOCO_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
+            fi
+
+            if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]] && [ -n "$OW_BUCKET" ]; then
+                echo "  ↳ Tentando provisionar bucket S3 externo para Open WebUI: ${OW_BUCKET}..."
+                aws s3 mb "s3://${OW_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
+            fi
+
+            if [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]] && [ -n "$N8N_BUCKET" ]; then
+                echo "  ↳ Tentando provisionar bucket S3 externo para n8n: ${N8N_BUCKET}..."
+                aws s3 mb "s3://${N8N_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
+            fi
+
+            if [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]] && [ -n "$LM_BUCKET" ]; then
+                echo "  ↳ Tentando provisionar bucket S3 externo para Listmonk: ${LM_BUCKET}..."
+                aws s3 mb "s3://${LM_BUCKET}" $ENDPOINT_FLAG 2>/dev/null || true
             fi
         fi
     fi
@@ -726,19 +716,22 @@ build_envs() {
     local active_storage="local"
     local pz_storage="local"
 
+    local s3_endpoint_host="${TS_DOMAIN:-localhost}"
     if [ "$STORAGE_MODE" = "s3minio" ] || [ "$STORAGE_MODE" = "minio" ]; then
         evo_s3_enabled="true"
         noco_storage_type="s3"
-        active_storage="amazon"
+        active_storage="s3_compatible"
         pz_storage="local"
-        s3_endpoint_val="http://${PREFIXO_CONTAINER}_s3minio:9000"
+        s3_endpoint_val="http://s3minio:9000"
         s3_access_val="${TS_EMAIL}"
         s3_secret_val="${DB_PASSWORD}"
+        s3_endpoint_host="${TS_DOMAIN:-localhost}"
     elif [ "$STORAGE_MODE" = "s3_external" ]; then
         evo_s3_enabled="true"
         noco_storage_type="s3"
-        active_storage="amazon"
+        active_storage="s3_compatible"
         pz_storage="local"
+        s3_endpoint_host=$(echo "${S3_ENDPOINT_EXT}" | sed -E 's|^https?://||; s|:[0-9]+.*||; s|/.*||')
     fi
 
     cat << EOF >> "$env_path"
@@ -763,7 +756,7 @@ S3_POSTIZ_BUCKET_EXT="${s3_pz_bucket}"
 S3_EVOLUTION_BUCKET_EXT="${s3_evo_bucket}"
 S3_NOCODB_BUCKET_EXT="${s3_noco_bucket}"
 S3_ENDPOINT="${s3_endpoint_val}"
-S3_ENDPOINT_HOST="${PREFIXO_CONTAINER}_s3minio"
+S3_ENDPOINT_HOST="${s3_endpoint_host}"
 S3_PORT="9000"
 S3_USE_SSL="false"
 S3_REGION="${s3_region_val}"
@@ -776,6 +769,12 @@ S3_NOCODB_BUCKET="${s3_noco_bucket}"
 EVOLUTION_S3_ENABLED="${evo_s3_enabled}"
 NOCODB_STORAGE_TYPE="${noco_storage_type}"
 ACTIVE_STORAGE_SERVICE="${active_storage}"
+STORAGE_BUCKET_NAME="${s3_cw_bucket}"
+STORAGE_ACCESS_KEY_ID="${s3_access_val}"
+STORAGE_SECRET_ACCESS_KEY="${s3_secret_val}"
+STORAGE_REGION="us-east-1"
+STORAGE_ENDPOINT="${s3_endpoint_val}"
+STORAGE_FORCE_PATH_STYLE="true"
 POSTIZ_STORAGE_PROVIDER="${pz_storage}"
 EOF
 }

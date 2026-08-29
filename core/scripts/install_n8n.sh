@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# N8N
+# N8N N8N_SANDBOX SEARXNG
 # Motor de Automações & Workflows Ilimitados
 # ===============================================================================
 # DAEMIND SRE MODULE - PROVISIONADOR DINÂMICO N8N AUTOMATION
@@ -36,6 +36,79 @@ build_structure() {
         sudo chown -R "$TARGET_OWNER" "$VOL_PATH" 2>/dev/null || true
         sudo chmod -R 775 "$VOL_PATH" 2>/dev/null || true
     fi
+
+    # Se N8N_DEV_AI_ASSISTANT estiver ativo, cria a estrutura do SearXNG e descomenta os serviços no compose
+    if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
+        local SEARX_DIR="$TARGET_DIR/volumes/searxng"
+        sudo mkdir -p "$SEARX_DIR" 2>/dev/null || true
+        # Se limiter.toml foi criado como diretório pelo docker, remove
+        if [ ! -f "$SEARX_DIR/limiter.toml" ]; then
+            echo "➜ [SRE N8N DEV] Gerando limiter.toml canônico da imagem oficial do SearXNG..."
+            sudo docker pull -q searxng/searxng:latest >/dev/null 2>&1 || true
+            sudo docker run --rm --entrypoint cat searxng/searxng:latest /usr/local/searxng/searx/limiter.toml 2>/dev/null | sudo tee "$SEARX_DIR/limiter.toml" > /dev/null || true
+        fi
+
+        if [ ! -f "$SEARX_DIR/settings.yml" ]; then
+            echo "➜ [SRE N8N DEV] Gerando settings.yml tunado com Redis/Valkey Cache e Alta Performance..."
+            sudo docker pull -q searxng/searxng:latest >/dev/null 2>&1 || true
+            sudo docker run --rm --entrypoint sh searxng/searxng:latest -c "
+/usr/local/searxng/.venv/bin/python3 -c '
+import yaml
+with open(\"/usr/local/searxng/searx/settings.yml\") as f:
+    cfg = yaml.safe_load(f)
+
+# Configurações de Servidor e API
+cfg[\"server\"][\"secret_key\"] = \"${DB_PASSWORD:-daemind_searxng_secret}\"
+cfg[\"server\"][\"limiter\"] = False
+cfg[\"server\"][\"image_proxy\"] = False
+cfg[\"search\"][\"formats\"] = [\"html\", \"json\"]
+
+# Integração Redis / Valkey Cache
+cfg[\"valkey\"] = {
+    \"url\": \"redis://redis:6379/0\"
+}
+
+# Tuning de Rede, Concorrência e HTTP/2
+cfg.setdefault(\"outgoing\", {})
+cfg[\"outgoing\"][\"request_timeout\"] = 4.0
+cfg[\"outgoing\"][\"max_request_timeout\"] = 8.0
+cfg[\"outgoing\"][\"pool_connections\"] = 100
+cfg[\"outgoing\"][\"pool_maxsize\"] = 100
+cfg[\"outgoing\"][\"enable_http2\"] = True
+
+# Tolerância a falhas e zero suspensão de engines
+cfg.setdefault(\"search\", {})
+cfg[\"search\"][\"suspended_times\"] = {
+    \"Google\": 0,
+    \"Bing\": 0,
+    \"DuckDuckGo\": 0,
+    \"default\": 0
+}
+
+# Otimização de timeout das principais engines para IA
+for eng in cfg.get(\"engines\", []):
+    name = eng.get(\"name\", \"\").lower()
+    if name in [\"google\", \"bing\", \"duckduckgo\", \"brave\", \"qwant\"]:
+        eng[\"timeout\"] = 2.0
+
+with open(\"/tmp/settings.yml\", \"w\") as f:
+    yaml.dump(cfg, f, sort_keys=False)
+' && cat /tmp/settings.yml
+" 2>/dev/null | sudo tee "$SEARX_DIR/settings.yml" > /dev/null
+        fi
+        sudo chown -R "$TARGET_OWNER" "$SEARX_DIR" 2>/dev/null || true
+
+        # Ativação prévia no compose antes da fusão monotélica da Fase 4
+        local N8N_COMPOSE="$TARGET_DIR/core/config/docker-compose.n8n.yml"
+        [ ! -f "$N8N_COMPOSE" ] && N8N_COMPOSE="$TARGET_DIR/docker-compose.n8n.yml"
+        if [ -f "$N8N_COMPOSE" ]; then
+            echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (LiteLLM + SearXNG) no compose..."
+            # 1. Descomenta todas as linhas marcadas com '# '
+            sed -i 's/# //g' "$N8N_COMPOSE" 2>/dev/null || true
+            # 2. Habilita o módulo instance-ai liberando a UI do assistente no n8n
+            sed -i 's/- N8N_DISABLED_MODULES=.*/- N8N_DISABLED_MODULES=/g' "$N8N_COMPOSE" 2>/dev/null || true
+        fi
+    fi
 }
 
 provision_db() {
@@ -47,6 +120,7 @@ provision_db() {
     else
         echo "  ↳ Criando schema 'n8n_schema'..."
         docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -q -c "CREATE SCHEMA IF NOT EXISTS n8n_schema AUTHORIZATION ${DB_USER};" > /dev/null 2>&1 || true
+        echo "✔ [SUCESSO N8N] Schema 'n8n_schema' provisionado com sucesso."
     fi
 }
 
@@ -104,6 +178,32 @@ EOF
         # Garante publicação caso o workflow já exista
         docker exec -u node ${PREFIX}_n8n n8n publish:workflow --id="$WF_ID" > /dev/null 2>&1 || docker exec -u node ${PREFIX}_n8n n8n update:workflow --id="$WF_ID" --active=true > /dev/null 2>&1 || true
         echo "➜ [IDEMPOTÊNCIA N8N] Workflow de Faxina Reativa de Modelos IA já presente e publicado no n8n."
+    fi
+
+    # Ativação dinâmica dos containers e variáveis do AI Assistant quando solicitado
+    local N8N_COMPOSE="$TARGET_DIR/core/config/docker-compose.n8n.yml"
+    [ ! -f "$N8N_COMPOSE" ] && N8N_COMPOSE="$TARGET_DIR/docker-compose.n8n.yml"
+    if [ -f "$N8N_COMPOSE" ]; then
+        if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
+            echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (LiteLLM + SearXNG) no compose..."
+            sed -i 's/# - N8N_INSTANCE_AI_/- N8N_INSTANCE_AI_/g' "$N8N_COMPOSE" 2>/dev/null || true
+            sed -i 's/#   image: node:20-alpine/  image: node:20-alpine/g' "$N8N_COMPOSE" 2>/dev/null || true
+            sed -i 's/#   image: searxng\/searxng/  image: searxng\/searxng/g' "$N8N_COMPOSE" 2>/dev/null || true
+            python3 -c "
+path = '$N8N_COMPOSE'
+try:
+    with open(path, 'r+') as f:
+        content = f.read()
+        import re
+        content = re.sub(r'#\s*(n8n_sandbox:|searxng:)', r'\1', content)
+        content = re.sub(r'#\s*(\s{2,}[a-zA-Z0-9_\-\.\:\/]+)', r'\1', content)
+        f.seek(0)
+        f.write(content)
+        f.truncate()
+except Exception:
+    pass
+" 2>/dev/null || true
+        fi
     fi
 }
 
@@ -287,14 +387,25 @@ render_forensic_report() {
 }
 
 get_version() {
+    local svc="${1:-n8n}"
     local PREFIX="${PREFIXO_CONTAINER}"
-    local VER=$(docker exec "${PREFIX}_n8n" n8n --version 2>/dev/null || echo "")
-    if [ -n "$VER" ]; then
-        echo "$VER"
-    else
-        local IMAGE_TAG=$(docker inspect --format='{{.Config.Image}}' "${PREFIX}_n8n" 2>/dev/null | cut -d':' -f2 || echo "")
-        echo "${IMAGE_TAG:-2.34.6}"
-    fi
+    case "$svc" in
+        searxng)
+            local VER=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "${PREFIX}_searxng" 2>/dev/null || echo "")
+            [ -z "$VER" ] && VER=$(docker exec "${PREFIX}_searxng" python3 -c 'import searx.version; print(searx.version.VERSION_STRING)' 2>/dev/null || echo "")
+            [ -z "$VER" ] && VER=$(docker inspect -f '{{slice .Created 0 10}}' "${PREFIX}_searxng" 2>/dev/null || echo "")
+            echo "${VER:-latest}"
+            ;;
+        *)
+            local VER=$(docker exec "${PREFIX}_n8n" n8n --version 2>/dev/null || echo "")
+            if [ -n "$VER" ]; then
+                echo "$VER"
+            else
+                local IMAGE_TAG=$(docker inspect --format='{{.Config.Image}}' "${PREFIX}_n8n" 2>/dev/null | cut -d':' -f2 || echo "")
+                echo "${IMAGE_TAG:-latest}"
+            fi
+            ;;
+    esac
 }
 
 provision_user() {
@@ -341,24 +452,31 @@ build_envs() {
         cpu_n8n="2.0"
     fi
 
-    local mem_n8n="1024M"
+    local mem_n8n="2048M"
     local res_n8n="0M"
-    local node_heap_default="768"
+    local node_heap_default="1536"
 
     if [ "$ram_mb" -gt 24576 ]; then
         mem_n8n="4096M"
         res_n8n="1024M"
         node_heap_default="3072"
     elif [ "$ram_mb" -gt 12288 ]; then
-        mem_n8n="2048M"
+        mem_n8n="3072M"
         res_n8n="512M"
-        node_heap_default="1536"
+        node_heap_default="2048"
+    fi
+
+    local disabled_modules="instance-ai"
+    if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
+        disabled_modules=""
     fi
 
     cat << EOF >> "$env_path"
 
 # --- Configurações e Tuning do Módulo n8n Automation ---
 USE_N8N="${USE_N8N:-s}"
+N8N_DEV_AI_ASSISTANT="${N8N_DEV_AI_ASSISTANT:-n}"
+N8N_DISABLED_MODULES="${disabled_modules}"
 HOST_N8N_PORT="5678"
 CPU_N8N=${CPU_N8N:-${cpu_n8n}}
 MEM_N8N=${MEM_N8N:-${mem_n8n}}
@@ -384,7 +502,7 @@ case "$ACTION" in
     start_container)      start_container ;;
     wait_readiness)       wait_readiness ;;
     audit_health)         audit_health "${3:-localhost}" ;;
-    get_version)          get_version ;;
+    get_version)          get_version "$3" ;;
     render_forensic_report|render_report) render_forensic_report "${3:-localhost}" ;;
     provision_user)       provision_user ;;
     all)

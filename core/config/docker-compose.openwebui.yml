@@ -5,12 +5,14 @@ services:
     networks:
       instancia_net:
         ipv4_address: ${IP_OPENWEBUI}
+        aliases:
+          - openwebui
     restart: unless-stopped
     deploy:
       resources:
         limits:
           cpus: '${CPU_OPENWEBUI:-1.0}'
-          memory: '${MEM_OPENWEBUI:-1024M}'
+          memory: '${MEM_OPENWEBUI:-1280M}'
         reservations:
           memory: '${RES_OPENWEBUI:-512M}'
     environment:
@@ -20,7 +22,11 @@ services:
       
       - USER_AGENT=open-webui
       - GLOBAL_LOG_LEVEL=WARNING
-      - CORS_ALLOW_ORIGIN=http://${TS_DOMAIN:-localhost}:3001,https://${TS_DOMAIN:-localhost},http://localhost:3001
+      - WEBUI_LOG_LEVEL=WARNING
+      - UVICORN_LOG_LEVEL=warning
+      - ALEMBIC_LOG_LEVEL=WARNING
+      - PYTHONWARNINGS=ignore
+      - CORS_ALLOW_ORIGIN=*
 
       # --- 2. INTEGRAÇÃO REDIS (Sessões e Rate Limit) ---
       # - ENABLE_WEBSOCKET_SUPPORT=True
@@ -29,7 +35,7 @@ services:
 
       # --- 3. ROTEAMENTO DE IA (LiteLLM) ---
       - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
-      - OPENAI_API_BASE=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      - OPENAI_API_BASE=http://litellm:4000/v1
       - DEFAULT_MODELS=openrouter/free
 
       # --- 4. DEBLOAT & HARDENING (SRE) ---
@@ -46,15 +52,40 @@ services:
       # - ENABLE_SIGNUP=False
       - WEBUI_SECRET_KEY=${OPENWEBUI_SECRET_KEY}
       - RAG_EMBEDDING_ENGINE=openai
+      - RAG_OPENAI_API_BASE_URL=http://litellm:4000/v1
+      - RAG_OPENAI_API_KEY=${LITELLM_MASTER_KEY}
       - ENABLE_OLLAMA_API=False
-      - OPENAI_API_BASE_URLS=http://${PREFIXO_CONTAINER}_litellm:4000/v1
+      - OPENAI_API_BASE_URLS=http://litellm:4000/v1
+
+      # --- 5. RAG ENGINE & DOCLING OCR PARSER (IBM RESEARCH) ---
+      - CONTENT_EXTRACTION_ENGINE=tika
+      - TIKA_SERVER_URL=http://docling:5001
+      - DOCLING_SERVER_URL=http://docling:5001
+      - VECTOR_DB=pgvector
+      - PGVECTOR_URL=postgresql://${DB_USER}:${DB_PASSWORD}@pgbouncer:6432/openwebui_db
+
+      # --- 6. STORAGE S3 / MINIO (Uploads & Bases de Conhecimento) ---
+      - STORAGE_PROVIDER=s3
+      - S3_ENDPOINT_URL=http://s3minio:9000
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
+      - S3_BUCKET_NAME=${S3_OPENWEBUI_BUCKET:-openwebui}
+      - S3_REGION_NAME=us-east-1
+      - S3_USE_SSL=false
+
+      # --- 7. RAG WEB SEARCH & METASEARCH (SearXNG) ---
+      - ENABLE_RAG_WEB_SEARCH=True
+      - RAG_WEB_SEARCH_ENGINE=searxng
+      - RAG_WEB_SEARCH_RESULT_COUNT=3
+      - RAG_WEB_SEARCH_CONCURRENT_REQUESTS=10
+      - SEARXNG_QUERY_URL=http://searxng:8080/search?q=<query>
     depends_on:
       pgbouncer:
         condition: service_healthy
       redis:
         condition: service_healthy
       litellm:
-        condition: service_healthy
+        condition: service_started
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://127.0.0.1:8080/health || exit 1" ]
       interval: 30s
@@ -66,6 +97,46 @@ services:
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
 
+  # --- DOCLING ON-DEMAND OCR & MULTIMODAL PARSER (SCALE-TO-ZERO) ---
+  docling:
+    image: 'quay.io/docling-project/docling-serve-cpu:latest'
+    container_name: '${PREFIXO_CONTAINER}_docling'
+    profiles:
+      - ondemand
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_DOCLING}
+        aliases:
+          - docling
+    restart: "no" # Scale-to-Zero: Permanece desligado (0MB RAM), sobe sob demanda para parsing e desliga
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_DOCLING:-2.0}'
+          memory: '${MEM_DOCLING:-2048M}'
+        reservations:
+          memory: '${RES_DOCLING:-512M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - PORT=5001
+      - HOST=0.0.0.0
+      - DOCLING_SERVE_PORT=5001
+      - DOCLING_SERVE_HOST=0.0.0.0
+      - DOCLING_SERVE_WORKERS_PER_CORE=2
+      - DOCLING_SERVE_LOG_LEVEL=warning
+      - DOCLING_SERVE_MAX_FILE_SIZE_MB=100
+      - DOCLING_SERVE_TIMEOUT=300
+      - DOCLING_SERVE_ENABLE_UI=false
+      - UVICORN_LOG_LEVEL=warning
+      - PYTHONWARNINGS=ignore
+      - OMP_NUM_THREADS=${DOCLING_OMP_THREADS:-2}
+      - TORCH_NUM_THREADS=${DOCLING_TORCH_THREADS:-2}
+    volumes:
+      - './volumes/docling_data:/data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+
   caddy:
     ports:
       - "3001:3001/tcp" # Open WebUI (IA)
+      - "${HOST_DOCLING_PORT:-5001}:5001/tcp" # Docling OCR / Doc Parsing API

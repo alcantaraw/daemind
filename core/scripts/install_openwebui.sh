@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# OPENWEBUI
-# Interface Web de IA Corporativa & MCP
+# OPENWEBUI DOCLING
+# Interface Web de IA Corporativa & MCP com Docling RAG On-Demand
 # ===============================================================================
 # DAEMIND SRE MODULE - PROVISIONADOR DINÂMICO OPEN WEBUI
 # Especificação: Módulo desacoplado de gerenciamento, injeção Caddy, visual e relatório Open WebUI
@@ -26,14 +26,15 @@ build_structure() {
     fi
 
     local VOL_PATH="$TARGET_DIR/volumes/openwebui_data"
+    local VOL_DOCLING="$TARGET_DIR/volumes/docling_data"
     local CURRENT_OWNER=$(stat -c '%u:%g' "$VOL_PATH" 2>/dev/null || echo "")
 
     if [ -d "$VOL_PATH" ] && [ "$CURRENT_OWNER" = "$TARGET_OWNER" ]; then
         echo "➜ [IDEMPOTÊNCIA OPENWEBUI] Estrutura de volumes de openwebui_data já alinhada (${TARGET_OWNER}). Preservando I/O."
     else
-        echo "➜ [SRE OPENWEBUI] Criando estrutura física de volumes e permissões do Open WebUI..."
-        sudo mkdir -p "$VOL_PATH" 2>/dev/null || true
-        sudo chown -R "$TARGET_OWNER" "$VOL_PATH" 2>/dev/null || true
+        echo "➜ [SRE OPENWEBUI] Criando estrutura física de volumes e permissões do Open WebUI e Docling..."
+        sudo mkdir -p "$VOL_PATH" "$VOL_DOCLING" 2>/dev/null || true
+        sudo chown -R "$TARGET_OWNER" "$VOL_PATH" "$VOL_DOCLING" 2>/dev/null || true
     fi
 }
 
@@ -46,6 +47,10 @@ provision_db() {
         echo "  ↳ Criando banco de dados 'openwebui_db'..."
         docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -q -c "CREATE DATABASE openwebui_db;" > /dev/null 2>&1 || true
     fi
+
+    # Habilita pgvector incondicionalmente para busca semântica, embeddings e RAG nativo
+    echo "  ↳ [RAG SRE] Habilitando extensão 'vector' (pgvector) no openwebui_db..."
+    docker compose exec -T postgres psql -U "${DB_USER}" -d "openwebui_db" -q -c "CREATE EXTENSION IF NOT EXISTS vector;" > /dev/null 2>&1 || true
 }
 
 provision_infra() {
@@ -62,12 +67,18 @@ ipset=/api-inference.huggingface.co/ALLOWED_DOMAINS
 ipset=/cdn-lfs.huggingface.co/ALLOWED_DOMAINS
 EOF
         if [ "${USE_TAILSCALE:-false}" = "true" ]; then
-            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport 5000 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
         else
-            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5000 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
         fi
     else
         sudo rm -f /etc/dnsmasq.d/openwebui.conf 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+        sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     fi
 
     local OWUI_ERRORS=$(docker logs "${PREFIX}_openwebui" --tail 200 2>&1 | grep -iE "UndefinedTable|relation .* does not exist" || true)
@@ -92,14 +103,42 @@ EOF
             sleep 5
         fi
 
-        echo "  ↳ Aguardando backend do Open WebUI (tentativa $TENTATIVAS_OWUI/36)..."
+        echo "  ↳ Aguardando backend do Open WebUI (tentativa $TENTATIVAS_OW/30)..."
         sleep 5
     done
     echo "✔ [SUCESSO OPENWEBUI] Infraestrutura relacional e API FastAPI validadas."
+    # 4. SRE Smoke Test: Valida e testa o motor Docling On-Demand (Scale-to-Zero)
+    echo "➜ [SRE DOCLING SMOKE TEST] Testando prontidão do motor Docling OCR sob demanda..."
+    if docker image inspect quay.io/docling-project/docling-serve-cpu:latest >/dev/null 2>&1; then
+        echo "  ↳ Disparando subida de validação do Docling..."
+        cd "$TARGET_DIR" && docker compose --profile ondemand up -d docling > /dev/null 2>&1 || true
+        
+        local TENTATIVAS_DOCLING=0
+        local DOCLING_OK=false
+        while [ $TENTATIVAS_DOCLING -lt 15 ]; do
+            local HTTP_DOCLING
+            HTTP_DOCLING=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5001/health" 2>/dev/null || echo "000")
+            if [ "$HTTP_DOCLING" = "200" ]; then
+                DOCLING_OK=true
+                break
+            fi
+            sleep 2
+            TENTATIVAS_DOCLING=$((TENTATIVAS_DOCLING + 1))
+        done
+        
+        # Desliga imediatamente garantindo Scale-to-Zero (0MB RAM em repouso)
+        docker stop "${PREFIX}_docling" > /dev/null 2>&1 || true
+        
+        if [ "$DOCLING_OK" = "true" ]; then
+            echo "✔ [SUCESSO DOCLING] Motor Docling OCR testado (HTTP 200) e retornado ao estado de repouso (Scale-to-Zero)."
+        else
+            echo "⚠️ [ALERTA DOCLING] Docling demorou para responder no healthcheck, mas o container foi posicionado."
+        fi
+    fi
 }
 
 inject_caddy_routes() {
-    echo "➜ [SRE OPENWEBUI] Injetando rotas do Open WebUI (:3001) no Caddyfile..."
+    echo "➜ [SRE OPENWEBUI] Injetando rotas do Open WebUI (:3001) e Docling (:5001) no Caddyfile..."
     local CADDYFILE_PATH="$TARGET_DIR/Caddyfile"
     if [ ! -f "$CADDYFILE_PATH" ] && [ -f "$TARGET_DIR/core/config/Caddyfile" ]; then
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
@@ -115,6 +154,17 @@ inject_caddy_routes() {
         level error
     }
     reverse_proxy ${PREFIX}_openwebui:8080
+}
+EOF
+        fi
+        if ! grep -q ':5001 {' "$CADDYFILE_PATH"; then
+            cat << EOF | sudo tee -a "$CADDYFILE_PATH" > /dev/null
+
+:5001 {
+    log {
+        level error
+    }
+    reverse_proxy ${PREFIX}_docling:5001
 }
 EOF
         fi
@@ -135,7 +185,7 @@ path = '$CADDYFILE_PATH'
 try:
     with open(path, 'r') as f:
         content = f.read()
-    pattern = r'(?:\n|^)\s*:3001\s*\{[\s\S]*?\n\}'
+    pattern = r'(?:\n|^)\s*:(3001|5001)\s*\{[\s\S]*?\n\}'
     new_content = re.sub(pattern, '', content)
     with open(path, 'w') as f:
         f.write(new_content.strip() + '\n')
@@ -215,26 +265,31 @@ except Exception as e:
 
 disable() {
     local PREFIX="${PREFIXO_CONTAINER}"
-    echo "➜ [SRE OPENWEBUI] Desativando e desprovisionando contêiner do Open WebUI..."
-    docker stop "${PREFIX}_openwebui" 2>/dev/null || true
-    docker rm -f "${PREFIX}_openwebui" 2>/dev/null || true
+    echo "➜ [SRE OPENWEBUI] Desativando e desprovisionando contêineres do Open WebUI e Docling..."
+    docker stop "${PREFIX}_openwebui" "${PREFIX}_docling" 2>/dev/null || true
+    docker rm -f "${PREFIX}_openwebui" "${PREFIX}_docling" 2>/dev/null || true
     remove_caddy_routes
     remove_dashboard_card
 
     # Limpeza de Regras de Firewall e DNS
     sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+    sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
+    sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     if [ -f /etc/dnsmasq.d/openwebui.conf ]; then
         sudo rm -f /etc/dnsmasq.d/openwebui.conf 2>/dev/null || true
         sudo systemctl restart dnsmasq 2>/dev/null || true
     fi
-    echo "✔ [SUCESSO OPENWEBUI] Módulo Open WebUI desativado, container removido, firewall e rotas limpos."
+    echo "✔ [SUCESSO OPENWEBUI] Módulo Open WebUI e Docling desativados, containers removidos, firewall e rotas limpos."
 }
 
 start_container() {
     local PREFIX="${PREFIXO_CONTAINER}"
-    echo "➜ [SRE OPENWEBUI] Garantindo subida integrada do container Open WebUI..."
+    echo "➜ [SRE OPENWEBUI] Garantindo subida integrada do Open WebUI e posicionamento do Docling (Scale-to-Zero)..."
     cd "$TARGET_DIR" && docker compose up -d --no-deps openwebui > /dev/null 2>&1 || true
+    # Posiciona o Docling criado e em repouso absoluto (Scale-to-Zero: 0MB RAM)
+    cd "$TARGET_DIR" && (docker compose --profile ondemand create docling > /dev/null 2>&1 || true)
+    docker stop "${PREFIX}_docling" > /dev/null 2>&1 || true
 }
 
 wait_readiness() {
@@ -269,8 +324,9 @@ audit_health() {
 
 render_forensic_report() {
     local ts_domain="${1:-localhost}"
-    echo "  🧠 Inteligência (Open WebUI)"
+    echo "  🧠 Inteligência (Open WebUI & Docling RAG)"
     echo "    ↳ Painel Web (Cliente MCP):        http://${ts_domain}:3001"
+    echo "    ↳ Motor Multimodal Docling:        http://${ts_domain}:5001 (Scale-to-Zero)"
     echo "    ↳ Integração REST API:             http://${ts_domain}:3001/api/"
     echo "    ↳ Open API/Swagger:                http://${ts_domain}:3001/openapi.json"
     echo "    ↳ Healthcheck:                     http://${ts_domain}:3001/health"
@@ -323,7 +379,7 @@ build_envs() {
         cpu_openwebui="2.0"
     fi
 
-    local mem_openwebui="1024M"
+    local mem_openwebui="1280M"
     local res_openwebui="512M"
 
     if [ "$ram_mb" -gt 24576 ]; then
@@ -336,12 +392,18 @@ build_envs() {
 
     cat << EOF >> "$env_path"
 
-# --- Configurações e Tuning do Módulo Open WebUI ---
+# --- Configurações e Tuning do Módulo Open WebUI & Docling OCR ---
 USE_OPENWEBUI="${USE_OPENWEBUI:-s}"
 HOST_OPENWEBUI_PORT="3001"
+HOST_DOCLING_PORT="5001"
 CPU_OPENWEBUI=${CPU_OPENWEBUI:-${cpu_openwebui}}
 MEM_OPENWEBUI=${MEM_OPENWEBUI:-${mem_openwebui}}
 RES_OPENWEBUI=${RES_OPENWEBUI:-${res_openwebui}}
+CPU_DOCLING=${CPU_DOCLING:-2.0}
+MEM_DOCLING=${MEM_DOCLING:-2048M}
+RES_DOCLING=${RES_DOCLING:-512M}
+DOCLING_OMP_THREADS=2
+DOCLING_TORCH_THREADS=2
 OPENWEBUI_SECRET_KEY=${FINAL_KEY}
 EOF
 }

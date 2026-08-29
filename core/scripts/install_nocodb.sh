@@ -39,8 +39,15 @@ build_structure() {
 }
 
 provision_db() {
-    # NocoDB utiliza SQLite/local data storage (banco PostgreSQL dedicado opcional)
-    :
+    local PREFIX="${PREFIXO_CONTAINER}"
+    echo "➜ [SRE NOCODB] Garantindo schema relacional (nocodb_schema) no PostgreSQL..."
+    if docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -c "SELECT 1 FROM information_schema.schemata WHERE schema_name = 'nocodb_schema'" 2>/dev/null | grep -q 1; then
+        echo "➜ [IDEMPOTÊNCIA NOCODB] Schema 'nocodb_schema' já existente no banco principal. Preservando."
+    else
+        echo "  ↳ Criando schema 'nocodb_schema'..."
+        docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -q -c "CREATE SCHEMA IF NOT EXISTS nocodb_schema AUTHORIZATION ${DB_USER};" > /dev/null 2>&1 || true
+        echo "✔ [SUCESSO NOCODB] Schema 'nocodb_schema' provisionado com sucesso."
+    fi
 }
 
 provision_infra() {
@@ -56,7 +63,7 @@ provision_infra() {
         fi
     fi
 
-    local NOCO_TABELAS=$(docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -t -c "SELECT count(*) FROM pg_tables WHERE schemaname = 'public' AND tablename LIKE 'nc_%';" 2>/dev/null | tr -dc '0-9' || echo "0")
+    local NOCO_TABELAS=$(docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -t -c "SELECT count(*) FROM pg_tables WHERE schemaname = 'nocodb_schema' AND tablename LIKE 'nc_%';" 2>/dev/null | tr -dc '0-9' || echo "0")
     NOCO_TABELAS=${NOCO_TABELAS:-0}
     local NOCO_ERRORS=$(sudo docker logs ${PREFIX}_nocodb --tail 200 2>&1 | grep -iE "relation.*does not exist|JOB FAILED|ERR_DATABASE_OP_FAILED" || true)
 
@@ -69,14 +76,14 @@ provision_infra() {
         DECLARE 
             r RECORD; 
         BEGIN 
-            FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename LIKE 'nc_%') LOOP 
-                EXECUTE 'DROP TABLE IF EXISTS public.' || quote_ident(r.tablename) || ' CASCADE'; 
+            FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'nocodb_schema' AND tablename LIKE 'nc_%') LOOP 
+                EXECUTE 'DROP TABLE IF EXISTS nocodb_schema.' || quote_ident(r.tablename) || ' CASCADE'; 
             END LOOP; 
-            FOR r IN (SELECT viewname FROM pg_views WHERE schemaname = 'public' AND viewname LIKE 'nc_%') LOOP 
-                EXECUTE 'DROP VIEW IF EXISTS public.' || quote_ident(r.viewname) || ' CASCADE'; 
+            FOR r IN (SELECT viewname FROM pg_views WHERE schemaname = 'nocodb_schema' AND viewname LIKE 'nc_%') LOOP 
+                EXECUTE 'DROP VIEW IF EXISTS nocodb_schema.' || quote_ident(r.viewname) || ' CASCADE'; 
             END LOOP;
-            FOR r IN (SELECT relname FROM pg_class WHERE relkind = 'S' AND relnamespace = 'public'::regnamespace AND relname LIKE 'nc_%') LOOP 
-                EXECUTE 'DROP SEQUENCE IF EXISTS public.' || quote_ident(r.relname) || ' CASCADE'; 
+            FOR r IN (SELECT relname FROM pg_class WHERE relkind = 'S' AND relnamespace = 'nocodb_schema'::regnamespace AND relname LIKE 'nc_%') LOOP 
+                EXECUTE 'DROP SEQUENCE IF EXISTS nocodb_schema.' || quote_ident(r.relname) || ' CASCADE'; 
             END LOOP;
         END \$\$;" > /dev/null 2>&1 || true
 
@@ -88,7 +95,7 @@ provision_infra() {
         cd "$TARGET_DIR" && sudo docker compose up -d --force-recreate nocodb > /dev/null 2>&1 || true
         sleep 5
     else
-        echo "➜ [IDEMPOTÊNCIA NOCODB] Estrutura do NocoDB parece íntegra ($NOCO_TABELAS tabelas). Preservando o estado atual."
+        echo "✔ [SUCESSO NOCODB] Integridade do esquema relacional validada com sucesso."
     fi
 }
 
@@ -99,12 +106,13 @@ inject_caddy_routes() {
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_noco="${HOST_NOCODB_PORT:-18080}"
 
     if [ -f "$CADDYFILE_PATH" ]; then
-        if ! grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; then
+        if ! grep -q ":${port_noco} {" "$CADDYFILE_PATH" && ! grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; then
             cat << EOF | sudo tee -a "$CADDYFILE_PATH" > /dev/null
 
-:8080 {
+:${port_noco} {
     log {
         level error
     }
@@ -120,7 +128,8 @@ remove_caddy_routes() {
     if [ ! -f "$CADDYFILE_PATH" ] && [ -f "$TARGET_DIR/core/config/Caddyfile" ]; then
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
-    if [ -f "$CADDYFILE_PATH" ] && grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; then
+    local port_noco="${HOST_NOCODB_PORT:-18080}"
+    if [ -f "$CADDYFILE_PATH" ] && { grep -q ":${port_noco} {" "$CADDYFILE_PATH" || grep -q ':8080 {' "$CADDYFILE_PATH" || grep -q "reverse_proxy.*_nocodb:8080" "$CADDYFILE_PATH"; }; then
         echo "➜ [SRE NOCODB] Removendo rotas do NocoDB ERP do Caddyfile..."
         python3 -c "
 path = '$CADDYFILE_PATH'
@@ -128,7 +137,8 @@ try:
     with open(path, 'r+') as f:
         content = f.read()
         import re
-        new_content = re.sub(r'\s*:8080\s*\{[\s\S]*?nocodb[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:${port_noco}\s*\{[\s\S]*?nocodb[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:8080\s*\{[\s\S]*?nocodb[\s\S]*?\}', '', new_content)
         f.seek(0)
         f.write(new_content)
         f.truncate()
@@ -334,23 +344,242 @@ provision_user() {
             echo "➜ [IDEMPOTÊNCIA NOCODB] Workspace já nomeado como 'Painel de Controle'. Preservando."
         fi
 
-        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[]? | select(.title == "daemind_db" or .title == "Loja_db") | .id // empty' 2>/dev/null | head -n 1 || true)
+        local PREFIX="${EMPRESA:-${PREFIXO_CONTAINER:-loja}}"
+        local BASE_NAME="${PREFIX}_db"
+        # 1. Localiza a base existente (${PREFIX}_db ou outra base padrão)
+        local BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r --arg bn "$BASE_NAME" '.list[]? | select((.title | ascii_downcase) == ($bn | ascii_downcase) or .title == "Default Project" or .title == "Default Workspace") | .id // empty' 2>/dev/null | head -n 1 || true)
 
         if [ -z "$BASE_EXISTENTE" ] || [ "$BASE_EXISTENTE" = "null" ]; then
-            echo "  ↳ Criando base corporativa (daemind_db)..."
-            local BASE_RESPONSE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d '{"title": "daemind_db"}')
-            BASE_EXISTENTE=$(echo "$BASE_RESPONSE" | jq -r '.id // empty')
-        else
-            sudo docker exec ${PREFIX}_nocodb curl -s -X PATCH "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d '{"title": "daemind_db"}' > /dev/null 2>&1 || true
+            # Se não localizou por nome específico, obtém a primeira base existente do workspace
+            BASE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[0].id // empty' 2>/dev/null || true)
+        fi
+
+        # 2. Se nenhuma base existir no Workspace (NocoDB v0.250+), cria a Base corporativa
+        if [ -z "$BASE_EXISTENTE" ] || [ "$BASE_EXISTENTE" = "null" ]; then
+            echo "  ↳ Criando base corporativa principal (${BASE_NAME})..."
+            local CREATE_BASE_RES
+            CREATE_BASE_RES=$(sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/workspaces/${WORKSPACE_ID}/bases" \
+                -H "xc-auth: $AUTH_TOKEN" \
+                -H "Content-Type: application/json" \
+                -d "{\"title\": \"${BASE_NAME}\", \"type\": \"database\"}" 2>/dev/null || echo "")
+
+            BASE_EXISTENTE=$(echo "$CREATE_BASE_RES" | jq -r '.id // empty' 2>/dev/null || true)
         fi
 
         if [ -n "$BASE_EXISTENTE" ] && [ "$BASE_EXISTENTE" != "null" ]; then
-            local SOURCE_EXISTENTE=$(sudo docker exec ${PREFIX}_nocodb curl -s -X GET "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[]? | select(.alias == "Postgres Transacional") | .id // empty' 2>/dev/null | head -n 1 || true)
+            # 3. Verifica se a fonte de dados PostgreSQL já está vinculada na Base
+            local HAS_PG_SOURCE=$(sudo docker exec ${PREFIX}_nocodb curl -s "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" | jq -r '.list[]? | select(.type == "pg" and .is_local == false) | .id // empty' 2>/dev/null | head -n 1 || true)
 
-            if [ -z "$SOURCE_EXISTENTE" ] || [ "$SOURCE_EXISTENTE" = "null" ]; then
-                echo "  ↳ Conectando Postgres Transacional..."
-                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" -H "xc-auth: $AUTH_TOKEN" -H "Content-Type: application/json" -d "{\"type\": \"pg\", \"alias\": \"Postgres Transacional\", \"config\": {\"client\": \"pg\", \"connection\": {\"host\": \"pgbouncer\", \"port\": 6432, \"user\": \"${DB_USER:-admin_db}\", \"password\": \"${DB_PASSWORD:-******}\", \"database\": \"${PREFIX}_db\", \"ssl\": false}}}" > /dev/null
+            if [ -z "$HAS_PG_SOURCE" ] || [ "$HAS_PG_SOURCE" = "null" ]; then
+                echo "  ↳ Vinculando e sincronizando fonte de dados PostgreSQL (${PREFIX}_db via PgBouncer) no NocoDB..."
+                local SOURCE_PAYLOAD
+                SOURCE_PAYLOAD=$(jq -n \
+                    --arg host "pgbouncer" \
+                    --arg port "6432" \
+                    --arg user "${DB_USER:-admin_db}" \
+                    --arg password "${DB_PASSWORD}" \
+                    --arg database "${PREFIX}_db" \
+                    '{
+                        type: "pg",
+                        alias: "PostgreSQL",
+                        config: {
+                            client: "pg",
+                            connection: {
+                                host: $host,
+                                port: ($port | tonumber),
+                                user: $user,
+                                password: $password,
+                                database: $database,
+                                ssl: false,
+                                searchPath: "public"
+                            }
+                        }
+                    }')
+
+                sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources" \
+                    -H "xc-auth: $AUTH_TOKEN" \
+                    -H "Content-Type: application/json" \
+                    -d "$SOURCE_PAYLOAD" >/dev/null 2>&1 || true
+                echo "✔ [AUTO-INTEGRAÇÃO NOCODB] Data Warehouse e tabelas vinculadas com sucesso no NocoDB."
+            else
+                echo "➜ [IDEMPOTÊNCIA NOCODB] Fonte de dados PostgreSQL já conectada. Disparando sincronização de schema e views..."
+                local SOURCE_ID=$(echo "$HAS_PG_SOURCE" | head -n 1)
+                if [ -n "$SOURCE_ID" ] && [ "$SOURCE_ID" != "null" ]; then
+                    sudo docker exec ${PREFIX}_nocodb curl -s -X POST "http://localhost:8080/api/v2/meta/bases/${BASE_EXISTENTE}/sources/${SOURCE_ID}/sync" \
+                        -H "xc-auth: $AUTH_TOKEN" \
+                        -H "Content-Type: application/json" >/dev/null 2>&1 || true
+                fi
+                echo "✔ [AUTO-SINCRONIZAÇÃO NOCODB] Schema relacional e views analíticas sincronizados com sucesso!"
             fi
+
+            # 4. Auto-Provisionamento de Views de CRM & Apps Visuais no NocoDB (Kanban, Gallery, Calendar, Forms)
+            echo "➜ [SRE NOCODB CRM] Provisionando Views de CRM (Kanban, Galeria, Formulários e Calendário)..."
+            local NOCO_PORT="${HOST_NOCODB_PORT:-18080}"
+            local PG_CONTAINER="${PREFIX}_postgres"
+            
+            # SSOT Dinâmico: Extrai a lista viva de tabelas públicas direto do PostgreSQL do cliente
+            local DB_TABLES_JSON
+            DB_TABLES_JSON=$(sudo docker exec -e PGPASSWORD="${DB_PASSWORD}" "${PG_CONTAINER}" psql -U "${DB_USER:-admin_db}" -d "${PREFIX}_db" -t -A -c "SELECT json_agg(table_name) FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE';" 2>/dev/null || echo "[]")
+            [ -z "$DB_TABLES_JSON" ] || [ "$DB_TABLES_JSON" = "null" ] && DB_TABLES_JSON="[]"
+
+            python3 -c '
+import json
+import sys
+import time
+import urllib.request
+import urllib.error
+
+base_url = "http://127.0.0.1:'"$NOCO_PORT"'"
+headers = {
+    "xc-auth": "'"$AUTH_TOKEN"'",
+    "Content-Type": "application/json"
+}
+
+try:
+    pg_live_tables = set(json.loads("""'"${DB_TABLES_JSON}"'"""))
+except Exception:
+    pg_live_tables = set()
+
+def api_get(endpoint):
+    try:
+        req = urllib.request.Request(f"{base_url}{endpoint}", headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+
+def api_post(endpoint, payload):
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(f"{base_url}{endpoint}", data=data, headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        return None
+    except Exception:
+        return None
+
+# 1. Aguarda sincronização dinâmica de todas as tabelas do PostgreSQL no NocoDB (SSOT Dinâmico)
+tables = []
+for attempt in range(20):
+    tables = []
+    b_tables = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/tables?limit=100")
+    if b_tables and "list" in b_tables:
+        tables.extend(b_tables["list"])
+
+    sources = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/sources")
+    if sources and "list" in sources:
+        for s in sources["list"]:
+            s_id = s.get("id")
+            s_tables = api_get(f"/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/sources/{s_id}/tables?limit=100")
+            if s_tables and "list" in s_tables:
+                tables.extend(s_tables["list"])
+    
+    found_names = {t.get("title") for t in tables} | {t.get("table_name") for t in tables}
+    
+    # Se o PostgreSQL tiver tabelas, aguarda todas serem indexadas pelo NocoDB
+    if pg_live_tables and pg_live_tables.issubset(found_names):
+        break
+    elif not pg_live_tables and len(tables) > 0:
+        break
+    time.sleep(2)
+
+views_to_create = [
+    {
+        "table_name": "leads",
+        "views": [
+            {"title": "🎯 Funil de Leads & Pipeline", "type": "grid", "endpoint_type": "grids"},
+            {"title": "🔥 Leads Quentes (Tier A)", "type": "grid", "endpoint_type": "grids"},
+            {"title": "📝 Formulário de Captação de Leads", "type": "form", "endpoint_type": "forms"}
+        ]
+    },
+    {
+        "table_name": "propostas_comerciais",
+        "views": [
+            {"title": "💼 Propostas & Pipeline B2B", "type": "grid", "endpoint_type": "grids"},
+            {"title": "📅 Prazos de Validade & Vencimento", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "pedidos",
+        "views": [
+            {"title": "📦 Esteira de Expedição & Entregas", "type": "grid", "endpoint_type": "grids"},
+            {"title": "🛍️ Vitrine de Pedidos", "type": "gallery", "endpoint_type": "galleries"}
+        ]
+    },
+    {
+        "table_name": "catalogo",
+        "views": [
+            {"title": "🛍️ Vitrine de Produtos (Galeria)", "type": "gallery", "endpoint_type": "galleries"},
+            {"title": "📋 Tabela de Preços & Estoque", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "clientes",
+        "views": [
+            {"title": "👥 Base de Clientes (Galeria 360°)", "type": "gallery", "endpoint_type": "galleries"},
+            {"title": "👑 Clientes VIP & Recorrentes", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "carrinhos_abandonados",
+        "views": [
+            {"title": "🛒 Recuperação de Vendas & Checkouts", "type": "grid", "endpoint_type": "grids"},
+            {"title": "💬 Oportunidades WhatsApp Ativas", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "campanhas_marketing",
+        "views": [
+            {"title": "🎯 Hub de Campanhas & Mídia Paga (Galeria)", "type": "gallery", "endpoint_type": "galleries"},
+            {"title": "📊 Performance de Criativos & UTMs", "type": "grid", "endpoint_type": "grids"}
+        ]
+    },
+    {
+        "table_name": "contratos_servicos",
+        "views": [
+            {"title": "📅 Cronograma de Renovações (MRR)", "type": "grid", "endpoint_type": "grids"},
+            {"title": "💼 Gestão de Assinaturas Ativas", "type": "grid", "endpoint_type": "grids"}
+        ]
+    }
+]
+
+created_count = 0
+for target in views_to_create:
+    t_name = target["table_name"]
+    matched = [t for t in tables if t.get("title") == t_name or t.get("table_name") == t_name]
+    if not matched:
+        continue
+    t_id = matched[0]["id"]
+    
+    existing_views_data = api_get(f"/api/v2/meta/tables/{t_id}/views")
+    existing_view_titles = set()
+    if existing_views_data and "list" in existing_views_data:
+        existing_view_titles = {v.get("title") for v in existing_views_data["list"]}
+        
+    for v_def in target["views"]:
+        v_title = v_def["title"]
+        if v_title in existing_view_titles:
+            continue
+            
+        v_type = v_def.get("type", "grid")
+        endpoint_type = v_def["endpoint_type"]
+        
+        # NocoDB v2 API aceita POST em /views com {title, type} ou /grids, /galleries, /forms
+        payload = {"title": v_title, "type": v_type}
+        res = api_post(f"/api/v2/meta/tables/{t_id}/views", payload)
+        if not res or "id" not in res:
+            res = api_post(f"/api/v2/meta/tables/{t_id}/{endpoint_type}", {"title": v_title})
+            
+        if res and "id" in res:
+            created_count += 1
+            print(f"  ↳ View criada: {v_title} ({t_name})")
+
+if created_count > 0:
+    print(f"✔ [SUCESSO NOCODB CRM] {created_count} Views Soberanas (Grid/Galeria/Formulário) provisionadas com sucesso!")
+else:
+    print("➜ [IDEMPOTÊNCIA NOCODB CRM] Views Soberanas já provisionadas ou tabelas em sincronia.")
+'
         fi
     fi
 

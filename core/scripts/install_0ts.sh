@@ -25,7 +25,6 @@ EMAIL="${TS_EMAIL:-}"
 CLIENT_ID="${TS_OAUTH_ID:-}"
 CLIENT_SECRET="${TS_OAUTH_SECRET:-}"
 CADDY_PORT="${HOST_CADDY_PORT:-80}"
-EVO_PORT_EXT="${HOST_EVO_PORT:-8081}"
 
 # ===============================================================================
 # 0. collect_wizard_inputs (CLI) & collect_wizard_inputs_tui (TUI) & build_envs
@@ -62,11 +61,9 @@ collect_wizard_inputs_tui() {
                 if [ "$ROUTING_CHOICE" = "1" ]; then
                     USE_TAILSCALE="true"
                     CUSTOM_DOMAIN=""
-                    CUSTOM_EVO_DOMAIN=""
                     CADDY_PROTOCOL="https"
                     save_wizard_cache "USE_TAILSCALE" "true"
                     save_wizard_cache "CUSTOM_DOMAIN" ""
-                    save_wizard_cache "CUSTOM_EVO_DOMAIN" ""
                     save_wizard_cache "CADDY_PROTOCOL" "https"
 
                     while true; do
@@ -99,21 +96,16 @@ collect_wizard_inputs_tui() {
                     unset TS_OAUTH_ID TS_OAUTH_SECRET 2>/dev/null || true
                     export USE_TAILSCALE
 
-                    local BYODNS_OUT
-                    BYODNS_OUT=$(tui_dialog_step --title "Domínio Próprio (BYODNS)" \
-                        --mixedform "Configure os domínios FQDN e o protocolo para a stack:" 17 88 0 \
-                        "Domínio Painel Mestre (Ex: painel.loja.com):" 1 1 "${CUSTOM_DOMAIN:-}" 1 46 36 80 0 \
-                        "Domínio API WhatsApp (Ex: api.loja.com):"     2 1 "${CUSTOM_EVO_DOMAIN:-}" 2 46 36 80 0 \
+                    CUSTOM_DOMAIN=$(tui_dialog_step --title "Domínio Próprio (BYODNS)" \
+                        --inputbox "Digite o domínio FQDN da stack (Ex: painel.loja.com):" 9 70 "${CUSTOM_DOMAIN:-}" \
                         )
                     if [ $? -ne 0 ]; then
                         ts_substep=1
                         continue
                     fi
-                    CUSTOM_DOMAIN=$(clean_tui_field "$(echo "$BYODNS_OUT" | sed -n '1p')")
-                    CUSTOM_EVO_DOMAIN=$(clean_tui_field "$(echo "$BYODNS_OUT" | sed -n '2p')")
+                    CUSTOM_DOMAIN=$(clean_tui_field "$CUSTOM_DOMAIN")
                     [ -z "$CUSTOM_DOMAIN" ] && CUSTOM_DOMAIN="localhost"
                     save_wizard_cache "CUSTOM_DOMAIN" "$CUSTOM_DOMAIN"
-                    save_wizard_cache "CUSTOM_EVO_DOMAIN" "$CUSTOM_EVO_DOMAIN"
 
                     local TLS_OPT1="on"
                     local TLS_OPT2="off"
@@ -189,7 +181,6 @@ collect_wizard_inputs() {
         echo ""
         echo -e "\e[33m=== [SRE TAILSCALE] Configuração BYODNS (Traga seu próprio DNS) ===\e[0m"
         coletar_input "Domínio do Painel Mestre (Ex: painel.empresa.com)" CUSTOM_DOMAIN "false" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ""
-        coletar_input "Domínio da API WhatsApp (Ex: api.empresa.com)" CUSTOM_EVO_DOMAIN "false" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ""
         
         echo -e "\e[36mComo o tráfego chegará no servidor local?\e[0m"
         echo "1) Offload Externo (Cloudflare Proxy / Nginx Proxy Manager) -> Caddy sobe em HTTP."
@@ -202,7 +193,6 @@ collect_wizard_inputs() {
     save_wizard_cache "ROUTING_CHOICE" "$ROUTING_CHOICE"
     save_wizard_cache "USE_TAILSCALE" "$USE_TAILSCALE"
     save_wizard_cache "CUSTOM_DOMAIN" "$CUSTOM_DOMAIN"
-    save_wizard_cache "CUSTOM_EVO_DOMAIN" "$CUSTOM_EVO_DOMAIN"
 }
 
 build_envs() {
@@ -214,7 +204,6 @@ build_envs() {
 # =========================================================================
 USE_TAILSCALE="${USE_TAILSCALE:-true}"
 CUSTOM_DOMAIN="${CUSTOM_DOMAIN}"
-CUSTOM_EVO_DOMAIN="${CUSTOM_EVO_DOMAIN}"
 CADDY_PROTOCOL="${CADDY_PROTOCOL:-https}"
 
 # =========================================================================
@@ -236,9 +225,24 @@ install_binary() {
         echo "nameserver 1.1.1.1" | sudo tee /etc/resolv.conf > /dev/null
         
         # SRE FIX: Injetado env NONINTERACTIVE=1 para execução não-interativa e blindada
-        if ! curl -fsSL --retry 3 --connect-timeout 15 https://tailscale.com/install.sh | sudo env NONINTERACTIVE=1 sh > /tmp/debug_tailscale.log 2>&1; then
-            echo "🚨 [ERRO CRÍTICO TAILSCALE] Falha ao instalar Tailscale. Verifique: tail -f /tmp/debug_tailscale.log"
-            exit 1
+        # Prevenção SRE contra triggers quebrados de dracut/initramfs de kernels órfãos
+        sudo dpkg --configure -a >/dev/null 2>&1 || true
+
+        local ts_install_ok=0
+        if curl -fsSL --retry 3 --connect-timeout 15 https://tailscale.com/install.sh | sudo env NONINTERACTIVE=1 sh > /tmp/debug_tailscale.log 2>&1; then
+            ts_install_ok=1
+        fi
+
+        # Se o script do Tailscale retornou erro apenas devido a triggers de terceiros (ex: dracut/initramfs),
+        # mas o binário do Tailscale foi de fato instalado no sistema:
+        if [ "$ts_install_ok" -eq 0 ]; then
+            if command -v tailscale &>/dev/null; then
+                echo "⚠️  [SRE WARN TAILSCALE] O apt retornou aviso de trigger no SO, mas o binário do Tailscale foi instalado com sucesso."
+                ts_install_ok=1
+            else
+                echo "🚨 [ERRO CRÍTICO TAILSCALE] Falha ao instalar Tailscale. Verifique: tail -f /tmp/debug_tailscale.log"
+                exit 1
+            fi
         fi
         echo "✔ [SUCESSO TAILSCALE] Binário do Tailscale instalado com sucesso."
     else
@@ -339,9 +343,12 @@ cleanup_orphans() {
     MY_LOCAL_IP=$(tailscale ip -4 2>/dev/null | tr -d '\r\n ' || echo "")
 
     local DEVICES_JSON
-    DEVICES_JSON=$(curl -s -H "Authorization: Bearer ${ACCESS_TOKEN}" "https://api.tailscale.com/api/v2/tailnet/${EMAIL}/devices" || echo "{}")
+    DEVICES_JSON=$(curl -s -H "Authorization: Bearer ${ACCESS_TOKEN}" "https://api.tailscale.com/api/v2/tailnet/-/devices" || echo "{}")
 
-    echo "$DEVICES_JSON" | jq -c '.devices[]? | select(.hostname | test("^'"${PREFIX}"'(-[0-9]+)?$"))' 2>/dev/null | while read -r device; do
+    local ESCAPED_PREFIX
+    ESCAPED_PREFIX=$(printf '%s' "$PREFIX" | sed 's/[.[\*^$()+?{|]/\\&/g')
+
+    echo "$DEVICES_JSON" | jq -c --arg pref "^${ESCAPED_PREFIX}(-[0-9]+)?$" '.devices[]? | select(.hostname | test($pref))' 2>/dev/null | while read -r device; do
         [ -z "$device" ] && continue
         local DEVICE_ID
         DEVICE_ID=$(echo "$device" | jq -r '.id')
@@ -388,7 +395,7 @@ authenticate_node() {
         echo "➜ [SRE TAILSCALE] Nó já autenticado na Tailnet. Reaplicando configurações (Preservando Identidade)..."
         sudo tailscale up --advertise-tags=tag:production --accept-dns=true --hostname="${PREFIX}"
     else
-        echo "➜ [SRE TAILSCALE] Nó não autenticado. Solicitando Auth Key via API OAuth para: ${EMAIL}..."
+        echo "➜ [SRE TAILSCALE] Nó não autenticado. Solicitando Auth Key via API OAuth..."
         local ACCESS_TOKEN
         ACCESS_TOKEN=$(get_oauth_token)
 
@@ -404,7 +411,7 @@ authenticate_node() {
         KEY_JSON=$(curl -s -X POST -H "Authorization: Bearer ${ACCESS_TOKEN}" \
             -H "Content-Type: application/json" \
             -d "{\"capabilities\": {\"devices\": {\"create\": {\"reusable\": false, \"ephemeral\": false, \"tags\": [\"tag:production\"]}}}}" \
-            "https://api.tailscale.com/api/v2/tailnet/${EMAIL}/keys" || echo "{}")
+            "https://api.tailscale.com/api/v2/tailnet/-/keys" || echo "{}")
         
         local PERSISTENT_AUTH_KEY
         PERSISTENT_AUTH_KEY=$(echo "$KEY_JSON" | jq -r '.key // empty' 2>/dev/null || echo "")
@@ -432,18 +439,16 @@ configure_funnels() {
         return 0
     fi
 
+    local CADDY_PORT="${HOST_CADDY_PORT:-80}"
     local FUNNEL_STATUS=$(sudo tailscale funnel status 2>/dev/null || echo "")
     if echo "$FUNNEL_STATUS" | grep -q "https://.*:443" && echo "$FUNNEL_STATUS" | grep -q "${CADDY_PORT}"; then
-        if echo "$FUNNEL_STATUS" | grep -q "https://.*:8443" && echo "$FUNNEL_STATUS" | grep -q "${EVO_PORT_EXT}"; then
-            echo "➜ [IDEMPOTÊNCIA TAILSCALE] Túneis Funnel já ativos e roteando (Porta 443 -> ${CADDY_PORT} e Porta 8443 -> ${EVO_PORT_EXT})."
-            return 0
-        fi
+        echo "➜ [IDEMPOTÊNCIA TAILSCALE] Túnel Funnel já ativo e roteando (Porta 443 -> ${CADDY_PORT})."
+        return 0
     fi
 
-    echo "➜ [CONFIGURANDO TAILSCALE] Ativando túneis de borda do Tailscale Funnel (Portas ${CADDY_PORT} e ${EVO_PORT_EXT})..."
+    echo "➜ [CONFIGURANDO TAILSCALE] Ativando túnel de borda do Tailscale Funnel (Porta ${CADDY_PORT})..."
     sudo tailscale funnel --bg "${CADDY_PORT}" > /dev/null 2>&1 || true
-    sudo tailscale funnel --bg --https=8443 "${EVO_PORT_EXT}" > /dev/null 2>&1 || true
-    echo "✔ [SUCESSO TAILSCALE] Túneis Funnel ativados em background (Porta 443 -> ${CADDY_PORT} e Porta 8443 -> ${EVO_PORT_EXT})."
+    echo "✔ [SUCESSO TAILSCALE] Túnel Funnel ativado em background (Porta 443 -> ${CADDY_PORT})."
 }
 
 # ===============================================================================
@@ -499,12 +504,11 @@ recovery() {
     # 1. Desliga instâncias fantasmas do Funnel
     echo "➜ Limpando escopo de túneis antigos..."
     sudo tailscale funnel --https=443 off 2>/dev/null || true
-    sudo tailscale funnel --https=8443 off 2>/dev/null || true
 
-    # 2. Força o handshake limpo no painel usando a chave mestre do cliente com o reset protetivo
+    # 2. Força o handshake limpo no painel usando a chave mestre do cliente com o reset protetivo (Garantindo Ephemeral=false)
     echo "➜ Reautenticando nó ativo na Tailnet de forma estrita..."
     if [ -n "$CLIENT_SECRET" ] && [ "$CLIENT_SECRET" != "bypass_sec" ]; then
-        sudo tailscale up --reset --auth-key="${CLIENT_SECRET}" --advertise-tags=tag:production --accept-dns=true --force-reauth || {
+        sudo tailscale up --reset --auth-key="${CLIENT_SECRET}?ephemeral=false&preauthorized=true" --advertise-tags=tag:production --accept-dns=true --force-reauth || {
             echo "  ↳ Reautenticação direta falhou. Tentando via token de API..."
             authenticate_node
         }
@@ -535,13 +539,9 @@ audit_health() {
     local HTTP_GATEWAY_FUNNEL
     HTTP_GATEWAY_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}/healthz" || echo "000")
 
-    local HTTP_EVO_FUNNEL
-    HTTP_EVO_FUNNEL=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${FQDN}:8443/" || echo "000")
-
     echo "====================================================================="
-    echo "➜ FQDN Canônico:          https://${FQDN}"
-    echo "➜ Portal Gateway (443):   Status [${HTTP_GATEWAY_FUNNEL}]"
-    echo "➜ Evolution API (8443):   Status [${HTTP_EVO_FUNNEL}]"
+    echo "➜ FQDN Canônico:            https://${FQDN}"
+    echo "➜ Portal Gateway (443):     Status [${HTTP_GATEWAY_FUNNEL}]"
     echo "====================================================================="
 
     # Inspeção de logs ACME/Let's Encrypt para detecção proativa de Rate Limits

@@ -40,7 +40,6 @@ build_structure() {
 provision_db() {
     local PREFIX="${PREFIXO_CONTAINER}"
     echo "➜ [SRE EVOLUTION] Garantindo banco de dados lógico (evolution_db) no PostgreSQL..."
-    local PREFIX="${PREFIXO_CONTAINER}"
     if docker compose exec -T postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -c "SELECT 1 FROM pg_database WHERE datname = 'evolution_db'" 2>/dev/null | grep -q 1; then
         echo "➜ [IDEMPOTÊNCIA EVOLUTION] Banco de dados 'evolution_db' já existente. Preservando esquema."
     else
@@ -50,8 +49,11 @@ provision_db() {
 }
 
 provision_infra() {
-    echo "➜ [SRE EVOLUTION] Aplicando firewall e patch de assets no Evolution Manager (v2.3.7)..."
+    echo "➜ [SRE EVOLUTION] Aplicando firewall, túnel perimetral e patch de assets no Evolution..."
+    local PREFIX="${PREFIXO_CONTAINER}"
     local use_val="${USE_EVOLUTION:-s}"
+    local port_num="${HOST_EVO_PORT:-18081}"
+
     if [[ "$use_val" =~ ^[Ss]$ ]]; then
         sudo mkdir -p /etc/dnsmasq.d 2>/dev/null || true
         cat << 'EOF' | sudo tee /etc/dnsmasq.d/evolution.conf > /dev/null
@@ -59,17 +61,38 @@ provision_infra() {
 ipset=/graph.facebook.com/ALLOWED_DOMAINS
 EOF
         if [ "${USE_TAILSCALE:-false}" = "true" ]; then
-            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport 18081 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -i tailscale0 -p tcp --dport "$port_num" -j ACCEPT 2>/dev/null || true
+            # Ativação autônoma do Tailscale Funnel para a porta da Evolution API (:8443 -> 18081)
+            local FUNNEL_STATUS
+            FUNNEL_STATUS=$(sudo tailscale funnel status 2>/dev/null || echo "")
+            if ! echo "$FUNNEL_STATUS" | grep -q "https://.*:8443"; then
+                echo "➜ [SRE TAILSCALE EVOLUTION] Ativando túnel Funnel HTTPS na porta :8443..."
+                sudo tailscale funnel --bg --https=8443 "${port_num}" > /dev/null 2>&1 || true
+            fi
         else
-            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport 18081 -j ACCEPT 2>/dev/null || true
+            sudo iptables -I DOCKER-USER 7 -s "${IP_NETWORK_SUBNET}" -p tcp --dport "$port_num" -j ACCEPT 2>/dev/null || true
         fi
     else
         sudo rm -f /etc/dnsmasq.d/evolution.conf 2>/dev/null || true
     fi
-    docker compose exec -T -u root evolution sh -c '
-        # Copia o logo público como favicon oficial na raiz servida do manager
+
+    local EVO_CONTAINER="${PREFIX}_evolution"
+    if ! docker ps --format '{{.Names}}' | grep -q "^${EVO_CONTAINER}$"; then
+        EVO_CONTAINER="evolution"
+    fi
+
+    docker exec -u root "$EVO_CONTAINER" sh -c '
+        # Garante pastas físicas no dist do manager
+        mkdir -p /evolution/manager/dist/assets/images 2>/dev/null || true
+
+        # Copia o logo público como favicon e logo oficial na raiz servida do manager
         if [ -f /evolution/public/images/evolution-logo.png ]; then
             cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/favicon.png 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/evolution-logo.png 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/evolution-logo-white.svg 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/evolution-logo.svg 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/assets/evolution-logo.png 2>/dev/null || true
+            cp /evolution/public/images/evolution-logo.png /evolution/manager/dist/assets/images/evolution-logo.png 2>/dev/null || true
         fi
 
         # Patch no index.html do manager para carregar o favicon
@@ -80,16 +103,16 @@ EOF
                    -e "s|type=\"image/svg+xml\"|type=\"image/png\"|g" /evolution/manager/dist/index.html 2>/dev/null || true
         fi
 
-        # Patch nos bundles JS para carregar logos e favicons locais em vez de CDN externa
+        # Patch nos bundles JS para carregar logos e favicons locais em vez da CDN externa
         if [ -d /evolution/manager/dist/assets ]; then
             find /evolution/manager/dist/assets -type f -name "*.js" -exec sed -i \
-                -e "s|https://evolution-api.com/files/evo/evolution-logo-white.svg|/assets/images/evolution-logo.png|g" \
-                -e "s|https://evolution-api.com/files/evo/evolution-logo.svg|/assets/images/evolution-logo.png|g" \
+                -e "s|https://evolution-api.com/files/evo/evolution-logo-white.svg|/manager/favicon.png|g" \
+                -e "s|https://evolution-api.com/files/evo/evolution-logo.svg|/manager/favicon.png|g" \
                 -e "s|https://evolution-api.com/files/evo/favicon.svg|/manager/favicon.png|g" {} + 2>/dev/null || true
         fi
     ' 2>/dev/null || true
 
-    echo "✔ [SUCESSO EVOLUTION] Infra provisionada: DB + assets do manager configurados."
+    echo "✔ [SUCESSO EVOLUTION] Infra provisionada: DB, firewall, Funnel e assets configurados."
 }
 
 inject_caddy_routes() {
@@ -99,12 +122,31 @@ inject_caddy_routes() {
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_num="${HOST_EVO_PORT:-18081}"
+    local custom_evo="${CUSTOM_EVO_DOMAIN:-}"
 
     if [ -f "$CADDYFILE_PATH" ]; then
-        if ! grep -q 'reverse_proxy.*_evolution:8080' "$CADDYFILE_PATH"; then
+        if ! grep -q ":${port_num}" "$CADDYFILE_PATH"; then
             cat << EOF | sudo tee -a "$CADDYFILE_PATH" > /dev/null
 
-:8081 {
+:${port_num} {
+    log {
+        level error
+    }
+    reverse_proxy ${PREFIX}_evolution:8080 {
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-Host {host}
+        header_up X-Real-IP {remote_host}
+    }
+}
+EOF
+        fi
+
+        # Rota dedicada se houver domínio próprio customizado para o WhatsApp
+        if [ -n "$custom_evo" ] && ! grep -q "$custom_evo" "$CADDYFILE_PATH"; then
+            cat << EOF | sudo tee -a "$CADDYFILE_PATH" > /dev/null
+
+${custom_evo} {
     log {
         level error
     }
@@ -124,15 +166,22 @@ remove_caddy_routes() {
     if [ ! -f "$CADDYFILE_PATH" ] && [ -f "$TARGET_DIR/core/config/Caddyfile" ]; then
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
     fi
-    if [ -f "$CADDYFILE_PATH" ] && grep -q ':8081 {' "$CADDYFILE_PATH"; then
+    local port_num="${HOST_EVO_PORT:-18081}"
+    local custom_evo="${CUSTOM_EVO_DOMAIN:-}"
+
+    if [ -f "$CADDYFILE_PATH" ]; then
         echo "➜ [SRE EVOLUTION] Removendo rotas da Evolution API do Caddyfile..."
         python3 -c "
 path = '$CADDYFILE_PATH'
+custom_evo = '$custom_evo'
 try:
     with open(path, 'r+') as f:
         content = f.read()
         import re
-        new_content = re.sub(r'\s*:8081\s*\{[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:(8081|${port_num})\s*\{[\s\S]*?evolution[\s\S]*?\}', '', content)
+        new_content = re.sub(r'\s*:(8081|${port_num})\s*\{[\s\S]*?\}', '', new_content)
+        if custom_evo:
+            new_content = re.sub(r'\s*' + re.escape(custom_evo) + r'\s*\{[\s\S]*?\}', '', new_content)
         f.seek(0)
         f.write(new_content)
         f.truncate()
@@ -143,15 +192,15 @@ except Exception:
 }
 
 inject_dashboard_card() {
+    local port_num="${HOST_EVO_PORT:-18081}"
     echo "➜ [SRE EVOLUTION] Injetando card da Evolution API no portal de controle (index.html)..."
     local INDEX_PATH="$TARGET_DIR/core/html/index.html"
     local PREFIX="${PREFIXO_CONTAINER}"
-    local EVO_PORT="${HOST_EVO_PORT:-8081}"
 
-    if [ -f "$INDEX_PATH" ] && ! grep -q 'data-port="8081"' "$INDEX_PATH" && ! grep -q 'Evolution API' "$INDEX_PATH"; then
+    if [ -f "$INDEX_PATH" ] && ! grep -q "data-port=\"$port_num\"" "$INDEX_PATH" && ! grep -q 'Evolution API' "$INDEX_PATH"; then
         python3 -c "
 path = '$INDEX_PATH'
-card = '''            <a href=\"#\" data-port=\"$EVO_PORT\" data-path=\"/manager\" class=\"card dynamic-link\">
+card = '''            <a href=\"#\" data-port=\"$port_num\" data-path=\"/manager\" class=\"card dynamic-link\">
                 <div class=\"card-content\">
                     <div class=\"card-header\">
                         <div class=\"icon\">💬</div>
@@ -161,7 +210,7 @@ card = '''            <a href=\"#\" data-port=\"$EVO_PORT\" data-path=\"/manager
                     <p class=\"description\">Gateway de integração oficial do WhatsApp com suporte a instâncias e webhooks.</p>
                     <div class=\"card-footer\">
                         <span>Gateway: HTTP</span>
-                        <span class=\"port\">:$EVO_PORT</span>
+                        <span class=\"port\">:$port_num</span>
                     </div>
                 </div>
             </a>\n'''
@@ -181,19 +230,18 @@ except Exception as e:
     fi
 }
 
-
 remove_dashboard_card() {
     echo "➜ [SRE EVOLUTION] Purgando card da Evolution API no portal de controle (index.html)..."
     local INDEX_PATH="$TARGET_DIR/core/html/index.html"
-    local EVO_PORT="${HOST_EVO_PORT:-18081}"
-    if [ -f "$INDEX_PATH" ] && ( grep -q 'Evolution API' "$INDEX_PATH" || grep -q "data-port=\"$EVO_PORT\"" "$INDEX_PATH" || grep -q 'data-port="8081"' "$INDEX_PATH" ); then
+    local port_num="${HOST_EVO_PORT:-18081}"
+    if [ -f "$INDEX_PATH" ] && ( grep -q 'Evolution API' "$INDEX_PATH" || grep -q "data-port=\"$port_num\"" "$INDEX_PATH" || grep -q 'data-port="8081"' "$INDEX_PATH" ); then
         python3 -c "
 path = '$INDEX_PATH'
 try:
     with open(path, 'r+') as f:
         content = f.read()
         import re
-        new_content = re.sub(r'\s*<a href=\"[^\"]*\" [^>]*data-port=\"(8081|$EVO_PORT)\"[\s\S]*?</a>\s*', '', content)
+        new_content = re.sub(r'\s*<a href=\"[^\"]*\" [^>]*data-port=\"(8081|${port_num})\"[\s\S]*?</a>\s*', '', content)
         new_content = re.sub(r'\s*<a href=\"[^\"]*\" [\s\S]*?Evolution API[\s\S]*?</a>\s*', '', new_content)
         f.seek(0)
         f.write(new_content)
@@ -211,6 +259,9 @@ disable() {
     local PREFIX="${PREFIXO_CONTAINER}"
     sudo docker rm -f "${PREFIX}_evolution" 2>/dev/null || true
 
+    # Desativação do túnel Tailscale Funnel da porta :8443
+    sudo tailscale funnel --https=8443 off 2>/dev/null || true
+
     # Limpeza de Regras de Firewall e DNS
     sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 18081 -j ACCEPT 2>/dev/null || true
     sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 18081 -j ACCEPT 2>/dev/null || true
@@ -218,7 +269,7 @@ disable() {
         sudo rm -f /etc/dnsmasq.d/evolution.conf 2>/dev/null || true
         sudo systemctl restart dnsmasq 2>/dev/null || true
     fi
-    echo "✔ [SUCESSO EVOLUTION] Módulo Evolution API desativado, container removido, firewall e rotas limpos."
+    echo "✔ [SUCESSO EVOLUTION] Módulo Evolution API desativado, container removido, firewall, Funnel e rotas limpos."
 }
 
 start_container() {
@@ -231,6 +282,7 @@ wait_readiness() {
     echo "➜ [SRE EVOLUTION] Validando prontidão de socket e healthcheck da Evolution API..."
     local TENTATIVAS=0
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_num="${HOST_EVO_PORT:-18081}"
     until [ "$(sudo docker inspect -f '{{.State.Health.Status}}' ${PREFIX}_evolution 2>/dev/null)" = "healthy" ]; do
         TENTATIVAS=$((TENTATIVAS+1))
         if [ "$TENTATIVAS" -ge 30 ]; then
@@ -241,14 +293,14 @@ wait_readiness() {
     done
 
     echo "➜ [SRE EVOLUTION] Validando integridade da conexão Prisma com PgBouncer..."
-    local EVO_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:8081/instance/fetchInstances" 2>/dev/null || echo "000")
+    local EVO_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_num}/instance/fetchInstances" 2>/dev/null || echo "000")
 
     if [ "$EVO_STATUS" = "500" ]; then
         echo "➜ [SRE RECOVERY EVOLUTION] Deadlock de conexão detectado no Prisma ORM (HTTP 500). Reciclando a Evolution API..."
         docker compose restart evolution > /dev/null 2>&1 || true
         sleep 5
         TENTATIVAS=0
-        until [ "$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:8081/instance/fetchInstances" 2>/dev/null || echo "200")" = "200" ]; do
+        until [ "$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_num}/instance/fetchInstances" 2>/dev/null || echo "200")" = "200" ]; do
             TENTATIVAS=$((TENTATIVAS+1))
             [ "$TENTATIVAS" -ge 20 ] && { echo "⚠️ [SRE WARN EVOLUTION] Evolution não estabilizou totalmente após restart SRE. Prosseguindo..."; return 1 2>/dev/null || true; }
             sleep 5
@@ -261,51 +313,176 @@ wait_readiness() {
 audit_health() {
     local ts_domain="${1:-localhost}"
     local PREFIX="${PREFIXO_CONTAINER}"
+    local port_num="${HOST_EVO_PORT:-18081}"
     local health_status=$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}unhealthy{{end}}' ${PREFIX}_evolution 2>/dev/null || echo "OFFLINE")
     local http_status="OFFLINE"
     if [ "$health_status" = "healthy" ]; then
-        http_status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:${HOST_EVO_PORT:-8081}/" 2>/dev/null || echo "FALHOU")
+        http_status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:${port_num}/" 2>/dev/null || echo "FALHOU")
     else
         http_status="CONTAINER_ERRO"
     fi
 
-    printf "  ↳ %-32s http://%s:%s  -> Status: [%s]\n" "WhatsApp API (Evolution):" "${ts_domain}" "${HOST_EVO_PORT:-8081}" "${http_status}"
+    local funnel_info=""
+    if [ "${USE_TAILSCALE:-false}" = "true" ]; then
+        local http_funnel
+        http_funnel=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://${ts_domain}:8443/" 2>/dev/null || echo "000")
+        funnel_info=" | Funnel HTTPS (:8443) -> [${http_funnel}]"
+    fi
+
+    printf "  ↳ %-32s http://%s:%s%s  -> Status: [%s]\n" "WhatsApp API (Evolution):" "${ts_domain}" "${port_num}" "${funnel_info}" "${http_status}"
 }
 
 get_version() {
     local PREFIX="${PREFIXO_CONTAINER}"
     local container_name="${PREFIX}_evolution"
-    sudo docker exec "$container_name" node -e 'console.log(require("./package.json").version)' 2>/dev/null || echo "v2.3.7"
+    sudo docker exec "$container_name" node -e 'console.log(require("./package.json").version)' 2>/dev/null || echo "homolog"
 }
 
 render_forensic_report() {
     local ts_domain="${1:-localhost}"
-    local evo_url="${SERVER_URL:-http://${ts_domain}:${HOST_EVO_PORT:-8081}}"
+    local port_num="${HOST_EVO_PORT:-18081}"
+    local custom_evo="${CUSTOM_EVO_DOMAIN:-}"
+    local evo_url="${SERVER_URL:-http://${ts_domain}:${port_num}}"
+
+    if [ -n "$custom_evo" ]; then
+        evo_url="${CADDY_PROTOCOL:-https}://${custom_evo}"
+    elif [ "${USE_TAILSCALE:-false}" = "true" ]; then
+        evo_url="https://${ts_domain}:8443"
+    fi
+
     echo "  💬 WhatsApp API (Evolution)"
     echo "    ↳ API Principal (SERVER_URL):      ${evo_url}"
-    echo "    ↳ Evolution Manager:               http://${ts_domain}:${HOST_EVO_PORT:-8081}/manager"
-    echo "    ↳ Healthcheck:                     http://${ts_domain}:${HOST_EVO_PORT:-8081}/manager/health"
+    echo "    ↳ Evolution Manager:               http://${ts_domain}:${port_num}/manager"
+    echo "    ↳ Healthcheck:                     http://${ts_domain}:${port_num}/manager/health"
     echo ""
 }
 
 provision_user() {
     echo "➜ [SRE EVOLUTION] Validando integridade de chave de API e conexão com PgBouncer..."
     local PREFIX="${PREFIXO_CONTAINER}"
-    local EVO_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:8081/instance/fetchInstances" 2>/dev/null || echo "000")
+    local port_num="${HOST_EVO_PORT:-18081}"
+    local EVO_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_num}/instance/fetchInstances" 2>/dev/null || echo "000")
 
     if [ "$EVO_STATUS" = "500" ]; then
         echo "➜ [SRE RECOVERY EVOLUTION] Deadlock de conexão no Prisma ORM (HTTP 500). Reciclando a Evolution API..."
         docker compose up -d --force-recreate evolution > /dev/null 2>&1 || true
         sleep 5
     elif [ "$EVO_STATUS" = "200" ]; then
-        echo "➜ [IDEMPOTÊNCIA EVOLUTION] Evolution API conectada e autenticada com sucesso (HTTP 200)."
+        echo "✔ [SUCESSO EVOLUTION] Evolution API conectada e autenticada com sucesso (HTTP 200)."
     fi
+
+    # Auto-Integração Zero-Touch com Chatwoot CRM
+    if [ "${USE_CHATWOOT:-s}" = "s" ]; then
+        echo "➜ [SRE EVOLUTION] Verificando auto-integração nativa com o Chatwoot CRM..."
+        local CW_URL="http://chatwoot:3000"
+        local CW_TOKEN="${CHATWOOT_API_TOKEN:-${DB_PASSWORD}}"
+        local INSTANCE_NAME="${PREFIXO_CONTAINER:-loja}"
+
+        # 1. Purgar caixas legadas de WPPConnect ou duplicadas de API no Chatwoot caso existam
+        sudo docker exec -i "${PREFIX}_chatwoot" bundle exec rails runner "
+        begin
+          Channel::Api.where('webhook_url LIKE ?', '%wppconnect%').each do |channel|
+            channel.inbox&.destroy!
+            channel.destroy!
+          end
+        rescue => e
+        end
+        " < /dev/null 2>/dev/null || true
+
+        # 2. Busca instâncias existentes no Evolution API
+        local INST_EXISTS
+        INST_EXISTS=$(curl -s -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" "http://127.0.0.1:${port_num}/instance/fetchInstances" 2>/dev/null || echo "[]")
+
+        # 3. Cria a instância padrão caso não exista
+        if ! echo "$INST_EXISTS" | grep -q "\"name\":\"${INSTANCE_NAME}\""; then
+            echo "  ↳ Criando instância padrão '${INSTANCE_NAME}' com integração Chatwoot..."
+            curl -s -X POST "http://127.0.0.1:${port_num}/instance/create" \
+                -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" \
+                -H "Content-Type: application/json" \
+                -d "{
+                    \"instanceName\": \"${INSTANCE_NAME}\",
+                    \"token\": \"${EVOLUTION_API_KEY:-${DB_PASSWORD}}\",
+                    \"qrcode\": true,
+                    \"integration\": \"WHATSAPP-BAILEYS\",
+                    \"chatwootAccountId\": \"1\",
+                    \"chatwootToken\": \"${CW_TOKEN}\",
+                    \"chatwootUrl\": \"${CW_URL}\",
+                    \"chatwootSignMsg\": true,
+                    \"chatwootReopenConversation\": true,
+                    \"chatwootConversationPending\": false,
+                    \"chatwootImportContacts\": true,
+                    \"chatwootNameInbox\": \"WhatsApp\",
+                    \"chatwootMergeBrazilContacts\": true,
+                    \"chatwootImportMessages\": true,
+                    \"chatwootDaysLimitImportMessages\": 3,
+                    \"chatwootOrganization\": \"${PREFIXO_CONTAINER:-loja}\",
+                    \"chatwootAutoCreate\": true
+                }" > /dev/null 2>&1 || true
+        else
+            # SRE Sync: Se a instância já existia, sincroniza parâmetros sem disparar autoCreate duplicado
+            local CW_INT_RES
+            CW_INT_RES=$(curl -s -X POST "http://127.0.0.1:${port_num}/chatwoot/set/${INSTANCE_NAME}" \
+                -H "apikey: ${EVOLUTION_API_KEY:-${DB_PASSWORD}}" \
+                -H "Content-Type: application/json" \
+                -d "{
+                    \"enabled\": true,
+                    \"accountId\": \"1\",
+                    \"token\": \"${CW_TOKEN}\",
+                    \"url\": \"${CW_URL}\",
+                    \"signMsg\": true,
+                    \"reopenConversation\": true,
+                    \"conversationPending\": false,
+                    \"nameInbox\": \"WhatsApp\",
+                    \"mergeBrazilContacts\": true,
+                    \"importContacts\": true,
+                    \"importMessages\": true,
+                    \"daysLimitImportMessages\": 3,
+                    \"signDelimiter\": \"\\n\",
+                    \"autoCreate\": false,
+                    \"organization\": \"${PREFIXO_CONTAINER:-loja}\"
+                }" 2>/dev/null || echo "")
+
+            if [ -n "$CW_INT_RES" ]; then
+                echo "✔ [SUCESSO EVOLUTION] Auto-integração Chatwoot sincronizada para instância '${INSTANCE_NAME}'."
+            fi
+        fi
+    fi
+}
+
+collect_wizard_inputs_tui() {
+    if [ "${USE_TAILSCALE:-true}" = "false" ] || [ "${ROUTING_CHOICE:-1}" = "2" ]; then
+        CUSTOM_EVO_DOMAIN=$(tui_dialog_step --title "Domínio Dedicado Evolution (WhatsApp)" \
+            --inputbox "Digite o domínio FQDN para a Evolution API (Ex: api.loja.com - Opcional):" 9 70 "${CUSTOM_EVO_DOMAIN:-}" \
+            ) || true
+        CUSTOM_EVO_DOMAIN=$(clean_tui_field "$CUSTOM_EVO_DOMAIN")
+        save_wizard_cache "CUSTOM_EVO_DOMAIN" "$CUSTOM_EVO_DOMAIN"
+    else
+        CUSTOM_EVO_DOMAIN=""
+        save_wizard_cache "CUSTOM_EVO_DOMAIN" ""
+    fi
+    return 0
 }
 
 collect_wizard_inputs() {
     coletar_sn "Deseja instalar a Evolution API (Gateway WhatsApp)?" USE_EVOLUTION "s"
     [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]] && USE_EVOLUTION="s" || USE_EVOLUTION="n"
     save_wizard_cache "USE_EVOLUTION" "$USE_EVOLUTION"
+
+    if [ "$USE_EVOLUTION" = "s" ]; then
+        USE_N8N="s"
+        USE_CHATWOOT="s"
+        save_wizard_cache "USE_N8N" "s"
+        save_wizard_cache "USE_CHATWOOT" "s"
+        export USE_N8N USE_CHATWOOT
+
+        if [ "${USE_TAILSCALE:-true}" = "false" ] || [ "${ROUTING_CHOICE:-1}" = "2" ]; then
+            coletar_input "Domínio da API WhatsApp (Ex: api.empresa.com - Deixe vazio para usar porta)" CUSTOM_EVO_DOMAIN "false" "^([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})?$" ""
+            save_wizard_cache "CUSTOM_EVO_DOMAIN" "$CUSTOM_EVO_DOMAIN"
+        else
+            CUSTOM_EVO_DOMAIN=""
+            save_wizard_cache "CUSTOM_EVO_DOMAIN" ""
+        fi
+    fi
 }
 
 build_envs() {
@@ -313,6 +490,14 @@ build_envs() {
     local API_KEY="${API_MASTER_KEY:-${DB_PASSWORD:-}}"
     local OLD_KEY=$(grep '^EVOLUTION_API_KEY=' "$env_path" 2>/dev/null | cut -d= -f2 || true)
     local FINAL_KEY="${OLD_KEY:-$API_KEY}"
+
+    # SRE Guardrail de Dependência Autônomo: Evolution ativa o Chatwoot e n8n no .env
+    if [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]]; then
+        export USE_CHATWOOT="s"
+        export USE_N8N="s"
+        sed -i 's/^USE_CHATWOOT=.*/USE_CHATWOOT="s"/' "$env_path" 2>/dev/null || true
+        sed -i 's/^USE_N8N=.*/USE_N8N="s"/' "$env_path" 2>/dev/null || true
+    fi
 
     local cpus="${SYSTEM_TOTAL_CPUS:-${TOTAL_CPUS:-4}}"
     local ram_mb="${SYSTEM_TOTAL_RAM_MB:-${TOTAL_RAM_MB:-8192}}"
@@ -341,6 +526,7 @@ build_envs() {
 USE_EVOLUTION="${USE_EVOLUTION:-s}"
 EVO_PORT=${HOST_EVO_PORT:-18081}
 HOST_EVO_PORT=${HOST_EVO_PORT:-18081}
+CUSTOM_EVO_DOMAIN="${CUSTOM_EVO_DOMAIN:-}"
 EVOLUTION_API_KEY=${FINAL_KEY}
 CPU_EVOLUTION=${CPU_EVOLUTION:-${cpu_evolution}}
 MEM_EVOLUTION=${MEM_EVOLUTION:-${mem_evolution}}
@@ -353,6 +539,9 @@ ACTION="${2:-all}"
 case "$ACTION" in
     collect_wizard_inputs|collect_inputs|wizard_prompt)
         collect_wizard_inputs
+        ;;
+    collect_wizard_inputs_tui)
+        collect_wizard_inputs_tui
         ;;
     build_envs|build_env)
         build_envs
@@ -377,7 +566,7 @@ case "$ACTION" in
         wait_readiness
         provision_infra
         provision_user
-		provision_db
+        provision_db
         ;;
     *)
         ;;

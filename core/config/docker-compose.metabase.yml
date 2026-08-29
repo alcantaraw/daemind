@@ -6,11 +6,13 @@ services:
     networks:
       instancia_net:
         ipv4_address: ${IP_METABASE}
+        aliases:
+          - metabase
     deploy:
       resources:
         limits:
-          cpus: '${CPU_METABASE:-1.0}'
-          memory: '${MEM_METABASE:-1024M}'
+          cpus: '${CPU_METABASE:-2.0}'
+          memory: '${MEM_METABASE:-2048M}'
         reservations:
           memory: '${RES_METABASE:-256M}'
     environment:
@@ -24,16 +26,32 @@ services:
       - MB_JETTY_PORT=3000
       - MB_ANON_TRACKING_ENABLED=false
       - MB_CHECK_FOR_UPDATES=false
+      - MB_ENABLE_METABOT=true
       - MB_EMOJI_IN_LOGS=false
       - MB_LOG_LEVEL=ERROR
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -XX:+ExitOnOutOfMemoryError -Duser.timezone=America/Sao_Paulo -Dlog4j2.level=ERROR -Dorg.slf4j.simpleLogger.defaultLogLevel=error -Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory
+      - MB_SESSION_SECRET_KEY=${METABASE_SECRET_KEY:-${DB_PASSWORD}${DB_PASSWORD}}
+      - JAVA_OPTS=-XX:+UseG1GC -Xms256m -Xmx768m -XX:MaxMetaspaceSize=512m -XX:+ExitOnOutOfMemoryError -Duser.timezone=America/Sao_Paulo -Dlog4j.configurationFile=file:/etc/metabase/log4j2.xml -Dlog4j2.level=WARN -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
+      # --- INTEGRAÇÃO COM IA SOBERANA (METABOT / LITELLM PROXY) ---
+      - MB_LLM_ENABLED=true
+      - MB_LLM_PROVIDER=openai
+      - MB_LLM_METABOT_PROVIDER=openai/${METABASE_AI_MODEL:-gpt-4.1}
+      - MB_LLM_OPENAI_KEY=${LITELLM_MASTER_KEY}
+      - MB_LLM_OPENAI_API_KEY=${LITELLM_MASTER_KEY}
+      - MB_LLM_OPENAI_API_BASE_URL=http://litellm:4000
+      - MB_LLM_OPENAI_MODEL=${METABASE_AI_MODEL:-gpt-4.1}
+      - MB_OPENAI_API_KEY=${LITELLM_MASTER_KEY}
+      - MB_OPENAI_BASE_URL=http://litellm:4000
+      - MB_OPENAI_MODEL=${METABASE_AI_MODEL:-gpt-4.1}
     volumes:
+      - './core/config/log4j2.metabase.xml:/etc/metabase/log4j2.xml:ro'
       - './volumes/metabase_data:/metabase-data'
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
     depends_on:
       postgres:
         condition: service_healthy
+      litellm:
+        condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "curl -fsSL http://127.0.0.1:3000/api/health | grep -q 'ok' || exit 1"]
       interval: 15s

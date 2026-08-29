@@ -20,9 +20,7 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [3.3. Prevenção de Race Condition no Boot de Cloud (dpkg fuser wait)](#33-prevenção-de-race-condition-no-boot-de-cloud-dpkg-fuser-wait)
   - [3.4. Sincronização de Relógio Atômica & Auto-Healing de DNS do Host](#34-sincronização-de-relógio-atômica--auto-healing-de-dns-do-host)
   - [3.5. Motor Autônomo & Desacoplado de Auto-Tuning de Hardware (`core/scripts/autotune.sh`)](#35-motor-autônomo--desacoplado-de-auto-tuning-de-hardware-corescriptsautotunesh)
-  - [3.6. Cronômetro SRE de Latência com Pausa Interativa de Wizard](#36-cronômetro-sre-de-latência-com-pausa-interativa-de-wizard)
-  - [3.7. Banner Executivo Dinâmico no Login SSH (`/etc/update-motd.d/99-sre-banner`)](#37-banner-executivo-dinâmico-no-login-ssh-etcupdate-motdd99-sre-banner)
-  - [3.8. Fixação Determinística de IP Estático via Netplan (`/etc/netplan/99-static-sre.yaml`)](#38-fixação-determinística-de-ip-estático-via-netplan-etcnetplan99-static-sreyaml)
+  - [3.6. Preservação Não-Destrutiva da Pilha de Rede do Host](#36-preservação-não-destrutiva-da-pilha-de-rede-do-host)
 - [4. Arquitetura da Malha de Contêineres & Tunings por Serviço](#4-arquitetura-da-malha-de-contêineres--tunings-por-serviço)
   - [4.1. PostgreSQL 17 + PGVector + PgBouncer (Transaction Pooling)](#41-postgresql-17--pgvector--pgbouncer-transaction-pooling)
   - [4.2. Chatwoot Omnichannel & Compilação Ruby YJIT](#42-chatwoot-omnichannel--compilação-ruby-yjit)
@@ -44,6 +42,19 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [6.6. Atualização Remota Declarativa da Stack (`upgrade_stack.sh`)](#66-atualização-remota-declarativa-da-stack-upgrade_stacksh)
   - [6.7. Bateria de Testes de Fumaça & Recuperação Perimetral (`ci_smoke_test.sh` e `install_0ts.sh`)](#67-bateria-de-testes-de-fumaça--recuperação-perimetral-ci_smoke_testsh-e-install_0tssh)
 - [7. Padrões Avançados de Arquitetura de Dados, LGPD & Integração Física](#7-padrões-avançados-de-arquitetura-de-dados-lgpd--integração-física)
+  - [7.1. Staging Area Soberana (Proteção contra Rate-Limits HTTP 429)](#71-staging-area-soberana-proteção-contra-rate-limits-http-429)
+  - [7.2. Isolamento Relacional vs. Base Vetorial (`pgvector`)](#72-isolamento-relacional-vs-base-vetorial-pgvector)
+  - [7.3. Privacy-by-Design & Conformidade Nativa LGPD](#73-privacy-by-design--conformidade-nativa-lgpd)
+  - [7.4. Interface Físico-Digital com Hardware HID (Leitor de Código de Barras USB)](#74-interface-físico-digital-com-hardware-hid-leitor-de-código-de-barras-usb)
+  - [7.5. Deduplicação por Hash de Payload SHA-256 (n8n Webhook Fallback)](#75-deduplicação-por-hash-de-payload-sha-256-n8n-webhook-fallback)
+  - [7.6. Data Warehouse Soberano & Federação Multi-Bancos (`postgres_fdw`)](#76-data-warehouse-soberano--federação-multi-bancos-postgres_fdw)
+  - [7.7. AI Mesh Soberana via LiteLLM (SRE Health Prober & Virtual Aliases)](#77-ai-mesh-soberana-via-litellm-sre-health-prober--virtual-aliases)
+  - [7.8. Pipeline de RAG Soberano com Docling OCR, pgvector e S3 Storage](#78-pipeline-de-rag-soberano-com-docling-ocr-pgvector-e-s3-storage)
+  - [7.9. Service Mesh de Variáveis de Ambiente no n8n](#79-service-mesh-de-variáveis-de-ambiente-no-n8n)
+  - [7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)](#710-rastreamento-ponta-a-ponta--atribuição-de-tráfego-shlink--listmonk--umami)
+  - [7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)](#711-padronização-de-aliases-de-rede-rfc-1123-mitigação-de-exceções-em-sdks-estritos)
+  - [7.12. Hardening e Supressão Global de Logs (Piso Mínimo WARN/ERROR & Debloat de I/O)](#712-hardening-e-supressão-global-de-logs-piso-mínimo-warnerror--debloat-de-io)
+  - [7.13. Motor de Hidratação, Simulação de Negócios & Validação Contínua (Seed Engine 360°)](#713-motor-de-hidratação-simulação-de-negócios--validação-contínua-seed-engine-360)
 
 ---
 
@@ -128,7 +139,7 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | `TS_OAUTH_ID` | `kXXXXXXXXXX` | OAuth Client ID do Tailscale *(Obrigatório se ROUTING_CHOICE=1)* |
 | `TS_OAUTH_SECRET` | `tskey-client-XXXXX` | OAuth Client Secret do Tailscale *(Obrigatório se ROUTING_CHOICE=1)* |
 | `CUSTOM_DOMAIN` | `painel.suaempresa.com.br` | Domínio do Painel Mestre / Caddy *(Obrigatório se ROUTING_CHOICE=2)* |
-| `CUSTOM_EVO_DOMAIN` | `api.suaempresa.com.br` | Domínio da API WhatsApp / Webhooks *(Obrigatório se ROUTING_CHOICE=2)* |
+| `CUSTOM_WPP_DOMAIN` | `api.suaempresa.com.br` | Domínio da API WhatsApp / Webhooks *(Obrigatório se ROUTING_CHOICE=2)* |
 | `CADDY_PROTOCOL` | `https` *(default)* ou `http` | Protocolo para emissão de certificados ou proxy reverso |
 | `TLS_CHOICE` | `1` (Offload / HTTP) ou `2` (Caddy SSL Nativo / HTTPS) | Tratamento TLS do Caddy (usado na CLI) |
 | `REDE_CHOICE` | `1`, `2`, `3` ou `4` | Escolha do CIDR Docker Privado |
@@ -139,14 +150,17 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | Variável | Opções / Formato | Descrição |
 | :--- | :--- | :--- |
 | `USE_CHATWOOT` | `s` / `n` | Chatwoot CRM (Atendimento Omnichannel Multiatendente) |
-| `USE_EVOLUTION` | `s` / `n` | Evolution API (Gateway WhatsApp / Baileys Webhooks) |
+| `USE_EVOLUTION` | `s` / `n` | Evolution API (Gateway WhatsApp Webhooks & Chatwoot Bridge) |
 | `USE_N8N` | `s` / `n` | n8n (Orquestrador & Automação de Workflows Ilimitados) |
 | `USE_NOCODB` | `s` / `n` | NocoDB (Smart Database & Interface Relacional/ERP) |
 | `USE_OPENWEBUI` | `s` / `n` | Open WebUI (Interface Web de IA Corporativa & MCP) |
 | `USE_POSTIZ` | `s` / `n` | Postiz (Agendador & Publicador de Mídias Sociais) |
 | `USE_METABASE` | `s` / `n` | Metabase (Painéis & Dashboards Analíticos em Tempo Real) |
-| `USE_OLLAMA` | `s` / `n` *(Requer >4 vCPUs e >=16GB RAM)* | Ollama (Inferência Local de Modelos Soberanos / LLMs) |
+| `USE_OLLAMA` | `s` / `n` *(Requer >4 vCPUs, >=16GB RAM e GPU >=4GB VRAM)* | Ollama (Inferência Local de Modelos Soberanos / LLMs) |
 | `USE_DOCLING` | `s` / `n` *(Requer >4 vCPUs e >=16GB RAM)* | Docling (OCR & Parser Avançado de Documentos/PDFs por IA) |
+| `USE_LISTMONK` | `s` / `n` | Listmonk (E-mail Marketing & Transacional Soberano) |
+| `USE_UMAMI` | `s` / `n` | Umami (Web Analytics & Privacidade sem Cookies) |
+| `USE_SHLINK` | `s` / `n` | Shlink + Web Client (Encurtador de Links, UTMs & Atribuição) |
 | `USE_S3MINIO` | `s` / `n` | Controlado dinamicamente pelo `STORAGE_MODE` |
 
 #### 5. 💾 Armazenamento de Objetos (Storage: Local vs MinIO vs S3 Externo)
@@ -301,31 +315,19 @@ done
 
 ---
 
-### ⚙️ 3.5. Motor de Auto-Tuning de Hardware & Descentralização nos Módulos (`autotune.sh` & `build_envs`)
+### ⚙️ 3.5. Motor de Auto-Tuning de Hardware, Descoberta de GPU & Descentralização nos Módulos (`autotune.sh` & `build_envs`)
 Para permitir o desacoplamento e o escalonamento autônomo dos microsserviços sem engessamento ou ponto único de falha:
 
-1. **Extração Universal de Hardware (`core/scripts/autotune.sh`):** Módulo SRE focado na descoberta pura de hardware do Host (`SYSTEM_TOTAL_CPUS`, `SYSTEM_TOTAL_RAM_MB`, `SYSTEM_TOTAL_DISK_GB`, `IS_MODEST_SERVER`).
+1. **Extração Universal de Hardware & Aceleração GPU (`core/scripts/autotune.sh`):** Módulo SRE focado na descoberta pura de recursos do Host (`SYSTEM_TOTAL_CPUS`, `SYSTEM_TOTAL_RAM_MB`, `SYSTEM_TOTAL_DISK_GB`, `IS_MODEST_SERVER`) e detecção determinística de GPU dedicada compatível (`SYSTEM_HAS_DEDICATED_GPU`, `SYSTEM_GPU_VENDOR`, `SYSTEM_GPU_MODEL`, `SYSTEM_GPU_VRAM_MB`, `SYSTEM_GPU_VRAM_GB`):
+   - **NVIDIA:** Famílias GeForce RTX (20xx/30xx/40xx/50xx), Quadro RTX, RTX A-Series, RTX Laptop/Mobile, Tesla/Ampere/Hopper/Blackwell via `nvidia-smi`.
+   - **AMD:** Famílias Radeon RX 6000, 7000, 8000 e 9000 Séries (Desktop e Mobile RX 6000M/S, 7000M/S, 8000M, 9000M, Radeon PRO) via `rocm-smi` / `lspci` + sysfs.
+   - **Intel:** Famílias Intel Arc Série A (A350M-A770M, A380-A770, Arc Pro) e Série B Battlemage (B570, B580) Desktop e Mobile via `xpu-smi` / `lspci` + sysfs.
 2. **Dimensionamento do Núcleo Core (`core/scripts/autotune.sh`):** Dimensiona exclusivamente a infraestrutura de dados base e borda obrigatória (Postgres 17, PgBouncer, Redis 8, Caddy WAF e LiteLLM Gateway), ajustando buffers (`shared_buffers`, `work_mem`), evicção de memória do Redis (`maxmemory`), workers do LiteLLM e limites de CPU/RAM do Core.
-3. **Dimensionamento Descentralizado por Módulo (`install_<modulo>.sh -> build_envs`):** Cada script de módulo é soberano e dono do seu próprio dimensionamento. Na execução de `build_envs()`, a aplicação avalia as métricas de hardware exportadas e injeta suas próprias variáveis de limites (`CPU_*`, `MEM_*`, `RES_*`, concorrência web/sidekiq, JVM/Node Heaps) no arquivo `.env` de forma 100% autônoma.
-4. **Consumo no Docker Compose:** Todos os manifestos consom as variáveis dinâmicas com fallbacks seguros `${VAR:-DEFAULT}`, garantindo idempotência e execução perfeita em instâncias modestas de 4GB até servidores dedicados de 64GB+.
+3. **Dimensionamento Descentralizado por Módulo (`install_<modulo>.sh -> build_envs`):** Cada script de módulo é soberano e dono do seu próprio dimensionamento. Na execução de `build_envs()`, a aplicação avalia as métricas de hardware exportadas e injeta suas próprias variáveis de limites (`CPU_*`, `MEM_*`, `RES_*`, concorrência web/sidekiq, JVM/Node Heaps) no arquivo `.env` de forma 100% autônoma. Módulos de inferência como o `install_ollama.sh` validam requisitos de CPU (> 4), RAM ($\ge$ 16GB) e GPU dedicada $> 4\text{ GB}$ VRAM via `is_hardware_supported()`.
+4. **Consumo no Docker Compose:** Todos os manifestos consom as variáveis dinâmicas com fallbacks seguros `${VAR:-DEFAULT}`, garantindo idempotência e execução perfeita em instâncias modestas de 4GB até servidores dedicados ou notebooks de alta performance com placas dedicadas.
 
----
-
-### ⏱️ 3.6. Cronômetro SRE de Latência com Pausa Interativa de Wizard
-Para gerar métricas de latência de deploy fiéis e auditáveis:
-- O cronômetro congela o contador durante perguntas interativas que aguardam digitação do operador (`pausar_cronometro` / `retomar_cronometro`).
-- Ao final, o relatório SRE discrimina a **duração líquida real de processamento** do **tempo total decorrido com pausas humanas**, permitindo benchmarks precisos de I/O de disco e velocidade de rede do provedor.
-
----
-
-### 🖥️ 3.7. Banner Executivo Dinâmico no Login SSH (`/etc/update-motd.d/99-sre-banner`)
-- Desativação de scripts verbosos padrão do Ubuntu em `/etc/update-motd.d/*`.
-- Injeção de painel executivo dinâmico que renderiza em tempo real: Sistema Operacional, Kernel, usuário logado, FQDN canônico, IP da interface de rede, modelo da CPU, total de vCPUs, RAM total/usada, Swap e taxa de ocupação da partição raiz (`/`).
-
----
-
-### 🔌 3.8. Fixação Determinística de IP Estático via Netplan (`/etc/netplan/99-static-sre.yaml`)
-- Para evitar a perda de conexão em servidores onde a concessão de DHCP expira ou varia, o `preinstall.sh` descobre a interface física padrão, IP, Gateway e MAC Address atribuídos e gera uma configuração declarativa estática protegida com permissão `600` via `netplan` (`renderer: networkd`).
+### 🔌 3.6. Preservação Não-Destrutiva da Pilha de Rede do Host
+- O `preinstall.sh` inspeciona a interface física de rede padrão e rotas de gateway ativas para aferição de telemetria perimetral, preservando integralmente a configuração declarativa original do Host/VM sem sobrescrita destrutiva de arquivos Netplan, garantindo persistência de conectividade pós-reboot.
 
 ---
 
@@ -446,20 +448,26 @@ A infraestrutura do **daemind.** opera com a matriz de imagens e versões audita
 
 | Container | Imagem Docker | Tag no Compose | Versão Interna Auditada | Função na Stack |
 | :--- | :--- | :--- | :--- | :--- |
+| `${PREFIXO_CONTAINER}_caddy` | `caddy:alpine` | `alpine` | **2.11.4** | Reverse Proxy & WAF com SSL Automático |
+| `${PREFIXO_CONTAINER}_chatwoot` | `chatwoot/chatwoot` | `latest` | **4.17.0** | Inbox Omnichannel & Atendimento *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` | **2.121.0** | Motor de OCR & Parsing de Documentos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_evolution` | `evoapicloud/evolution-api` | `latest` | **2.3.7** | Gateway WhatsApp & Chatwoot Bridge *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_listmonk` | `listmonk/listmonk` | `latest` | **6.2.0** | E-mail Marketing & Transacional *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` | **1.99.0** | Gateway & Roteador de Modelos de IA |
+| `${PREFIXO_CONTAINER}_metabase` | `metabase/metabase` | `latest` | **0.63.14.2** | Painéis e Dashboards de BI *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_n8n` | `n8nio/n8n` | `latest` | **2.35.7** | Motor de Automação de Processos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_nocodb` | `nocodb/nocodb` | `latest` | **2026.08.1** | CRM e Planilhas Inteligentes *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_ollama` | `ollama/ollama` | `latest` | **0.32.15** | Motor de Inferência Local Soberano *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` | **0.11.0** | Interface Gráfica de IA *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_pgbouncer` | `edoburu/pgbouncer` | `latest` | **1.25.2** | Multiplexador de Conexões Postgres |
 | `${PREFIXO_CONTAINER}_postgres` | `pgvector/pgvector` | `pg17` | **17.11** | Banco de Dados Relacional & Vetorial |
-| `${PREFIXO_CONTAINER}_pgbouncer` | `edoburu/pgbouncer` | `v1.25.2-p0` | **1.25.2-p0** | Multiplexador de Conexões Postgres |
-| `${PREFIXO_CONTAINER}_caddy` | `caddy` | `2.11.4-alpine` | **2.11.4** | Reverse Proxy & WAF com SSL Automático |
-| `${PREFIXO_CONTAINER}_redis` | `redis` | `8.10-alpine` | **8.10.0** | Cache & Fila de Automações em Memória |
-| `${PREFIXO_CONTAINER}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` *(dinâmica)* | **1.98.0** | Gateway & Roteador de Modelos de IA |
-| `${PREFIXO_CONTAINER}_s3minio` | `alpine/minio` | `latest-release` *(dinâmica)* | **2025-10-25** | Armazenamento S3 Soberano *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_metabase` | `metabase/metabase` | `latest` *(dinâmica)* | **0.63.13** | Painéis e Dashboards de BI *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_n8n` | `n8nio/n8n` | `2.34.6` | **2.34.6** | Motor de Automação de Processos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `latest` | **2.23.0** | Agendador de Redes Sociais *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_redis` | `redis` | `8-alpine` | **8.10.1** | Cache & Fila de Automações em Memória |
+| `${PREFIXO_CONTAINER}_s3minio` | `alpine/minio` | `latest-release` | **2025-10-25** | Armazenamento S3 Soberano *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_shlink` | `shlinkio/shlink` | `stable` | **5.1.5** | Encurtador de Links & API UTM *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_shlink_web` | `shlinkio/shlink-web-client` | `latest` | **4.8.1** | Interface Web do Shlink *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_temporal` | `temporalio/auto-setup` | `1.29.7` | **1.29.7** | Orquestrador de Workflows (Postiz) |
-| `${PREFIXO_CONTAINER}_postiz` | `ghcr.io/gitroomhq/postiz-app` | `v2.23.0` | **2.23.0** | Agendador de Redes Sociais *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_chatwoot` | `chatwoot/chatwoot` | `v4.16.2` | **4.16.2** | Inbox Omnichannel & Atendimento *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_evolution` | `evoapicloud/evolution-api` | `v2.3.7` | **2.3.7** | API de Conexão WhatsApp *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_nocodb` | `nocodb/nocodb` | `2026.08.0` | **2026.08.0** | CRM e Planilhas Inteligentes *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_openwebui` | `ghcr.io/open-webui/open-webui` | `main` *(dinâmica)* | **0.11.0** | Interface Gráfica de IA *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` | **3.3.1** | Web Analytics Soberano LGPD *(Módulo Opcional Desacoplado)* |
 
 ---
 
@@ -552,8 +560,18 @@ echo "   sudo tail -n 50 $LOG_PATH"
 
 ---
 
-### 🧪 6.7. Bateria de Testes de Fumaça & Recuperação Perimetral (`ci_smoke_test.sh` e `install_0ts.sh`)
-- **`ci_smoke_test.sh`:** Suíte automatizada de validação pós-deploy que executa probes HTTP/HTTPS em todos os endpoints, testa portas internas (Postgres 5432, PgBouncer 6432, Redis 6379) e emite relatório com status de cada microsserviço.
+### 🧪 6.7. Suíte Enterprise de Testes Contínuos & Qualidade CI/CD (`ci_smoke_test.sh` e `install_0ts.sh`)
+- **`ci_smoke_test.sh` (Portão de Qualidade Enterprise em 10 Fases):**
+  1. **Fase 1 (Sanitização & Subida):** Validação de sintaxe e subida determinística de toda a topologia Docker Compose.
+  2. **Fase 2 (Hardware Host):** Profiling de Load Average, Uptime, Memória RAM, SWAP e ocupação por volume físico em `./volumes/*`.
+  3. **Fase 3 (Containers, Limits & OOM):** Matriz `docker stats` em tempo real (% CPU, % Memória, Net I/O, Block I/O) e auditoria de OOMKilled no Docker e Kernel (`dmesg` e `/proc/pressure/memory`).
+  4. **Fase 4 (Telemetria de Dados):** Conexões no PostgreSQL, Cache Hit Ratio em RAM (>95%), tamanho de cada banco lógico, pools no PgBouncer e métricas no Redis 8.
+  5. **Fase 5 (18 Portas & URLs):** Checagem ponto a ponto de todas as portas e endpoints HTTP das aplicações.
+  6. **Fase 6 (Service Mesh E2E Handshakes):** Simulação cruzada de interações entre microsserviços (LiteLLM ➔ pgvector HNSW 768d, MinIO S3 Object Storage, Evolution ➔ Chatwoot Inter-DNS, Shlink ➔ Umami Tracking).
+  7. **Fase 7 (Saúde Interna PostgreSQL):** Detecção de deadlocks, transações presas há mais de 5 minutos e análise de bloat/dead tuples no Autovacuum.
+  8. **Fase 8 (Time Drift & TLS):** Verificação de sincronização de relógio via NTP e integridade de certificados TLS no Tailscale.
+  9. **Fase 9 (Varredura Forense de Logs):** Inspeção de logs dos contêineres ativos buscando exceções críticas (`SIGSEGV`, `NullPointerException`, `ERR_DATABASE_OP_FAILED`, `UnhandledPromiseRejection`, `FATAL`).
+  10. **Fase 10 (Seed Engine & 27 Views):** Hidratação de 18 meses de dados mock e validação de execução de 100% das 27 views analíticas do Data Warehouse.
 - **`install_0ts.sh recovery`:** Utilitário de resgate perimetral que desliga túneis órfãos do Funnel, reseta o daemon `tailscaled`, reaplica a Auth Key do cliente e restabelece a exposição externa sem necessidade de reboot do host.
 
 ---
@@ -582,6 +600,55 @@ Para garantir tempos de resposta de consulta otimizados e evitar inchaço no ban
 ### 🔄 7.5. Deduplicação por Hash de Payload SHA-256 (n8n Webhook Fallback)
 - **Mitigação de Retentativas Indevidas:** Quando a infraestrutura externa reenviar webhooks modificando metadados como `event_id`, a primeira etapa do workflow do n8n executa uma função JavaScript (*Code Node*) que gera o `dedup_hash` (SHA-256 do corpo do payload + `LOJA_APP_KEY`).
 - **Validação com TTL de 5 Minutos:** O n8n registra o hash com expiração automática de 5 minutos. Se o mesmo hash colidir dentro dessa janela, o fluxo responde HTTP 200 e interrompe o processamento redundante.
+
+### 🏛️ 7.6. Data Warehouse Soberano 2.0 & Federação Multi-Bancos (`postgres_fdw`)
+- **Arquitetura de Federação Zero-ETL:** O PostgreSQL 17 atua como Data Warehouse unificado através da extensão `postgres_fdw`. O banco centralizador `${PREFIX}_db` mapeia os schemas externos `fdw_chatwoot`, `fdw_shlink`, `fdw_listmonk`, `fdw_umami`, `fdw_evolution` e `fdw_postiz` diretamente sobre os bancos operacionais via PgBouncer com `USER MAPPING` idempotente.
+- **Catálogo de 27 Views Analíticas Executivas:**
+  - **Operacionais & BI de Borda:** `vw_kpi_atendimento`, `vw_kpi_marketing_links`, `vw_kpi_email_marketing`, `vw_kpi_trafego_web`, `vw_kpi_whatsapp_disparos`, `vw_kpi_redes_sociais`, `vw_funil_executivo_completo` (com Hash Join O(N)).
+  - **DRE, Contabilidade & Estoque:** `vw_gestao_lucro_real`, `vw_dre_diario_consolidado`, `vw_estoque_critico` (com alerta de ruptura de insumos), `vw_calculadora_leads_metricas` (First-Touch Attribution), `vw_atribuicao_utm_360`, `vw_matriz_rfm_clientes` (LTV Consolidado Híbrido), `vw_recompra_e_ciclo_de_vida` (Lag O(N)), `vw_kpi_recuperacao_vendas`, `vw_social_media_engajamento_conversao`, `vw_performance_comercial_atendentes` (Janela de 30 dias com deduplicação de pedidos), `vw_relatorio_mensal_agencia`.
+  - **Lead Scoring & Triagem de Volume:** `vw_ranking_leads_icp`, `vw_triagem_volume_leads`, `vw_analise_descarte_leads`.
+  - **Hub Universal de Ads:** `vw_performance_ads_gerenciadores`, `vw_correlacao_ads_vendas_reais` (Auditoria de ROAS Real Caixa vs ROAS Pixel e discrepância de atribuição).
+  - **Serviços B2B & MRR:** `vw_kpi_servicos_mrr_arr` (com série temporal resiliente e Churn Rate histórico via LAG), `vw_funil_propostas_servicos` (Win Rate %), `vw_lucro_real_servicos` (DRE de contratos e margem de contribuição).
+  - **Inteligência 360°:** `vw_cliente_visao_360_hibrida` (Radar de Oportunidades Cross-Sell/Upsell e Share of Wallet).
+- **Auto-Provisionamento de Dashboards (Metabase & NocoDB APIs):** Injeção automatizada via REST API do Dashboard *Cockpit Executivo Omnichannel 360°* com 7 cards visuais no Metabase e trigger de *Schema Sync* no NocoDB.
+- **Governança Noturna & Otimização:** Stored Procedure `sp_manutencao_analitica_diaria()` executando `ANALYZE` nas tabelas críticas, `REINDEX INDEX CONCURRENTLY` no grafo HNSW (768d) e expurgo de eventos idempotentes (> 90 dias).
+
+### 🤖 7.7. AI Mesh Soberana via LiteLLM (SRE Health Prober & Virtual Aliases)
+- **SRE Probing Paralelo:** O motor de descoberta (`sync_ia_models.sh` e `install_1ia.sh`) dispara probes assíncronos de 1 token para validar saúde, créditos e latência em milissegundos de cada provedor configurado.
+- **Isolamento no `model_alias_map`:** Os modelos padrão exigidos por bibliotecas parceiras (`gpt-4.1`, `gpt-4o`, `gpt-3.5-turbo`) são traduzidos internamente pelo LiteLLM, mantendo o dropdown público do Open WebUI limpo e imune a truncamento visual.
+- **Wildcard Fallback Universal (`*`):** A esteira de fallback configurada no LiteLLM redireciona requisições de modelos desconhecidos ou offline para o modelo saudável eleito, garantindo zero paradas em robôs e copilotos.
+
+### 📑 7.8. Pipeline de RAG Soberano com Docling OCR, pgvector e S3 Storage
+- **IBM Docling Serve:** Microserviço dedicado em `:5001` responsável pelo parsing visual de PDFs, DOCX e escaneamentos, transformando documentos complexos e tabelas em Markdown estruturado.
+- **Vetorização no PostgreSQL (`pgvector`):** Extensão `vector` ativada condicionalmente no `openwebui_db` para indexação matemática de embeddings vetoriais com busca semântica de alta velocidade.
+- **Desacoplamento de Armazenamento:** Uploads e bases de conhecimento do Open WebUI são persistidos no bucket `openwebui` no MinIO S3.
+
+### ⚡ 7.9. Service Mesh de Variáveis de Ambiente no n8n
+- Injeção declarativa de variáveis inter-serviços no container `n8n` (`DOCLING_API_URL`, `SHLINK_API_URL`, `EVOLUTION_API_URL`, `CHATWOOT_API_URL`, `MINIO_ENDPOINT`, `LISTMONK_API_URL`, `POSTIZ_API_URL`), permitindo que nós de automação e Agentes LangChain se comuniquem com qualquer ferramenta da stack via `$env.NOME_VAR`.
+
+### 🔗 7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)
+- **Atribuição UTM Unificada:** Disparos de campanhas pelo Listmonk utilizam o template padrão auto-formatado com UTMs (`utm_source=listmonk`, `utm_medium=email`, `utm_campaign`), integrados aos links encurtados do Shlink e monitorados pelo Umami Analytics, consolidando a atribuição no Data Warehouse sem rastreadores invasivos de terceiros.
+
+### 🌐 7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)
+- **O Problema de Nomenclatura Docker (`_` vs RFC 1123):** Por padrão, containers Docker costumam adotar nomes estruturados com prefixos corporativos contendo underlines (ex: `${PREFIXO}_s3minio`, `loja_litellm`). No entanto, bibliotecas e SDKs estritos com validação de hostname conforme as normas **RFC 1123 e RFC 952 (DNS Standards)** — como o **`botocore`** (AWS SDK em Python utilizado por Open WebUI/LiteLLM), **AWS SDK v3** (Node.js/Go/Ruby) e parsers de URL HTTP modernos — rejeitam terminantemente nomes de host com underline (`_`), disparando exceções de inicialização como `ValueError: Invalid endpoint: http://loja_s3minio:9000`.
+- **Solução Arquitetural por Aliases Canônicos:** Todos os 14 arquivos `docker-compose*.yml` da stack declaram explicitamente a propriedade `aliases` dentro do bloco `networks.instancia_net`. Isso estabelece nomes DNS canônicos e limpos (`s3minio`, `litellm`, `docling`, `postgres`, `pgbouncer`, `redis`, `n8n`, `evolution`, `chatwoot`, `metabase`, `nocodb`, `openwebui`, `postiz`, `temporal`, `shlink`, `shlink-web`, `umami`, `caddy`, `listmonk`, `ollama`), garantindo 100% de conformidade RFC 1123 e eliminando qualquer risco de falha de conexão entre os microsserviços.
+
+### 🔇 7.12. Hardening e Supressão Global de Logs (Piso Mínimo WARN/ERROR & Debloat de I/O)
+- **Mitigação de Degradação de I/O em Disco:** Em ambientes de produção, aplicações com logs em níveis `INFO` ou `DEBUG` geram gigabytes de dados desnecessários por mês, competindo por IOPS de disco e poluindo as ferramentas de observabilidade com rotinas rotineiras (ex: healthcheck pings, compilações de assets, introspecção de esquemas e migrações silenciosas).
+- **Calibração de Nível por Microsserviço:**
+  - **Metabase BI:** Utilização de arquivo [core/config/log4j2.metabase.xml](file:///e:/Documenta%C3%A7%C3%A3o/seu-repositorio-git/infra-loja1/core/config/log4j2.metabase.xml) com `Root level="WARN"`, desligando o fingerprinting periódico (`metabase.sync`) e geradores de IA não configurados (`example-question-generator`, `suggested-prompts-generator`).
+  - **Open WebUI:** Parâmetros `GLOBAL_LOG_LEVEL=WARNING`, `WEBUI_LOG_LEVEL=WARNING`, `UVICORN_LOG_LEVEL=warning` e `ALEMBIC_LOG_LEVEL=WARNING`, suprimindo o log das migrações do banco.
+  - **LiteLLM & Ollama:** Flags `UVICORN_LOG_LEVEL=warning`, `LITELLM_BANNER=False`, `DISABLE_BANNER=true`, `GIN_MODE=release` e `OLLAMA_DEBUG_LOG_REQUESTS=false`, silenciando requisições repetitivas de liveliness.
+  - **Serviços de Background (Evolution, Chatwoot, n8n, NocoDB, Listmonk, Postiz, Temporal):** Níveis configurados com `LOG_LEVEL=error`/`warn`, `RUBYOPT=-W0` e `NC_LOGGER_LEVEL=error`, focando estritamente em incidentes reais de sistema.
+
+### 🌱 7.13. Motor de Hidratação, Simulação de Negócios & Validação Contínua (Seed Engine 360°)
+- **Finalidade e Arquitetura (`seed_mock_data.sql` + `seed_demo_data.sh`):**
+  - O ecossistema disponibiliza um motor autônomo de hidratação relacional projetado para testes de carga, simulação de modelos de negócios e validação contínua das **27 Views Analíticas** antes da entrada em produção.
+- **Topologia de Carga Multi-Bancos e FDWs:**
+  - **Data Warehouse Central (`${PREFIX}_db`):** Popula catálogo expandido (20 produtos com CMV e níveis de estoque), insumos com alertas de ruptura, clientes B2C/B2B com histórico de até 400 dias, pedidos com detalhamento por SKU/CMV, funil de prospecção com lead scoring (Tier A, B, C), carrinhos abandonados, hub universal de ads (90 dias contínuos em Meta, Google e TikTok), 18 meses de contratos B2B com múltiplos churns históricos, propostas comerciais com validades futuras, documentos RAG com embeddings vetoriais (768d) e fila outbox com agendamentos futuros.
+  - **Bancos Satélites dos Microsserviços:** Popula simultaneamente o `chatwoot_db` (atendentes SDRs, conversas e CSATs), `shlink_db` (links curtos, geolocalização e visitas), `listmonk_db` (subscribers, campanhas e aberturas), `umami_db` (sessões e eventos com tags UTM), `postiz_db` (posts publicados e agendamentos futuros) e `evolution_db` (instâncias e mensagens).
+- **Portão de Qualidade em CI/CD (`ci_smoke_test.sh`):**
+  - Integrado nativamente à suíte de testes de fumaça, disparando a rotina de validação executiva (`SELECT count(*) FROM public.vw_*`) que assegura que 100% das 27 views analíticas executam sem erro de join ou agregação sobre as foreign tables.
 
 ---
 

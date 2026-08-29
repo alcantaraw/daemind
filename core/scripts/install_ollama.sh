@@ -181,28 +181,29 @@ render_forensic_report() {
 }
 
 is_hardware_supported() {
-    local cpus="${OVERRIDE_TOTAL_CPUS:-${SYSTEM_TOTAL_CPUS:-${TOTAL_CPUS:-}}}"
-    local ram_gb="${OVERRIDE_TOTAL_RAM_GB:-${SYSTEM_TOTAL_RAM_GB:-${TOTAL_RAM_GB:-}}}"
-    if [ -z "$cpus" ] || [ -z "$ram_gb" ]; then
-        cpus=$(nproc 2>/dev/null || echo 4)
-        local ram_mb=$(free -m 2>/dev/null | awk '/^Mem:/{print $2}' || echo 8192)
-        ram_gb=$(( (ram_mb + 512) / 1024 ))
-    fi
-    if [ "$cpus" -le 4 ] || [ "$ram_gb" -lt 16 ]; then
+    local cpus="${SYSTEM_TOTAL_CPUS:-${TOTAL_CPUS:-4}}"
+    local ram_gb="${SYSTEM_TOTAL_RAM_GB:-${TOTAL_RAM_GB:-8}}"
+    local has_gpu="${HAS_DEDICATED_GPU:-false}"
+    local vram_mb="${GPU_VRAM_MB:-0}"
+
+    # Requisitos Estritos: >4 vCPUs, >=16GB RAM e GPU Dedicada com >=4000MB VRAM
+    if [ "$cpus" -le 4 ] || [ "$ram_gb" -lt 16 ] || [ "$has_gpu" != "true" ] || [ "$vram_mb" -lt 4000 ]; then
         return 1
     fi
     return 0
 }
 
 collect_wizard_inputs() {
-    local cpus="${OVERRIDE_TOTAL_CPUS:-${SYSTEM_TOTAL_CPUS:-${TOTAL_CPUS:-4}}}"
-    local ram_gb="${OVERRIDE_TOTAL_RAM_GB:-${SYSTEM_TOTAL_RAM_GB:-${TOTAL_RAM_GB:-8}}}"
+    local cpus="${SYSTEM_TOTAL_CPUS:-${TOTAL_CPUS:-4}}"
+    local ram_gb="${SYSTEM_TOTAL_RAM_GB:-${TOTAL_RAM_GB:-8}}"
+    local gpu_name="${GPU_MODEL:-Nenhuma GPU compatível}"
+    local vram_gb="${GPU_VRAM_GB:-0}"
 
     if ! is_hardware_supported; then
-        echo -e "\e[33m⚠️ [SRE FinOps OLLAMA] Ollama Local AI desativado: requer host com > 4 vCPUs e >= 16 GB RAM (Detectado pelo autotune: ${cpus} Cores, ${ram_gb} GB RAM).\e[0m"
+        echo -e "\e[33m⚠️ [SRE FinOps OLLAMA] Ollama Local AI desativado: requer host com >4 vCPUs, >=16 GB RAM e GPU >=4GB VRAM (Detectado: ${cpus} Cores, ${ram_gb}GB RAM, GPU: ${gpu_name} [${vram_gb}GB VRAM]).\e[0m"
         USE_OLLAMA="n"
     else
-        coletar_sn "Deseja instalar o Ollama (Motor Local de IA & Modelos Soberanos)?" USE_OLLAMA "s"
+        coletar_sn "Deseja instalar o Ollama (Detectada GPU: ${gpu_name} [${vram_gb}GB VRAM])?" USE_OLLAMA "s"
         [[ "${USE_OLLAMA:-s}" =~ ^[Ss]$ ]] && USE_OLLAMA="s" || USE_OLLAMA="n"
     fi
     save_wizard_cache "USE_OLLAMA" "$USE_OLLAMA"

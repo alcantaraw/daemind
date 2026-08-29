@@ -8,6 +8,8 @@ services:
     networks:
       instancia_net:
         ipv4_address: ${IP_S3MINIO}
+        aliases:
+          - s3minio
     deploy:
       resources:
         limits:
@@ -19,6 +21,8 @@ services:
       - TZ=America/Sao_Paulo
       - MINIO_ROOT_USER=${TS_EMAIL}
       - MINIO_ROOT_PASSWORD=${DB_PASSWORD}
+      - MINIO_REGION=us-east-1
+      - MINIO_REGION_NAME=us-east-1
       - MINIO_SERVER_DEBUG=off
       - MINIO_NOTIFY_AMQP_ENABLE=off
       - MINIO_BROWSER_LOGIN_ANIMATION=off
@@ -43,19 +47,20 @@ services:
   # --- INJEÇÃO DECLARATIVA NATIVA NO CHATWOOT QUANDO S3MINIO ESTÁ ATIVO ---
 
 
-  # --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---
-  # evolution:
-  #   depends_on:
-  #     s3minio:
-  #       condition: service_healthy
-  # --- INJEÇÃO DECLARATIVA NATIVA NO EVOLUTION QUANDO S3MINIO ESTÁ ATIVO ---
-
   # --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---
   # nocodb:
   #   depends_on:
   #     s3minio:
   #       condition: service_healthy
   # --- INJEÇÃO DECLARATIVA NATIVA NO NOCODB QUANDO S3MINIO ESTÁ ATIVO ---
+
+
+  # --- INJEÇÃO DECLARATIVA NATIVA NO LISTMONK QUANDO S3MINIO ESTÁ ATIVO ---
+  # listmonk:
+  #   depends_on:
+  #     s3minio:
+  #       condition: service_healthy
+  # --- INJEÇÃO DECLARATIVA NATIVA NO LISTMONK QUANDO S3MINIO ESTÁ ATIVO ---
 
   caddy:
     ports:

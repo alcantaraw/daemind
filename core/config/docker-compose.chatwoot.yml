@@ -1,12 +1,14 @@
 services:
   chatwoot:
-    image: 'chatwoot/chatwoot:v4.16.2'
+    image: 'chatwoot/chatwoot:latest'
     container_name: '${PREFIXO_CONTAINER}_chatwoot'
     networks:
       instancia_net:
         ipv4_address: ${IP_CHATWOOT}
+        aliases:
+          - chatwoot
     restart: always
-    command: ["sh", "-c", "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b 0.0.0.0"]
+    command: [ "sh", "-c", "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b 0.0.0.0" ]
     deploy:
       resources:
         limits:
@@ -18,6 +20,8 @@ services:
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@postgres:5432/chatwoot_db?pool=30
       - DEFAULT_LOCALE=pt_BR
       - DISABLE_TELEMETRY=true
+      - DISABLE_ENTERPRISE=true
+      - ENABLE_ENTERPRISE=false
       - FRONTEND_URL=${CHATWOOT_FRONTEND_URL}
       - INSTALLATION_ENV=docker
       - LOG_LEVEL=error
@@ -28,24 +32,39 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USERNAME=${DB_USER}
       - RAILS_ENV=production
-      - REDIS_URL=redis://${PREFIXO_CONTAINER}_redis:6379
+      - REDIS_URL=redis://redis:6379
       - RUBY_YJIT_ENABLE=1
+      - RUBYOPT=-W0
       - SECRET_KEY_BASE=${CHATWOOT_SECRET_KEY}
       - TZ=America/Sao_Paulo
       - WEB_CONCURRENCY=${CHATWOOT_WEB_CONCURRENCY:-2}
       - SIDEKIQ_CONCURRENCY=${CHATWOOT_SIDEKIQ_CONCURRENCY:-10}
       - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
-      - OPENAI_API_BASE=http://${PREFIXO_CONTAINER}_litellm:4000/v1
-      - OPENAI_API_BASE_URLS=http://${PREFIXO_CONTAINER}_litellm:4000/v1
-      - ACTIVE_STORAGE_SERVICE=${ACTIVE_STORAGE_SERVICE:-local}
-      - AWS_REGION=${S3_REGION:-us-east-1}
+      - OPENAI_API_BASE=http://litellm:4000
+      - OPENAI_API_BASE_URL=http://litellm:4000
+      - OPENAI_BASE_URL=http://litellm:4000
+      - CAPTAIN_OPEN_AI_API_KEY=${LITELLM_MASTER_KEY}
+      - CAPTAIN_OPEN_AI_ENDPOINT=http://litellm:4000
+      - ACTIVE_STORAGE_SERVICE=${ACTIVE_STORAGE_SERVICE:-s3_compatible}
+      - STORAGE_BUCKET_NAME=${STORAGE_BUCKET_NAME:-${S3_CHATWOOT_BUCKET:-chatwoot}}
+      - STORAGE_ACCESS_KEY_ID=${STORAGE_ACCESS_KEY_ID:-${S3_ACCESS_KEY_ID:-${TS_EMAIL}}}
+      - STORAGE_SECRET_ACCESS_KEY=${STORAGE_SECRET_ACCESS_KEY:-${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}}
+      - STORAGE_REGION=us-east-1
+      - STORAGE_ENDPOINT=http://s3minio:9000
+      - STORAGE_FORCE_PATH_STYLE=true
+      - AWS_REGION=us-east-1
       - AWS_EC2_METADATA_DISABLED=true
+      - AWS_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
+      - AWS_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
+      - AWS_BUCKET_NAME=${S3_CHATWOOT_BUCKET:-chatwoot}
       - S3_BUCKET_NAME=${S3_CHATWOOT_BUCKET:-chatwoot}
       - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-${TS_EMAIL}}
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-${DB_PASSWORD}}
-      - S3_REGION=${S3_REGION:-us-east-1}
-      - S3_ENDPOINT=${S3_ENDPOINT:-http://${PREFIXO_CONTAINER}_s3minio:9000}
-      - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE:-true}
+      - S3_REGION=us-east-1
+      - S3_ENDPOINT=http://${TS_DOMAIN:-s3minio}:9000
+      - S3_FORCE_PATH_STYLE=true
+    extra_hosts:
+      - "${TS_DOMAIN:-localhost}:${IP_S3MINIO}"
     volumes:
       - './volumes/storage_data/chatwoot:/app/storage'
       - '/etc/timezone:/etc/timezone:ro'
@@ -56,10 +75,11 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/ || exit 1"]
-      interval: 60s
-      timeout: 15s
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/ || exit 1" ]
+      interval: 15s
+      timeout: 5s
       retries: 5
+      start_period: 120s
 
   caddy:
     ports:

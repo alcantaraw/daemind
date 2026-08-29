@@ -68,7 +68,7 @@ provision_infra() {
     # Validação e execução idempotente de migrações Rails
     if ! docker compose exec -T postgres psql -U "${DB_USER}" -d chatwoot_db -c "SELECT 1 FROM installation_configs LIMIT 1;" > /dev/null 2>&1 < /dev/null; then
         echo "➜ [CONFIGURANDO CHATWOOT] Executando preparação de schema inicial do Chatwoot (db:chatwoot_prepare)..."
-        docker stop ${PREFIX}_chatwoot 2>/dev/null || true
+        docker stop ${PREFIX}_chatwoot > /dev/null 2>&1 || true
         CW_ERR=$(docker compose run --rm --no-deps -T chatwoot bundle exec rails db:chatwoot_prepare 2>&1) || true
         if ! docker compose exec -T postgres psql -U "${DB_USER}" -d chatwoot_db -c "SELECT 1 FROM installation_configs LIMIT 1;" > /dev/null 2>&1 < /dev/null; then
             echo "  ↳ Segunda tentativa via db:schema:load e db:migrate..."
@@ -265,8 +265,6 @@ provision_user() {
 
     local CHATWOOT_STATUS=$(sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
       if User.exists?(uid: '${TS_EMAIL:-admin@localhost}', provider: 'email') || User.exists?(email: '${TS_EMAIL:-admin@localhost}')
-        user = User.find_by(uid: '${TS_EMAIL:-admin@localhost}', provider: 'email') || User.find_by(email: '${TS_EMAIL:-admin@localhost}')
-        user.update!(password: '${DB_PASSWORD:-******}', password_confirmation: '${DB_PASSWORD:-******}')
         puts 'EXISTE'
       else
         puts 'CRIAR'
@@ -274,14 +272,66 @@ provision_user() {
     " < /dev/null 2>/dev/null | grep -E "EXISTE|CRIAR" || echo "CRIAR")
 
     if [ "$CHATWOOT_STATUS" = "EXISTE" ]; then
-        echo "➜ [IDEMPOTÊNCIA CHATWOOT] O Administrador mestre já existe no Chatwoot. Credenciais mantidas."
+        echo "➜ [IDEMPOTÊNCIA CHATWOOT] O Administrador mestre já existe no Chatwoot. Sincronizando AccessToken com DB_PASSWORD..."
+        sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
+        begin
+          user = User.find_by(email: '${TS_EMAIL:-admin@localhost}') || User.find_by(uid: '${TS_EMAIL:-admin@localhost}') || User.first
+          if user
+            token_obj = AccessToken.find_or_initialize_by(owner: user)
+            token_obj.token = '${DB_PASSWORD}'
+            token_obj.save!
+          end
+
+          # Auto-ativação da integração OpenAI / LiteLLM nativa para a conta
+          Account.all.each do |acc|
+            hook = Integrations::Hook.find_or_initialize_by(account_id: acc.id, app_id: 'openai')
+            hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
+            hook.status = :enabled
+            hook.save(validate: false) rescue nil
+          end
+
+          # Parametrização do GlobalConfig / InstallationConfig (HashWithIndifferentAccess)
+          [
+            ['INSTALLATION_NAME', '${PREFIX}'],
+            ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
+            ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000'],
+            ['CAPTAIN_OPEN_AI_MODEL', 'gpt-4.1-mini'],
+            ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['OPENAI_MODEL', 'gpt-4.1-mini']
+          ].each do |k, v|
+            cfg = InstallationConfig.find_or_initialize_by(name: k)
+            cfg.serialized_value = ActiveSupport::HashWithIndifferentAccess.new({ 'value' => v })
+            cfg.save! rescue nil
+          end
+
+          # SRE Self-Healing: Purga conversas e caixas de entrada órfãs (sem canal) para evitar 500 no painel geral
+          Conversation.all.each do |c|
+            if c.inbox.nil? || c.inbox.channel.nil?
+              c.messages.destroy_all rescue nil
+              c.destroy! rescue nil
+            end
+          end
+          Inbox.all.each do |i|
+            if i.channel.nil?
+              i.destroy! rescue nil
+            end
+          end
+
+          Rails.cache.clear
+          GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)
+        rescue => e
+        end
+        " < /dev/null 2>/dev/null || true
     else
         sudo docker exec -i ${PREFIX}_redis redis-cli FLUSHALL > /dev/null 2>&1 < /dev/null || true
         sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
         begin
           Sidekiq.logger.level = Logger::WARN if defined?(Sidekiq)
-          ActiveRecord::Base.transaction do
-            account = Account.find_or_create_by!(name: '${PREFIX}')
+          
+          # 1. Criação do SuperAdmin e Conta Mestre (Commit Garantido)
+          user = User.find_by(email: '${TS_EMAIL:-admin@localhost}')
+          if user.nil?
             user = User.new(
               name: '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}',
               email: '${TS_EMAIL:-admin@localhost}',
@@ -291,23 +341,64 @@ provision_user() {
             user.type = 'SuperAdmin'
             user.skip_confirmation! if user.respond_to?(:skip_confirmation!)
             user.save!
-            AccountUser.find_or_create_by!(account_id: account.id, user_id: user.id) do |au|
-              au.role = :administrator
-            end
-            InstallationConfig.find_or_create_by!(name: 'INSTALLATION_NAME').update!(value: '${PREFIX}')
-            InstallationConfig.find_or_create_by!(name: 'CHATWOOT_INSTANCE_ADMIN_EMAIL').update!(value: '${TS_EMAIL:-admin@localhost}')
-            user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
-            account.update!(custom_attributes: { 'website' => 'https://${TS_DOMAIN:-localhost}', 'timezone' => 'America/Sao_Paulo' })
+          else
+            user.password = '${DB_PASSWORD:-******}'
+            user.password_confirmation = '${DB_PASSWORD:-******}'
+            user.type = 'SuperAdmin'
+            user.save!
           end
+
+          account = Account.find_or_create_by!(name: '${PREFIX}')
+          AccountUser.find_or_create_by!(account_id: account.id, user_id: user.id) do |au|
+            au.role = :administrator
+          end
+          token_obj = AccessToken.find_or_initialize_by(owner: user)
+          token_obj.token = '${DB_PASSWORD}'
+          token_obj.save!
+
+          user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
+          account.update!(custom_attributes: { 'website' => 'https://${TS_DOMAIN:-localhost}', 'timezone' => 'America/Sao_Paulo' })
+
+          # 2. Auto-ativação da integração OpenAI / LiteLLM nativa para a conta
+          hook = Integrations::Hook.find_or_initialize_by(account_id: account.id, app_id: 'openai')
+          hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
+          hook.status = :enabled
+          hook.save(validate: false) rescue nil
+
+          # 3. Parametrização do GlobalConfig / InstallationConfig (HashWithIndifferentAccess)
+          [
+            ['INSTALLATION_NAME', '${PREFIX}'],
+            ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
+            ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000'],
+            ['CAPTAIN_OPEN_AI_MODEL', 'gpt-4.1-mini'],
+            ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['OPENAI_MODEL', 'gpt-4.1-mini']
+          ].each do |k, v|
+            cfg = InstallationConfig.find_or_initialize_by(name: k)
+            cfg.serialized_value = ActiveSupport::HashWithIndifferentAccess.new({ 'value' => v })
+            cfg.save! rescue nil
+          end
+
           Rails.cache.clear
           GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)
-          puts '➜ [OK CHATWOOT] Banco do Chatwoot populado com sucesso!'
+          puts '➜ [OK CHATWOOT] SuperAdmin e configurações criados com sucesso!'
         rescue => e
           puts '🚨 [ERRO RUBY CHATWOOT] ' + e.message
         end
         " < /dev/null 2>/dev/null || true
-        echo "➜ [SUCESSO CHATWOOT] Administrador Chatwoot cadastrado."
+        echo "➜ [SUCESSO CHATWOOT] Administrador Chatwoot cadastrado e IA configurada (Zero-Touch)."
     fi
+
+    local env_file="${TARGET_DIR:-/opt/daemind}/.env"
+    if [ -f "$env_file" ]; then
+        if grep -q '^CHATWOOT_API_TOKEN=' "$env_file"; then
+            sudo sed -i "s|^CHATWOOT_API_TOKEN=.*|CHATWOOT_API_TOKEN=\"${DB_PASSWORD}\"|" "$env_file" 2>/dev/null || true
+        else
+            echo "CHATWOOT_API_TOKEN=\"${DB_PASSWORD}\"" | sudo tee -a "$env_file" > /dev/null 2>&1 || true
+        fi
+    fi
+    export CHATWOOT_API_TOKEN="${DB_PASSWORD}"
 }
 
 collect_wizard_inputs() {

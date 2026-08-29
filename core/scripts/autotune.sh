@@ -8,6 +8,7 @@
 set -eo pipefail
 
 # Função modular para extração pura de dados de hardware do Host
+# Função modular para extração pura de dados de hardware do Host
 get_host_hardware() {
     TOTAL_CPUS="${OVERRIDE_TOTAL_CPUS:-$(nproc 2>/dev/null || echo 4)}"
     TOTAL_RAM_MB="${OVERRIDE_TOTAL_RAM_MB:-$(free -m 2>/dev/null | awk '/^Mem:/{print $2}' || echo 8192)}"
@@ -19,6 +20,65 @@ get_host_hardware() {
         IS_MODEST_SERVER="true"
     fi
 
+    # Detecção Agnóstica de GPU Dedicada (NVIDIA, AMD RX 6000+, Intel Arc) >= 4GB VRAM
+    local has_gpu="false"
+    local vram_mb=0
+    local gpu_model="none"
+    local gpu_type="none"
+
+    if [ -n "${OVERRIDE_GPU_VRAM_MB:-}" ]; then
+        vram_mb="$OVERRIDE_GPU_VRAM_MB"
+        [ "$vram_mb" -ge 4000 ] && has_gpu="true"
+        gpu_model="Manual Override GPU"
+        gpu_type="override"
+    else
+        # 1. NVIDIA (nvidia-smi)
+        if command -v nvidia-smi >/dev/null 2>&1; then
+            local nv_vram
+            nv_vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null | head -n 1 | tr -d ' ' || echo "0")
+            if [ "${nv_vram:-0}" -ge 4000 ] 2>/dev/null; then
+                has_gpu="true"
+                vram_mb="$nv_vram"
+                gpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -n 1 | xargs || echo "NVIDIA GPU")
+                gpu_type="nvidia"
+            fi
+        fi
+
+        # 2. AMD Radeon (RX 6000+ / RDNA 2/3/3.5/4 / ROCm / Sysfs)
+        if [ "$has_gpu" = "false" ] && lspci 2>/dev/null | grep -iE 'vga|3d|display' | grep -qi 'AMD\|Radeon'; then
+            local amd_vram_bytes
+            amd_vram_bytes=$(cat /sys/class/drm/card*/device/mem_info_vram_total 2>/dev/null | head -n 1 || echo "0")
+            local amd_vram_mb=$(( amd_vram_bytes / 1024 / 1024 ))
+            if [ "$amd_vram_mb" -ge 4000 ] 2>/dev/null; then
+                if lspci 2>/dev/null | grep -iE 'AMD|Radeon' | grep -qiE 'Navi [2-4]|RX [6-9][0-9]{3}|Radeon Pro (W[6-9]|V[6-9])|[789][0-9]{2}M|Radeon 80[0-9]{2}|GFX1[0-2]'; then
+                    has_gpu="true"
+                    vram_mb="$amd_vram_mb"
+                    gpu_model=$(lspci 2>/dev/null | grep -iE 'vga|3d|display' | grep -i 'AMD' | head -n 1 | sed 's/.*: //; s/(rev.*)//' | xargs || echo "AMD Radeon Series")
+                    gpu_type="amd"
+                fi
+            fi
+        fi
+
+        # 3. Intel Arc (Alchemist / Battlemage / Celestial / Xe2)
+        if [ "$has_gpu" = "false" ] && lspci 2>/dev/null | grep -iE 'vga|3d|display' | grep -qi 'Intel.*Arc\|DG2\|BMG\|Battlemage\|Alchemist\|Xe LPG\|Xe2'; then
+            local intel_vram_bytes
+            intel_vram_bytes=$(cat /sys/class/drm/card*/device/lmem_total_bytes 2>/dev/null | head -n 1 || echo "0")
+            local intel_vram_mb=$(( intel_vram_bytes / 1024 / 1024 ))
+            if [ "$intel_vram_mb" -ge 4000 ] 2>/dev/null; then
+                has_gpu="true"
+                vram_mb="$intel_vram_mb"
+                gpu_model=$(lspci 2>/dev/null | grep -iE 'vga|3d|display' | grep -i 'Intel' | head -n 1 | sed 's/.*: //; s/(rev.*)//' | xargs || echo "Intel Arc Series")
+                gpu_type="intel"
+            fi
+        fi
+    fi
+
+    GPU_VRAM_GB=$(( (vram_mb + 512) / 1024 ))
+    HAS_DEDICATED_GPU="$has_gpu"
+    GPU_VRAM_MB="$vram_mb"
+    GPU_MODEL="$gpu_model"
+    GPU_TYPE="$gpu_type"
+
     SYSTEM_TOTAL_CPUS="$TOTAL_CPUS"
     SYSTEM_TOTAL_RAM_MB="$TOTAL_RAM_MB"
     SYSTEM_TOTAL_RAM_GB="$TOTAL_RAM_GB"
@@ -26,6 +86,7 @@ get_host_hardware() {
 
     export TOTAL_CPUS TOTAL_RAM_MB TOTAL_RAM_GB TOTAL_DISK_GB IS_MODEST_SERVER
     export SYSTEM_TOTAL_CPUS SYSTEM_TOTAL_RAM_MB SYSTEM_TOTAL_RAM_GB SYSTEM_TOTAL_DISK_GB
+    export HAS_DEDICATED_GPU GPU_VRAM_MB GPU_VRAM_GB GPU_MODEL GPU_TYPE
 }
 
 get_host_hardware

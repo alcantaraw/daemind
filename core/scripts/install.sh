@@ -177,20 +177,38 @@ resolver_containers_ativos() {
     STACK_ACTIVE_CONTAINERS=()
     local prefix="${PREFIXO_CONTAINER}"
     
-    # 1. Se o docker-compose.yml final (unificado) já existe, descobre os serviços via CLI
+    # 1. Se o Docker está disponível, descobre todos os containers reais com o prefixo da stack
+    if command -v docker >/dev/null 2>&1; then
+        local running_cnts=($(docker ps -a --format '{{.Names}}' 2>/dev/null | grep -E "^${prefix}_" | sort -u || true))
+        if [ ${#running_cnts[@]} -gt 0 ]; then
+            for c in "${running_cnts[@]}"; do
+                [ -n "$c" ] && STACK_ACTIVE_CONTAINERS+=("$c")
+            done
+            return 0
+        fi
+    fi
+
+    # 2. Se o docker-compose.yml final (unificado) já existe, descobre os serviços declarados
     if command -v docker >/dev/null 2>&1 && [ -f "$TARGET_DIR/docker-compose.yml" ]; then
-        for svc in $(cd "$TARGET_DIR" && docker compose config --services 2>/dev/null); do
-            STACK_ACTIVE_CONTAINERS+=("${prefix}_${svc}")
-        done
+        local comp_svcs=($(cd "$TARGET_DIR" && docker compose config --services 2>/dev/null || true))
+        if [ ${#comp_svcs[@]} -gt 0 ]; then
+            for svc in "${comp_svcs[@]}"; do
+                local svc_clean=$(echo "$svc" | tr '-' '_')
+                local c_name=$(docker inspect -f '{{.Name}}' "${prefix}_${svc_clean}" 2>/dev/null | sed 's/^\///' || echo "")
+                [ -z "$c_name" ] && c_name=$(docker inspect -f '{{.Name}}' "${prefix}_${svc}" 2>/dev/null | sed 's/^\///' || echo "")
+                [ -z "$c_name" ] && c_name="${prefix}_${svc_clean}"
+                STACK_ACTIVE_CONTAINERS+=("$c_name")
+            done
+            return 0
+        fi
     fi
     
-    # 2. Fallback 100% Dinâmico: Varre o docker-compose.yml base + YAMLs dos módulos ativos
-    if [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ]; then
-        local base_compose="$TARGET_DIR/core/config/docker-compose.yml"
-        local base_services=()
-        
-        if [ -f "$base_compose" ]; then
-            base_services=($(python3 -c "
+    # 3. Fallback 100% Dinâmico: Varre o docker-compose.yml base + YAMLs dos módulos ativos
+    local base_compose="$TARGET_DIR/core/config/docker-compose.yml"
+    local base_services=()
+    
+    if [ -f "$base_compose" ]; then
+        base_services=($(python3 -c "
 import yaml
 try:
     with open('$base_compose', 'r') as f:
@@ -200,20 +218,20 @@ try:
 except Exception:
     pass
 " 2>/dev/null || true))
-        fi
-        
-        if [ ${#base_services[@]} -eq 0 ]; then
-            base_services=("postgres" "pgbouncer" "redis" "caddy" "litellm")
-        fi
-        
-        for svc in "${base_services[@]}"; do
-            STACK_ACTIVE_CONTAINERS+=("${prefix}_${svc}")
-        done
-        
-        for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
-            local mod_compose="$TARGET_DIR/core/config/docker-compose.${mod}.yml"
-            if [ -f "$mod_compose" ]; then
-                local mod_services=($(python3 -c "
+    fi
+    
+    if [ ${#base_services[@]} -eq 0 ]; then
+        base_services=("postgres" "pgbouncer" "redis" "caddy" "litellm")
+    fi
+    
+    for svc in "${base_services[@]}"; do
+        STACK_ACTIVE_CONTAINERS+=("${prefix}_${svc}")
+    done
+    
+    for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
+        local mod_compose="$TARGET_DIR/core/config/docker-compose.${mod}.yml"
+        if [ -f "$mod_compose" ]; then
+            local mod_services=($(python3 -c "
 import yaml
 try:
     with open('$mod_compose', 'r') as f:
@@ -223,14 +241,14 @@ try:
 except Exception:
     pass
 " 2>/dev/null || true))
-                for m_svc in "${mod_services[@]}"; do
-                    if [[ ! " ${STACK_ACTIVE_CONTAINERS[*]} " =~ " ${prefix}_${m_svc} " ]]; then
-                        STACK_ACTIVE_CONTAINERS+=("${prefix}_${m_svc}")
-                    fi
-                done
-            fi
-        done
-    fi
+            for m_svc in "${mod_services[@]}"; do
+                local m_clean=$(echo "$m_svc" | tr '-' '_')
+                if [[ ! " ${STACK_ACTIVE_CONTAINERS[*]} " =~ " ${prefix}_${m_clean} " ]]; then
+                    STACK_ACTIVE_CONTAINERS+=("${prefix}_${m_clean}")
+                fi
+            done
+        fi
+    done
 }
 
 diagnosticar_containers_stack() {
@@ -242,7 +260,7 @@ diagnosticar_containers_stack() {
         echo "====================================================================="
         local PREFIXO="${PREFIXO_CONTAINER}"
 
-        [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+        resolver_containers_ativos
 
         for container in "${STACK_ACTIVE_CONTAINERS[@]}"; do
             STATUS=$(docker inspect -f '{{.State.Status}}' "$container" 2>/dev/null || echo "unknown")
@@ -276,18 +294,32 @@ gerar_relatorio_versoes_stack() {
         printf "%-20s | %-50s | %-20s\n" "CONTAINER" "IMAGEM DOCKER" "VERSÃO INTERNA"
         echo "---------------------------------------------------------------------------------------------------"
 
-        [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+        resolver_containers_ativos
 
         for container in "${STACK_ACTIVE_CONTAINERS[@]}"; do
-            local imagem=$(docker inspect --format '{{.Config.Image}}' "$container" 2>/dev/null || echo "N/A")
+            local imagem=$(docker inspect --format '{{.Config.Image}}' "$container" 2>/dev/null | tr -d '\r\n' || echo "N/A")
+            [ -z "$imagem" ] && imagem="N/A"
             local servico="${container#${PREFIXO}_}"
             local versao=""
 
-            # Delegador Polimórfico: se existir install_<servico>.sh, delega para get_version do módulo
-            if [ -f "$TARGET_DIR/core/scripts/install_${servico}.sh" ]; then
-                versao=$(bash "$TARGET_DIR/core/scripts/install_${servico}.sh" "$TARGET_DIR" get_version "$servico" 2>/dev/null || echo "")
-            elif [ "$servico" = "temporal" ] && [ -f "$TARGET_DIR/core/scripts/install_postiz.sh" ]; then
-                versao=$(bash "$TARGET_DIR/core/scripts/install_postiz.sh" "$TARGET_DIR" get_version "temporal" 2>/dev/null || echo "")
+            # Inversão de Controle (IoC): Descoberta dinâmica do script responsável pelo nó (via Linha 2 de cada install_*.sh)
+            for mod_script in "$TARGET_DIR"/core/scripts/install_*.sh; do
+                [ ! -f "$mod_script" ] && continue
+                local nodes_decl=$(sed -n '2p' "$mod_script" 2>/dev/null | sed 's/^#[[:space:]]*//' | tr '[:upper:]' '[:lower:]')
+                local svc_norm=$(echo "$servico" | tr '_-' ' ')
+                for nd in $nodes_decl; do
+                    nd_norm=$(echo "$nd" | tr '_-' ' ')
+                    if [ "$nd_norm" = "$svc_norm" ] || [ "$nd" = "$servico" ] || [ "$nd" = "${servico//-/_}" ]; then
+                        versao=$(bash "$mod_script" "$TARGET_DIR" get_version "$servico" 2>/dev/null || echo "")
+                        break 2
+                    fi
+                done
+            done
+
+            # Fallback Universal: Leitura de Labels OCI nativas da imagem do container
+            if [ -z "$versao" ]; then
+                versao=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "$container" 2>/dev/null || true)
+                [ -z "$versao" ] && versao=$(docker inspect -f '{{index .Config.Labels "version"}}' "$container" 2>/dev/null || true)
             fi
 
             # Fallback para serviços do Core que não possuem script desacoplado dedicado
@@ -297,9 +329,12 @@ gerar_relatorio_versoes_stack() {
                         versao=$(docker exec "$container" postgres --version 2>/dev/null | awk '{print $3}' || echo "")
                         ;;
                     pgbouncer)
-                        local tag_imagem="${imagem##*:}"
-                        if [ -n "$tag_imagem" ] && [ "$tag_imagem" != "$imagem" ]; then
-                            versao="${tag_imagem}"
+                        versao=$(docker exec "$container" pgbouncer -V 2>/dev/null | head -n 1 | awk '{print $2}' || echo "")
+                        if [ -z "$versao" ]; then
+                            local tag_imagem="${imagem##*:}"
+                            if [ -n "$tag_imagem" ] && [ "$tag_imagem" != "$imagem" ]; then
+                                versao="${tag_imagem}"
+                            fi
                         fi
                         ;;
                     redis)
@@ -320,17 +355,9 @@ gerar_relatorio_versoes_stack() {
                 esac
             fi
 
-            if [ -z "$versao" ]; then
-                local tag_imagem="${imagem##*:}"
-                if [ -n "$tag_imagem" ] && [ "$tag_imagem" != "$imagem" ]; then
-                    versao="${tag_imagem}"
-                else
-                    versao="N/A"
-                fi
-            fi
-
             # Sanitização global de formatação (remove "Tag (...)", "RELEASE.", e prefixo "v")
-            versao=$(echo "$versao" | sed -E 's/^Tag \((.*)\)$/\1/; s/^RELEASE\.//; s/^[vV]//')
+            versao=$(echo "$versao" | sed -E 's/^Tag \((.*)\)$/\1/; s/^RELEASE\.//; s/^[vV]//' | tr -d '\r\n ' | head -n 1)
+            [ -z "$versao" ] && versao="N/A"
 
             printf "%-20s | %-50s | %-20s\n" "$container" "$imagem" "$versao"
         done
@@ -442,7 +469,7 @@ VARIAVEIS_CRITICAS=(
     TS_EMAIL TS_OAUTH_ID TS_OAUTH_SECRET DB_USER DB_PASSWORD
     HASH_ESPERADO CHAVE_PUBLICA_B64 PREFIXO_CONTAINER PROJETO_DIR
     CLIENTE_NOME CLIENTE_SOBRENOME
-    HOST_CADDY_PORT HOST_EVO_PORT HOST_NOCODB_PORT
+    HOST_CADDY_PORT
 )
 
 for var in "${VARIAVEIS_CRITICAS[@]}"; do
@@ -504,7 +531,7 @@ step_build_tree_and_files() {
 echo "=== [FASE 1 INSTALL] Arquitetura Físico-Lógica de Volumes e Portal Estático ======="
 # ===============================================================================
     # 1. Estruturação dos volumes exclusivos da infraestrutura CORE
-    mkdir -p "$TARGET_DIR"/volumes/{postgres_data,tailscale_state,caddy_data,litellm_data,pgbouncer_data}
+    mkdir -p "$TARGET_DIR"/volumes/{postgres_data,tailscale_state,caddy_data,litellm_data,pgbouncer_data,redis_data}
     touch "$TARGET_DIR/volumes/pgbouncer_data/pgbouncer-other-databases.ini" 2>/dev/null || true
 
     # SRE PRE-FLIGHT FIX: Garante que config.yaml do LiteLLM seja um ARQUIVO e não um DIRETÓRIO
@@ -519,7 +546,7 @@ EO_BASE
     fi
 
     # SRE Volume Hardening: Restaura permissões estritas dos serviços Core
-    chown -R 999:999 "$TARGET_DIR/volumes/postgres_data" 2>/dev/null || true
+    chown -R 999:999 "$TARGET_DIR/volumes/postgres_data" "$TARGET_DIR/volumes/redis_data" 2>/dev/null || true
     chown -R 1000:1000 "$TARGET_DIR/volumes/litellm_data" "$TARGET_DIR/volumes/pgbouncer_data" 2>/dev/null || true
 
     # --- INVOCAÇÃO DESACOPLADA DE ESTRUTURA DE VOLUMES DOS MÓDULOS (PARALELIZADO) ---
@@ -557,15 +584,12 @@ echo "=== [SRE INSTALL] Processando Assets Visuais e Rotas WAF ==="
 # GOLPE DE MESTRE SRE: O Caddyfile DEVE ser criado antes de reiniciar o container
 # ===============================================================================
 BIND_PORTAL=":80"
-BIND_API=":8081"
 
 if [ "$USE_TAILSCALE" = "false" ]; then
     if [ "$CADDY_PROTOCOL" = "http" ]; then
         BIND_PORTAL="http://${CUSTOM_DOMAIN}"
-        BIND_API="http://${CUSTOM_EVO_DOMAIN}"
     else
         BIND_PORTAL="${CUSTOM_DOMAIN}"
-        BIND_API="${CUSTOM_EVO_DOMAIN}"
     fi
 fi
 
@@ -597,11 +621,9 @@ ${BIND_PORTAL} {
     }
 
     # --- PORTAL WHITE-LABEL ---
-    handle {
-        root * /etc/caddy/public
-        header Cache-Control "no-cache, no-store, must-revalidate"
-        file_server
-    }
+    root * /etc/caddy/public
+    header Cache-Control "no-cache, no-store, must-revalidate"
+    file_server
 }
 
 # ===============================================================================
@@ -825,6 +847,7 @@ done
     printf 'STORAGE_MODE="%s"\n'  "${STORAGE_MODE:-local}"
     printf 'USE_S3MINIO="%s"\n'   "${USE_S3MINIO:-n}"
     printf 'USE_TAILSCALE="%s"\n' "${USE_TAILSCALE:-false}"
+    printf 'N8N_DEV_AI_ASSISTANT="%s"\n' "${N8N_DEV_AI_ASSISTANT:-n}"
 } >> .env
 # Guardrail de Segurança: Oculta o arquivo de outros usuários do Linux
 chmod 600 .env
@@ -842,7 +865,7 @@ cd "$TARGET_DIR" 2>/dev/null || true
 
 preparar_compose_monolitico() {
     cd "$TARGET_DIR" 2>/dev/null || true
-    
+
     # 1. Inicia a topologia base no docker-compose.yml a partir do arquivo base do Core
     cp "$TARGET_DIR/core/config/docker-compose.yml" "$TARGET_DIR/docker-compose.yml"
     
@@ -874,12 +897,7 @@ preparar_compose_monolitico
 
 cd "$TARGET_DIR" 2>/dev/null || true
 
-# [SRE DOC] Polimorfismo de Portas: Se estivermos em BYODNS, a API Evolution não usa 
-# mais uma porta separada (8081). Tudo passa pela 80/443 usando roteamento por Domínio (SNI).
 if [ "$USE_TAILSCALE" = "false" ]; then
-    # SRE FIX: Purga a porta 8081 no Compose usando RegEx flexível para evitar quebras por espaço/string
-    sed -i -E '/\$\{EVO_PORT.*:8081\/tcp/d' ./docker-compose.yml
-    
     if [ "$CADDY_PROTOCOL" = "https" ]; then
         sed -i 's/- "${PROXY_PORT:-80}:80\/tcp"/- "80:80\/tcp"\n      - "443:443\/tcp"/g' ./docker-compose.yml
     fi
@@ -887,12 +905,12 @@ fi
 
 echo "➜ [SRE INSTALL] Verificando integridade das imagens Docker locais..."
 
-SERVICOS_DECLARADOS=($(docker compose config --services 2>/dev/null | grep -v '^$' || true))
+SERVICOS_DECLARADOS=($(docker compose --profile "*" config --services 2>/dev/null | grep -v '^$' || true))
 TOTAL_SERVICOS=${#SERVICOS_DECLARADOS[@]}
 
 if [ "$TOTAL_SERVICOS" -gt 0 ]; then
-    # Extrai a lista de imagens declaradas no docker-compose.yml
-    IMAGENS_NECESSARIAS=($(docker compose config 2>/dev/null | grep -E '^\s*image:' | awk '{print $2}' | tr -d '"' | tr -d "'" | sort -u || true))
+    # Extrai a lista de imagens declaradas no docker-compose.yml (incluindo profiles ondemand como Docling)
+    IMAGENS_NECESSARIAS=($(docker compose --profile "*" config 2>/dev/null | grep -E '^\s*image:' | awk '{print $2}' | tr -d '"' | tr -d "'" | sort -u || true))
     IMAGENS_FALTANDO=()
 
     for img in "${IMAGENS_NECESSARIAS[@]}"; do
@@ -1025,33 +1043,92 @@ until docker compose exec -T postgres pg_isready -U $DB_USER -d ${PREFIXO_CONTAI
   sleep 2
 done
 
-# 1. Injeção de DDL idempotente (init.sql com IF NOT EXISTS)
-if [ -f "./core/database/init.sql" ]; then
-    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < ./core/database/init.sql > /dev/null 2>&1 || true
-elif [ -f "$TARGET_DIR/core/database/init.sql" ]; then
-    docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q < "$TARGET_DIR/core/database/init.sql" > /dev/null 2>&1 || true
-fi
-
-# 2. Bancos lógicos do Core
+# 1. Bancos lógicos do Core
 echo "➜ [SRE CORE INSTALL] Garantindo bancos de dados lógicos do Core (litellm_db)..."
 for db in litellm_db; do
-    if docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -c "SELECT 1 FROM pg_database WHERE datname = '$db'" < /dev/null 2>/dev/null | grep -q 1; then
+    if docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -c "SELECT 1 FROM pg_database WHERE datname = '$db'" < /dev/null 2>/dev/null | grep -q 1; then
         echo "➜ [IDEMPOTÊNCIA INSTALL] Banco de dados Core '$db' já existente. Preservando esquema."
     else
         echo "  ↳ Criando banco de dados Core '$db'..."
-        docker compose exec -T postgres psql -U $DB_USER -d ${PREFIXO_CONTAINER}_db -q -c "CREATE DATABASE $db;" < /dev/null > /dev/null 2>&1 || true
+        if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -q -v ON_ERROR_STOP=1 -c "CREATE DATABASE $db;" < /dev/null; then
+            echo "🚨 [ERRO FATAL INSTALL] Falha ao criar banco de dados Core '$db'." >&2
+            exit 1
+        fi
     fi
 done
 
-# 3. Bancos lógicos dos módulos desacoplados (Invocação Polimórfica)
+# 2. Bancos lógicos dos módulos desacoplados (Invocação Polimórfica)
 echo "➜ [SRE MODULOS INSTALL] Garantindo bancos de dados lógicos dos módulos ativos..."
 [ ${#MODULOS_DESACOPLADOS_ATIVOS[@]} -eq 0 ] && resolver_modulos_desacoplados
 
 for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
     if [ -f "$TARGET_DIR/core/scripts/install_${mod}.sh" ]; then
-        bash "$TARGET_DIR/core/scripts/install_${mod}.sh" "$TARGET_DIR" provision_db 2>/dev/null || true
+        if ! bash "$TARGET_DIR/core/scripts/install_${mod}.sh" "$TARGET_DIR" provision_db; then
+            echo "🚨 [ERRO FATAL INSTALL] Falha ao provisionar banco de dados do módulo '$mod'." >&2
+            exit 1
+        fi
     fi
 done
+
+# 3. Injeção de User Mappings para Federação FDW no Data Warehouse Central (loja_db)
+echo "➜ [SRE CORE INSTALL] Habilitando extensões (postgres_fdw, pgvector) e configurando federação FDW..."
+if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -v ON_ERROR_STOP=1 -q -c "
+SET client_min_messages = warning;
+CREATE EXTENSION IF NOT EXISTS postgres_fdw;
+CREATE EXTENSION IF NOT EXISTS vector;
+"; then
+    echo "🚨 [ERRO FATAL INSTALL] Falha ao habilitar extensões postgres_fdw/vector no banco principal." >&2
+    exit 1
+fi
+
+for srv in srv_chatwoot srv_shlink srv_listmonk srv_umami srv_evolution srv_postiz; do
+    target_dbname="${srv#srv_}_db"
+    target_host="${DB_HOST:-localhost}"
+    target_port="${DB_PORT:-5432}"
+    if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" \
+        -q \
+        -v ON_ERROR_STOP=1 \
+        -v target_srv="$srv" \
+        -v target_db="$target_dbname" \
+        -v target_host="$target_host" \
+        -v target_port="$target_port" \
+        -v target_user="$DB_USER" \
+        -v target_pass="$DB_PASSWORD" << 'EOF'
+SET client_min_messages = warning;
+
+-- Garante Servidor Estrangeiro com host e porta parametrizados
+SELECT format('DO $b$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_foreign_server WHERE srvname = %L) THEN CREATE SERVER %I FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host %L, port %L, dbname %L); ELSE ALTER SERVER %I OPTIONS (SET host %L, SET port %L, SET dbname %L); END IF; END $b$;', :'target_srv', :'target_srv', :'target_host', :'target_port', :'target_db', :'target_srv', :'target_host', :'target_port', :'target_db') \gexec
+
+-- SRE Security Fix: Renovação atômica de credenciais com escape seguro (%I / %L)
+SELECT format('DROP USER MAPPING IF EXISTS FOR %I SERVER %I;', :'target_user', :'target_srv') \gexec
+SELECT format('CREATE USER MAPPING FOR %I SERVER %I OPTIONS (user %L, password %L);', :'target_user', :'target_srv', :'target_user', :'target_pass') \gexec
+
+-- SRE Notice: USER MAPPING FOR PUBLIC permite federação transparente para ferramentas de BI.
+-- A segurança de isolamento é mantida pelas restrições de permissão nos schemas fdw_*.
+SELECT format('DROP USER MAPPING IF EXISTS FOR PUBLIC SERVER %I;', :'target_srv') \gexec
+SELECT format('CREATE USER MAPPING FOR PUBLIC SERVER %I OPTIONS (user %L, password %L);', :'target_srv', :'target_user', :'target_pass') \gexec
+EOF
+    then
+        echo "🚨 [ERRO FATAL INSTALL] Falha ao configurar FDW e User Mapping para o servidor '$srv'." >&2
+        exit 1
+    fi
+done
+
+# 4. Injeção de DDL idempotente (init.sql com IF NOT EXISTS)
+echo "➜ [SRE CORE INSTALL] Aplicando DDL idempotente do Data Warehouse e Views Analíticas (init.sql)..."
+INIT_SQL_PATH=""
+if [ -f "./core/database/init.sql" ]; then
+    INIT_SQL_PATH="./core/database/init.sql"
+elif [ -f "$TARGET_DIR/core/database/init.sql" ]; then
+    INIT_SQL_PATH="$TARGET_DIR/core/database/init.sql"
+fi
+
+if [ -n "$INIT_SQL_PATH" ]; then
+    if ! docker compose exec -T postgres psql -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" -v ON_ERROR_STOP=1 -q < "$INIT_SQL_PATH"; then
+        echo "🚨 [ERRO FATAL INSTALL] Falha na execução do DDL em init.sql." >&2
+        exit 1
+    fi
+fi
 
 # --- PREVENÇÃO SRE: CRIANDO CONFIG PLACEHOLDER ANTES DO BOOT ---
 mkdir -p "$TARGET_DIR/volumes/litellm_data" 2>/dev/null || true
@@ -1079,6 +1156,29 @@ ALL_DECLARED_SERVICES=($(docker compose config --services 2>/dev/null | grep -v 
 RUNNING_SERVICES=($(docker compose ps --services --filter "status=running" 2>/dev/null | grep -v '^$' || true))
 APPS_OFFLINE=()
 
+# 🛡️ SRE AUDIT: Validação Atômica de Integridade de IP (Evita Drift e Colisões Ocultas)
+for svc in "${RUNNING_SERVICES[@]}"; do
+    svc_clean=$(echo "$svc" | tr '-' '_')
+    c_name="${PREFIXO_CONTAINER}_${svc_clean}"
+    
+    # Obtém o IP atual alocado no container em execução
+    current_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$c_name" 2>/dev/null || true)
+    
+    # Obtém a variável de IP esperada no .env (ex: IP_OPENWEBUI, IP_SHLINK_WEB)
+    var_name="IP_$(echo "$svc" | tr '[:lower:]-' '[:upper:]_')"
+    expected_ip="${!var_name:-}"
+    
+    if [ -n "$expected_ip" ] && [ -n "$current_ip" ] && [ "$current_ip" != "$expected_ip" ]; then
+        echo "⚠️ [SRE IP DRIFT DETECTED] O serviço '$svc' está rodando no IP $current_ip, mas o .env espera $expected_ip."
+        echo "  ↳ Purgando contêiner desatualizado para realocação determinística de IP..."
+        docker network disconnect -f "instancia_net" "$c_name" > /dev/null 2>&1 || true
+        docker rm -f "$c_name" "${PREFIXO_CONTAINER}_${svc}" > /dev/null 2>&1 || true
+    fi
+done
+
+# Reavalia serviços em execução após a autocorreção de drift
+RUNNING_SERVICES=($(docker compose ps --services --filter "status=running" 2>/dev/null | grep -v '^$' || true))
+
 for svc in "${ALL_DECLARED_SERVICES[@]}"; do
     if ! echo "${RUNNING_SERVICES[*]}" | grep -qw "$svc"; then
         APPS_OFFLINE+=("$svc")
@@ -1088,23 +1188,55 @@ done
 if [ ${#APPS_OFFLINE[@]} -eq 0 ]; then
     echo "➜ [IDEMPOTÊNCIA INSTALL] Todos os ${#ALL_DECLARED_SERVICES[@]} serviços declarados já estão rodando em status RUNNING."
 else
-    echo "  ↳ Disparando subida seletiva apenas dos microsserviços offline: ${APPS_OFFLINE[*]}..."
+    echo "  ↳ Disparando subida seletiva dos microsserviços: ${APPS_OFFLINE[*]}..."
     
-    # SRE FIX: Proteção contra falso-negativo de 'unhealthy' no Docker Compose (Pico de I/O)
+    # SRE FIX: Proteção contra falso-negativo de 'unhealthy' e 'Address already in use' (Race condition de IP)
     if ! UP_ERR=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
-        if echo "$UP_ERR" | grep -qiE "unhealthy|dependency failed"; then
-            echo "⚠️ [SRE RECOVERY INSTALL] O Docker bloqueou a subida pois uma dependência reportou 'unhealthy' temporário (Pico de CPU/IO)."
-            echo "  ↳ Resetando o estado de saúde do Redis e do Postgres..."
-            docker restart ${PREFIXO_CONTAINER}_redis ${PREFIXO_CONTAINER}_postgres > /dev/null 2>&1 || true
+        if echo "$UP_ERR" | grep -qiE "Address already in use|failed to set up container networking|already in use"; then
+            echo "⚠️ [SRE RECOVERY INSTALL] O Docker Engine encontrou race condition de alocação de IP ('Address already in use')."
+            echo "  ↳ Purgando contêineres conflitantes e liberando endpoints da rede..."
             
-            # Aguarda o reset cravar no Daemon
-            sleep 10
+            # 1. Pede ao Docker para desconectar forçadamente e remover os serviços offline
+            for svc_off in "${APPS_OFFLINE[@]}"; do
+                svc_clean=$(echo "$svc_off" | tr '-' '_')
+                docker rm -f "${PREFIXO_CONTAINER}_${svc_off}" "${PREFIXO_CONTAINER}_${svc_clean}" > /dev/null 2>&1 || true
+            done
+            
+            # 2. Se o IP ainda estiver retido por outro container legado/desatualizado, localiza e desanexa
+            for net_name in $(docker network ls --format '{{.Name}}' | grep -E "instancia_net|default" || true); do
+                for c_id in $(docker network inspect "$net_name" --format '{{range $k, $v := .Containers}}{{$k}} {{end}}' 2>/dev/null || true); do
+                    c_name=$(docker inspect -f '{{.Name}}' "$c_id" 2>/dev/null | sed 's/^\///' || true)
+                    for svc_off in "${APPS_OFFLINE[@]}"; do
+                        svc_clean=$(echo "$svc_off" | tr '-' '_')
+                        if [ "$c_name" = "${PREFIXO_CONTAINER}_${svc_off}" ] || [ "$c_name" = "${PREFIXO_CONTAINER}_${svc_clean}" ]; then
+                            docker network disconnect -f "$net_name" "$c_id" > /dev/null 2>&1 || true
+                            docker rm -f "$c_id" > /dev/null 2>&1 || true
+                        fi
+                    done
+                done
+            done
+            
+            sleep 3
+            if ! UP_ERR_NET=$(docker compose up -d --force-recreate "${APPS_OFFLINE[@]}" 2>&1); then
+                echo "🚨 [ERRO CRÍTICO INSTALL] Falha na re-alocação de IP dos microsserviços:"
+                echo "$UP_ERR_NET"
+                exit 1
+            fi
+        elif echo "$UP_ERR" | grep -qiE "unhealthy|dependency failed"; then
+            echo "⚠️ [SRE RECOVERY INSTALL] O Docker bloqueou a subida pois uma dependência reportou 'unhealthy' temporário (Pico de CPU/IO)."
+            echo "  ↳ Aguardando 15s para estabilização das migrações e readiness probes..."
+            sleep 15
             
             echo "  ↳ Retentando injeção dos contêineres..."
             if ! UP_ERR2=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
-                echo "🚨 [ERRO CRÍTICO INSTALL] Falha definitiva ao inicializar microsserviços:"
-                echo "$UP_ERR2"
-                exit 1
+                echo "  ↳ Resetando o estado de saúde dos bancos e retentando..."
+                docker restart ${PREFIXO_CONTAINER}_redis ${PREFIXO_CONTAINER}_postgres > /dev/null 2>&1 || true
+                sleep 10
+                if ! UP_ERR3=$(docker compose up -d --remove-orphans "${APPS_OFFLINE[@]}" 2>&1); then
+                    echo "🚨 [ERRO CRÍTICO INSTALL] Falha definitiva ao inicializar microsserviços:"
+                    echo "$UP_ERR3"
+                    exit 1
+                fi
             fi
         else
             echo "🚨 [ERRO CRÍTICO INSTALL] Falha ao inicializar os microsserviços:"
@@ -1112,9 +1244,31 @@ else
             exit 1
         fi
     fi
-    # SRE: Recria o Caddy WAF com os novos mapeamentos de portas e Caddyfile consolidado
-    echo "➜ [SRE INSTALL] Sincronizando portas e rotas de borda no Caddy WAF..."
-    sudo docker compose up -d --force-recreate caddy > /dev/null 2>&1 || true
+fi
+
+# SRE: Recria o Caddy WAF com os novos mapeamentos de portas e Caddyfile consolidado
+echo "➜ [SRE INSTALL] Sincronizando portas e rotas de borda no Caddy WAF..."
+sudo docker compose up -d --force-recreate caddy > /dev/null 2>&1 || true
+
+# 🛡️ SRE GUARDRAIL & SELF-HEALING: Validação do Ingress Estático do Portal (/etc/caddy/public/index.html)
+local CADDY_PORTAL_OK=false
+for tent_caddy in {1..5}; do
+    if docker exec "${PREFIXO_CONTAINER}_caddy" test -s /etc/caddy/public/index.html 2>/dev/null; then
+        CADDY_PORTAL_OK=true
+        break
+    else
+        echo "⚠️ [SRE WARN INSTALL] Assets do portal ausentes no volume do Caddy (Tentativa ${tent_caddy}/5). Re-sincronizando..."
+        cp -r "$TARGET_DIR/core/html/"* "$TARGET_DIR/core/html/" 2>/dev/null || true
+        sudo docker compose up -d --force-recreate caddy > /dev/null 2>&1 || true
+        sleep 2
+    fi
+done
+
+if [ "$CADDY_PORTAL_OK" = "true" ]; then
+    echo "✔ [SUCESSO SRE] Portal White-Label validado e acessível no Caddy WAF."
+else
+    echo "🚨 [ERRO CRÍTICO SRE] Falha ao sincronizar arquivos do portal no Caddy WAF."
+fi
 
     # --- AUTOMAÇÃO ATÔMICA DO CATÁLOGO DE IAS (HÍBRIDO) ---
     if [ "$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:4000/health/liveliness || echo "000")" != "200" ]; then
@@ -1123,7 +1277,6 @@ else
             sleep 3
         done
     fi
-fi
 }
 echo -e "\e[33m⏳ [EXECUTANDO INSTALL] Subida e Orquestração dos Microsserviços...\e[0m"
 step_docker_up_apps
@@ -1216,11 +1369,17 @@ else
     echo "➜ [SUCESSO INSTALL] Administrador LiteLLM cadastrado."
 fi
 
-# 2. PROVISÃO POLIMÓRFICA DE USUÁRIOS DOS MÓDULOS DESACOPLADOS ATIVOS (PARALELIZADO)
+# 2. PROVISÃO POLIMÓRFICA DE USUÁRIOS DOS MÓDULOS DESACOPLADOS ATIVOS (ORDENADA & PARALELIZADA)
 [ ${#MODULOS_DESACOPLADOS_ATIVOS[@]} -eq 0 ] && resolver_modulos_desacoplados
+
+# SRE Guardrail de Dependência: Se Chatwoot estiver ativo, provisiona-o primeiro para gerar o CHATWOOT_API_TOKEN
+if [[ " ${MODULOS_DESACOPLADOS_ATIVOS[*]} " =~ " chatwoot " ]] && [ -f "$TARGET_DIR/core/scripts/install_chatwoot.sh" ]; then
+    bash "$TARGET_DIR/core/scripts/install_chatwoot.sh" "$TARGET_DIR" provision_user 2>/dev/null || true
+fi
 
 USER_PROV_PIDS=()
 for mod in "${MODULOS_DESACOPLADOS_ATIVOS[@]}"; do
+    [ "$mod" = "chatwoot" ] && continue
     if [ -f "$TARGET_DIR/core/scripts/install_${mod}.sh" ]; then
         (
             bash "$TARGET_DIR/core/scripts/install_${mod}.sh" "$TARGET_DIR" provision_user
@@ -1245,7 +1404,7 @@ if [ "$RAIZ_REPO" = "/tmp/infra-loja-bootstrap" ]; then rm -rf /tmp/infra-loja-b
 # ===============================================================================
 echo "=== [SRE INSTALL] Inicializando Probes Dinâmicas de Prontidão (Readiness Probes) ==="
 
-[ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+resolver_containers_ativos
 
 # SRE IDEMPOTÊNCIA: Validação rápida - se todos já estiverem saudáveis, avança sem loops de espera
 ALL_INSTANT_HEALTHY=true
@@ -1315,7 +1474,7 @@ if [ -f "$TARGET_DIR/core/scripts/install_1ia.sh" ] && [ "$TODO_ECOSSISTEMA_SAUD
         echo "=== [SRE GUARDRAIL INSTALL] Amortecendo e aguardando re-estabilização pós-restart dos microsserviços ==="
 
         # Contêineres ativos da stack resolvidos dinamicamente (SSOT)
-        [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+        resolver_containers_ativos
         RESTARTED_CONTAINERS=("${STACK_ACTIVE_CONTAINERS[@]}")
 
         # Loop de tolerância de até 90 segundos com intervalo de 3s
@@ -1528,7 +1687,7 @@ echo "  ↳ Domínio FQDN Canônico:   $TS_DOMAIN"
 echo ""
 echo ""
 echo "➜ MAPEAMENTO TOPOLÓGICO DE ATIVOS (DOCKER MALHA INTERNA):"
-[ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+resolver_containers_ativos
 
 # Varre e imprime dinamicamente todos os containers da stack em ordem alfabética
 for cnt in $(printf '%s\n' "${STACK_ACTIVE_CONTAINERS[@]}" | sort); do
@@ -1548,7 +1707,7 @@ echo "➜ MATRIZ DE ROTEAMENTO E STATUS DE HANDSHAKES:"
 
 ROUTING_LINES=()
 
-[ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+resolver_containers_ativos
 
 # SRE PERFORMANCE: Auditoria de integridade e handshakes em paralelo (background subshells com pipes temporários)
 AUDIT_TMP_DIR=$(mktemp -d /tmp/sre_audit.XXXXXX 2>/dev/null || echo "/tmp/sre_audit_tmp")
@@ -1676,7 +1835,7 @@ if [ "$ECOSSISTEMA_COM_ALERTAS" = "true" ]; then
     echo "Mapeamento dos caminhos absolutos de logs no host para depuração externa:"
     echo ""
 
-    [ ${#STACK_ACTIVE_CONTAINERS[@]} -eq 0 ] && resolver_containers_ativos
+    resolver_containers_ativos
 
     for container in "${STACK_ACTIVE_CONTAINERS[@]}"; do
         # Captura a saúde em tempo real do componente
