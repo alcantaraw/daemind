@@ -313,8 +313,10 @@ provision_user() {
         sudo docker exec -i ${PREFIX}_chatwoot bundle exec rails runner "
         begin
           Sidekiq.logger.level = Logger::WARN if defined?(Sidekiq)
-          ActiveRecord::Base.transaction do
-            account = Account.find_or_create_by!(name: '${PREFIX}')
+          
+          # 1. Criação do SuperAdmin e Conta Mestre (Commit Garantido)
+          user = User.find_by(email: '${TS_EMAIL:-admin@localhost}')
+          if user.nil?
             user = User.new(
               name: '${CLIENTE_NOME:-Admin} ${CLIENTE_SOBRENOME:-User}',
               email: '${TS_EMAIL:-admin@localhost}',
@@ -324,39 +326,48 @@ provision_user() {
             user.type = 'SuperAdmin'
             user.skip_confirmation! if user.respond_to?(:skip_confirmation!)
             user.save!
-            AccountUser.find_or_create_by!(account_id: account.id, user_id: user.id) do |au|
-              au.role = :administrator
-            end
-            token_obj = AccessToken.find_or_initialize_by(owner: user)
-            token_obj.token = '${DB_PASSWORD}'
-            token_obj.save!
-            
-            # Parametrização Zero-Touch no InstallationConfig
-            [
-              ['INSTALLATION_NAME', '${PREFIX}'],
-              ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
-              ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
-              ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000/v1'],
-              ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
-              ['OPENAI_MODEL', 'gpt-4.1']
-            ].each do |k, v|
-              cfg = InstallationConfig.find_or_initialize_by(name: k)
-              cfg.serialized_value = { 'value' => v }
-              cfg.save! rescue nil
-            end
-
-            user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
-            account.update!(custom_attributes: { 'website' => 'https://${TS_DOMAIN:-localhost}', 'timezone' => 'America/Sao_Paulo' })
-
-            # Auto-ativação da integração OpenAI / LiteLLM nativa para a conta
-            hook = Integrations::Hook.find_or_initialize_by(account_id: account.id, app_id: 'openai')
-            hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
-            hook.status = :enabled
-            hook.save(validate: false) rescue nil
+          else
+            user.password = '${DB_PASSWORD:-******}'
+            user.password_confirmation = '${DB_PASSWORD:-******}'
+            user.type = 'SuperAdmin'
+            user.save!
           end
+
+          account = Account.find_or_create_by!(name: '${PREFIX}')
+          AccountUser.find_or_create_by!(account_id: account.id, user_id: user.id) do |au|
+            au.role = :administrator
+          end
+          token_obj = AccessToken.find_or_initialize_by(owner: user)
+          token_obj.token = '${DB_PASSWORD}'
+          token_obj.save!
+
+          user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
+          account.update!(custom_attributes: { 'website' => 'https://${TS_DOMAIN:-localhost}', 'timezone' => 'America/Sao_Paulo' })
+
+          # 2. Auto-ativação da integração OpenAI / LiteLLM nativa para a conta
+          hook = Integrations::Hook.find_or_initialize_by(account_id: account.id, app_id: 'openai')
+          hook.settings = { 'api_key' => '${LITELLM_MASTER_KEY}' }
+          hook.status = :enabled
+          hook.save(validate: false) rescue nil
+
+          # 3. Parametrização do GlobalConfig / InstallationConfig (HashWithIndifferentAccess)
+          [
+            ['INSTALLATION_NAME', '${PREFIX}'],
+            ['CHATWOOT_INSTANCE_ADMIN_EMAIL', '${TS_EMAIL:-admin@localhost}'],
+            ['CAPTAIN_OPEN_AI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['CAPTAIN_OPEN_AI_ENDPOINT', 'http://litellm:4000/v1'],
+            ['CAPTAIN_OPEN_AI_MODEL', 'gpt-4.1'],
+            ['OPENAI_API_KEY', '${LITELLM_MASTER_KEY}'],
+            ['OPENAI_MODEL', 'gpt-4.1']
+          ].each do |k, v|
+            cfg = InstallationConfig.find_or_initialize_by(name: k)
+            cfg.serialized_value = ActiveSupport::HashWithIndifferentAccess.new({ 'value' => v })
+            cfg.save! rescue nil
+          end
+
           Rails.cache.clear
           GlobalConfig.clear_cache if defined?(GlobalConfig) && GlobalConfig.respond_to?(:clear_cache)
-          puts '➜ [OK CHATWOOT] Banco do Chatwoot populado com sucesso!'
+          puts '➜ [OK CHATWOOT] SuperAdmin e configurações criados com sucesso!'
         rescue => e
           puts '🚨 [ERRO RUBY CHATWOOT] ' + e.message
         end

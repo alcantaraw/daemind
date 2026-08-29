@@ -370,7 +370,7 @@ provision_user() {
         curl -s -X PUT "${MB_URL}/api/setting/llm-enabled" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": true}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-metabot-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-model" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "gpt-4.1"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000/v1"}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${LITELLM_MASTER_KEY}\"}" >/dev/null 2>&1 || true
     fi
 }

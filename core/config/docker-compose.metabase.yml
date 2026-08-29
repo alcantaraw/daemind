@@ -33,8 +33,8 @@ services:
       - JAVA_OPTS=-XX:+UseG1GC -Xms256m -Xmx768m -XX:MaxMetaspaceSize=512m -XX:+ExitOnOutOfMemoryError -Duser.timezone=America/Sao_Paulo -Dlog4j.configurationFile=file:/etc/metabase/log4j2.xml -Dlog4j2.level=WARN -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
       # --- INTEGRAÇÃO COM IA SOBERANA (LITELLM PROXY / TEXT-TO-SQL) ---
       - MB_OPENAI_API_KEY=${LITELLM_MASTER_KEY}
-      - MB_OPENAI_BASE_URL=http://litellm:4000/v1
-      - MB_OPENAI_MODEL=${METABASE_AI_MODEL:-openai/gpt-4o-mini}
+      - MB_OPENAI_BASE_URL=http://litellm:4000
+      - MB_OPENAI_MODEL=${METABASE_AI_MODEL:-gpt-4.1}
     volumes:
       - './core/config/log4j2.metabase.xml:/etc/metabase/log4j2.xml:ro'
       - './volumes/metabase_data:/metabase-data'

@@ -681,6 +681,7 @@ litellm_settings:
   drop_params: true
   turn_off_message_logging: true
   set_verbose: false
+  default_max_tokens: 4096
   webhook_url: "http://${PREFIXO_CONTAINER}_n8n:5678/webhook/litellm-falhas"
   failure_callback: ["webhook"]
   model_alias_map:
@@ -703,6 +704,7 @@ EO_BASE
   - model_name: "$app_m"
     litellm_params:
       model: ${TARGET_MODEL}
+      max_tokens: 4096
     model_info:
       id: "$app_m"
       name: "$app_m"
