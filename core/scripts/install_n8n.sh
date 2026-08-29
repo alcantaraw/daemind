@@ -42,47 +42,14 @@ build_structure() {
         local SEARX_DIR="$TARGET_DIR/volumes/searxng"
         sudo mkdir -p "$SEARX_DIR" 2>/dev/null || true
         # Se limiter.toml foi criado como diretório pelo docker, remove
-        if [ -d "$SEARX_DIR/limiter.toml" ]; then
-            sudo rm -rf "$SEARX_DIR/limiter.toml" 2>/dev/null || true
-        fi
         if [ ! -f "$SEARX_DIR/limiter.toml" ]; then
-            echo "➜ [SRE N8N DEV] Gerando limiter.toml tunado para AI Tools no SearXNG..."
-            cat << 'EOF' | sudo tee "$SEARX_DIR/limiter.toml" > /dev/null
-[botdetection]
-ip_limit = false
-link_token = false
-ipv4_prefix = 32
-ipv6_prefix = 48
-trusted_proxies = [
-  '127.0.0.0/8',
-  '::1',
-  '10.0.0.0/8',
-  '172.16.0.0/12',
-  '192.168.0.0/16'
-]
-
-[ratelimit]
-block_ip = []
-pass_ip = [
-  '127.0.0.1',
-  '10.0.0.0/8',
-  '172.16.0.0/12',
-  '192.168.0.0/16'
-]
-
-[botdetection.ip_lists]
-pass_ip = [
-  '127.0.0.1',
-  '10.0.0.0/8',
-  '172.16.0.0/12',
-  '192.168.0.0/16'
-]
-pass_searxng_org = true
-EOF
+            echo "➜ [SRE N8N DEV] Gerando limiter.toml canônico da imagem oficial do SearXNG..."
+            sudo docker pull -q searxng/searxng:latest >/dev/null 2>&1 || true
+            sudo docker run --rm --entrypoint cat searxng/searxng:latest /usr/local/searxng/searx/limiter.toml 2>/dev/null | sudo tee "$SEARX_DIR/limiter.toml" > /dev/null || true
         fi
 
         if [ ! -f "$SEARX_DIR/settings.yml" ]; then
-            echo "➜ [SRE N8N DEV] Gerando settings.yml tunado com Redis Cache e Alta Performance..."
+            echo "➜ [SRE N8N DEV] Gerando settings.yml tunado com Redis/Valkey Cache e Alta Performance..."
             sudo docker pull -q searxng/searxng:latest >/dev/null 2>&1 || true
             sudo docker run --rm --entrypoint sh searxng/searxng:latest -c "
 /usr/local/searxng/.venv/bin/python3 -c '
@@ -90,14 +57,14 @@ import yaml
 with open(\"/usr/local/searxng/searx/settings.yml\") as f:
     cfg = yaml.safe_load(f)
 
-# Configurações de Servidor, API e uWSGI
+# Configurações de Servidor e API
 cfg[\"server\"][\"secret_key\"] = \"${DB_PASSWORD:-daemind_searxng_secret}\"
 cfg[\"server\"][\"limiter\"] = False
 cfg[\"server\"][\"image_proxy\"] = False
 cfg[\"search\"][\"formats\"] = [\"html\", \"json\"]
 
-# Integração Redis Cache Nativo
-cfg[\"redis\"] = {
+# Integração Redis / Valkey Cache
+cfg[\"valkey\"] = {
     \"url\": \"redis://redis:6379/0\"
 }
 
