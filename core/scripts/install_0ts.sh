@@ -343,9 +343,12 @@ cleanup_orphans() {
     MY_LOCAL_IP=$(tailscale ip -4 2>/dev/null | tr -d '\r\n ' || echo "")
 
     local DEVICES_JSON
-    DEVICES_JSON=$(curl -s -H "Authorization: Bearer ${ACCESS_TOKEN}" "https://api.tailscale.com/api/v2/tailnet/${EMAIL}/devices" || echo "{}")
+    DEVICES_JSON=$(curl -s -H "Authorization: Bearer ${ACCESS_TOKEN}" "https://api.tailscale.com/api/v2/tailnet/-/devices" || echo "{}")
 
-    echo "$DEVICES_JSON" | jq -c '.devices[]? | select(.hostname | test("^'"${PREFIX}"'(-[0-9]+)?$"))' 2>/dev/null | while read -r device; do
+    local ESCAPED_PREFIX
+    ESCAPED_PREFIX=$(printf '%s' "$PREFIX" | sed 's/[.[\*^$()+?{|]/\\&/g')
+
+    echo "$DEVICES_JSON" | jq -c --arg pref "^${ESCAPED_PREFIX}(-[0-9]+)?$" '.devices[]? | select(.hostname | test($pref))' 2>/dev/null | while read -r device; do
         [ -z "$device" ] && continue
         local DEVICE_ID
         DEVICE_ID=$(echo "$device" | jq -r '.id')
@@ -392,7 +395,7 @@ authenticate_node() {
         echo "➜ [SRE TAILSCALE] Nó já autenticado na Tailnet. Reaplicando configurações (Preservando Identidade)..."
         sudo tailscale up --advertise-tags=tag:production --accept-dns=true --hostname="${PREFIX}"
     else
-        echo "➜ [SRE TAILSCALE] Nó não autenticado. Solicitando Auth Key via API OAuth para: ${EMAIL}..."
+        echo "➜ [SRE TAILSCALE] Nó não autenticado. Solicitando Auth Key via API OAuth..."
         local ACCESS_TOKEN
         ACCESS_TOKEN=$(get_oauth_token)
 
@@ -408,7 +411,7 @@ authenticate_node() {
         KEY_JSON=$(curl -s -X POST -H "Authorization: Bearer ${ACCESS_TOKEN}" \
             -H "Content-Type: application/json" \
             -d "{\"capabilities\": {\"devices\": {\"create\": {\"reusable\": false, \"ephemeral\": false, \"tags\": [\"tag:production\"]}}}}" \
-            "https://api.tailscale.com/api/v2/tailnet/${EMAIL}/keys" || echo "{}")
+            "https://api.tailscale.com/api/v2/tailnet/-/keys" || echo "{}")
         
         local PERSISTENT_AUTH_KEY
         PERSISTENT_AUTH_KEY=$(echo "$KEY_JSON" | jq -r '.key // empty' 2>/dev/null || echo "")
@@ -428,12 +431,6 @@ authenticate_node() {
 }
 
 # ===============================================================================
-# 6. configure_funnels: Ativação dos túneis de borda HTTPS (Tailscale Funnel)
-# ===============================================================================
-configure_funnels() {
-    if [ "${USE_TAILSCALE:-true}" = "false" ]; then
-        echo "➜ [SRE SKIP TAILSCALE] Modo BYODNS Ativado. Omitindo configuração do Funnel."
-        return 0
     fi
 
     local FUNNEL_STATUS=$(sudo tailscale funnel status 2>/dev/null || echo "")
@@ -501,10 +498,10 @@ recovery() {
     echo "➜ Limpando escopo de túneis antigos..."
     sudo tailscale funnel --https=443 off 2>/dev/null || true
 
-    # 2. Força o handshake limpo no painel usando a chave mestre do cliente com o reset protetivo
+    # 2. Força o handshake limpo no painel usando a chave mestre do cliente com o reset protetivo (Garantindo Ephemeral=false)
     echo "➜ Reautenticando nó ativo na Tailnet de forma estrita..."
     if [ -n "$CLIENT_SECRET" ] && [ "$CLIENT_SECRET" != "bypass_sec" ]; then
-        sudo tailscale up --reset --auth-key="${CLIENT_SECRET}" --advertise-tags=tag:production --accept-dns=true --force-reauth || {
+        sudo tailscale up --reset --auth-key="${CLIENT_SECRET}?ephemeral=false&preauthorized=true" --advertise-tags=tag:production --accept-dns=true --force-reauth || {
             echo "  ↳ Reautenticação direta falhou. Tentando via token de API..."
             authenticate_node
         }

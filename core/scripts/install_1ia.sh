@@ -680,6 +680,7 @@ general_settings:
 litellm_settings:
   drop_params: true
   turn_off_message_logging: true
+  suppress_debug_info: true
   set_verbose: false
   default_max_tokens: 4096
   webhook_url: "http://${PREFIXO_CONTAINER}_n8n:5678/webhook/litellm-falhas"
@@ -696,21 +697,6 @@ $(printf "%b" "$MODEL_ALIASES_YAML")
 
 model_list:
 EO_BASE
-
-        # Injeta os aliases das aplicações no topo do model_list para compatibilidade total com a OpenAI Responses API (/v1/responses)
-        for app_m in "${APP_DETECTED_MODELS[@]}"; do
-            [ -z "$app_m" ] && continue
-            cat << EO_ALIAS >> "$TMP_CONFIG"
-  - model_name: "$app_m"
-    litellm_params:
-      model: ${TARGET_MODEL}
-      max_tokens: 4096
-    model_info:
-      id: "$app_m"
-      name: "$app_m"
-      mode: chat
-EO_ALIAS
-        done
 
         echo "$PAYLOADS_TOTAIS" | jq -r --arg target "$TARGET_MODEL" '
           unique_by(.ID) |

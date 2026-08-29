@@ -259,8 +259,9 @@ start_container() {
     local PREFIX="${PREFIXO_CONTAINER}"
     echo "➜ [SRE OPENWEBUI] Garantindo subida integrada do Open WebUI e posicionamento do Docling (Scale-to-Zero)..."
     cd "$TARGET_DIR" && docker compose up -d --no-deps openwebui > /dev/null 2>&1 || true
-    # Posiciona o Docling criado e em repouso (Scale-to-Zero)
-    cd "$TARGET_DIR" && (docker compose create docling > /dev/null 2>&1 || docker compose up --no-start docling > /dev/null 2>&1 || true)
+    # Posiciona o Docling criado e em repouso absoluto (Scale-to-Zero: 0MB RAM)
+    cd "$TARGET_DIR" && (docker compose --profile ondemand create docling > /dev/null 2>&1 || true)
+    docker stop "${PREFIX}_docling" > /dev/null 2>&1 || true
 }
 
 wait_readiness() {

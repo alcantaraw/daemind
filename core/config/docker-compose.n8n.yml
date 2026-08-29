@@ -131,7 +131,7 @@ services:
       # resources:
         # limits:
           # cpus: '0.2'
-          # memory: '32M'
+          # memory: '128M'
     # networks:
       # instancia_net:
         # ipv4_address: ${IP_N8N_SANDBOX}

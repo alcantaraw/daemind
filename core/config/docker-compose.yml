@@ -172,9 +172,14 @@ services:
           memory: '${RES_LITELLM:-256M}'
     environment:
       - LITELLM_LOG=ERROR
+      - LITELLM_LOG_LEVEL=WARNING
       - UVICORN_LOG_LEVEL=warning
       - LITELLM_BANNER=False
       - DISABLE_BANNER=true
+      - DISABLE_LOGGING=false
+      - SUPPRESS_DEBUG_INFO=True
+      - TURN_OFF_MESSAGE_LOGGING=True
+      - MAX_STRING_LENGTH_STDOUT_LOG=100
       - PYTHONUNBUFFERED=1 # Força a exibição instantânea de logs
       - TZ=America/Sao_Paulo
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
