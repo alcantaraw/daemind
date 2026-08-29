@@ -328,9 +328,14 @@ provision_user() {
     fi
 
     # 3. Auto-vinculação do Data Warehouse (loja_db via PgBouncer)
-    local MB_SESSION=$(curl -s -X POST "${MB_URL}/api/session" \
-        -H "Content-Type: application/json" \
-        -d "{\"username\": \"${ADMIN_EMAIL}\", \"password\": \"${ADMIN_PASS}\"}" 2>/dev/null | jq -r '.id // empty' 2>/dev/null || echo "")
+    local MB_SESSION=""
+    for attempt in $(seq 1 10); do
+        MB_SESSION=$(curl -s -X POST "${MB_URL}/api/session" \
+            -H "Content-Type: application/json" \
+            -d "{\"username\": \"${ADMIN_EMAIL}\", \"password\": \"${ADMIN_PASS}\"}" 2>/dev/null | jq -r '.id // empty' 2>/dev/null || echo "")
+        [ -n "$MB_SESSION" ] && [ "$MB_SESSION" != "null" ] && break
+        sleep 2
+    done
 
     if [ -n "$MB_SESSION" ]; then
         local HAS_DB=$(curl -s -X GET "${MB_URL}/api/database" -H "X-Metabase-Session: $MB_SESSION" 2>/dev/null | jq -r '(.data // .)? | .[]? | select(.name == "Data Warehouse Soberano") | .id' 2>/dev/null || echo "")
@@ -367,11 +372,12 @@ provision_user() {
 
         # 5. Auto-configuração do Metabot AI Gateway (LiteLLM) no Metabase (Zero-Touch)
         echo "➜ [SRE METABASE] Configurando Metabot AI via LiteLLM Gateway..."
+        local LLM_KEY="${LITELLM_MASTER_KEY:-sk-admin-${DB_PASSWORD}}"
         curl -s -X PUT "${MB_URL}/api/setting/llm-enabled" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": true}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-metabot-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-model" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "gpt-4.1"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${LITELLM_MASTER_KEY}\"}" >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${LLM_KEY}\"}" >/dev/null 2>&1 || true
     fi
 }
 

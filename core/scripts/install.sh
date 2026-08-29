@@ -905,12 +905,12 @@ fi
 
 echo "➜ [SRE INSTALL] Verificando integridade das imagens Docker locais..."
 
-SERVICOS_DECLARADOS=($(docker compose config --services 2>/dev/null | grep -v '^$' || true))
+SERVICOS_DECLARADOS=($(docker compose --profile "*" config --services 2>/dev/null | grep -v '^$' || true))
 TOTAL_SERVICOS=${#SERVICOS_DECLARADOS[@]}
 
 if [ "$TOTAL_SERVICOS" -gt 0 ]; then
-    # Extrai a lista de imagens declaradas no docker-compose.yml
-    IMAGENS_NECESSARIAS=($(docker compose config 2>/dev/null | grep -E '^\s*image:' | awk '{print $2}' | tr -d '"' | tr -d "'" | sort -u || true))
+    # Extrai a lista de imagens declaradas no docker-compose.yml (incluindo profiles ondemand como Docling)
+    IMAGENS_NECESSARIAS=($(docker compose --profile "*" config 2>/dev/null | grep -E '^\s*image:' | awk '{print $2}' | tr -d '"' | tr -d "'" | sort -u || true))
     IMAGENS_FALTANDO=()
 
     for img in "${IMAGENS_NECESSARIAS[@]}"; do

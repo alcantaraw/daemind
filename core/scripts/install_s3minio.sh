@@ -52,6 +52,7 @@ build_structure() {
             fi
             if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/openwebui 2>/dev/null || true
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/docling 2>/dev/null || true
             fi
             sudo chmod -R 777 "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
             sudo chown -R "$TARGET_OWNER" "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
@@ -320,6 +321,7 @@ provision_infra() {
     local EVO_BUCKET="${S3_EVOLUTION_BUCKET_EXT:-${S3_EVOLUTION_BUCKET:-evolution}}"
     local NOCO_BUCKET="${S3_NOCODB_BUCKET_EXT:-${S3_NOCODB_BUCKET:-nocodb}}"
     local OW_BUCKET="${S3_OPENWEBUI_BUCKET_EXT:-${S3_OPENWEBUI_BUCKET:-openwebui}}"
+    local DOC_BUCKET="${S3_DOCLING_BUCKET_EXT:-${S3_DOCLING_BUCKET:-docling}}"
     local N8N_BUCKET="${S3_N8N_BUCKET_EXT:-${S3_N8N_BUCKET:-n8n}}"
     local LM_BUCKET="${S3_LISTMONK_BUCKET_EXT:-${S3_LISTMONK_BUCKET:-listmonk}}"
 
@@ -337,7 +339,7 @@ provision_infra() {
         [[ "${USE_POSTIZ:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${PZ_BUCKET}")
         [[ "${USE_EVOLUTION:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${EVO_BUCKET}")
         [[ "${USE_NOCODB:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${NOCO_BUCKET}")
-        [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${OW_BUCKET}")
+        [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${OW_BUCKET}" "${DOC_BUCKET}")
         [[ "${USE_N8N:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${N8N_BUCKET}")
         [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]] && ALL_BUCKETS+=("${LM_BUCKET}")
 

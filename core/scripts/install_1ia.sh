@@ -715,8 +715,9 @@ EO_BASE
           def free_label: if .Provider == "ollama" then " (local)" elif .Free then " (free)" else "" end;
           def visual_name: "\(.ID)\(free_label)";
           def api_base_entry: if .Provider == "ollama" and .ApiBase then "\n      api_base: \(.ApiBase)" else "" end;
+          def openrouter_capping: if .Provider == "openrouter" then "\n      max_tokens: 4096" else "" end;
 
-          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(full_id)\(api_base_entry)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
+          "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(full_id)\(api_base_entry)\(openrouter_capping)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
         ' >> "$TMP_CONFIG"
         
         if ! grep -q "^model_list:" "$TMP_CONFIG" || [ "$(grep -c "model_name:" "$TMP_CONFIG")" -eq 0 ]; then

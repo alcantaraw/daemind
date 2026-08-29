@@ -107,6 +107,34 @@ EOF
         sleep 5
     done
     echo "✔ [SUCESSO OPENWEBUI] Infraestrutura relacional e API FastAPI validadas."
+    # 4. SRE Smoke Test: Valida e testa o motor Docling On-Demand (Scale-to-Zero)
+    echo "➜ [SRE DOCLING SMOKE TEST] Testando prontidão do motor Docling OCR sob demanda..."
+    if docker image inspect quay.io/docling-project/docling-serve-cpu:latest >/dev/null 2>&1; then
+        echo "  ↳ Disparando subida de validação do Docling..."
+        cd "$TARGET_DIR" && docker compose --profile ondemand up -d docling > /dev/null 2>&1 || true
+        
+        local TENTATIVAS_DOCLING=0
+        local DOCLING_OK=false
+        while [ $TENTATIVAS_DOCLING -lt 15 ]; do
+            local HTTP_DOCLING
+            HTTP_DOCLING=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5001/health" 2>/dev/null || echo "000")
+            if [ "$HTTP_DOCLING" = "200" ]; then
+                DOCLING_OK=true
+                break
+            fi
+            sleep 2
+            TENTATIVAS_DOCLING=$((TENTATIVAS_DOCLING + 1))
+        done
+        
+        # Desliga imediatamente garantindo Scale-to-Zero (0MB RAM em repouso)
+        docker stop "${PREFIX}_docling" > /dev/null 2>&1 || true
+        
+        if [ "$DOCLING_OK" = "true" ]; then
+            echo "✔ [SUCESSO DOCLING] Motor Docling OCR testado (HTTP 200) e retornado ao estado de repouso (Scale-to-Zero)."
+        else
+            echo "⚠️ [ALERTA DOCLING] Docling demorou para responder no healthcheck, mas o container foi posicionado."
+        fi
+    fi
 }
 
 inject_caddy_routes() {

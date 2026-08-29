@@ -415,9 +415,17 @@ provision_user() {
             # 4. Auto-Provisionamento de Views de CRM & Apps Visuais no NocoDB (Kanban, Gallery, Calendar, Forms)
             echo "➜ [SRE NOCODB CRM] Provisionando Views de CRM (Kanban, Galeria, Formulários e Calendário)..."
             local NOCO_PORT="${HOST_NOCODB_PORT:-18080}"
+            local PG_CONTAINER="${PREFIX}_postgres"
+            
+            # SSOT Dinâmico: Extrai a lista viva de tabelas públicas direto do PostgreSQL do cliente
+            local DB_TABLES_JSON
+            DB_TABLES_JSON=$(sudo docker exec -e PGPASSWORD="${DB_PASSWORD}" "${PG_CONTAINER}" psql -U "${DB_USER:-admin_db}" -d "${PREFIX}_db" -t -A -c "SELECT json_agg(table_name) FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE';" 2>/dev/null || echo "[]")
+            [ -z "$DB_TABLES_JSON" ] || [ "$DB_TABLES_JSON" = "null" ] && DB_TABLES_JSON="[]"
+
             python3 -c '
 import json
 import sys
+import time
 import urllib.request
 import urllib.error
 
@@ -427,10 +435,15 @@ headers = {
     "Content-Type": "application/json"
 }
 
+try:
+    pg_live_tables = set(json.loads("""'"${DB_TABLES_JSON}"'"""))
+except Exception:
+    pg_live_tables = set()
+
 def api_get(endpoint):
     try:
         req = urllib.request.Request(f"{base_url}{endpoint}", headers=headers)
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=15) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except Exception:
         return None
@@ -439,27 +452,37 @@ def api_post(endpoint, payload):
     try:
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(f"{base_url}{endpoint}", data=data, headers=headers, method="POST")
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=15) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         return None
     except Exception:
         return None
 
-# 1. Busca tabelas na Base e em Sources conectadas
+# 1. Aguarda sincronização dinâmica de todas as tabelas do PostgreSQL no NocoDB (SSOT Dinâmico)
 tables = []
-b_tables = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/tables")
-if b_tables and "list" in b_tables:
-    tables.extend(b_tables["list"])
+for attempt in range(20):
+    tables = []
+    b_tables = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/tables?limit=100")
+    if b_tables and "list" in b_tables:
+        tables.extend(b_tables["list"])
 
-if not tables:
     sources = api_get("/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/sources")
     if sources and "list" in sources:
         for s in sources["list"]:
             s_id = s.get("id")
-            s_tables = api_get(f"/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/sources/{s_id}/tables")
+            s_tables = api_get(f"/api/v2/meta/bases/'"${BASE_EXISTENTE}"'/sources/{s_id}/tables?limit=100")
             if s_tables and "list" in s_tables:
                 tables.extend(s_tables["list"])
+    
+    found_names = {t.get("title") for t in tables} | {t.get("table_name") for t in tables}
+    
+    # Se o PostgreSQL tiver tabelas, aguarda todas serem indexadas pelo NocoDB
+    if pg_live_tables and pg_live_tables.issubset(found_names):
+        break
+    elif not pg_live_tables and len(tables) > 0:
+        break
+    time.sleep(2)
 
 views_to_create = [
     {
@@ -539,10 +562,15 @@ for target in views_to_create:
         if v_title in existing_view_titles:
             continue
             
+        v_type = v_def.get("type", "grid")
         endpoint_type = v_def["endpoint_type"]
-        payload = {"title": v_title}
         
-        res = api_post(f"/api/v2/meta/tables/{t_id}/{endpoint_type}", payload)
+        # NocoDB v2 API aceita POST em /views com {title, type} ou /grids, /galleries, /forms
+        payload = {"title": v_title, "type": v_type}
+        res = api_post(f"/api/v2/meta/tables/{t_id}/views", payload)
+        if not res or "id" not in res:
+            res = api_post(f"/api/v2/meta/tables/{t_id}/{endpoint_type}", {"title": v_title})
+            
         if res and "id" in res:
             created_count += 1
             print(f"  ↳ View criada: {v_title} ({t_name})")
