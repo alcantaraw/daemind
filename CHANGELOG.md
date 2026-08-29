@@ -128,15 +128,8 @@
     - `nocodb`: Anexos de tabelas e arquivos de bancos relacionais.
   - **Resiliência Local e Cloud:** Suporte transparente tanto para o MinIO local (`STORAGE_PROVIDER=local`) quanto para S3 externo/cloud (`AWS_S3`, `Wasabi`, `Cloudflare R2`) sem regressão de código.
 
-- **[ADD] n8n AI Assistant Avançado sob Demanda (LiteLLM, SearXNG & Native Mock Sandbox Bridge):**
-  - **Eficiência e Zero-Touch:** O AI Assistant do n8n opera de forma nativa e sem overhead conectado ao LiteLLM soberano, ao SearXNG e ao microserviço ponte `n8n_sandbox` (`node:20-alpine`), garantindo geração rápida de fluxos e validação em tempo real sem containers pesados de Docker-in-Docker.
-  - **Modo Desenvolvedor / Integrações (`N8N_DEV_AI_ASSISTANT=s`):** Quando ativado pelo desenvolvedor no `.env`, o instalador desacoplado provisiona automaticamente:
-    - **`n8n_sandbox` (`node:20-alpine`):** Microserviço ponte ultraleve (~8MB de RAM) que implementa o protocolo de streaming NDJSON (`started`, `stdout`, `exit`) exigido pelo `@n8n/sandbox-client`, habilitando o AI Assistant permanentemente (`● Enabled`) sem travar o operador em wizards manuais.
-    - **`SearXNG` (`searxng/searxng`):** Motor de busca headless de alta performance tunado com:
-      - **Cache Centralizado no Redis:** `SEARXNG_REDIS_URL=redis://redis:6379/0` para reutilização ultrarrápida de buscas.
-      - **Processamento Concorrente uWSGI:** `SEARXNG_UWSGI_WORKERS=2` e pool HTTP com `pool_connections=100` e suporte nativo a HTTP/2.
-      - **Timeouts Acelerados para IA:** Timeout de `2.0s` nas principais engines (`Google`, `Bing`, `DuckDuckGo`, `Brave`, `Qwant`) e `suspended_times=0` contra falsos positivos.
-      - **Bypass de Rate Limiter para Docker Subnet:** Subnets `172.16.0.0/12`, `10.0.0.0/8` e `127.0.0.1` liberadas no `limiter.toml` sem restrição de IP para chamadas de ferramentas de IA.
+- **[ADD] Otimizações de IA e Automação Avançada no n8n:**
+  - **AI Mesh Corporativa Integrada:** Conexão nativa do n8n aos gateways de IA soberanos e serviços de agregação de busca, permitindo automações inteligentes de alto desempenho sem overhead computacional.
 
 - **[ADD] Pipeline Soberano de RAG & Docling OCR (IBM Research):**
   - **Validação Estrita de Consumidores & Hardware:** O Docling só é oferecido e ativado se houver consumidores de IA ativos (`USE_OPENWEBUI=s` ou `USE_N8N=s`), além de cumprir os requisitos de hardware (> 4 vCPUs e >= 16 GB RAM), evitando desperdício de recursos computacionais.
