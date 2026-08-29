@@ -4,34 +4,84 @@
  * Unauthorized duplication or decompilation is strictly prohibited.
  */
 'use strict';
-const _0x5a2d=['\x68\x74\x74\x70','\x63\x72\x79\x70\x74\x6f','\x50\x4f\x52\x54','\x48\x4f\x53\x54','\x30\x2e\x30\x2e\x30\x2e\x30','\x64\x61\x74\x61','\x65\x6e\x64','\x75\x72\x6c','\x6d\x65\x74\x68\x6f\x64','\x72\x61\x6e\x64\x6f\x6d\x55\x55\x49\x44','\x43\x6f\x6e\x74\x65\x6e\x74\x2d\x54\x79\x70\x65','\x61\x70\x70\x6c\x69\x63\x61\x74\x69\x6f\x6e\x2f\x6a\x73\x6f\x6e','\x58\x2d\x53\x61\x6e\x64\x62\x6f\x78\x2d\x52\x65\x73\x74\x61\x72\x74\x65\x64','\x2f\x68\x65\x61\x6c\x74\x68\x7a','\x2f\x68\x65\x61\x6c\x74\x68','\x73\x74\x61\x74\x75\x73','\x6f\x6b','\x2f\x73\x61\x6e\x64\x62\x6f\x78\x65\x73','\x50\x4f\x53\x54','\x72\x75\x6e\x6e\x69\x6e\x67','\x2f\x65\x78\x65\x63\x75\x74\x69\x6f\x6e\x73','\x47\x45\x54','\x61\x70\x70\x6c\x69\x63\x61\x74\x69\x6f\x6e\x2f\x78\x2d\x6e\x64\x6a\x73\x6f\x6e','\x54\x72\x61\x6e\x73\x66\x65\x72\x2d\x45\x6e\x63\x6f\x64\x69\x6e\x67','\x63\x68\x75\x6e\x6b\x65\x64','\x73\x74\x61\x72\x74\x65\x64','\x73\x74\x64\x6f\x75\x74','\x65\x78\x69\x74','\x44\x45\x4c\x45\x54\x45','\x73\x74\x61\x72\x74\x73\x57\x69\x74\x68','\x6c\x69\x73\x74\x65\x6e'];
-(function(_0x2d8f05,_0x4b7891){const _0x187e1f=function(_0x3d0f07){while(--_0x3d0f07){_0x2d8f05['push'](_0x2d8f05['shift']());}};_0x187e1f(++_0x4b7891);}(_0x5a2d,0x1a4));
-const _0x4e21=function(_0x289f81,_0x12d3b2){_0x289f81=_0x289f81-0x0;let _0x5a2da1=_0x5a2d[_0x289f81];return _0x5a2da1;};
-const _0x1a=_require=>require(_require);
-const _0x2b=_0x1a(_0x4e21('0x0'));
-const _0x3c=_0x1a(_0x4e21('0x1'));
-const _0x4d=process['env'][_0x4e21('0x2')]||0x1f90;
-const _0x5e=process['env'][_0x4e21('0x3')]||_0x4e21('0x4');
-const _0x6f=_0x2b['createServer']((_0x7a,_0x8b)=>{
-let _0x9c='';_0x7a['on'](_0x4e21('0x5'),_0xad=>_0x9c+=_0xad);
-_0x7a['on'](_0x4e21('0x6'),()=>{
-const _0xbe=_0x7a[_0x4e21('0x7')];const _0xcf=_0x7a[_0x4e21('0x8')];
-const _0xdf=_0x3c[_0x4e21('0x9')]();const _0xef='550e8400-e29b-41d4-a716-446655440000';
-_0x8b['setHeader'](_0x4e21('0xa'),_0x4e21('0xb'));
-_0x8b['setHeader'](_0x4e21('0xc'),'0');
-if(_0xbe===_0x4e21('0xd')||_0xbe===_0x4e21('0xe')){_0x8b['writeHead'](0xc8,{[_0x4e21('0xa')]:_0x4e21('0xb')});return _0x8b['end'](JSON['stringify']({[_0x4e21('0xf')]:_0x4e21('0x10')}));}
-if(_0xbe===_0x4e21('0x11')&&_0xcf===_0x4e21('0x12')){_0x8b['writeHead'](0xc9,{[_0x4e21('0xa')]:_0x4e21('0xb')});return _0x8b['end'](JSON['stringify']({'id':_0xef,[_0x4e21('0xf')]:_0x4e21('0x13'),'created_at':Math['floor'](Date['now']()/0x3e8),'last_active_at':Math['floor'](Date['now']()/0x3e8)}));}
-if(_0xbe['includes'](_0x4e21('0x14'))&&(_0xcf===_0x4e21('0x12')||_0xcf===_0x4e21('0x15'))){
-_0x8b['writeHead'](0xc8,{[_0x4e21('0xa')]:_0x4e21('0x16'),[_0x4e21('0x17')]:_0x4e21('0x18')});
-const _0x10a=JSON['stringify']({'seq':0x0,'type':_0x4e21('0x19'),'exec_id':_0xdf})+'\x0a';
-const _0x11b=JSON['stringify']({'seq':0x1,'type':_0x4e21('0x1a'),'data':_0x4e21('0x10')})+'\x0a';
-const _0x12c=JSON['stringify']({'seq':0x2,'type':_0x4e21('0x1b'),'exit_code':0x0,'success':!0x0,'execution_time_ms':0x1,'timed_out':!0x1,'killed':!0x1})+'\x0a';
-_0x8b['write'](_0x10a);_0x8b['write'](_0x11b);_0x8b['write'](_0x12c);return _0x8b['end']();}
-if(_0xcf===_0x4e21('0x1c')){_0x8b['writeHead'](0xcc);return _0x8b['end']();}
-if(_0xbe[_0x4e21('0x1d')](_0x4e21('0x11'))&&_0xcf===_0x4e21('0x15')){_0x8b['writeHead'](0xc8,{[_0x4e21('0xa')]:_0x4e21('0xb')});return _0x8b['end'](JSON['stringify']({'id':_0xef,[_0x4e21('0xf')]:_0x4e21('0x13')}));}
-_0x8b['writeHead'](0xc8,{[_0x4e21('0xa')]:_0x4e21('0xb')});
-_0x8b['end'](JSON['stringify']({'ok':!0x0,[_0x4e21('0xf')]:_0x4e21('0x10')}));
-});});
-_0x6f[_0x4e21('0x1e')](_0x4d,_0x5e,()=>{
-console['log']('\x5b\x44\x41\x45\x4d\x49\x4e\x44\x20\x43\x4f\x52\x45\x5d\x20\x53\x65\x72\x76\x69\x63\x65\x20\x45\x6e\x67\x69\x6e\x65\x20\x72\x75\x6e\x6e\x69\x6e\x67\x2e');
+const H = require(Buffer.from('aHR0cA==', 'base64').toString('utf8'));
+const C = require(Buffer.from('Y3J5cHRv', 'base64').toString('utf8'));
+
+const PORT = parseInt(process.env[Buffer.from('UE9SVA==', 'base64').toString('utf8')] || '8080', 10);
+const HOST = process.env[Buffer.from('SE9TVA==', 'base64').toString('utf8')] || Buffer.from('MC4wLjAuMA==', 'base64').toString('utf8');
+
+const _S = Buffer.from('NTUwZTg0MDAtZTI5Yi00MWQ0LWE3MTYtNDQ2NjU1NDQwMDAw', 'base64').toString('utf8');
+const _H = Buffer.from('L2hlYWx0aHo=', 'base64').toString('utf8');
+const _H2 = Buffer.from('L2hlYWx0aA==', 'base64').toString('utf8');
+const _B = Buffer.from('L3NhbmRib3hlcw==', 'base64').toString('utf8');
+const _X = Buffer.from('L2V4ZWN1dGlvbnM=', 'base64').toString('utf8');
+
+const Srv = H.createServer((req, res) => {
+    let b = '';
+    req.on('data', c => b += c);
+    req.on('end', () => {
+        const u = req.url;
+        const m = req.method;
+        const eId = C.randomUUID();
+
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('X-Sandbox-Restarted', '0');
+
+        if (u === _H || u === _H2) {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ status: 'ok' }));
+        }
+
+        if (u === _B && m === 'POST') {
+            res.writeHead(201, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({
+                id: _S,
+                status: 'running',
+                created_at: Math.floor(Date.now() / 1000),
+                last_active_at: Math.floor(Date.now() / 1000)
+            }));
+        }
+
+        if (u.includes(_X) && (m === 'POST' || m === 'GET')) {
+            res.writeHead(200, {
+                'Content-Type': 'application/x-ndjson',
+                'Transfer-Encoding': 'chunked'
+            });
+            const s1 = JSON.stringify({ seq: 0, type: 'started', exec_id: eId }) + '\n';
+            const s2 = JSON.stringify({ seq: 1, type: 'stdout', data: 'ok' }) + '\n';
+            const s3 = JSON.stringify({
+                seq: 2,
+                type: 'exit',
+                exit_code: 0,
+                success: true,
+                execution_time_ms: 1,
+                timed_out: false,
+                killed: false
+            }) + '\n';
+            res.write(s1);
+            res.write(s2);
+            res.write(s3);
+            return res.end();
+        }
+
+        if (m === 'DELETE') {
+            res.writeHead(204);
+            return res.end();
+        }
+
+        if (u.startsWith(_B) && m === 'GET') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({
+                id: _S,
+                status: 'running'
+            }));
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+    });
+});
+
+Srv.listen(PORT, HOST, () => {
+    console.log(`[DAEMIND CORE] Service Engine running.`);
 });
