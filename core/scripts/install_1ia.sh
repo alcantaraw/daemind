@@ -521,17 +521,16 @@ sync_models() {
             (.id | test("content-safety|guardrail|lyria|embedding|moderation") | not)
           ))
         | map(. + {
-            clean_id: (.id | sub(":free$"; "")),
             family: (.id | sub(":free$"; "") | split("-")[0])
           })
         | sort_by(.created) | reverse
         | map({
-            ID: .clean_id,
+            ID: .id,
             Family: .family,
             Provider: "openrouter",
             Category: (["chat"] + (if (.architecture.input_modalities | type == "array") then .architecture.input_modalities else [] end) + (if (.supported_parameters | type == "array" and contains(["tools"])) then ["tools"] else [] end) + (if (.supported_parameters | type == "array" and contains(["reasoning"])) then ["reasoning"] else [] end)) | map(if . == "text" then empty else . end) | unique | join(", "),
             Description: (.description // "Modelo agregado via OpenRouter"),
-            Free: (.pricing.prompt == "0" and .pricing.completion == "0"),
+            Free: true,
             Created: .created,
             Alias: true
         })' || echo "[]")
@@ -606,9 +605,6 @@ sync_models() {
         for cand in $CANDIDATES; do
             (
                 local PROBE_ID="$cand"
-                if [ "$cand" != "openrouter/free" ] && ! echo "$cand" | grep -q ":free"; then
-                    PROBE_ID="${cand}:free"
-                fi
                 local START_TS
                 START_TS=$(date +%s%N 2>/dev/null | cut -b1-13)
                 [ -z "$START_TS" ] && START_TS=$(date +%s)
@@ -624,7 +620,9 @@ sync_models() {
                 [ "$LATENCY" -lt 0 ] && LATENCY=0
 
                 if echo "$RESP" | grep -q '"choices"'; then
-                    printf "%06d:%s\n" "$LATENCY" "$cand" > "${TMP_PROBE_DIR}/${cand//\//_}.ok"
+                    local clean_file
+                    clean_file=$(echo "$cand" | tr -c 'a-zA-Z0-9' '_')
+                    printf "%06d:%s\n" "$LATENCY" "$cand" > "${TMP_PROBE_DIR}/${clean_file}.ok"
                 fi
             ) &
         done
@@ -677,7 +675,7 @@ sync_models() {
         def full_id: (litellm_provider) as $lp | (if (.ID | startswith($lp + "/")) then .ID else "\($lp)/\(.ID)" end);
         [.[] | select(full_id == $tm or .ID == $tm)] | first | 
         if . == null then $tm else
-          "\(.ID)\(if .Provider == "ollama" then " (local)" elif .Free then " (free)" else "" end)"
+          "\(.ID)\(if .Provider == "ollama" then " (local)" elif (.Free and (.ID | test(":free$") | not)) then " (free)" else "" end)"
         end
     ' 2>/dev/null || echo "$TARGET_MODEL")
 
@@ -715,6 +713,7 @@ litellm_settings:
   suppress_debug_info: true
   set_verbose: false
   default_max_tokens: 4096
+  max_output_tokens: 4096
   webhook_url: "http://${PREFIXO_CONTAINER}_n8n:5678/webhook/litellm-falhas"
   failure_callback: ["webhook"]
   model_alias_map:
@@ -744,10 +743,10 @@ EO_BASE
             else "6_openrouter" end;
           sort_by(provider_weight, .ID) |
           .[] |
-          def free_label: if .Provider == "ollama" then " (local)" elif .Free then " (free)" else "" end;
+          def free_label: if .Provider == "ollama" then " (local)" elif (.Free and (.ID | test(":free$") | not)) then " (free)" else "" end;
           def visual_name: "\(.ID)\(free_label)";
           def api_base_entry: if .Provider == "ollama" and .ApiBase then "\n      api_base: \(.ApiBase)" else "" end;
-          def openrouter_capping: if .Provider == "openrouter" then "\n      max_tokens: 4096" else "" end;
+          def openrouter_capping: if .Provider == "openrouter" then "\n      max_tokens: 4096\n      max_output_tokens: 4096" else "" end;
 
           "  - model_name: \(visual_name | tojson)\n    litellm_params:\n      model: \(full_id)\(api_base_entry)\(openrouter_capping)\n    model_info:\n      id: \(.ID)\n      name: \(visual_name | tojson)\n      mode: chat\n      description: \(.Description | tojson)\n      tags: \([(.Category | split(", ")), (if .Free then "grátis" else "pago" end)] | flatten | unique | tojson)"
         ' >> "$TMP_CONFIG"

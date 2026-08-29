@@ -103,7 +103,7 @@ EOF
             sleep 5
         fi
 
-        echo "  ↳ Aguardando backend do Open WebUI (tentativa $TENTATIVAS_OWUI/36)..."
+        echo "  ↳ Aguardando backend do Open WebUI (tentativa $TENTATIVAS_OW/30)..."
         sleep 5
     done
     echo "✔ [SUCESSO OPENWEBUI] Infraestrutura relacional e API FastAPI validadas."

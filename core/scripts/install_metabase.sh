@@ -604,6 +604,7 @@ provision_dashboards() {
 }
 
 render_forensic_report() {
+    local ts_domain="${1:-${TS_DOMAIN:-localhost}}"
     local MB_PORT="${HOST_METABASE_PORT:-3030}"
     echo "  📊 Metabase Business Intelligence"
     echo "    ↳ Painel Web:                      http://${ts_domain}:${MB_PORT}"

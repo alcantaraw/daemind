@@ -42,7 +42,7 @@ provision_db() {
 provision_infra() {
     echo "➜ [SRE SHLINK] Verificando integridade e firewall perimetral do Shlink..."
     local use_val="${USE_SHLINK:-s}"
-    local port_api="${HOST_SHLINK_PORT:-8080}"
+    local port_api="${HOST_SHLINK_PORT:-8081}"
     local port_web="${HOST_SHLINK_WEB_PORT:-8082}"
     if [[ "$use_val" =~ ^[Ss]$ ]]; then
         if [ "${USE_TAILSCALE:-false}" = "true" ]; then
