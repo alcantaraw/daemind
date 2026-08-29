@@ -36,10 +36,10 @@ services:
       - MB_LLM_PROVIDER=openai
       - MB_LLM_METABOT_PROVIDER=openai
       - MB_LLM_OPENAI_API_KEY=${LITELLM_MASTER_KEY}
-      - MB_LLM_OPENAI_API_BASE=http://litellm:4000
+      - MB_LLM_OPENAI_API_BASE=http://litellm:4000/v1
       - MB_LLM_OPENAI_MODEL=${METABASE_AI_MODEL:-gpt-4.1}
       - MB_OPENAI_API_KEY=${LITELLM_MASTER_KEY}
-      - MB_OPENAI_BASE_URL=http://litellm:4000
+      - MB_OPENAI_BASE_URL=http://litellm:4000/v1
       - MB_OPENAI_MODEL=${METABASE_AI_MODEL:-gpt-4.1}
     volumes:
       - './core/config/log4j2.metabase.xml:/etc/metabase/log4j2.xml:ro'

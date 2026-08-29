@@ -381,7 +381,7 @@ provision_user() {
                 ('llm-provider', '\"openai\"'),
                 ('llm-metabot-provider', '\"openai\"'),
                 ('llm-openai-model', '\"gpt-4.1\"'),
-                ('llm-openai-api-base', '\"http://litellm:4000\"'),
+                ('llm-openai-api-base', '\"http://litellm:4000/v1\"'),
                 ('llm-openai-api-key', '\"${LLM_KEY}\"')
             ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
         " >/dev/null 2>&1 || true
@@ -391,7 +391,7 @@ provision_user() {
         curl -s -X PUT "${MB_URL}/api/setting/llm-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-metabot-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-model" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "gpt-4.1"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000"}' >/dev/null 2>&1 || true
+        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000/v1"}' >/dev/null 2>&1 || true
         curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${LLM_KEY}\"}" >/dev/null 2>&1 || true
     fi
 }
