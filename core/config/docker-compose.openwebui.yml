@@ -97,6 +97,44 @@ services:
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
 
+  # --- DOCLING ON-DEMAND OCR & MULTIMODAL PARSER (SCALE-TO-ZERO) ---
+  docling:
+    image: 'quay.io/docling-project/docling-serve-cpu:latest'
+    container_name: '${PREFIXO_CONTAINER}_docling'
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_DOCLING}
+        aliases:
+          - docling
+    restart: "no" # Scale-to-Zero: Permanece desligado (0MB RAM), sobe sob demanda para parsing e desliga
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_DOCLING:-2.0}'
+          memory: '${MEM_DOCLING:-2048M}'
+        reservations:
+          memory: '${RES_DOCLING:-512M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - PORT=5001
+      - HOST=0.0.0.0
+      - DOCLING_SERVE_PORT=5001
+      - DOCLING_SERVE_HOST=0.0.0.0
+      - DOCLING_SERVE_WORKERS_PER_CORE=2
+      - DOCLING_SERVE_LOG_LEVEL=warning
+      - DOCLING_SERVE_MAX_FILE_SIZE_MB=100
+      - DOCLING_SERVE_TIMEOUT=300
+      - DOCLING_SERVE_ENABLE_UI=false
+      - UVICORN_LOG_LEVEL=warning
+      - PYTHONWARNINGS=ignore
+      - OMP_NUM_THREADS=${DOCLING_OMP_THREADS:-2}
+      - TORCH_NUM_THREADS=${DOCLING_TORCH_THREADS:-2}
+    volumes:
+      - './volumes/docling_data:/data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+
   caddy:
     ports:
       - "3001:3001/tcp" # Open WebUI (IA)
+      - "${HOST_DOCLING_PORT:-5001}:5001/tcp" # Docling OCR / Doc Parsing API

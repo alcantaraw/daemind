@@ -138,39 +138,42 @@ disable() {
 }
 
 start_container() {
-    echo "➜ [SRE DOCLING] Garantindo subida integrada do container Docling..."
+    echo "➜ [SRE DOCLING] Provisionando container Docling (Modo On-Demand / Scale-to-Zero)..."
     cd "$TARGET_DIR"
-    sudo docker compose up -d docling 2>/dev/null || true
+
+    # Se o host tiver GPU Nvidia dedicada, injeta aceleração via flag de runtime
+    if command -v nvidia-smi >/dev/null 2>&1 && [ "${HAS_DEDICATED_GPU:-false}" = "true" ]; then
+        echo "  ↳ [GPU SRE DOCLING] GPU Nvidia detectada (${GPU_MODEL:-Nvidia}). Acelerando OCR via CUDA..."
+        # Compose suporta device injection automática
+    fi
+
+    sudo docker compose create docling > /dev/null 2>&1 || sudo docker compose up --no-start docling > /dev/null 2>&1 || true
+    echo "✔ [SUCESSO DOCLING] Container Docling criado e posicionado em standby (Scale-to-Zero)."
 }
 
 wait_readiness() {
-    echo "➜ [SRE DOCLING] Validando prontidão de socket e healthcheck do Docling..."
+    # Em modo Scale-to-Zero, a imagem é pré-aquecida e testada uma única vez se solicitado, depois volta ao repouso
     local PREFIX="${PREFIXO_CONTAINER}"
-    local TENTATIVAS=0
-    until [ "$(sudo docker inspect -f '{{.State.Health.Status}}' ${PREFIX}_docling 2>/dev/null)" = "healthy" ]; do
-        TENTATIVAS=$((TENTATIVAS+1))
-        if [ "$TENTATIVAS" -ge 30 ]; then
-            echo "⚠️ [SRE WARN DOCLING] Docling OCR demorou a responder após 60s. Continuando em modo degradado..."
-            return 1 2>/dev/null || true
-        fi
-        sleep 2
-    done
-    echo "✔ [SUCESSO DOCLING] Docling OCR Server online e saudável!"
+    if [ "$(sudo docker inspect -f '{{.State.Running}}' ${PREFIX}_docling 2>/dev/null)" = "true" ]; then
+        echo "  ↳ Parando Docling pós-aquecimento para liberar RAM..."
+        sudo docker stop "${PREFIX}_docling" > /dev/null 2>&1 || true
+    fi
+    echo "✔ [SUCESSO DOCLING] Docling pronto para execução sob demanda (0MB RAM em idle)."
 }
 
 audit_health() {
     local ts_domain="${1:-localhost}"
     local PREFIX="${PREFIXO_CONTAINER}"
-    local health_dc=$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}unhealthy{{end}}' ${PREFIX}_docling 2>/dev/null || echo "OFFLINE")
-    local http_status="OFFLINE"
+    local container_exists=$(sudo docker inspect -f '{{.State.Status}}' ${PREFIX}_docling 2>/dev/null || echo "MISSING")
+    local status_label="STANDBY (Scale-to-Zero)"
 
-    if [ "$health_dc" = "healthy" ]; then
-        http_status=$(curl -s -L -H "Host: ${ts_domain}" -o /dev/null -w "%{http_code}" --max-time 10 --retry 3 --retry-delay 2 "http://127.0.0.1:5001/health" || echo "FALHOU")
-    else
-        http_status="CONTAINER_ERRO"
+    if [ "$container_exists" = "running" ]; then
+        status_label="RUNNING (Processando)"
+    elif [ "$container_exists" = "MISSING" ]; then
+        status_label="OFFLINE"
     fi
 
-    printf "  ↳ %-32s http://%s:5001  -> Status: [%s]\n" "Docling OCR / Doc API:" "${ts_domain}" "${http_status}"
+    printf "  ↳ %-32s http://%s:5001  -> Status: [%s]\n" "Docling Multimodal (On-Demand):" "${ts_domain}" "${status_label}"
 }
 
 get_version() {

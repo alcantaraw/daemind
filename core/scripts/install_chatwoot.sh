@@ -332,6 +332,8 @@ provision_user() {
             token_obj.save!
             InstallationConfig.find_or_create_by!(name: 'INSTALLATION_NAME').update!(value: '${PREFIX}')
             InstallationConfig.find_or_create_by!(name: 'CHATWOOT_INSTANCE_ADMIN_EMAIL').update!(value: '${TS_EMAIL:-admin@localhost}')
+            InstallationConfig.find_or_create_by!(name: 'OPENAI_API_KEY').update!(value: '${LITELLM_MASTER_KEY}')
+            InstallationConfig.find_or_create_by!(name: 'OPENAI_MODEL').update!(value: 'gpt-4.1')
             user.update!(ui_settings: { is_profile_setup_completed: true, is_onboarding_completed: true, locale: 'pt_BR' })
             account.update!(custom_attributes: { 'website' => 'https://${TS_DOMAIN:-localhost}', 'timezone' => 'America/Sao_Paulo' })
 
@@ -348,7 +350,7 @@ provision_user() {
           puts '🚨 [ERRO RUBY CHATWOOT] ' + e.message
         end
         " < /dev/null 2>/dev/null || true
-        echo "➜ [SUCESSO CHATWOOT] Administrador Chatwoot cadastrado."
+        echo "➜ [SUCESSO CHATWOOT] Administrador Chatwoot cadastrado e IA configurada (Zero-Touch)."
     fi
 
     local env_file="${TARGET_DIR:-/opt/daemind}/.env"

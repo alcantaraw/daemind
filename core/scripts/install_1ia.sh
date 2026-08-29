@@ -297,9 +297,11 @@ sync_models() {
 
     # 1.1 Varredura Postiz (Serviço NestJS + Agent Mastra AI)
     if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_postiz 2>/dev/null)" = "true" ]; then
-        local POSTIZ_POSTS_M
-        POSTIZ_POSTS_M=$(docker exec -i ${PREFIXO_CONTAINER}_postiz grep -roE "model: *['\"]gpt-[0-9a-zA-Z.-]+['\"]" /app/libraries /app/dist 2>/dev/null | head -n 1 | grep -oE "gpt-[0-9a-zA-Z.-]+" || true)
-        [ -n "$POSTIZ_POSTS_M" ] && add_app_model "$POSTIZ_POSTS_M"
+        local POSTIZ_MODELS
+        POSTIZ_MODELS=$(docker exec -i ${PREFIXO_CONTAINER}_postiz grep -roE "(model|modelId): *['\"][a-zA-Z0-9_./-]+['\"]|openai\(['\"][a-zA-Z0-9_./-]+['\"]\)" /app/libraries /app/node_modules/@ag-ui /app/node_modules/@mastra 2>/dev/null | grep -oE "['\"][a-zA-Z0-9_./-]+['\"]" | tr -d '"'\'' ' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' | sort -u || true)
+        for pm in $POSTIZ_MODELS; do
+            add_app_model "$pm"
+        done
     fi
 
     # 1.2 Varredura Chatwoot CRM

@@ -50,6 +50,9 @@ build_structure() {
             if [[ "${USE_LISTMONK:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/listmonk 2>/dev/null || true
             fi
+            if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]]; then
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/openwebui 2>/dev/null || true
+            fi
             sudo chmod -R 777 "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
             sudo chown -R "$TARGET_OWNER" "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
             echo "➜ [SRE S3MINIO] Permissões de I/O de storage_data alinhadas (Owner: ${TARGET_OWNER}, Mode: 777)."
