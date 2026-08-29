@@ -1143,15 +1143,11 @@ CREATE FOREIGN TABLE fdw_umami.website_event (
     event_id uuid,
     website_id uuid,
     session_id uuid,
-    visit_id uuid,
     created_at timestamp with time zone,
     url_path character varying,
     url_query character varying,
     referrer_domain character varying,
-    page_title character varying,
-    utm_source character varying,
-    utm_medium character varying,
-    utm_campaign character varying
+    page_title character varying
 ) SERVER srv_umami OPTIONS (schema_name 'public', table_name 'website_event');
 
 -- 5. EVOLUTION API (evolution_db)
