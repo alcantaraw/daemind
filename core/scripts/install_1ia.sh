@@ -300,8 +300,6 @@ sync_models() {
         local POSTIZ_POSTS_M
         POSTIZ_POSTS_M=$(docker exec -i ${PREFIXO_CONTAINER}_postiz grep -roE "model: *['\"]gpt-[0-9a-zA-Z.-]+['\"]" /app/libraries /app/dist 2>/dev/null | head -n 1 | grep -oE "gpt-[0-9a-zA-Z.-]+" || true)
         [ -n "$POSTIZ_POSTS_M" ] && add_app_model "$POSTIZ_POSTS_M"
-        add_app_model "gpt-5.2"
-        echo "  ↳ Modelos Postiz detectados em runtime: [ ${POSTIZ_POSTS_M:-gpt-4.1}, gpt-5.2 ]"
     fi
 
     # 1.2 Varredura Chatwoot CRM
@@ -312,11 +310,6 @@ sync_models() {
           print c.value if c
         " 2>/dev/null || true)
         [ -n "$CW_MODEL_ATUAL" ] && add_app_model "$CW_MODEL_ATUAL"
-        add_app_model "gpt-3.5-turbo"
-        add_app_model "gpt-4o"
-        add_app_model "gpt-4o-mini"
-        add_app_model "gpt-4-turbo"
-        echo "  ↳ Modelos Chatwoot adicionados à malha."
     fi
 
     # 1.3 Varredura Metabase BI
@@ -324,7 +317,8 @@ sync_models() {
         local MB_MODEL
         MB_MODEL=$(curl -s "http://127.0.0.1:3030/api/setting" 2>/dev/null | jq -r '.[] | select(.key == "llm-metabot-provider" or .key == "llm-openai-model") | .value // empty' 2>/dev/null || true)
         for mm in $MB_MODEL; do
-            local mm_clean=$(echo "$mm" | sed 's|^openai/||')
+            local mm_clean
+            mm_clean=$(echo "$mm" | sed 's|^openai/||')
             add_app_model "$mm_clean"
         done
     fi
@@ -336,10 +330,8 @@ sync_models() {
         [ -n "$N8N_AI_M" ] && add_app_model "$N8N_AI_M"
     fi
 
-    # 1.5 Aliases canônicos universais garantidos
-    for canon in "gpt-4.1" "gpt-4" "gpt-4-turbo" "gpt-4o" "gpt-4o-2024-08-06" "gpt-4o-mini" "gpt-3.5-turbo" "gpt-5" "gpt-5.2" "openrouter/free"; do
-        add_app_model "$canon"
-    done
+    # 1.5 Fallback universal garantido
+    add_app_model "openrouter/free"
 
     echo "  ↳ Total de aliases de compatibilidade ativos: ${#APP_DETECTED_MODELS[@]} [ ${APP_DETECTED_MODELS[*]} ]"
 
@@ -695,7 +687,8 @@ router_settings:
   num_retries: 2
   timeout: 30
   model_alias_map:
-$(printf "%b" "$MODEL_ALIASES_YAML")  fallbacks:
+$(printf "%b" "$MODEL_ALIASES_YAML")
+  fallbacks:
     - {"*": $FALLBACK_JSON}
 
 model_list:
@@ -751,6 +744,25 @@ EO_ALIAS
             chmod 644 "$DEST_CONFIG" 2>/dev/null || true
             docker restart ${PREFIXO_CONTAINER}_litellm > /dev/null 2>&1 || true
             echo "  ↳ [CONFIGURANDO AI GATEWAY] Catálogo LiteLLM atualizado e serviço reiniciado."
+        fi
+
+        # 5. SINCRONIZAÇÃO EM CASCATA: N8N AI ASSISTANT
+        if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_n8n 2>/dev/null)" = "true" ]; then
+            local N8N_MODEL_ATUAL
+            N8N_MODEL_ATUAL=$(docker exec -i ${PREFIXO_CONTAINER}_n8n node -e "console.log(process.env.N8N_INSTANCE_AI_MODEL || '')" 2>/dev/null || true)
+            local TARGET_N8N="${TARGET_MODEL:-gpt-4.1}"
+            if [ "$N8N_MODEL_ATUAL" = "$TARGET_N8N" ] || [ "$N8N_MODEL_ATUAL" = "gpt-4.1" ]; then
+                echo "  ↳ [IDEMPOTÊNCIA AI GATEWAY] Modelo n8n AI Assistant já pareado com a malha (${N8N_MODEL_ATUAL})."
+            else
+                echo "  ↳ [CONFIGURANDO AI GATEWAY] Pareando modelo no n8n AI Assistant -> ${TARGET_N8N}..."
+                local local_env="${TARGET_DIR_LITE}/.env"
+                if [ -f "$local_env" ]; then
+                    if grep -q '^N8N_INSTANCE_AI_MODEL=' "$local_env"; then
+                        sed -i "s/^N8N_INSTANCE_AI_MODEL=.*/N8N_INSTANCE_AI_MODEL=${TARGET_N8N}/" "$local_env" 2>/dev/null || true
+                    fi
+                fi
+                echo "  ↳ Modelo n8n AI Assistant sincronizado com sucesso."
+            fi
         fi
     fi
 }
