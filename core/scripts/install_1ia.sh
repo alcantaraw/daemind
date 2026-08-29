@@ -304,14 +304,21 @@ sync_models() {
         done
     fi
 
-    # 1.2 Varredura Chatwoot CRM
-    if [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_chatwoot 2>/dev/null)" = "healthy" ]; then
-        local CW_MODEL_ATUAL
-        CW_MODEL_ATUAL=$(docker exec -i ${PREFIXO_CONTAINER}_chatwoot bundle exec rails runner "
-          c = InstallationConfig.find_by(name: 'OPENAI_MODEL')
-          print c.value if c
-        " 2>/dev/null || true)
-        [ -n "$CW_MODEL_ATUAL" ] && add_app_model "$CW_MODEL_ATUAL"
+    # 1.2 Varredura Dinâmica Chatwoot CRM (Configurações de Banco e llm.yml / llm_constants.rb)
+    if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_chatwoot 2>/dev/null)" = "true" ]; then
+        local CW_DYNAMIC_MODELS
+        # Consulta direta no banco PostgreSQL do Chatwoot (installation_configs)
+        CW_DYNAMIC_MODELS=$(docker exec -i ${PREFIXO_CONTAINER}_postgres psql -U "${DB_USER:-admin_db}" -d "chatwoot_db" -t -A -c "
+            SELECT serialized_value FROM installation_configs WHERE name ILIKE '%MODEL%' OR name ILIKE '%OPENAI%' OR name ILIKE '%CAPTAIN%';
+        " 2>/dev/null | grep -oE "['\"][a-zA-Z0-9_./-]+['\"]" | tr -d '"'\'' ' | grep -iE 'gpt-|claude-|gemini-|deepseek-|openrouter/' || true)
+
+        # Varredura direta no arquivo de catálogo nativo do Chatwoot (config/llm.yml e lib/llm_constants.rb)
+        local CW_FILE_MODELS
+        CW_FILE_MODELS=$(docker exec -i ${PREFIXO_CONTAINER}_chatwoot sh -c "cat /app/config/llm.yml /app/lib/llm_constants.rb 2>/dev/null" | grep -oE "[a-zA-Z0-9_.-]+:[0-9a-zA-Z_.-]*|DEFAULT_MODEL *= *['\"][a-zA-Z0-9_./-]+['\"]|models: *\[.*\]|default: *[a-zA-Z0-9_./-]+" | grep -oE "gpt-[a-zA-Z0-9_./-]+|claude-[a-zA-Z0-9_./-]+|gemini-[a-zA-Z0-9_./-]+" | sort -u || true)
+
+        for cwm in $CW_DYNAMIC_MODELS $CW_FILE_MODELS; do
+            [ -n "$cwm" ] && add_app_model "$cwm"
+        done
     fi
 
     # 1.3 Varredura Metabase BI

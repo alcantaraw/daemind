@@ -602,18 +602,6 @@ provision_dashboards() {
         curl -s -X DELETE "${MB_URL}/api/database/${SAMPLE_DB_ID}" -H "X-Metabase-Session: $MB_SESSION" >/dev/null 2>&1 || true
     fi
 
-    # Integração Automática com IA Soberana (LiteLLM Proxy / Metabot v50+)
-    local AI_KEY="${LITELLM_MASTER_KEY:-${OPENROUTER_API_KEY:-${OPENAI_API_KEY}}}"
-    local AI_MODEL="${METABASE_AI_MODEL:-gpt-4.1}"
-    if [ -n "$AI_KEY" ]; then
-        curl -s -X PUT "${MB_URL}/api/setting/llm-enabled" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": true}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-metabot-provider" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "openai"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-model" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${AI_MODEL}\"}" >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-base-url" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d '{"value": "http://litellm:4000"}' >/dev/null 2>&1 || true
-        curl -s -X PUT "${MB_URL}/api/setting/llm-openai-api-key" -H "X-Metabase-Session: $MB_SESSION" -H "Content-Type: application/json" -d "{\"value\": \"${AI_KEY}\"}" >/dev/null 2>&1 || true
-    fi
-
     echo "✔ [SUCESSO METABASE] Dashboard 'Cockpit Executivo Omnichannel 360°' provisionado e fixado na Homepage!"
 }
 
