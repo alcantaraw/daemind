@@ -17,33 +17,69 @@ chmod 777 $LOG_ERR
 echo "=== [SRE COMPATIBILITY ENGINE] Iniciando Varredura e Matchmaking ==="
 
 # ===============================================================================
-# 1. EXTRAÇÃO ATÔMICA (Descoberta do modelo do Postiz/Chatwoot)
+# 1. VARREDURA DINÂMICA DE MODELOS DAS APLICAÇÕES (Postiz, Chatwoot, Metabase, n8n, Evolution)
 # ===============================================================================
-POSTIZ_MODEL=""
+declare -A DETECTED_ALIASES_MAP
+APP_DETECTED_MODELS=()
+
+add_app_model() {
+    local m="$1"
+    m=$(echo "$m" | tr -d '"'\''\r\n ' || true)
+    if [ -n "$m" ] && [ -z "${DETECTED_ALIASES_MAP[$m]:-}" ]; then
+        DETECTED_ALIASES_MAP["$m"]=1
+        APP_DETECTED_MODELS+=("$m")
+    fi
+}
+
+echo "➜ [SRE AI DISCOVERY] Executando varredura dinâmica de modelos em uso pelas aplicações..."
+
+# 1.1 Varredura Postiz (Serviço NestJS + Agent Mastra AI)
 if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_postiz 2>/dev/null)" = "true" ]; then
-    POSTIZ_MODEL=$(docker exec -i ${PREFIXO_CONTAINER}_postiz grep -oE "model: *['\"]gpt-[0-9a-zA-Z.-]+['\"]" /app/libraries/nestjs-libraries/src/openai/openai.service.ts 2>/dev/null | head -n 1 | grep -oE "gpt-[0-9a-zA-Z.-]+" || true)
+    POSTIZ_POSTS_M=$(docker exec -i ${PREFIXO_CONTAINER}_postiz grep -roE "model: *['\"]gpt-[0-9a-zA-Z.-]+['\"]" /app/libraries /app/dist 2>/dev/null | head -n 1 | grep -oE "gpt-[0-9a-zA-Z.-]+" || true)
+    [ -n "$POSTIZ_POSTS_M" ] && add_app_model "$POSTIZ_POSTS_M"
+    
+    # Modelo do Postiz Agent (Mastra AI)
+    add_app_model "gpt-5.2"
+    echo "  ↳ Modelos Postiz detectados em runtime: [ ${POSTIZ_POSTS_M:-gpt-4.1}, gpt-5.2 ]"
 fi
 
-[ -z "$POSTIZ_MODEL" ] && POSTIZ_MODEL="gpt-4.1"
-echo "  ↳ Modelo Postiz detectado em runtime: $POSTIZ_MODEL"
-
+# 1.2 Varredura Chatwoot CRM
 if [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_chatwoot 2>/dev/null)" = "healthy" ]; then
     CW_MODEL_ATUAL=$(docker exec -i ${PREFIXO_CONTAINER}_chatwoot bundle exec rails runner "
       c = InstallationConfig.find_by(name: 'OPENAI_MODEL')
       print c.value if c
     " 2>/dev/null || true)
-
-    if [ "$CW_MODEL_ATUAL" = "$POSTIZ_MODEL" ]; then
-        echo "  ↳ [IDEMPOTÊNCIA] Modelo Chatwoot CRM já configurado ($POSTIZ_MODEL)."
-    else
-        echo "  ↳ [CONFIGURANDO] Atualizando modelo no Chatwoot CRM -> $POSTIZ_MODEL..."
-        docker exec -i ${PREFIXO_CONTAINER}_chatwoot bundle exec rails runner "
-          c = InstallationConfig.find_or_initialize_by(name: 'OPENAI_MODEL')
-          c.value = '$POSTIZ_MODEL'
-          c.save!
-        " > /dev/null 2>&1 || true
-    fi
+    [ -n "$CW_MODEL_ATUAL" ] && add_app_model "$CW_MODEL_ATUAL"
+    
+    # Modelos padrão do Chatwoot Copilot / OpenAI Hook
+    add_app_model "gpt-3.5-turbo"
+    add_app_model "gpt-4o"
+    add_app_model "gpt-4o-mini"
+    add_app_model "gpt-4-turbo"
+    echo "  ↳ Modelos Chatwoot adicionados à malha."
 fi
+
+# 1.3 Varredura Metabase BI
+if [ "$(docker inspect -f '{{.State.Health.Status}}' ${PREFIXO_CONTAINER}_metabase 2>/dev/null)" = "healthy" ]; then
+    MB_MODEL=$(curl -s "http://127.0.0.1:3030/api/setting" 2>/dev/null | jq -r '.[] | select(.key == "llm-metabot-provider" or .key == "llm-openai-model") | .value // empty' 2>/dev/null || true)
+    for mm in $MB_MODEL; do
+        mm_clean=$(echo "$mm" | sed 's|^openai/||')
+        add_app_model "$mm_clean"
+    done
+fi
+
+# 1.4 Varredura n8n AI Assistant
+if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_n8n 2>/dev/null)" = "true" ]; then
+    N8N_AI_M=$(docker exec -i ${PREFIXO_CONTAINER}_n8n env 2>/dev/null | grep -E '^N8N_INSTANCE_AI_MODEL=' | cut -d= -f2- | tr -d '"\r' || true)
+    [ -n "$N8N_AI_M" ] && add_app_model "$N8N_AI_M"
+fi
+
+# 1.5 Aliases canônicos universais garantidos
+for canon in "gpt-4.1" "gpt-4" "gpt-4-turbo" "gpt-4o" "gpt-4o-2024-08-06" "gpt-4o-mini" "gpt-3.5-turbo" "gpt-5" "gpt-5.2" "openrouter/free"; do
+    add_app_model "$canon"
+done
+
+echo "  ↳ Total de aliases de compatibilidade ativos: ${#APP_DETECTED_MODELS[@]} [ ${APP_DETECTED_MODELS[*]} ]"
 
 # ===============================================================================
 # 2. INTEGRAÇÃO ATÔMICA DOS CATÁLOGOS (Busca os Modelos nas APIs)
@@ -361,6 +397,13 @@ if [ "$TOTAL" -gt 0 ]; then
     FALLBACK_JSON=$(printf '%s\n' "${HEALTHY_FALLBACKS[@]}" | jq -R . 2>/dev/null | jq -s --arg tm "$TARGET_VISUAL" '([$tm] + .) | unique | map(select(length > 0))' 2>/dev/null || echo "[\"$TARGET_VISUAL\"]")
     [ "$FALLBACK_JSON" = "[]" ] && FALLBACK_JSON="[\"$TARGET_VISUAL\"]"
 
+    # Gera as entradas do model_alias_map dinamicamente para cada modelo descoberto
+    MODEL_ALIASES_YAML=""
+    for app_m in "${APP_DETECTED_MODELS[@]}"; do
+        [ -z "$app_m" ] && continue
+        MODEL_ALIASES_YAML="${MODEL_ALIASES_YAML}    \"${app_m}\": \"${TARGET_VISUAL}\"\n"
+    done
+
     cat << EO_BASE > "$TMP_CONFIG"
 general_settings:
   store_model_in_db: false
@@ -372,30 +415,30 @@ litellm_settings:
   webhook_url: "http://${PREFIXO_CONTAINER}_n8n:5678/webhook/litellm-falhas"
   failure_callback: ["webhook"]
   model_alias_map:
-    "$POSTIZ_MODEL": "$TARGET_VISUAL"
-    "gpt-4.1": "$TARGET_VISUAL"
-    "gpt-4": "$TARGET_VISUAL"
-    "gpt-4o": "$TARGET_VISUAL"
-    "gpt-4o-mini": "$TARGET_VISUAL"
-    "gpt-3.5-turbo": "$TARGET_VISUAL"
-    "openrouter/free": "$TARGET_VISUAL"
- 
+$(printf "%b" "$MODEL_ALIASES_YAML")
 router_settings:
   num_retries: 2
   timeout: 30
   model_alias_map:
-    "$POSTIZ_MODEL": "$TARGET_VISUAL"
-    "gpt-4.1": "$TARGET_VISUAL"
-    "gpt-4": "$TARGET_VISUAL"
-    "gpt-4o": "$TARGET_VISUAL"
-    "gpt-4o-mini": "$TARGET_VISUAL"
-    "gpt-3.5-turbo": "$TARGET_VISUAL"
-    "openrouter/free": "$TARGET_VISUAL"
-  fallbacks:
+$(printf "%b" "$MODEL_ALIASES_YAML")  fallbacks:
     - {"*": $FALLBACK_JSON}
 
 model_list:
 EO_BASE
+
+    # Injeta os aliases das aplicações no topo do model_list para compatibilidade total com a OpenAI Responses API (/v1/responses)
+    for app_m in "${APP_DETECTED_MODELS[@]}"; do
+        [ -z "$app_m" ] && continue
+        cat << EO_ALIAS >> "$TMP_CONFIG"
+  - model_name: "$app_m"
+    litellm_params:
+      model: ${TARGET_MODEL}
+    model_info:
+      id: "$app_m"
+      name: "$app_m"
+      mode: chat
+EO_ALIAS
+    done
 
     echo "$PAYLOADS_TOTAIS" | jq -r --arg target "$TARGET_MODEL" '
       unique_by(.ID) |
@@ -433,16 +476,16 @@ EO_BASE
     # ===============================================================================
     if [ "$(docker inspect -f '{{.State.Running}}' ${PREFIXO_CONTAINER}_n8n 2>/dev/null)" = "true" ]; then
         N8N_MODEL_ATUAL=$(docker exec -i ${PREFIXO_CONTAINER}_n8n node -e "console.log(process.env.N8N_INSTANCE_AI_MODEL || '')" 2>/dev/null || true)
-        if [ "$N8N_MODEL_ATUAL" = "$POSTIZ_MODEL" ]; then
-            echo "  ↳ [IDEMPOTÊNCIA] Modelo n8n AI Assistant já pareado ($POSTIZ_MODEL)."
+        local TARGET_N8N="${TARGET_MODEL:-gpt-4.1}"
+        if [ "$N8N_MODEL_ATUAL" = "$TARGET_N8N" ] || [ "$N8N_MODEL_ATUAL" = "gpt-4.1" ]; then
+            echo "  ↳ [IDEMPOTÊNCIA] Modelo n8n AI Assistant já pareado com a malha (${N8N_MODEL_ATUAL})."
         else
-            echo "  ↳ [CONFIGURANDO] Pareando modelo no n8n AI Assistant -> $POSTIZ_MODEL..."
-            # Atualiza no compose e arquivo .env se existirem para persistência definitiva
+            echo "  ↳ [CONFIGURANDO] Pareando modelo no n8n AI Assistant -> ${TARGET_N8N}..."
             local_env="${SCRIPT_DIR}/../.env"
             [ ! -f "$local_env" ] && local_env="/opt/daemind/.env"
             if [ -f "$local_env" ]; then
                 if grep -q '^N8N_INSTANCE_AI_MODEL=' "$local_env"; then
-                    sed -i "s/^N8N_INSTANCE_AI_MODEL=.*/N8N_INSTANCE_AI_MODEL=${POSTIZ_MODEL}/" "$local_env" 2>/dev/null || true
+                    sed -i "s/^N8N_INSTANCE_AI_MODEL=.*/N8N_INSTANCE_AI_MODEL=${TARGET_N8N}/" "$local_env" 2>/dev/null || true
                 fi
             fi
             echo "  ↳ Modelo n8n AI Assistant sincronizado com sucesso."

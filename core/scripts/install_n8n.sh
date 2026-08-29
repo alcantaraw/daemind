@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# N8N N8N_SANDBOX SEARXNG
+# N8N SEARXNG
 # Motor de Automações & Workflows Ilimitados
 # ===============================================================================
 # DAEMIND SRE MODULE - PROVISIONADOR DINÂMICO N8N AUTOMATION
@@ -46,9 +46,11 @@ build_structure() {
             sudo rm -rf "$SEARX_DIR/limiter.toml" 2>/dev/null || true
         fi
         if [ ! -f "$SEARX_DIR/limiter.toml" ]; then
-            echo "➜ [SRE N8N DEV] Gerando limiter.toml para o SearXNG..."
+            echo "➜ [SRE N8N DEV] Gerando limiter.toml tunado para AI Tools no SearXNG..."
             cat << 'EOF' | sudo tee "$SEARX_DIR/limiter.toml" > /dev/null
 [botdetection]
+ip_limit = false
+link_token = false
 ipv4_prefix = 32
 ipv6_prefix = 48
 trusted_proxies = [
@@ -59,12 +61,18 @@ trusted_proxies = [
   '192.168.0.0/16'
 ]
 
-[botdetection.ip_limit]
-filter_link_local = false
-link_token = false
+[ratelimit]
+block_ip = []
+pass_ip = [
+  '127.0.0.1',
+  '10.0.0.0/8',
+  '172.16.0.0/12',
+  '192.168.0.0/16'
+]
 
 [botdetection.ip_lists]
 pass_ip = [
+  '127.0.0.1',
   '10.0.0.0/8',
   '172.16.0.0/12',
   '192.168.0.0/16'
@@ -74,48 +82,60 @@ EOF
         fi
 
         if [ ! -f "$SEARX_DIR/settings.yml" ]; then
-            echo "➜ [SRE N8N DEV] Gerando settings.yml canônico e expurgando engines instáveis para o SearXNG..."
+            echo "➜ [SRE N8N DEV] Gerando settings.yml tunado com Redis Cache e Alta Performance..."
             sudo docker pull -q searxng/searxng:latest >/dev/null 2>&1 || true
             sudo docker run --rm --entrypoint sh searxng/searxng:latest -c "
 /usr/local/searxng/.venv/bin/python3 -c '
 import yaml
 with open(\"/usr/local/searxng/searx/settings.yml\") as f:
     cfg = yaml.safe_load(f)
+
+# Configurações de Servidor, API e uWSGI
 cfg[\"server\"][\"secret_key\"] = \"${DB_PASSWORD:-daemind_searxng_secret}\"
 cfg[\"server\"][\"limiter\"] = False
 cfg[\"server\"][\"image_proxy\"] = False
 cfg[\"search\"][\"formats\"] = [\"html\", \"json\"]
-# Remover completamente as engines problemáticas da lista
-cfg[\"engines\"] = [
-    eng for eng in cfg.get(\"engines\", [])
-    if not any(k in eng.get(\"name\", \"\").lower() or k in eng.get(\"engine\", \"\").lower()
-               for k in [\"ahmia\", \"torch\", \"wikidata\", \"onion\"])
-]
+
+# Integração Redis Cache Nativo
+cfg[\"redis\"] = {
+    \"url\": \"redis://redis:6379/0\"
+}
+
+# Tuning de Rede, Concorrência e HTTP/2
+cfg.setdefault(\"outgoing\", {})
+cfg[\"outgoing\"][\"request_timeout\"] = 4.0
+cfg[\"outgoing\"][\"max_request_timeout\"] = 8.0
+cfg[\"outgoing\"][\"pool_connections\"] = 100
+cfg[\"outgoing\"][\"pool_maxsize\"] = 100
+cfg[\"outgoing\"][\"enable_http2\"] = True
+
+# Tolerância a falhas e zero suspensão de engines
+cfg.setdefault(\"search\", {})
+cfg[\"search\"][\"suspended_times\"] = {
+    \"Google\": 0,
+    \"Bing\": 0,
+    \"DuckDuckGo\": 0,
+    \"default\": 0
+}
+
+# Otimização de timeout das principais engines para IA
+for eng in cfg.get(\"engines\", []):
+    name = eng.get(\"name\", \"\").lower()
+    if name in [\"google\", \"bing\", \"duckduckgo\", \"brave\", \"qwant\"]:
+        eng[\"timeout\"] = 2.0
+
 with open(\"/tmp/settings.yml\", \"w\") as f:
-    yaml.dump(cfg, f)
+    yaml.dump(cfg, f, sort_keys=False)
 ' && cat /tmp/settings.yml
 " 2>/dev/null | sudo tee "$SEARX_DIR/settings.yml" > /dev/null
         fi
         sudo chown -R "$TARGET_OWNER" "$SEARX_DIR" 2>/dev/null || true
 
-        local CERTS_DIR="$TARGET_DIR/volumes/n8n_sandbox_certs"
-        if [ ! -f "$CERTS_DIR/server.crt" ]; then
-            echo "➜ [SRE N8N DEV] Gerando par mTLS para o Sandbox API do n8n..."
-            sudo mkdir -p "$CERTS_DIR" 2>/dev/null || true
-            sudo openssl req -x509 -newkey rsa:2048 -nodes \
-                -keyout "$CERTS_DIR/server.key" \
-                -out "$CERTS_DIR/server.crt" \
-                -days 3650 -subj "/CN=n8n_sandbox" 2>/dev/null || true
-            sudo cp "$CERTS_DIR/server.crt" "$CERTS_DIR/ca.crt" 2>/dev/null || true
-            sudo chown -R "$TARGET_OWNER" "$CERTS_DIR" 2>/dev/null || true
-            sudo chmod -R 777 "$CERTS_DIR" 2>/dev/null || true
-        fi
-
         # Ativação prévia no compose antes da fusão monotélica da Fase 4
         local N8N_COMPOSE="$TARGET_DIR/core/config/docker-compose.n8n.yml"
         [ ! -f "$N8N_COMPOSE" ] && N8N_COMPOSE="$TARGET_DIR/docker-compose.n8n.yml"
         if [ -f "$N8N_COMPOSE" ]; then
-            echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (Sandbox + SearXNG) no compose..."
+            echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (LiteLLM + SearXNG) no compose..."
             # 1. Descomenta todas as linhas marcadas com '# '
             sed -i 's/# //g' "$N8N_COMPOSE" 2>/dev/null || true
             # 2. Habilita o módulo instance-ai liberando a UI do assistente no n8n
@@ -198,9 +218,9 @@ EOF
     [ ! -f "$N8N_COMPOSE" ] && N8N_COMPOSE="$TARGET_DIR/docker-compose.n8n.yml"
     if [ -f "$N8N_COMPOSE" ]; then
         if [[ "${N8N_DEV_AI_ASSISTANT:-n}" =~ ^[Ss]$ ]]; then
-            echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (Sandbox + SearXNG) no compose..."
+            echo "➜ [SRE N8N DEV] Habilitando AI Assistant Avançado (LiteLLM + SearXNG) no compose..."
             sed -i 's/# - N8N_INSTANCE_AI_/- N8N_INSTANCE_AI_/g' "$N8N_COMPOSE" 2>/dev/null || true
-            sed -i 's/#   image: ghcr.io\/n8n-io\/n8n-sandbox/  image: ghcr.io\/n8n-io\/n8n-sandbox/g' "$N8N_COMPOSE" 2>/dev/null || true
+            sed -i 's/#   image: node:20-alpine/  image: node:20-alpine/g' "$N8N_COMPOSE" 2>/dev/null || true
             sed -i 's/#   image: searxng\/searxng/  image: searxng\/searxng/g' "$N8N_COMPOSE" 2>/dev/null || true
             python3 -c "
 path = '$N8N_COMPOSE'
@@ -407,12 +427,6 @@ get_version() {
             local VER=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "${PREFIX}_searxng" 2>/dev/null || echo "")
             [ -z "$VER" ] && VER=$(docker exec "${PREFIX}_searxng" python3 -c 'import searx.version; print(searx.version.VERSION_STRING)' 2>/dev/null || echo "")
             [ -z "$VER" ] && VER=$(docker inspect -f '{{slice .Created 0 10}}' "${PREFIX}_searxng" 2>/dev/null || echo "")
-            echo "${VER:-latest}"
-            ;;
-        n8n_sandbox)
-            local VER=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "${PREFIX}_n8n_sandbox" 2>/dev/null || echo "")
-            [ -z "$VER" ] && VER=$(docker inspect -f '{{index .Config.Labels "version"}}' "${PREFIX}_n8n_sandbox" 2>/dev/null || echo "")
-            [ -z "$VER" ] && VER=$(docker inspect -f '{{slice .Created 0 10}}' "${PREFIX}_n8n_sandbox" 2>/dev/null || echo "")
             echo "${VER:-latest}"
             ;;
         *)

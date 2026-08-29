@@ -101,10 +101,10 @@ services:
       # - N8N_INSTANCE_AI_MODEL_API_KEY=${LITELLM_MASTER_KEY}
       # - N8N_INSTANCE_AI_MODEL=gpt-4.1
       # - N8N_INSTANCE_AI_SEARXNG_URL=http://searxng:8080
-      # - N8N_INSTANCE_AI_SANDBOX_ENABLED=true
       # - N8N_INSTANCE_AI_SANDBOX_PROVIDER=n8n-sandbox
       # - N8N_SANDBOX_SERVICE_URL=http://n8n_sandbox:8080
       # - N8N_SANDBOX_SERVICE_API_KEY=${LITELLM_MASTER_KEY}
+      # - N8N_INSTANCE_AI_SANDBOX_ENABLED=true
     volumes:
       - './volumes/n8n_data:/home/node/.n8n'
       - '/etc/timezone:/etc/timezone:ro'
@@ -123,34 +123,24 @@ services:
         # condition: service_healthy
       
   # n8n_sandbox:
-    # image: ghcr.io/n8n-io/n8n-sandbox-service-api:latest
+    # image: node:20-alpine
     # container_name: '${PREFIXO_CONTAINER}_n8n_sandbox'
     # restart: unless-stopped
+    # command: ["node", "/app/n8n_mock_sandbox.js"]
     # deploy:
       # resources:
         # limits:
-          # cpus: '1.0'
-          # memory: '256M'
+          # cpus: '0.2'
+          # memory: '32M'
     # networks:
       # instancia_net:
         # ipv4_address: ${IP_N8N_SANDBOX}
         # aliases:
           # - n8n_sandbox
     # volumes:
-      # - './volumes/n8n_sandbox_certs:/certs:ro'
-    # environment:
-      # - TZ=America/Sao_Paulo
-      # - SANDBOX_LOG_LEVEL=warn
-      # - SANDBOX_API_KEYS=${LITELLM_MASTER_KEY}
-      # - SANDBOX_API_RUNNER_REGISTRATION_TOKEN=${DB_PASSWORD}
-      # - SANDBOX_API_GRPC_TLS_CERT_FILE=/certs/server.crt
-      # - SANDBOX_API_GRPC_TLS_KEY_FILE=/certs/server.key
-      # - SANDBOX_API_GRPC_TLS_CLIENT_CA_FILE=/certs/ca.crt
-      # - SANDBOX_API_RUNNER_CONTROL_GRPC_TLS_CERT_FILE=/certs/server.crt
-      # - SANDBOX_API_RUNNER_CONTROL_GRPC_TLS_KEY_FILE=/certs/server.key
-      # - SANDBOX_API_RUNNER_CONTROL_GRPC_TLS_CA_FILE=/certs/ca.crt
+      # - './core/scripts/n8n_mock_sandbox.js:/app/n8n_mock_sandbox.js:ro'
     # healthcheck:
-      # test: ["CMD-SHELL", "nc -z 127.0.0.1 8080 || exit 1"]
+      # test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz || exit 1"]
       # interval: 15s
       # timeout: 5s
       # retries: 3
@@ -177,9 +167,12 @@ services:
       # - SEARXNG_SECRET=${DB_PASSWORD}
       # - SEARXNG_URL=http://searxng:8080
       # - SEARXNG_BIND_ADDRESS=0.0.0.0:8080
+      # - SEARXNG_REDIS_URL=redis://redis:6379/0
+      # - SEARXNG_UWSGI_WORKERS=2
     # healthcheck:
       # test: ["CMD-SHELL", "wget --header='X-Real-IP: 127.0.0.1' -qO- http://localhost:8080/healthz || exit 1"]
       # interval: 15s
       # timeout: 5s
       # retries: 3
+
 

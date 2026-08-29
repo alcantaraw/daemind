@@ -449,15 +449,6 @@ CREATE INDEX IF NOT EXISTS idx_propostas_cliente ON propostas_comerciais(cliente
 CREATE INDEX IF NOT EXISTS idx_base_conhecimento_embedding 
 ON base_conhecimento USING hnsw (embedding vector_cosine_ops);
 
--- 9. DML de Carga Inicial (Seed de Insumos Estratégicos para Teste de Alerta - White Label)
-INSERT INTO insumos (item_nome, tipo_insumo, quantidade_atual, estoque_minimo, fornecedor_nome, fornecedor_contato)
-VALUES 
-('Caixa de Embalagem Padrão Tamanho P', 'CAIXA', 5, 25, 'Fornecedor Central Embalagens', '21988887777'),
-('Fita Adesiva Acrílica Larga 50mm', 'FITA', 2, 10, 'Distribuidora de Fitas e Lacres', '21977776666'),
-('Etiqueta Térmica de Expedição 100x150mm', 'ETIQUETA', 150, 500, 'Suprimentos de Automacao Ltda', '21966665555')
-ON CONFLICT (item_nome) DO UPDATE 
-SET tipo_insumo = EXCLUDED.tipo_insumo;
-
 -- ===============================================================================
 -- 9.5 AUTOMAÇÃO NATIVA DO BANCO (TRIGGERS, FUNCTIONS, RAG & CHECK CONSTRAINTS)
 -- ===============================================================================

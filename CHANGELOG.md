@@ -78,6 +78,7 @@
       5. *Gestão de Serviços B2B: MRR, ARR & Churn Rate* (Table/KPI)
       6. *Recuperação de Carrinhos Abandonados & WhatsApp* (Table/Funnel)
       7. *Produtividade Comercial de Atendentes SDR no Chatwoot* (Table/Rank)
+    - **Integração Metabot AI / Text-to-SQL (Metabase v50+ & LiteLLM):** Configuração autônoma do assistente de IA conversacional (`metabot`) compatível com o schema moderno de LLMs do Metabase (`llm-openai-api-base-url`, `llm-openai-api-key`, `llm-openai-model` e `llm-metabot-provider`), conectando diretamente ao proxy soberano LiteLLM local (`http://litellm:4000/v1`) para exploração de dados e geração de SQL em linguagem natural.
     - **NocoDB ERP & Smart CRM (`install_nocodb.sh`):** Disparo automatizado de sincronização de schema e views analíticas do PostgreSQL via REST API (`/sources/{id}/sync`) e **auto-provisionamento de Views Visuais de CRM**:
       - 🎯 *Funil de Vendas (Kanban)* na tabela `leads` agrupado por `status_funil` com cards arrastáveis.
       - 💼 *Pipeline Comercial B2B (Kanban)* na tabela `propostas_comerciais` agrupado por `status_proposta`.
@@ -127,10 +128,9 @@
     - `nocodb`: Anexos de tabelas e arquivos de bancos relacionais.
   - **Resiliência Local e Cloud:** Suporte transparente tanto para o MinIO local (`STORAGE_PROVIDER=local`) quanto para S3 externo/cloud (`AWS_S3`, `Wasabi`, `Cloudflare R2`) sem regressão de código.
 
-- **[ADD] n8n AI Assistant Avançado sob Demanda (Code Sandbox & SearXNG Web Search):**
-  - **Eficiência de Recursos por Padrão:** Por padrão, a stack roda de forma ultraleve e econômica (`N8N_DEV_AI_ASSISTANT=n`), conectando o AI Assistant do n8n diretamente ao LiteLLM soberano sem overhead de containers extras.
+- **[ADD] n8n AI Assistant Avançado sob Demanda (LiteLLM & SearXNG Web Search):**
+  - **Eficiência e Estabilidade:** O AI Assistant do n8n opera de forma direta e sem overhead conectado ao LiteLLM soberano e ao SearXNG (`searxng/searxng`), garantindo geração rápida de fluxos e validação em tempo real.
   - **Modo Desenvolvedor / Integrações (`N8N_DEV_AI_ASSISTANT=s`):** Quando ativado pelo desenvolvedor no `.env`, o instalador desacoplado provisiona automaticamente:
-    - **`n8n-sandbox-api` (`ghcr.io/n8n-io/n8n-sandbox-service-api`):** Ambiente isolado para teste e validação de scripts gerados pela IA sem tocar no container principal.
     - **`SearXNG` (`searxng/searxng`):** Motor de busca headless auto-hospedado (com `formats: [html, json]`) para o assistente consultar schemas e documentações de APIs externas em tempo real.
 
 - **[ADD] Pipeline Soberano de RAG & Docling OCR (IBM Research):**
@@ -179,7 +179,7 @@
 - **[FIX] Listmonk Template Executivo:** Correção da constraint de `subject` obrigatório e substituição de `ON CONFLICT` por bloco transacional atômico no PostgreSQL.
 - **[FIX] Chatwoot Copiloto de IA:** Auto-ativação da integração OpenAI persistida diretamente no bootstrap com o LiteLLM soberano, eliminando bloqueios de chave na interface web.
 - **[FIX] MinIO S3 Idempotência de Buckets:** Alinhamento de sondas e criação garantida dos 7 buckets oficiais da stack com políticas de acesso público.
-- **[FIX] n8n AI Assistant Opcional:** Desativação por padrão do módulo `instance-ai` via `N8N_DISABLED_MODULES` para manter a interface limpa em produção, com ativação sob demanda (`N8N_DEV_AI_ASSISTANT=s`) para provisionamento automático de Sandbox e SearXNG.
+- **[FIX] n8n AI Assistant Opcional:** Desativação por padrão do módulo `instance-ai` via `N8N_DISABLED_MODULES` para manter a interface limpa em produção, com ativação sob demanda (`N8N_DEV_AI_ASSISTANT=s`) para provisionamento automático integrado ao LiteLLM e SearXNG.
 
 ---
 
