@@ -37,6 +37,7 @@ O **daemind.** é uma infraestrutura empresarial pronta para uso que centraliza 
   - [✉️ 5. E-mail Marketing, Campanhas e Atribuição Soberana](#-5-e-mail-marketing-campanhas-e-atribuição-soberana)
   - [🧠 6. Inteligência Artificial Corporativa \& RAG Soberano](#-6-inteligência-artificial-corporativa--rag-soberano)
   - [🔒 7. Blindagem de Dados, Segurança Bancária e Autocura](#-7-blindagem-de-dados-segurança-bancária-e-autocura)
+  - [📑 8. Catálogo Soberano de Contratos OpenAPI 3.0](#-8-catálogo-soberano-de-contratos-openapi-30)
 - [🛠️ Como funciona a implementação?](#️-como-funciona-a-implementação)
 - [📦 Matriz de Versões da Stack \& Imagens Docker (SRE BOM)](#-matriz-de-versões-da-stack--imagens-docker-sre-bom)
 - [🛡️ Engenharia de Resiliência \& SRE (Destaques da Arquitetura)](#️-engenharia-de-resiliência--sre-destaques-da-arquitetura)
@@ -124,6 +125,14 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 - **Soberania Absoluta**: Seus leads, contatos e faturamento nunca saem do seu servidor privado.
 - **Backup Diário Criptografado**: Cópia de segurança automática dos dados e bancos com criptografia militar.
 - **Disponibilidade 24/7**: Sistema projetado com tecnologia de tolerância a falhas e autocura imediata caso haja oscilações de conexão.
+
+### 📑 8. Catálogo Soberano de Contratos OpenAPI 3.0
+- **Governança Unificada de APIs ([`docs/OpenAPI/`](docs/OpenAPI/))**: A stack disponibiliza um catálogo centralizado com **74 plataformas e mais de 24.500 endpoints** mapeados no padrão **OpenAPI 3.0.3**, pronto para consumo por agentes de IA, n8n ou SDKs.
+- **Engine de Compilação & Extração Híbrida**: Os contratos são gerados através de um pipeline automatizado que combina a extração direta de especificações oficiais (Swagger/OpenAPI/Postman) com a varredura semântica de documentações técnicas, aplicando um algoritmo de *merge aditivo não-destrutivo* para capturar rotas recentes sem perder schemas canônicos.
+- **Injeção de Resiliência & Padrões RFC**: Todas as especificações recebem injeção padronizada de esquemas de autenticação (`BearerAuth`, `ApiKeyAuth`, `OAuth2`), limites de taxa (`x-ratelimit`), políticas de retentativa com backoff exponencial (`x-retry-policy`), tratamento uniforme de erros (`RFC 7807/9457`) e eventos assíncronos (`webhooks`).
+- **Organização Modular**:
+  - 📦 [`docs/OpenAPI/apps/`](docs/OpenAPI/apps/): Contratos das 14 aplicações locais da stack (`Chatwoot`, `Evolution API`, `LiteLLM`, `Metabase`, `MinIO`, `n8n`, `NocoDB`, `Shlink`, etc.).
+  - 🌐 [`docs/OpenAPI/services/`](docs/OpenAPI/services/): Contratos de 60 plataformas parceiras de E-Commerce, Marketplaces, Gateways de Pagamento, Logística e Delivery (`Shopify`, `VTEX`, `Bling`, `Tiny`, `Mercado Livre`, `Stripe`, `Asaas`, `Melhor Envio`, `iFood`, etc.).
 
 ---
 
@@ -308,6 +317,7 @@ Todas as mudanças relevantes entre versões estão documentadas em **[CHANGELOG
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| [`v2.1.0`](CHANGELOG.md#v210--2026-08-31--catálogo-soberano-de-especificações-openapi-30) | 2026-08-31 | **Marco 2.1:** Catálogo Soberano OpenAPI 3.0 em `docs/OpenAPI/` (74 plataformas e 24.500+ endpoints em `apps/` e `services/`) com governança e resiliência |
 | [`v2.0.0`](CHANGELOG.md#v200--2026-08-29--release-estável-consolidada) | 2026-08-29 | **Marco 2.0:** Data Warehouse Zero-ETL (27 Views), Hub de Ads, Módulo B2B & Serviços, Dashboards Metabase/NocoDB e Governança Noturna SRE |
 | [`v1.0.0`](CHANGELOG.md#v100--2026-08-18--desacoplamento-completo) | 2026-08-18 | Desacoplamento completo — wizard TUI/CLI, módulos independentes, guardrails SRE |
 | [`v0.5.0`](CHANGELOG.md#v050--2026-08--main-prova-de-conceito) | 2026-08-06 | Prova de conceito — stack monolítica funcional, instalador CLI simples |

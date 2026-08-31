@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## [v2.1.0] — 2026-08-31 — (CATÁLOGO SOBERANO DE ESPECIFICAÇÕES OPENAPI 3.0)
+
+> **Marco Arquitetural 2.1:** Consolidação e publicação do **Catálogo Central de Especificações OpenAPI 3.0** em `docs/OpenAPI/`, cobrindo 74 plataformas e mais de 24.500 endpoints estruturados com governança padronizada de segurança, resiliência, rate limits e contratos de webhooks.
+
+---
+
+### 📑 Catálogo de Contratos OpenAPI 3.0 (`docs/OpenAPI/`)
+
+- **[ADD] Categorização e Estrutura Modular:**
+  - **`docs/OpenAPI/apps/` (14 Aplicações da Stack Self-Hosted | 4.011 Endpoints):**
+    - Contratos soberanos para toda a infraestrutura interna da stack: `chatwoot`, `docling`, `evolution`, `listmonk`, `litellm`, `metabase`, `minio`, `n8n`, `nocodb`, `ollama`, `openwebui`, `postiz`, `searxng` e `shlink`.
+  - **`docs/OpenAPI/services/` (60 Serviços Externos & Parceiros | 20.566 Endpoints):**
+    - Contratos de E-Commerce, Marketplaces, Gateways de Pagamento/PIX, Logística/Fretes, Food Delivery, ERPs e Utilitários (Shopify, VTEX, Bling, Tiny, Mercado Livre, Stripe, Asaas, Pagar.me, Efí Bank, Melhor Envio, Jadlog, Loggi, iFood, Rappi, Hotmart, Kiwify, etc.).
+- **[ADD] Documentação Técnica & Catálogo Geral ([`docs/OpenAPI/README.md`](docs/OpenAPI/README.md)):**
+  - Catálogo completo com índice, metadados, URLs base e detalhamento dos padrões OpenAPI 3.0 aplicados.
+- **[CHG] Governança de Versionamento (`.gitignore`):**
+  - Ajuste nas regras de versionamento para rastrear e versionar os contratos JSON em `docs/OpenAPI/`.
+
+---
+
 ## [v2.0.0] — 2026-08-29 — (RELEASE ESTÁVEL CONSOLIDADA)
 
 > **Marco Arquitetural 2.0:** Transformação da stack em um **Sistema Operacional Autônomo para Negócios Digitais e Híbridos (Produtos + Serviços B2B)**. Inclui Data Warehouse Soberano Zero-ETL com 27 Views Analíticas, Hub Universal de Ads, Módulo de Serviços & MRR, Radar Cross-Sell/Upsell 360°, Blindagem de Concorrência SRE e Auto-Provisionamento de Dashboards Executivos no Metabase e NocoDB.
