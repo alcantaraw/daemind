@@ -1,0 +1,2096 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Kiwify Infoprodutos & Checkout API",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack kiwify.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.kiwify.com.br"
+    }
+  ],
+  "paths": {
+    "/api/v1/convers-o-do-facebook": {
+      "get": {
+        "tags": [
+          "Conversão Do Facebook"
+        ],
+        "summary": "Consultar Conversão Do Facebook",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversão Do Facebook"
+        ],
+        "summary": "Criar/Atualizar Conversão Do Facebook",
+        "description": "Operação de mutação para Conversão Do Facebook.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/convers-es": {
+      "get": {
+        "tags": [
+          "Conversões"
+        ],
+        "summary": "Consultar Conversões",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversões"
+        ],
+        "summary": "Criar/Atualizar Conversões",
+        "description": "Operação de mutação para Conversões.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/convers-o-no-facebook": {
+      "get": {
+        "tags": [
+          "Conversão No Facebook"
+        ],
+        "summary": "Consultar Conversão No Facebook",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversão No Facebook"
+        ],
+        "summary": "Criar/Atualizar Conversão No Facebook",
+        "description": "Operação de mutação para Conversão No Facebook.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/convers-o-na-kiwify": {
+      "get": {
+        "tags": [
+          "Conversão Na Kiwify"
+        ],
+        "summary": "Consultar Conversão Na Kiwify",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversão Na Kiwify"
+        ],
+        "summary": "Criar/Atualizar Conversão Na Kiwify",
+        "description": "Operação de mutação para Conversão Na Kiwify.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/convers-o-n-o-obrigat-ria": {
+      "get": {
+        "tags": [
+          "Conversão Não É Obrigatória"
+        ],
+        "summary": "Consultar Conversão Não É Obrigatória",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversão Não É Obrigatória"
+        ],
+        "summary": "Criar/Atualizar Conversão Não É Obrigatória",
+        "description": "Operação de mutação para Conversão Não É Obrigatória.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/convers-o": {
+      "get": {
+        "tags": [
+          "Conversão"
+        ],
+        "summary": "Consultar Conversão",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversão"
+        ],
+        "summary": "Criar/Atualizar Conversão",
+        "description": "Operação de mutação para Conversão.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/convers-o-do-facebook-tamb-m": {
+      "get": {
+        "tags": [
+          "Conversão Do Facebook Também"
+        ],
+        "summary": "Consultar Conversão Do Facebook Também",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-o-pixel-do-facebook-1rb2xtr.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversão Do Facebook Também"
+        ],
+        "summary": "Criar/Atualizar Conversão Do Facebook Também",
+        "description": "Operação de mutação para Conversão Do Facebook Também.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/convers-o-do-pinterest-tamb-m": {
+      "get": {
+        "tags": [
+          "Conversão Do Pinterest Também"
+        ],
+        "summary": "Consultar Conversão Do Pinterest Também",
+        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-o-pixel-do-pinterest-1347mkq.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Conversão Do Pinterest Também"
+        ],
+        "summary": "Criar/Atualizar Conversão Do Pinterest Também",
+        "description": "Operação de mutação para Conversão Do Pinterest Também.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /oauth/token",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /oauth/token",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account-details": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /account-details",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /products",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /products/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /sales",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /sales/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales/{id}/refund": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /sales/{id}/refund",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /stats",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/balance": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /balance",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/balance/{legal_entity_id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /balance/{legal_entity_id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "legal_entity_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payouts": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /payouts",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /payouts",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payouts/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /payouts/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/affiliates": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /affiliates",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/affiliates/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /affiliates/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "PUT /affiliates/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /webhooks",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "PUT /webhooks/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "DELETE /webhooks/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{product_id}/participants": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /events/{product_id}/participants",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/docs.json": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /docs.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /openapi.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/banking/openapi.json": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /banking/openapi.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-reference/banking/openapi.json": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /api-reference/banking/openapi.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-reference/banking/openapi.pt.json": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /api-reference/banking/openapi.pt.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/account-details": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/account-details",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/list": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/list",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/create": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/create",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/single": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/single",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/edit": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/edit",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/delete": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/delete",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chat/completions": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /api/v1/chat/completions",
+        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payouts": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/payouts",
+        "description": "Endpoint extraído da documentação (api-reference_affiliates_edit.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/affiliates/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/affiliates/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_affiliates_single.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/oauth/token": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/oauth/token",
+        "description": "Endpoint extraído da documentação (api-reference_auth_oauth.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/tokenExperimentarEndpoint": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /oauth/tokenExperimentarEndpoint",
+        "description": "Endpoint extraído da documentação (api-reference_auth_oauth.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events/{product_id}/participants": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/events/{product_id}/participants",
+        "description": "Endpoint extraído da documentação (api-reference_events_list.md).",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/balance": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/balance",
+        "description": "Endpoint extraído da documentação (api-reference_finance_balance_list.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/products/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_products_single.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/sales",
+        "description": "Endpoint extraído da documentação (api-reference_sales_list.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/{id}/refund": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/sales/{id}/refund",
+        "description": "Endpoint extraído da documentação (api-reference_sales_refund.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/sales/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_sales_single.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stats": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/stats",
+        "description": "Endpoint extraído da documentação (api-reference_sales_stats.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/create.mdx": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/create.mdx",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_create.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooks/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/webhooks/{id}",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_delete.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/{id}ExperimentarcURL": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/{id}ExperimentarcURL",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_delete.md).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/delete.mdx": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/delete.mdx",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_delete.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/edit.mdx": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/edit.mdx",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_edit.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooks": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/webhooks",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_list.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/list.mdx": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/list.mdx",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_list.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/single.mdx": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /webhooks/single.mdx",
+        "description": "Endpoint extraído da documentação (api-reference_webhooks_single.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-reference/openapi.json": {
+      "post": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "POST /api-reference/openapi.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (llms_txt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/um-curso-da-rea-de-membros": {
+      "get": {
+        "tags": [
+          "Um Curso Da Área De Membros"
+        ],
+        "summary": "Consultar Um Curso Da Área De Membros",
+        "description": "Recurso identificado na documentação (members-area_key-concepts_theme_sections.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Um Curso Da Área De Membros"
+        ],
+        "summary": "Criar/Atualizar Um Curso Da Área De Membros",
+        "description": "Operação de mutação para Um Curso Da Área De Membros.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/balance/{legal_entity_id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/balance/{legal_entity_id}",
+        "description": "Endpoint extraído da documentação (network_json_127_api-reference_finance_balance_single.json).",
+        "parameters": [
+          {
+            "name": "legal_entity_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payouts/{id}": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/payouts/{id}",
+        "description": "Endpoint extraído da documentação (network_json_155_api-reference_finance_payouts_single.json).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/affiliates": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/affiliates",
+        "description": "Endpoint extraído da documentação (network_json_182_api-reference_affiliates_list.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/liquid": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /api/liquid",
+        "description": "Endpoint extraído da documentação (network_json_24_members-area_reference_liquid-language.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products": {
+      "get": {
+        "tags": [
+          "Kiwify"
+        ],
+        "summary": "GET /v1/products",
+        "description": "Endpoint extraído da documentação (network_json_47_api-reference_products_list.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via Token Bearer / JWT para Kiwify Infoprodutos & Checkout API"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Chave de API (API Key / Token) para Kiwify Infoprodutos & Checkout API"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Fluxo de autorização OAuth 2.0 para Kiwify Infoprodutos & Checkout API",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.kiwify.com.br/oauth/authorize",
+            "tokenUrl": "https://api.kiwify.com.br/oauth/token",
+            "scopes": {
+              "read": "Leitura de recursos em Kiwify Infoprodutos & Checkout API",
+              "write": "Gravação e mutação em Kiwify Infoprodutos & Checkout API"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "O campo email é obrigatório."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "x-ratelimit": {
+    "description": "Políticas de Limites de Requisições e Throttling para a stack kiwify.",
+    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
+    "headers": [
+      "X-RateLimit-Limit",
+      "X-RateLimit-Remaining",
+      "X-RateLimit-Reset"
+    ]
+  },
+  "x-retry-policy": {
+    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack kiwify.",
+    "max_retries": 3,
+    "retry_on_status": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoff_strategy": "exponential",
+    "initial_delay_ms": 1000,
+    "max_delay_ms": 10000,
+    "jitter": true,
+    "idempotency_header": "X-Idempotency-Key"
+  },
+  "webhooks": {
+    "kiwify_event_notification": {
+      "post": {
+        "summary": "Notificação de Eventos em Tempo Real (Kiwify Infoprodutos & Checkout API)",
+        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Kiwify Infoprodutos & Checkout API.",
+        "requestBody": {
+          "description": "Payload JSON com dados do evento disparado.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.created"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Dados da entidade mutada."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processado e confirmado com sucesso."
+          }
+        }
+      }
+    }
+  }
+}

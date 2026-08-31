@@ -1,0 +1,7124 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Efí Bank (Gerencianet) PIX & Boleto Open Finance API",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack efi.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://pix.sejaefi.com.br"
+    }
+  ],
+  "paths": {
+    "/v1/conta-simplificadaRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/conta-simplificadaRequer",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_cadastro-simplificado.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/conta-simplificada/:idContaSimplificada/credenciaisRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/conta-simplificada/:idContaSimplificada/credenciaisRequer",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_cadastro-simplificado.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/conta-simplificada/:idContaSimplificada/certificadoRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/conta-simplificada/:idContaSimplificada/certificadoRequer",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_cadastro-simplificado.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cadastro": {
+      "get": {
+        "tags": [
+          "Cadastro"
+        ],
+        "summary": "Consultar Cadastro",
+        "description": "Recurso identificado na documentação (docs_api-abertura-de-contas_cadastro-simplificado.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cadastro"
+        ],
+        "summary": "Criar/Atualizar Cadastro",
+        "description": "Operação de mutação para Cadastro.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/oauth/tokene": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/oauth/tokene",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/oauth/token": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/oauth/token",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/abertura-de-contas": {
+      "get": {
+        "tags": [
+          "Abertura De Contas"
+        ],
+        "summary": "Consultar Abertura De Contas",
+        "description": "Recurso identificado na documentação (docs_api-abertura-de-contas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Abertura De Contas"
+        ],
+        "summary": "Criar/Atualizar Abertura De Contas",
+        "description": "Operação de mutação para Abertura De Contas.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data.json": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /data.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/var/www/webhook/index.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /var/www/webhook/index.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dados.json": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /dados.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/certificate-chain-prod.crtHomologa": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /webhooks/certificate-chain-prod.crtHomologa",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/certificate-chain-homolog.crt": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /webhooks/certificate-chain-homolog.crt",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/pix": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /webhook/pix",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/index.php": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /webhook/index.php",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhookRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/webhookRequer",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhook/:identificadorWebhookRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/webhook/:identificadorWebhookRequer",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooksRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/webhooksRequer",
+        "description": "Endpoint extraído da documentação (docs_api-abertura-de-contas_webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/planRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/planRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plansRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plansRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:id/subscription/one-step": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:id/subscription/one-step",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:id/subscription/one-stepAtributos": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:id/subscription/one-stepAtributos",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:id/subscription": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:id/subscription",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:id/subscriptionRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:id/subscriptionRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:id/pay": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:id/pay",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:id/payRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:id/payRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/retryRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/retryRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charges.": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charges.",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chargesRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/chargesRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/f8f5ff18cbdf4ede844189941892238d5214000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/f8f5ff18cbdf4ede844189941892238d5214000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/431a57a6c31d41b2b17fb3f06861d89e1204000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/431a57a6c31d41b2b17fb3f06861d89e1204000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/1134216cf0864df5baa11a303afa868c225204000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/1134216cf0864df5baa11a303afa868c225204000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:id/subscription/one-step/link.Estrutura": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:id/subscription/one-step/link.Estrutura",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:id/subscription/one-step/link": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:id/subscription/one-step/link",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/:id/subscription/one-step/linkAtributos": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan/:id/subscription/one-step/linkAtributos",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/metadata": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/metadata",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:id/metadataRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:id/metadataRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:idcom": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:idcom",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:id/cancelda": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:id/cancelda",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:id/cancelRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:id/cancelRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:id/history.": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:id/history.",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/:id/historyRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/subscription/:id/historyRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/subscription/resend.POST/v1/charge/:id/subscription/resendRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/subscription/resend.POST/v1/charge/:id/subscription/resendRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_assinatura.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/one-stepRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/one-stepRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/0000000000000000000000000000GERENCIANET": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/0000000000000000000000000000GERENCIANET",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge.Estrutura": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge.Estrutura",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chargeRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/chargeRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/pay.Estrutura": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/pay.Estrutura",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/payRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/payRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id.GET/v1/charge/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id.GET/v1/charge/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/46796ab467b84cab3619437c11d0b0f5204000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/46796ab467b84cab3619437c11d0b0f5204000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/3dc71188a0343a1b5d279287040da2b5204000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/3dc71188a0343a1b5d279287040da2b5204000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/1771126b4703408db94f2115495d0ffb5204000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/1771126b4703408db94f2115495d0ffb5204000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/metadata.Casos": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/metadata.Casos",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/metadataRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/metadataRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/billet.Importante": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/billet.Importante",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/billetRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/billetRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/cancel.PUT/v1/charge/:id/cancelRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/cancel.PUT/v1/charge/:id/cancelRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/billet/resend.POST/v1/charge/:id/billet/resendRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/billet/resend.POST/v1/charge/:id/billet/resendRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/history.POST/v1/charge/:id/historyRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/history.POST/v1/charge/:id/historyRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/balance-sheet.NOTA": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/balance-sheet.NOTA",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/balance-sheetRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/balance-sheetRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/settle.PUT/v1/charge/:id/settleRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/settle.PUT/v1/charge/:id/settleRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_boleto.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnetcom": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnetcom",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnetRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnetRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id.GET/v1/carnet/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id.GET/v1/carnet/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/188815a85a354826832b0635d9a82fb8520410053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/188815a85a354826832b0635d9a82fb8520410053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/c0af53aa36604a6f821c8e334c2a47755204000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/c0af53aa36604a6f821c8e334c2a47755204000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/c54b102ae9764eeeacfdcba16b0222865204000453039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/c54b102ae9764eeeacfdcba16b0222865204000453039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/metadata.Casos": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/metadata.Casos",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/metadataRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/metadataRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcel/:parcelonde:id": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcel/:parcelonde:id",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcel/:parcelRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcel/:parcelRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcelsonde:id": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcelsonde:id",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcelsRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcelsRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/cancel.PUT/v1/carnet/:id/cancelRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/cancel.PUT/v1/carnet/:id/cancelRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcel/:parcel/cancel": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcel/:parcel/cancel",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcel/:parcel/cancelRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcel/:parcel/cancelRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/resend.POST/v1/carnet/:id/resendRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/resend.POST/v1/carnet/:id/resendRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/resend.": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/resend.",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcel/:parcel/resendRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcel/:parcel/resendRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/history.POST/v1/carnet/:id/historyRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/history.POST/v1/carnet/:id/historyRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/settle.Aten": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/settle.Aten",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/settleRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/settleRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcel/:parcel/settle": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcel/:parcel/settle",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet/:id/parcel/:parcel/settleRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet/:id/parcel/:parcel/settleRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_carne.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/pay": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/pay",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/card/:id/refundRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/card/:id/refundRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/cancel": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/cancel",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge:id/cancelRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge:id/cancelRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/historyRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/historyRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/installmentsRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/installmentsRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_cartao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/authorize": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /v1/authorize",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/authorize",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/authorizee": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/authorizee",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cobran-as": {
+      "get": {
+        "tags": [
+          "Cobranças"
+        ],
+        "summary": "Consultar Cobranças",
+        "description": "Recurso identificado na documentação (docs_api-cobrancas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cobranças"
+        ],
+        "summary": "Criar/Atualizar Cobranças",
+        "description": "Operação de mutação para Cobranças.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/one-step15.000POST/v1/charge15.000GET/v1/charges15.000GET/v1/charge/:id15.000PUT/v1/charge/:id/metadata15.000PUT/v1/charge/:id/billet15.000PUT/v1/charge/:id/cancel15.000POST/v1/charge/:id/pay15.000POST/v1/charge/:id/billet/resend15.000POST/v1/charge/:id/history15.000POST/v1/charge/:id/link15.000PUT/v1/charge/:id/link15.000POST/v1/charge/:id/balance-sheet15.000PUT/v1/charge/:id/settle15.000GET/v1/installments15.000": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/one-step15.000POST/v1/charge15.000GET/v1/charges15.000GET/v1/charge/:id15.000PUT/v1/charge/:id/metadata15.000PUT/v1/charge/:id/billet15.000PUT/v1/charge/:id/cancel15.000POST/v1/charge/:id/pay15.000POST/v1/charge/:id/billet/resend15.000POST/v1/charge/:id/history15.000POST/v1/charge/:id/link15.000PUT/v1/charge/:id/link15.000POST/v1/charge/:id/balance-sheet15.000PUT/v1/charge/:id/settle15.000GET/v1/installments15.000",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carnet15.000GET/v1/carnet/:id15.000PUT/v1/carnet/:id/metadata15.000PUT/v1/carnet/:id/parcel/:parcel15.000PUT/v1/carnet/:id/cancel15.000PUT/v1/carnet/:id/parcel/:parcel/cancel15.000POST/v1/carnet/:id/resend15.000POST/v1/carnet/:id/parcel/:parcel/resend15.000POST/v1/carnet/:id/history15.000PUT/v1/carnet/:id/parcel/:parcel/settle15.000PUT/v1/carnet/:id/settle15.000": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/carnet15.000GET/v1/carnet/:id15.000PUT/v1/carnet/:id/metadata15.000PUT/v1/carnet/:id/parcel/:parcel15.000PUT/v1/carnet/:id/cancel15.000PUT/v1/carnet/:id/parcel/:parcel/cancel15.000POST/v1/carnet/:id/resend15.000POST/v1/carnet/:id/parcel/:parcel/resend15.000POST/v1/carnet/:id/history15.000PUT/v1/carnet/:id/parcel/:parcel/settle15.000PUT/v1/carnet/:id/settle15.000",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan15.000GET/v1/plans15.000PUT/v1/plan/:id15.000DELETE/v1/plan/:id15.000POST/v1/plan/:id/subscription/one-step15.000POST/v1/plan/:id/subscription/one-step/link15.000POST/v1/plan/:id/subscription15.000GET/v1/subscription/:id15.000PUT/v1/subscription/:id/cancel15.000PUT/v1/subscription/:id/metadata15.000POST/v1/subscription/:id/pay15.000POST/v1/subscription/:id/history15.000": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/plan15.000GET/v1/plans15.000PUT/v1/plan/:id15.000DELETE/v1/plan/:id15.000POST/v1/plan/:id/subscription/one-step15.000POST/v1/plan/:id/subscription/one-step/link15.000POST/v1/plan/:id/subscription15.000GET/v1/subscription/:id15.000PUT/v1/subscription/:id/cancel15.000PUT/v1/subscription/:id/metadata15.000POST/v1/subscription/:id/pay15.000POST/v1/subscription/:id/history15.000",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notification/:token30.000": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/notification/:token30.000",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/one-step/link": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/one-step/link",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/linkpara": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/linkpara",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/link": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/link",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/linkImportante": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/linkImportante",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/linkRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/linkRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/link/resend.POST/v1/charge/:id/link/resendRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/link/resend.POST/v1/charge/:id/link/resendRequer",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/:token": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /notification/:token",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_notificacoes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/../../vendor/autoload.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /../../vendor/autoload.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_api-cobrancas_notificacoes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/charge/:id/metadata.": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/charge/:id/metadata.",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_notificacoes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notification/:tokenRetorna": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/notification/:tokenRetorna",
+        "description": "Endpoint extraído da documentação (docs_api-cobrancas_notificacoes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/url-de-notifica-o": {
+      "get": {
+        "tags": [
+          "Url De Notificação"
+        ],
+        "summary": "Consultar Url De Notificação",
+        "description": "Recurso identificado na documentação (docs_api-cobrancas_notificacoes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Url De Notificação"
+        ],
+        "summary": "Criar/Atualizar Url De Notificação",
+        "description": "Operação de mutação para Url De Notificação.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/configRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/configRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_configuracoes-de-aplicacao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-agendados/pixRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-agendados/pixRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-agendados.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-agendados/pix": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-agendados/pix",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-agendados.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-agendados/pix/:identificadorPagamento/cancelarRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-agendados/pix/:identificadorPagamento/cancelarRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-agendados.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-agendados/pix/:identificadorPagamento/devolverRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-agendados/pix/:identificadorPagamento/devolverRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-agendados.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-automaticos/adesaoRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-automaticos/adesaoRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-automaticos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-automaticos/adesao": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-automaticos/adesao",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-automaticos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-automaticos/pixRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-automaticos/pixRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-automaticos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos/pixRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos/pixRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-imediatos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos/pix": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos/pix",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-imediatos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos/pix/:identificadorPagamento/devolverRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos/pix/:identificadorPagamento/devolverRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-imediatos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-biometria/vinculosRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-biometria/vinculosRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-por-biometria.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-biometria/pixRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-biometria/pixRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-por-biometria.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-biometria/pix": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-biometria/pix",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-por-biometria.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-recorrentes/pixRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-recorrentes/pixRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-recorrentes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-recorrentes/pix": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-recorrentes/pix",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-recorrentes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-recorrentes/pix/:identificadorPagamento/cancelarRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-recorrentes/pix/:identificadorPagamento/cancelarRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-recorrentes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-recorrentes/pix/:identificadorPagamento/devolverRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-recorrentes/pix/:identificadorPagamento/devolverRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-recorrentes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/pagamentos-recorrentes/pix/:identificadorPagamento/substituir/:endToEndIdRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/pagamentos-recorrentes/pix/:identificadorPagamento/substituir/:endToEndIdRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_pagamentos-recorrentes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/participantesRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/participantesRequer",
+        "description": "Endpoint extraído da documentação (docs_api-open-finance_participantes.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/:txidRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/:txidRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/c24c8d65fd024836bc7bac75d5c4002f5204000053039865802BR5905EFISA6008SAOPAULO62070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/c24c8d65fd024836bc7bac75d5c4002f5204000053039865802BR5905EFISA6008SAOPAULO62070503",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/CobVOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/CobVOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/AcessoNegado": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/AcessoNegado",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/NaoEncontrado": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/NaoEncontrado",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/ServicoIndisponivel": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/ServicoIndisponivel",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/:txid": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/:txid",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "PUT /v2/cobv/:txid",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobvRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobvRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/ba942520ab0746cfae2858d9afe485fd0": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/ba942520ab0746cfae2858d9afe485fd0",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/68ae6f11868040ce980d6803ff6d904d": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/68ae6f11868040ce980d6803ff6d904d",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-com-vencimento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-imediatas.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/9d36b84fc70b478fb95c12729b90ca25": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/9d36b84fc70b478fb95c12729b90ca25",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-imediatas.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/41e0badf811a4ce6ad8a80b306821fce5204000053000065802BR5905EFISA6008SAOPAULO60070503": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/41e0badf811a4ce6ad8a80b306821fce5204000053000065802BR5905EFISA6008SAOPAULO60070503",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-imediatas.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cob/:txidRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cob/:txidRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-imediatas.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cob/:txid": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cob/:txid",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-imediatas.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "PUT /v2/cob/:txid",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cob": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cob",
+        "description": "Endpoint extraído da documentação (docs_api-pix_cobrancas-imediatas.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /v2/cob",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /oauth/token",
+        "description": "Endpoint extraído da documentação (docs_api-pix_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /oauth/token",
+        "description": "Endpoint extraído da documentação (docs_api-pix_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/tokene": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /oauth/tokene",
+        "description": "Endpoint extraído da documentação (docs_api-pix_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/evpRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/evpRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/evp/:chaveRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/evp/:chaveRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/saldo/Requer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/saldo/Requer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/saldo": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/saldo",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/configRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/configRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/comprovantesRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/comprovantesRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/chaves/baldeRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/chaves/baldeRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/BaldeFichasConsultaInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/BaldeFichasConsultaInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/BaldeFichasErroInterno": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/BaldeFichasErroInterno",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/infracoesRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/infracoesRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/infracoes": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/infracoes",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/InfracoesConsultaInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/InfracoesConsultaInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/InfracaoErroInterno": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/InfracaoErroInterno",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/infracoes/:idInfracao/defesaRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/infracoes/:idInfracao/defesaRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/InfracaoNaoEncontrada": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/InfracaoNaoEncontrada",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/InfracaoOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/InfracaoOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/relatorios/extrato-conciliacaoRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/relatorios/extrato-conciliacaoRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/ExtratoConciliacaoConsultaInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/ExtratoConciliacaoConsultaInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/ErroInterno": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/ErroInterno",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/relatorios/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/relatorios/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/NaoEncontrado": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/NaoEncontrado",
+        "description": "Endpoint extraído da documentação (docs_api-pix_endpoints-exclusivos-efi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/enviados/id-envio/:idEnviopara": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/enviados/id-envio/:idEnviopara",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/gn/pix/:idEnvio": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v3/gn/pix/:idEnvio",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/:idEnvion": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/:idEnvion",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/gn/pix/:idEnvioRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v3/gn/pix/:idEnvioRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/:idEnvio/mesma-titularidadeRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/:idEnvio/mesma-titularidadeRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/enviados/:e2eIdRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/enviados/:e2eIdRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/PixEnviadoNaoEncontrado": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/PixEnviadoNaoEncontrado",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/enviados/id-envio/:idEnvioRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/enviados/id-envio/:idEnvioRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/enviadosRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/enviadosRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/enviados": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/enviados",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/:idEnvio/qrcodeRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/:idEnvio/qrcodeRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/QrcodeOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/QrcodeOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/QrcodeErroInterno": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/QrcodeErroInterno",
+        "description": "Endpoint extraído da documentação (docs_api-pix_envio-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/pix/:e2eIdRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/pix/:e2eIdRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_gestao-de-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/pix/:e2eId": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/pix/:e2eId",
+        "description": "Endpoint extraído da documentação (docs_api-pix_gestao-de-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/pixRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/pixRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_gestao-de-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/pix": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/pix",
+        "description": "Endpoint extraído da documentação (docs_api-pix_gestao-de-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/pix/:e2eId/devolucao/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/pix/:e2eId/devolucao/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_gestao-de-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/pix/:e2eId/devolucao/:id": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/pix/:e2eId/devolucao/:id",
+        "description": "Endpoint extraído da documentação (docs_api-pix_gestao-de-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cob500PUT/v2/cob/:txid500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cob500PUT/v2/cob/:txid500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/:txid500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/:txid500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/rec500POST/v2/solicrec500PUT/v2/cobr/:txid500POST/v2/cobr500POST/v2/cobr/:txid/retentativa/:data500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/rec500POST/v2/solicrec500PUT/v2/cobr/:txid500POST/v2/cobr500POST/v2/cobr/:txid/retentativa/:data500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/:idEnvio500POST/v2/gn/qrcodes/detalhar500PUT/v2/gn/pix/:idEnvio/qrcode500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/:idEnvio500POST/v2/gn/qrcodes/detalhar500PUT/v2/gn/pix/:idEnvio/qrcode500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/pix/:e2eid/devolucao/:id500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/pix/:e2eid/devolucao/:id500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/loc500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/loc500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/lotecobv/:id500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/lotecobv/:id500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/config500PUT/v2/gn/split/config/:id500PUT/v2/gn/split/cob/:txid/vinculo/:splitConfigId500PUT/v2/gn/split/cobv/:txid/vinculo/:splitConfigId500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/config500PUT/v2/gn/split/config/:id500PUT/v2/gn/split/cob/:txid/vinculo/:splitConfigId500PUT/v2/gn/split/cobv/:txid/vinculo/:splitConfigId500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/webhook/:chave500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/webhook/:chave500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/evp500PUT/v2/gn/config500POST/v2/gn/infracoes/:idInfracao/defesa500POST/v2/gn/relatorios/extrato-conciliacao500": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/evp500PUT/v2/gn/config500POST/v2/gn/infracoes/:idInfracao/defesa500POST/v2/gn/relatorios/extrato-conciliacao500",
+        "description": "Endpoint extraído da documentação (docs_api-pix_limites-de-consumo.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/locRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/locRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/7796e273b8e447c2b2c0ac2c58fe1a13": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/7796e273b8e447c2b2c0ac2c58fe1a13",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/loc": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/loc",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/05a9c9f346294ea1be67fb3dbac0fb9c": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/05a9c9f346294ea1be67fb3dbac0fb9c",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/ba942526a50746cfae28e8d9af89afd0": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/ba942526a50746cfae28e8d9af89afd0",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/de2fe49560c64a5fb70aa8249853279f": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/de2fe49560c64a5fb70aa8249853279f",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/loc/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/loc/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/2353c790eefb11eaadc10242ac120002": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/2353c790eefb11eaadc10242ac120002",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/loc/:id/txidRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/loc/:id/txidRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/a8534e273ecb47d3ac30613104544466": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/a8534e273ecb47d3ac30613104544466",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/locrecRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/locrecRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/rec/2353c790eefb11eaadc10242ac120002": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/rec/2353c790eefb11eaadc10242ac120002",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/locrec": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/locrec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /v2/locrec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/locrec/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/locrec/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/locrec/:id/idRecRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/locrec/:id/idRecRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/loc/:id/qrcodeRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/loc/:id/qrcodeRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/loc/:id/qrcode": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/loc/:id/qrcode",
+        "description": "Endpoint extraído da documentação (docs_api-pix_payload-locations.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/rec": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /v2/rec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/rec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/solicrec": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /v2/solicrec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/solicrec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobr/:txid": {
+      "put": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "PUT /v2/cobr/:txid",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobr/:txid",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobr": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /v2/cobr",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobr",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/rec/:idRec": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/rec/:idRec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/recRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/recRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/RecOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/RecOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/rec/:idRecRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/rec/:idRecRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/rec/2353c790eefb11eaadc10242ac120002630462C9": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/rec/2353c790eefb11eaadc10242ac120002630462C9",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/solicrecRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/solicrecRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/SolicRecOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/SolicRecOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/solicrec/:idSolicRecRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/solicrec/:idSolicRecRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobr/:txidRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobr/:txidRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/CobROperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/CobROperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobrRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobrRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobr/:txid/retentativa/:dataRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobr/:txid/retentativa/:dataRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_pix-automatico.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/configRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/configRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/SplitConfigOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/SplitConfigOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/config/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/config/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/config/:id": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/config/:id",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/SplitConfigNaoEncontrado": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/SplitConfigNaoEncontrado",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/cob/:txid/vinculo/:splitConfigIdRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/cob/:txid/vinculo/:splitConfigIdRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/SplitOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/SplitOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/SplitNaoEncontrado": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/SplitNaoEncontrado",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/SplitErroInterno": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/SplitErroInterno",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/cob/:txidRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/cob/:txidRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/709c783e00ee4cc59f753435e1c492b1": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/709c783e00ee4cc59f753435e1c492b1",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/CobrancaSplitNaoEncontrada": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/CobrancaSplitNaoEncontrada",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/cob/:txid/vinculoRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/cob/:txid/vinculoRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/cobv/:txid/vinculo/:splitConfigIdRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/cobv/:txid/vinculo/:splitConfigIdRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/cobv/:txidRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/cobv/:txidRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/cobv/85fa1eb7e430489087afbafb718e8727": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/cobv/85fa1eb7e430489087afbafb718e8727",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/ErroInterno": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/ErroInterno",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/pix/:e2eid/devolucao/:idRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/pix/:e2eid/devolucao/:idRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/SplitDevolucaoOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/SplitDevolucaoOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/split/cobv/:txid/vinculoRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/split/cobv/:txid/vinculoRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_split-de-pagamento-pix.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/webhook/:chaveRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/webhook/:chaveRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/webhookRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/webhookRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/webhook": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/webhook",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/webhookrecRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/webhookrecRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/webhookrec": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/webhookrec",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/WebhookOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/WebhookOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/webhookcobrRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/webhookcobrRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/webhookcobr": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/webhookcobr",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/gn/webhook/reenviarRequer": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v2/gn/webhook/reenviarRequer",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/Desconhecido": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/Desconhecido",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/WebhooksOperacaoInvalida": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/WebhooksOperacaoInvalida",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/error/WebhooksErroInterno": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /api/v2/error/WebhooksErroInterno",
+        "description": "Endpoint extraído da documentação (docs_api-pix_webhooks.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/integra-o-ef-para-bubble": {
+      "get": {
+        "tags": [
+          "Integração Efí Para Bubble"
+        ],
+        "summary": "Consultar Integração Efí Para Bubble",
+        "description": "Recurso identificado na documentação (docs_modulos_Bubble.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Integração Efí Para Bubble"
+        ],
+        "summary": "Criar/Atualizar Integração Efí Para Bubble",
+        "description": "Operação de mutação para Integração Efí Para Bubble.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/emiss-es": {
+      "get": {
+        "tags": [
+          "Emissões"
+        ],
+        "summary": "Consultar Emissões",
+        "description": "Recurso identificado na documentação (docs_modulos_Bubble.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Emissões"
+        ],
+        "summary": "Criar/Atualizar Emissões",
+        "description": "Operação de mutação para Emissões.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp.json": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /mcp.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_modulos_mcp.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/integra-o-ef-para-opencart": {
+      "get": {
+        "tags": [
+          "Integração Efí  Para Opencart"
+        ],
+        "summary": "Consultar Integração Efí  Para Opencart",
+        "description": "Recurso identificado na documentação (docs_modulos_OpenCart.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Integração Efí  Para Opencart"
+        ],
+        "summary": "Criar/Atualizar Integração Efí  Para Opencart",
+        "description": "Operação de mutação para Integração Efí  Para Opencart.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/integra-o-fornecido-pela": {
+      "get": {
+        "tags": [
+          "Integração Fornecido Pela"
+        ],
+        "summary": "Consultar Integração Fornecido Pela",
+        "description": "Recurso identificado na documentação (docs_modulos_PrestaShop.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Integração Fornecido Pela"
+        ],
+        "summary": "Criar/Atualizar Integração Fornecido Pela",
+        "description": "Operação de mutação para Integração Fornecido Pela.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gateways/efi.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /gateways/efi.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_modulos_WHMCS.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gateways/callback/efi.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /gateways/callback/efi.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_modulos_WHMCS.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hooks/efi.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /hooks/efi.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_modulos_WHMCS.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/efi.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /efi.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_modulos_WHMCS.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/android": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/android",
+        "description": "Endpoint extraído da documentação (docs_sdk_android.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/delphi": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/delphi",
+        "description": "Endpoint extraído da documentação (docs_sdk_delphi.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/credentials.json": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /credentials.json",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_sdk_dotnet-core.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/dotnet-core": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/dotnet-core",
+        "description": "Endpoint extraído da documentação (docs_sdk_dotnet-core.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/flutter": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/flutter",
+        "description": "Endpoint extraído da documentação (docs_sdk_flutter.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/go": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/go",
+        "description": "Endpoint extraído da documentação (docs_sdk_go.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/introducao": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/introducao",
+        "description": "Endpoint extraído da documentação (docs_sdk_introducao.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/java": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/java",
+        "description": "Endpoint extraído da documentação (docs_sdk_java.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/node": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/node",
+        "description": "Endpoint extraído da documentação (docs_sdk_node.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/examples/pix/cob/pixCreateCharge.phpou/examples/charges/billet/createOneStepBillet.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /examples/pix/cob/pixCreateCharge.phpou/examples/charges/billet/createOneStepBillet.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_sdk_php.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/php": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/php",
+        "description": "Endpoint extraído da documentação (docs_sdk_php.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/python": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/python",
+        "description": "Endpoint extraído da documentação (docs_sdk_python.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/ruby": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/ruby",
+        "description": "Endpoint extraído da documentação (docs_sdk_ruby.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/type-script": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/type-script",
+        "description": "Endpoint extraído da documentação (docs_sdk_type-script.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sdk/type": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /sdk/type",
+        "description": "Endpoint extraído da documentação (docs_sdk_type.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/oauth/tokenand": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/oauth/tokenand",
+        "description": "Endpoint extraído da documentação (en_docs_api-abertura-de-contas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/authorizeroute": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /v1/authorizeroute",
+        "description": "Endpoint extraído da documentação (en_docs_api-cobrancas_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/tokenand": {
+      "get": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "GET /oauth/tokenand",
+        "description": "Endpoint extraído da documentação (en_docs_api-pix_credenciais.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/examples/pix/cob/pixCreateCharge.phpor/examples/charges/billet/createOneStepBillet.php": {
+      "post": {
+        "tags": [
+          "Efi"
+        ],
+        "summary": "POST /examples/pix/cob/pixCreateCharge.phpor/examples/charges/billet/createOneStepBillet.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (en_docs_sdk_php.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via Token Bearer / JWT para Efí Bank (Gerencianet) PIX & Boleto Open Finance API"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Chave de API (API Key / Token) para Efí Bank (Gerencianet) PIX & Boleto Open Finance API"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Fluxo de autorização OAuth 2.0 para Efí Bank (Gerencianet) PIX & Boleto Open Finance API",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://pix.sejaefi.com.br/oauth/authorize",
+            "tokenUrl": "https://pix.sejaefi.com.br/oauth/token",
+            "scopes": {
+              "read": "Leitura de recursos em Efí Bank (Gerencianet) PIX & Boleto Open Finance API",
+              "write": "Gravação e mutação em Efí Bank (Gerencianet) PIX & Boleto Open Finance API"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "O campo email é obrigatório."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "x-ratelimit": {
+    "description": "Políticas de Limites de Requisições e Throttling para a stack efi.",
+    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
+    "headers": [
+      "X-RateLimit-Limit",
+      "X-RateLimit-Remaining",
+      "X-RateLimit-Reset"
+    ]
+  },
+  "x-retry-policy": {
+    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack efi.",
+    "max_retries": 3,
+    "retry_on_status": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoff_strategy": "exponential",
+    "initial_delay_ms": 1000,
+    "max_delay_ms": 10000,
+    "jitter": true,
+    "idempotency_header": "X-Idempotency-Key"
+  },
+  "webhooks": {
+    "efi_event_notification": {
+      "post": {
+        "summary": "Notificação de Eventos em Tempo Real (Efí Bank (Gerencianet) PIX & Boleto Open Finance API)",
+        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Efí Bank (Gerencianet) PIX & Boleto Open Finance API.",
+        "requestBody": {
+          "description": "Payload JSON com dados do evento disparado.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.created"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Dados da entidade mutada."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processado e confirmado com sucesso."
+          }
+        }
+      }
+    }
+  }
+}

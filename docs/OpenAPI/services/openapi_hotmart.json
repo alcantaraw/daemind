@@ -1,0 +1,6467 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Hotmart Developers & Webhooks API v1",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack hotmart.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://developers.hotmart.com/payments/api/v1"
+    }
+  ],
+  "paths": {
+    "/webhook/order-fulfillment-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/order-fulfillment-webhook",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_2_0_0_webhook_order-fulfillment-webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/purchase-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/purchase-webhook",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_2_0_0_webhook_purchase-webhook.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/perfil-do-usu-rio": {
+      "get": {
+        "tags": [
+          "Perfil Do Usuário"
+        ],
+        "summary": "Consultar Perfil Do Usuário",
+        "description": "Recurso identificado na documentação (docs_pt-BR_tos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Perfil Do Usuário"
+        ],
+        "summary": "Criar/Atualizar Perfil Do Usuário",
+        "description": "Operação de mutação para Perfil Do Usuário.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ofertas-de-produtos": {
+      "get": {
+        "tags": [
+          "Ofertas De Produtos"
+        ],
+        "summary": "Consultar Ofertas De Produtos",
+        "description": "Recurso identificado na documentação (docs_pt-BR_tos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ofertas De Produtos"
+        ],
+        "summary": "Criar/Atualizar Ofertas De Produtos",
+        "description": "Operação de mutação para Ofertas De Produtos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/listagem-de-planos-de-produto": {
+      "get": {
+        "tags": [
+          "Listagem De Planos De Produto"
+        ],
+        "summary": "Consultar Listagem De Planos De Produto",
+        "description": "Recurso identificado na documentação (docs_pt-BR_tos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Listagem De Planos De Produto"
+        ],
+        "summary": "Criar/Atualizar Listagem De Planos De Produto",
+        "description": "Operação de mutação para Listagem De Planos De Produto.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/listagem-de-produtos": {
+      "get": {
+        "tags": [
+          "Listagem De Produtos"
+        ],
+        "summary": "Consultar Listagem De Produtos",
+        "description": "Recurso identificado na documentação (docs_pt-BR_tos.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Listagem De Produtos"
+        ],
+        "summary": "Criar/Atualizar Listagem De Produtos",
+        "description": "Operação de mutação para Listagem De Produtos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-billet": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-billet",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_sales_sales-billet.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/get-user-me": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/user/get-user-me",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_user_get-user-me.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/history": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/history",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-summary": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-summary",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-price-details": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-price-details",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscribers": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscribers",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-purchases": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-purchases",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/reactivate-subscription": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/reactivate-subscription",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/reactivate-subscriptions": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/reactivate-subscriptions",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/cart-abandonment-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/cart-abandonment-webhook",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-users": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-users",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/auth": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/auth",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-history": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-history",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/update-subscription-charge-date": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/update-subscription-charge-date",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/switch-plan-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/switch-plan-webhook",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/cancel-subscription-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/cancel-subscription-webhook",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-summary": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-summary",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/coupon-post-coupon": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/coupon-post-coupon",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/coupon-get-coupon": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/coupon-get-coupon",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/coupon-delete-coupon": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/coupon-delete-coupon",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/get-participants-tickets": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/tickets/get-participants-tickets",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/get-info-tickets": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/tickets/get-info-tickets",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-list": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-list",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/club-first-access": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/club-first-access",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/club-module-completed": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/club-module-completed",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-offers": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-offers",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-plans": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-plans",
+        "description": "Endpoint extraído da documentação (network_json_10_docs_page-data_pt-BR_changelog_page-data_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/about-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/about-webhook",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/http-response-codes-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/http-response-codes-webhook",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/using-webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/using-webhook",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-modules-club": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-modules-club",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/account/get-account-info": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/account/get-account-info",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/about-club": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/about-club",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-lessons-club": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-lessons-club",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-pages-club": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-pages-club",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/about-coupon": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/about-coupon",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-users-club": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-users-club",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/negotiate/about-negotiation": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/negotiate/about-negotiation",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/negotiate/generate-negotiation": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/negotiate/generate-negotiation",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/about-pl": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/about-pl",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/charge-by-offer": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/charge-by-offer",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/before-starting": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/before-starting",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/charge-by-value": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/charge-by-value",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-additional-plan": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-additional-plan",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-pl": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-pl",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-additional-offer": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-additional-offer",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/get-pl": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/get-pl",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-create": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-create",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-about": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-about",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-delete": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-delete",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-create": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-create",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-sales-update": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-sales-update",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-update": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-update",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-create": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-create",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-update": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-update",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-delete": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-delete",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-variants-update": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-variants-update",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-update": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-update",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/sp-about": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/sp-about",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/sp-shipment-status": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/sp-shipment-status",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-configuration": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-configuration",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/sp-shipment-tracking": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/sp-shipment-tracking",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/about-sales": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/about-sales",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-commissions": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-commissions",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-refund": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-refund",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/about-subscription": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/about-subscription",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/cancel-subscriptions": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/cancel-subscriptions",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/cancel-subscription": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/cancel-subscription",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/change-due-day": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/change-due-day",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/switch-plan-get-plans": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/switch-plan-get-plans",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/switch-plan": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/switch-plan",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/about-tickets": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/tickets/about-tickets",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-transactions": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-transactions",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/club/get-pages-club": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/club/get-pages-club",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/physical-product/pp-product-create": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/physical-product/pp-product-create",
+        "description": "Endpoint extraído da documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/listado-de-productos": {
+      "get": {
+        "tags": [
+          "Listado De Productos"
+        ],
+        "summary": "Consultar Listado De Productos",
+        "description": "Recurso identificado na documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Listado De Productos"
+        ],
+        "summary": "Criar/Atualizar Listado De Productos",
+        "description": "Operação de mutação para Listado De Productos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ofertas-de-producto": {
+      "get": {
+        "tags": [
+          "Ofertas De Producto"
+        ],
+        "summary": "Consultar Ofertas De Producto",
+        "description": "Recurso identificado na documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ofertas De Producto"
+        ],
+        "summary": "Criar/Atualizar Ofertas De Producto",
+        "description": "Operação de mutação para Ofertas De Producto.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/listado-de-planes-de-producto": {
+      "get": {
+        "tags": [
+          "Listado De Planes De Producto"
+        ],
+        "summary": "Consultar Listado De Planes De Producto",
+        "description": "Recurso identificado na documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Listado De Planes De Producto"
+        ],
+        "summary": "Criar/Atualizar Listado De Planes De Producto",
+        "description": "Operação de mutação para Listado De Planes De Producto.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/perfil-del-usuario": {
+      "get": {
+        "tags": [
+          "Perfil Del Usuario"
+        ],
+        "summary": "Consultar Perfil Del Usuario",
+        "description": "Recurso identificado na documentação (network_json_1_docs_page-data_sq_d_3996864857_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Perfil Del Usuario"
+        ],
+        "summary": "Criar/Atualizar Perfil Del Usuario",
+        "description": "Operação de mutação para Perfil Del Usuario.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app/index.php": {
+      "post": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "POST /app/index.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /oauth/token",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/:subscriber_code/cancel": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/:subscriber_code/cancel",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/:subscriber_code/purchases": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/:subscriber_code/purchases",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/users": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/users",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/users",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/link": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/link",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/cancel-subscription-webhook.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/cancel-subscription-webhook.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/cart-abandonment-webhook.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/cart-abandonment-webhook.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/switch-plan-webhook.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/switch-plan-webhook.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/cancel-subscription-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/cancel-subscription-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/cart-abandonment-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/cart-abandonment-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/club-first-access-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/club-first-access-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/club-module-completed-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/club-module-completed-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/order-fulfillment-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/order-fulfillment-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/purchase-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/purchase-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/A0ACBEDA916F322FAB94E7DA5B29D0185204000053039865802BR5910EBANX": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/A0ACBEDA916F322FAB94E7DA5B29D0185204000053039865802BR5910EBANX",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/switch-plan-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/switch-plan-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/update-subscription-charge-date-webhook-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /webhook/update-subscription-charge-date-webhook-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/account/post-get-account-info-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/account/post-get-account-info-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/account/post-get-account-info.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/account/post-get-account-info.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/info": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/info",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-lessons-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-lessons-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{user_id}/lessons": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/users/{user_id}/lessons",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-lessons-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-lessons-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-modules-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-modules-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/modules": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/modules",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-modules-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-modules-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-pages-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-pages-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/modules/{module_id}/pages": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/modules/{module_id}/pages",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [
+          {
+            "name": "module_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-pages-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-pages-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-users-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-users-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club/get-club-users-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/club/get-club-users-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/delete-coupon-delete-coupon-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/delete-coupon-delete-coupon-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/delete-coupon-delete-coupon.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/delete-coupon-delete-coupon.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coupon/:coupon_id": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/coupon/:coupon_id",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/get-coupon-get-coupon-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/get-coupon-get-coupon-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/get-coupon-get-coupon.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/get-coupon-get-coupon.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coupon/product/:product_id": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/coupon/product/:product_id",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/post-coupon-post-coupon-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/post-coupon-post-coupon-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupon/post-coupon-post-coupon.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/coupon/post-coupon-post-coupon.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/:product_id/coupon": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/product/:product_id/coupon",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/negotiate/post-negotiate-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/negotiate/post-negotiate-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/ACA4311F88661BC0D48200487EF1BCD95204000053039865802BR5910FAKEPIX": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/ACA4311F88661BC0D48200487EF1BCD95204000053039865802BR5910FAKEPIX",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/negotiate/post-negotiate.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/negotiate/post-negotiate.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/installments/negotiate": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/installments/negotiate",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/charge-by-offer-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/charge-by-offer-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/link/token/charge/offer": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/link/token/charge/offer",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/charge-by-value-or-offer-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/charge-by-value-or-offer-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/charge-by-value-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/charge-by-value-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/link/token/charge/value": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/link/token/charge/value",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-pl-additional-offer-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-pl-additional-offer-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/link/:payment_link_ucode/offer": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/link/:payment_link_ucode/offer",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-pl-additional-offer-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-pl-additional-offer-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-pl-additional-plan-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-pl-additional-plan-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/link/:payment_link_ucode/plan": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/link/:payment_link_ucode/plan",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-pl-additional-plan-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-pl-additional-plan-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-pl-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-pl-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/create-pl-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/create-pl-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/event-pl-token.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/event-pl-token.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/event-pl-approved.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/event-pl-approved.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/get-pl-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/get-pl-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/get-pl-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/get-pl-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payment-link/invalid-pl-error-message.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/payment-link/invalid-pl-error-message.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-create-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-create-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credentials": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/credentials",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-create-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-create-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-delete-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-delete-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credentials/:client_id": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/credentials/:client_id",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-update-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-update-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-delete-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-delete-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-credential-update-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-credential-update-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-create-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-create-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/product",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-create-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-create-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-sales-update-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-sales-update-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/:product_ucode/status": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/product/:product_ucode/status",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-sales-update-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-sales-update-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-update-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-update-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-update-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-update-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/:product_ucode": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/product/:product_ucode",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-variants-update-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-variants-update-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/:product_ucode/variants": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/product/:product_ucode/variants",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-product-variants-update-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-product-variants-update-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-create-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-create-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/webhook": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/webhook",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-create-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-create-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-delete-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-delete-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/webhook/:webhook_id": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/webhook/:webhook_id",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-delete-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-delete-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-update-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-update-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/pp-webhook-update-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/pp-webhook-update-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/sp-shipment-status-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/sp-shipment-status-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipments/status": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/shipments/status",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/sp-shipment-status-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/sp-shipment-status-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/sp-shipment-tracking-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/sp-shipment-tracking-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipments/tracking": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/shipments/tracking",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/physical-product/sp-shipment-tracking-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/physical-product/sp-shipment-tracking-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-configuration-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-configuration-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/configuration/:product_id": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/product/configuration/:product_id",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-configuration-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-configuration-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-list-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-list-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/products",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-list-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-list-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-offers-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-offers-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/:ucode/offers": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/products/:ucode/offers",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-offers-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-offers-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-plans-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-plans-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/:ucode/plans": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/products/:ucode/plans",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/product/product-plans-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/product/product-plans-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-commissions-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-commissions-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/commissions": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/commissions",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-commissions-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-commissions-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-history-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-history-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-history.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-history.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/history": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/history",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-price-details-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-price-details-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/price/details": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/price/details",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-price-details-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-price-details-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-summary-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-summary-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-summary.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-summary.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/summary": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/summary",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-users-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-users-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/get-sales-users-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/get-sales-users-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-billet-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-billet-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/:transaction/billet": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/:transaction/billet",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-billet-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-billet-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boletobancario.pdf": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/boletobancario.pdf",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-refund-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-refund-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/:transaction_code/refund": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/:transaction_code/refund",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/sales-refund-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/sales/sales-refund-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/cancel-subscription-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/cancel-subscription-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/cancel-subscription-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/cancel-subscription-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/cancel-subscriptions-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/cancel-subscriptions-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/cancel": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/cancel",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/cancel-subscriptions-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/cancel-subscriptions-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/change-due-day-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/change-due-day-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/:subscriber_code": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/:subscriber_code",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/change-due-day-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/change-due-day-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscribers-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscribers-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscribers-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscribers-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-purchases-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-purchases-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-purchases-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-purchases-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-summary-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-summary-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-summary.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-summary.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/summary": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/summary",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-transaction-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-transaction-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/transactions": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/transactions",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/get-subscription-transaction-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/get-subscription-transaction-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/reactivate-subscription-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/reactivate-subscription-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/:subscriber_code/reactivate": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/:subscriber_code/reactivate",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/reactivate-subscription-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/reactivate-subscription-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/reactivate-subscriptions-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/reactivate-subscriptions-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/reactivate": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/reactivate",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/reactivate-subscriptions-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/reactivate-subscriptions-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/switch-plan-get-plans-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/switch-plan-get-plans-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/switch-plan/plans": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/switch-plan/plans",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/switch-plan/plan": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/switch-plan/plan",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/switch-plan-get-plans-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/switch-plan-get-plans-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/switch-plan-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/switch-plan-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/switch-plan": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/switch-plan",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscription/switch-plan-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/subscription/switch-plan-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/get-get-info-tickets-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/tickets/get-get-info-tickets-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/get-get-info-tickets.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/tickets/get-get-info-tickets.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/:event_id/info": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/:event_id/info",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/get-get-participants-tickets-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/tickets/get-get-participants-tickets-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/get-get-participants-tickets.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/tickets/get-get-participants-tickets.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/:event_id/participants": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/:event_id/participants",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/club/get-club-pages-request-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/club/get-club-pages-request-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/modules/{module_id}/pages": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v2/modules/{module_id}/pages",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [
+          {
+            "name": "module_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/club/get-club-pages-response-v2.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/club/get-club-pages-response-v2.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/get-user-me-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/user/get-user-me-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/me",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/get-user-me-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v1/user/get-user-me-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/physical-product/pp-product-create-v2-request.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/physical-product/pp-product-create-v2-request.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/product": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v2/product",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/physical-product/pp-product-create-v2-response.md": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /v2/physical-product/pp-product-create-v2-response.md",
+        "description": "Endpoint extraído da documentação (network_json_4_docs_page-data_sq_d_4285555676_json.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coupon/:coupon_idcURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/coupon/:coupon_idcURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_coupon_coupon-delete-coupon.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coupon/product/:product_idcURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/coupon/product/:product_idcURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_coupon_coupon-get-coupon.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/:product_id/couponcURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/product/:product_id/couponcURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_coupon_coupon-post-coupon.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/productscURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/productscURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_product_product-list.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/:ucode/offerscURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/products/:ucode/offerscURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_product_product-offers.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/:ucode/planscURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/products/:ucode/planscURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_product_product-plans.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/:transaction/billetcURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/sales/:transaction/billetcURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_sales_sales-billet.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/summarycURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/subscriptions/summarycURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_subscription_get-subscription-summary.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/:event_id/infocURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/:event_id/infocURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_tickets_get-info-tickets.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/:event_id/participantscURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/:event_id/participantscURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_tickets_get-participants-tickets.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mecURL": {
+      "get": {
+        "tags": [
+          "Hotmart"
+        ],
+        "summary": "GET /api/v1/mecURL",
+        "description": "Endpoint extraído da documentação (docs_pt-BR_v1_user_get-user-me.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via Token Bearer / JWT para Hotmart Developers & Webhooks API v1"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Chave de API (API Key / Token) para Hotmart Developers & Webhooks API v1"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Fluxo de autorização OAuth 2.0 para Hotmart Developers & Webhooks API v1",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://developers.hotmart.com/payments/api/v1/oauth/authorize",
+            "tokenUrl": "https://developers.hotmart.com/payments/api/v1/oauth/token",
+            "scopes": {
+              "read": "Leitura de recursos em Hotmart Developers & Webhooks API v1",
+              "write": "Gravação e mutação em Hotmart Developers & Webhooks API v1"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "O campo email é obrigatório."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "x-ratelimit": {
+    "description": "Políticas de Limites de Requisições e Throttling para a stack hotmart.",
+    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
+    "headers": [
+      "X-RateLimit-Limit",
+      "X-RateLimit-Remaining",
+      "X-RateLimit-Reset"
+    ]
+  },
+  "x-retry-policy": {
+    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack hotmart.",
+    "max_retries": 3,
+    "retry_on_status": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoff_strategy": "exponential",
+    "initial_delay_ms": 1000,
+    "max_delay_ms": 10000,
+    "jitter": true,
+    "idempotency_header": "X-Idempotency-Key"
+  },
+  "webhooks": {
+    "hotmart_event_notification": {
+      "post": {
+        "summary": "Notificação de Eventos em Tempo Real (Hotmart Developers & Webhooks API v1)",
+        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Hotmart Developers & Webhooks API v1.",
+        "requestBody": {
+          "description": "Payload JSON com dados do evento disparado.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.created"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Dados da entidade mutada."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processado e confirmado com sucesso."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6448 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "description": "API para gerenciamento de anÃºncios no iCarros",
+    "version": "2.0.0",
+    "title": "iCarros (Itaú) Anúncios Automotivos API",
+    "contact": {
+      "email": "api@icarros.com.br"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.icarros.com.br"
+    }
+  ],
+  "paths": {
+    "/automakerservice/automaker/{regionalGroupId}/inventory": {
+      "get": {
+        "tags": [
+          "automakerservice"
+        ],
+        "summary": "Lista o estoque atual do grupo regional",
+        "description": "",
+        "operationId": "getDealerStockAutoMaker",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "regionalGroupId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Deal"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "gruporegional"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "automakerservice"
+        ],
+        "summary": "Cria um novo anúncio",
+        "description": "",
+        "operationId": "updateDeal",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "regionalGroupId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Deal"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "gruporegional"
+            ]
+          }
+        ]
+      }
+    },
+    "/automakerservice/automaker/{regionalGroupId}/inventory/{dealId}": {
+      "put": {
+        "tags": [
+          "automakerservice"
+        ],
+        "summary": "Atualiza o anúncio com os dados enviados",
+        "description": "",
+        "operationId": "updateDealAutoMaker",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "regionalGroupId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Deal"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "gruporegional"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "automakerservice"
+        ],
+        "summary": "Remover um anúncio do estoque",
+        "description": "",
+        "operationId": "removeDeal",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "regionalGroupId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "gruporegional"
+            ]
+          }
+        ]
+      }
+    },
+    "/automakerservice/automakerlist": {
+      "get": {
+        "tags": [
+          "automakerservice"
+        ],
+        "summary": "Lista de grupos regionais do usuário autenticado",
+        "description": "",
+        "operationId": "getGruposRegionais",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ListRegionalGroup"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "gruporegional"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/cache/city/{cityId}": {
+      "put": {
+        "tags": [
+          "databaseservice"
+        ],
+        "operationId": "updateCidadeCache",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cityId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/cache/ddds": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "operationId": "getAllDdds",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/category/{segmento}": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna as categorias de veiculos",
+        "description": "",
+        "operationId": "getCategorias",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "segmento",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Categoria"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/colors": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a codificação para o campo colors (cor) para ser utilizada na inclusão do anúncio",
+        "description": "",
+        "operationId": "getColors",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ListItem"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/deal/numberImages": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "operationId": "getQtdeImagensAnuncio",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/equipments/{segmento}": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a codificação para o campo equipments (opcionais do veículo) para ser utilizada na inclusão do anúncio",
+        "description": "",
+        "operationId": "getEquipments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "segmento",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Opcional"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/fueltypes": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a codificação para o campo fuel (combustível) para ser utilizada na inclusão do anúncio",
+        "description": "",
+        "operationId": "getFuelTypes",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ListItem"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/makes/{segmento}": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a lista de marcas e sua codificação no iCarros",
+        "description": "",
+        "operationId": "getMakes",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "segmento",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Marca"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/model/{modelId}/qbbt": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna uma lista de modelos relacionadas a busca de um modelo especifico.",
+        "description": "",
+        "operationId": "getModelsQBBT",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "modelId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Modelo"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/models/launch/{segmento}": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a lista de modelos recém lançados e sua codificação no iCarros. A marca está associada pelo id.",
+        "description": "",
+        "operationId": "getModelsLaunch",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "segmento",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Modelo"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/models/{segmento}": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a lista de modelos e sua codificação no iCarros. A marca está associada pelo id.",
+        "description": "",
+        "operationId": "getModels",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "segmento",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "makeId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "inLine",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Modelo"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/pricestats/{ufId}/{trimId}/{year}/{km}": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Devolve o preço mínimo, médio e máximo anunciado para o veículo no iCarros (Brasil e se possível, no estado) juntamente com o preço Fipe.",
+        "description": "",
+        "operationId": "getPriceStats",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "ufId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "trimId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "km",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Cotacoes"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/transmissions": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a codificação para o campo transmission (câmbio) para ser utilizada na inclusão do anúncio",
+        "description": "",
+        "operationId": "getTransmissions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ListItem"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/trim/{trimId}/images": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna todos os IDs de imagens relacionados a uma versao",
+        "description": "",
+        "operationId": "getTrimImagesId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "trimId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/databaseservice/trims/{segmento}": {
+      "get": {
+        "tags": [
+          "databaseservice"
+        ],
+        "summary": "Retorna a lista de versões e sua codificação no iCarros. As versões são uma especialização do modelo e está associada a este pelo id.",
+        "description": "",
+        "operationId": "getTrims",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "segmento",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "makeId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "modelId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "modelYear",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "fipeId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "molicarId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "alldata",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "inLine",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Versao"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/1.0/dealer": {
+      "get": {
+        "tags": [
+          "dealerservice1.0"
+        ],
+        "summary": "Lista dos Dealers aos quais esse login tem acesso",
+        "description": "",
+        "operationId": "getDealersLogin",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Dealer"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/1.0/dealer/minimal": {
+      "get": {
+        "tags": [
+          "dealerservice1.0"
+        ],
+        "summary": "Lista dos Dealers aos quais esse login tem acesso",
+        "description": "",
+        "operationId": "getMinimalDealers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RetornoAnuncianteMinimal"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/1.0/dealer/{dealerId}": {
+      "get": {
+        "tags": [
+          "dealerservice1.0"
+        ],
+        "summary": "Lista as informaÃ§Ãµes do Dealer",
+        "description": "",
+        "operationId": "getDealersIntegrator",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Dealer"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/config/version/{trimId}": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Recupera informaÃ§Ãµes sobre a versÃ£o",
+        "description": "",
+        "operationId": "getVersionInfo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "trimId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/deal/refresh": {
+      "put": {
+        "tags": [
+          "dealerservice"
+        ],
+        "operationId": "refresh",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RefreshAnuncioIdxDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/deal/refreshRemovedDeal/{zeroKm}": {
+      "put": {
+        "tags": [
+          "dealerservice"
+        ],
+        "operationId": "refreshRemovedDeal",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "zeroKm",
+            "in": "path",
+            "required": true,
+            "type": "boolean"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RefreshAnuncioIdxDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Lista dos Dealers aos quais esse login tem acesso",
+        "description": "",
+        "operationId": "getDealers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Dealer"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/leads/check/{lastTimeChecked}": {
+      "post": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Checa quais dos ID's de anunciantes enviados receberam leads depois de um perÃ­odo especÃ­fico.",
+        "description": "",
+        "operationId": "getDealersThatReceivedLeadsAfter",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lastTimeChecked",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/plans/pj/{dealerId}/{zeroKm}": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Lista todos os planos do dealer para ms-anuncio",
+        "description": "",
+        "operationId": "getPlansServiceAccount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "zeroKm",
+            "in": "path",
+            "required": true,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/plans/{dealerId}/{zeroKm}": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Lista todos os planos do dealer",
+        "description": "",
+        "operationId": "getPlans",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "zeroKm",
+            "in": "path",
+            "required": true,
+            "type": "boolean"
+          },
+          {
+            "name": "segmento",
+            "in": "query",
+            "description": "Carro, Moto ou Caminhao.",
+            "required": false,
+            "type": "string",
+            "default": "Carro"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/calls": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Busca as ligaÃ§Ãµes recebidas pelo anunciante.",
+        "description": "",
+        "operationId": "getDealerCallsByDate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "lastupdate",
+            "in": "header",
+            "description": "Pode ser enviado um header lastupdate com uma data no formato era UNIX (segundos desde 1970) para mudar a data default de 90 dias para 10 dias atrÃ¡s por exemplo.",
+            "required": false,
+            "type": "string",
+            "x-example": "20160501000000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LeadUniqueUser"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/dealerstats": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "operationId": "getDealerStats",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ListDealerStats"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/emdia": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "operationId": "getDealerIsEmDia",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "boolean"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Lista o estoque atual do dealer",
+        "description": "",
+        "operationId": "getDealerStock",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Deal"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory/new": {
+      "post": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Cria um novo anÃºncio",
+        "description": "Retorna um JSON com o httpStatus, mensagem e o anuncioId(se o anuncio foi inserido). \n\n Ex: {\"httpStatus\": 200,\n \"mensagem\": \"Anuncio salvo com sucesso\", \"anuncioId\": 12345678}",
+        "operationId": "updateDealInventory",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "description": "Id do Revendedor",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Deal"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory/update/{dealId}": {
+      "put": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Atualiza o anÃºncio com os dados enviados",
+        "description": "",
+        "operationId": "updateDealWithStatus",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Deal"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/RetornoStatusAnuncio"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory/{dealId}": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Retorna os dados atuais do anuncio solicitado",
+        "description": "",
+        "operationId": "getDealData",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Deal"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Atualiza o anÃºncio com os dados enviados",
+        "description": "",
+        "operationId": "updateDealDealerService",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Deal"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Apaga um anÃºncio",
+        "description": "",
+        "operationId": "removeDealDealerService",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory/{dealId}/image": {
+      "post": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Cria uma nova imagem para o anuncio informado. Pode ser feito o upload via URL ou Array de byte",
+        "description": "",
+        "operationId": "uploadImage",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ImgData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ],
+        "deprecated": true
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory/{dealId}/image/{imageId}": {
+      "delete": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Remove uma imagem do anÃºncio",
+        "description": "",
+        "operationId": "removeImage",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "imageId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory/{dealId}/image/{imageId}/remove": {
+      "delete": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Remove uma imagem do anÃºncio",
+        "description": "",
+        "operationId": "removeImageNew",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "imageId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/inventory/{dealId}/orderimages/{imageIdsDelimitedByUnderline}": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Reordena as imagens do anÃºncio na ordem enviada (ids das imagens separados por underline. Ex: 123_432_9832)",
+        "description": "",
+        "operationId": "orderImages",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "imageIdsDelimitedByUnderline",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/leads": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Retorna todas as leads de email e financiamento (agrupadas por usuÃ¡rio) dos ultimos 31 dias.",
+        "description": "",
+        "operationId": "getDealerLeads",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "lastupdate",
+            "in": "header",
+            "description": "Pode ser enviado um header lastupdate com uma data no formato era UNIX (segundos desde 1970) para mudar a data default de 31 dias para 10 dias atrÃ¡s por exemplo.",
+            "required": false,
+            "type": "string",
+            "x-example": "1462060800"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LeadUniqueUser"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/leads/{initialDate}": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Busca as leads de email e financiamento (agrupadas por usuÃ¡rio) desde a data solicitada",
+        "description": "",
+        "operationId": "getDealerLeadsByDate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "initialDate",
+            "in": "path",
+            "description": "Data inicial no formato yyyyMMddHHmmss",
+            "required": true,
+            "type": "string",
+            "x-example": "20160501000000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LeadUniqueUser"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/dealer/{dealerId}/{anuncioId}/{spotLight}": {
+      "put": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Atualiza o Spotlight de um anÃºncio",
+        "description": "",
+        "operationId": "updateSpotlight",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealerId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "anuncioId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "spotLight",
+            "in": "path",
+            "required": true,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/leads/check/{lastTimeChecked}": {
+      "post": {
+        "tags": [
+          "dealerservice"
+        ],
+        "summary": "Checa quais dos ID's de anunciantes enviados receberam leads depois de um perÃ­odo especÃ­fico.",
+        "description": "",
+        "operationId": "getDealersThatReceivedLeadsAfterByDealersId",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lastTimeChecked",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/dealerservice/products": {
+      "get": {
+        "tags": [
+          "dealerservice"
+        ],
+        "operationId": "getAllProducts",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/gestordelead/registerintegrator": {
+      "post": {
+        "tags": [
+          "gestordelead"
+        ],
+        "operationId": "registerIntegratorDealler",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/GestorLeadDealler"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/historicolead": {
+      "post": {
+        "tags": [
+          "historicolead"
+        ],
+        "summary": "Atualiza historico de leads",
+        "description": "",
+        "operationId": "criaOuAtualizaHistoricoLead",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/HistoricoLeadDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/imageservice/upload/deal/{dealId}": {
+      "post": {
+        "tags": [
+          "imageservice"
+        ],
+        "summary": "Upload da imagem para o anúncio. Tamanho máximo da Imagem de 3MB. Enviar os dados da foto via Base64 ou URL",
+        "description": "",
+        "operationId": "uploadImageDeal",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ImgData"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "icarros_accesscode": [
+              "anunciantepj"
+            ]
+          }
+        ]
+      }
+    },
+    "/multilead/multimatchmail": {
+      "post": {
+        "tags": [
+          "multilead"
+        ],
+        "summary": "Envio de multileads agrupados(multimatch)",
+        "description": "",
+        "operationId": "sendMultileadMail",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Multilead"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pf/cobranca": {
+      "post": {
+        "tags": [
+          "pf"
+        ],
+        "operationId": "cobranca",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PFFinancialData"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "pf"
+        ],
+        "operationId": "cobrancaAtualizaStatus",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PFFinancialData"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pf/intencao": {
+      "post": {
+        "tags": [
+          "pf"
+        ],
+        "operationId": "intencao",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PFIntent"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pf/km": {
+      "get": {
+        "tags": [
+          "pf"
+        ],
+        "operationId": "getKmPf",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pf/landingPage": {
+      "get": {
+        "tags": [
+          "pf"
+        ],
+        "operationId": "getConfigLandingPage",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pf/refresh": {
+      "put": {
+        "tags": [
+          "pf"
+        ],
+        "operationId": "refresh",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RefreshAnuncioIdxDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pjconfig/desligamento/onda1": {
+      "get": {
+        "tags": [
+          "pjconfig"
+        ],
+        "summary": "Verifica se o desligamento da operaÃ§Ã£o PJ para a onda 1 estÃ¡ ativo",
+        "description": "",
+        "operationId": "getDesligamentoPjAtivoOnda1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest": {
+      "get": {
+        "tags": [
+          "Icarros"
+        ],
+        "summary": "GET /rest",
+        "description": "Endpoint extraído por declaração de rota (apidocs.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/realms/icarros/protocol/openid-connect/token": {
+      "post": {
+        "tags": [
+          "Icarros"
+        ],
+        "summary": "POST /auth/realms/icarros/protocol/openid-connect/token",
+        "description": "Endpoint extraído da documentação (apidocs_apiOauth_html.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/dealerservice/dealer": {
+      "get": {
+        "tags": [
+          "Icarros"
+        ],
+        "summary": "GET /rest/dealerservice/dealer",
+        "description": "Endpoint extraído da documentação (apidocs_apiOauth_html.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/realms/icarros/protocol/openid-connect/auth": {
+      "post": {
+        "tags": [
+          "Icarros"
+        ],
+        "summary": "POST /auth/realms/icarros/protocol/openid-connect/auth",
+        "description": "Endpoint extraído da documentação (apidocs_apiOauth_html.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via Token Bearer / JWT para iCarros (Itaú) Anúncios Automotivos API"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Chave de API (API Key / Token) para iCarros (Itaú) Anúncios Automotivos API"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Fluxo de autorização OAuth 2.0 para iCarros (Itaú) Anúncios Automotivos API",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.icarros.com.br/oauth/authorize",
+            "tokenUrl": "https://api.icarros.com.br/oauth/token",
+            "scopes": {
+              "read": "Leitura de recursos em iCarros (Itaú) Anúncios Automotivos API",
+              "write": "Gravação e mutação em iCarros (Itaú) Anúncios Automotivos API"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "O campo email é obrigatório."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "x-ratelimit": {
+    "description": "Políticas de Limites de Requisições e Throttling para a stack icarros.",
+    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
+    "headers": [
+      "X-RateLimit-Limit",
+      "X-RateLimit-Remaining",
+      "X-RateLimit-Reset"
+    ]
+  },
+  "x-retry-policy": {
+    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack icarros.",
+    "max_retries": 3,
+    "retry_on_status": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoff_strategy": "exponential",
+    "initial_delay_ms": 1000,
+    "max_delay_ms": 10000,
+    "jitter": true,
+    "idempotency_header": "X-Idempotency-Key"
+  },
+  "webhooks": {
+    "icarros_event_notification": {
+      "post": {
+        "summary": "Notificação de Eventos em Tempo Real (iCarros (Itaú) Anúncios Automotivos API)",
+        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em iCarros (Itaú) Anúncios Automotivos API.",
+        "requestBody": {
+          "description": "Payload JSON com dados do evento disparado.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.created"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Dados da entidade mutada."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processado e confirmado com sucesso."
+          }
+        }
+      }
+    }
+  }
+}

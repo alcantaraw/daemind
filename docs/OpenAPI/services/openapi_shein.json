@@ -1,0 +1,670 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SHEIN Open Platform Marketplace API",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack shein.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://openapi.sheincorp.com"
+    }
+  ],
+  "paths": {
+    "//monitor-web.do": {
+      "post": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "POST //monitor-web.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (register.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "//assets.do": {
+      "post": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "POST //assets.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_101_webassets_openapi-portal-front_43867_38724__next_static_chunks_12748-d2f7a6be2c6def21_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/apiDoc/queryAllApiDocCategoryList": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /api/apiDoc/queryAllApiDocCategoryList",
+        "description": "Endpoint extraído da documentação (network_json_101_webassets_openapi-portal-front_43867_38724__next_static_chunks_12748-d2f7a6be2c6def21_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/external/file/upload": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /api/external/file/upload",
+        "description": "Endpoint extraído da documentação (network_json_101_webassets_openapi-portal-front_43867_38724__next_static_chunks_12748-d2f7a6be2c6def21_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/V6/9mwf": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /V6/9mwf",
+        "description": "Endpoint extraído da documentação (network_json_101_webassets_openapi-portal-front_43867_38724__next_static_chunks_12748-d2f7a6be2c6def21_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /documents",
+        "description": "Endpoint extraído por declaração de rota (network_json_101_webassets_openapi-portal-front_43867_38724__next_static_chunks_12748-d2f7a6be2c6def21_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/order": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/order",
+        "description": "Endpoint extraído por declaração de rota (network_json_101_webassets_openapi-portal-front_43867_38724__next_static_chunks_12748-d2f7a6be2c6def21_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notice/0": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /notice/0",
+        "description": "Endpoint extraído por declaração de rota (network_json_101_webassets_openapi-portal-front_43867_38724__next_static_chunks_12748-d2f7a6be2c6def21_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "//assets2.do": {
+      "post": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "POST //assets2.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_105_webassets_openapi-portal-front_43867_38724__next_static_chunks_25822_81289f4090bc7f22_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/home": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/home",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/mange-applictions": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/mange-applictions",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/applictions-test-tool/access": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/applictions-test-tool/access",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/pub-dev": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/pub-dev",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/applictions-test-tool": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/applictions-test-tool",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/test-data": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/test-data",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/white-list": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/white-list",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/sdk": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/sdk",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/api-preview": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/api-preview",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/govern-documents": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/govern-documents",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backstage/basic": {
+      "get": {
+        "tags": [
+          "Shein"
+        ],
+        "summary": "GET /backstage/basic",
+        "description": "Endpoint extraído por declaração de rota (network_json_20_webassets_openapi-portal-front_43867_38724__next_static_chunks_app__5Blocale_5D__backstage__layout-70927aecf03da92e_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via Token Bearer / JWT para SHEIN Open Platform Marketplace API"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Chave de API (API Key / Token) para SHEIN Open Platform Marketplace API"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Fluxo de autorização OAuth 2.0 para SHEIN Open Platform Marketplace API",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://openapi.sheincorp.com/oauth/authorize",
+            "tokenUrl": "https://openapi.sheincorp.com/oauth/token",
+            "scopes": {
+              "read": "Leitura de recursos em SHEIN Open Platform Marketplace API",
+              "write": "Gravação e mutação em SHEIN Open Platform Marketplace API"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "O campo email é obrigatório."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "x-ratelimit": {
+    "description": "Políticas de Limites de Requisições e Throttling para a stack shein.",
+    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
+    "headers": [
+      "X-RateLimit-Limit",
+      "X-RateLimit-Remaining",
+      "X-RateLimit-Reset"
+    ]
+  },
+  "x-retry-policy": {
+    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack shein.",
+    "max_retries": 3,
+    "retry_on_status": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoff_strategy": "exponential",
+    "initial_delay_ms": 1000,
+    "max_delay_ms": 10000,
+    "jitter": true,
+    "idempotency_header": "X-Idempotency-Key"
+  },
+  "webhooks": {
+    "shein_event_notification": {
+      "post": {
+        "summary": "Notificação de Eventos em Tempo Real (SHEIN Open Platform Marketplace API)",
+        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em SHEIN Open Platform Marketplace API.",
+        "requestBody": {
+          "description": "Payload JSON com dados do evento disparado.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.created"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Dados da entidade mutada."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processado e confirmado com sucesso."
+          }
+        }
+      }
+    }
+  }
+}

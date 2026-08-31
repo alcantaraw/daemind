@@ -1,0 +1,1242 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Mercado Pago Payment Gateway API",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack mercadopago.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.mercadopago.com"
+    }
+  ],
+  "paths": {
+    "/navigation/navbar/impression": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /navigation/navbar/impression",
+        "description": "Endpoint extraído por declaração de rota (developers_panel_contact.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/navigation/footer/impression": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /navigation/footer/impression",
+        "description": "Endpoint extraído por declaração de rota (developers_panel_contact.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/navigation/navbar/link": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /navigation/navbar/link",
+        "description": "Endpoint extraído por declaração de rota (developers_panel_contact.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/navigation/footer/link": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /navigation/footer/link",
+        "description": "Endpoint extraído por declaração de rota (developers_panel_contact.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login/auth/challenge": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /login/auth/challenge",
+        "description": "Endpoint extraído por declaração de rota (developers_panel_contact.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/home_devsite": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/home_devsite",
+        "description": "Endpoint extraído por declaração de rota (developers_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/checkout": {
+      "get": {
+        "tags": [
+          "Checkout"
+        ],
+        "summary": "Consultar Checkout",
+        "description": "Recurso identificado na documentação (developers_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Checkout"
+        ],
+        "summary": "Criar/Atualizar Checkout",
+        "description": "Operação de mutação para Checkout.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pagamentos": {
+      "get": {
+        "tags": [
+          "Pagamentos"
+        ],
+        "summary": "Consultar Pagamentos",
+        "description": "Recurso identificado na documentação (developers_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pagamentos"
+        ],
+        "summary": "Criar/Atualizar Pagamentos",
+        "description": "Operação de mutação para Pagamentos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Consultar Orders",
+        "description": "Recurso identificado na documentação (developers_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Criar/Atualizar Orders",
+        "description": "Operação de mutação para Orders.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pagos": {
+      "get": {
+        "tags": [
+          "Pagos"
+        ],
+        "summary": "Consultar Pagos",
+        "description": "Recurso identificado na documentação (developers_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pagos"
+        ],
+        "summary": "Criar/Atualizar Pagos",
+        "description": "Operação de mutação para Pagos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/news": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/news",
+        "description": "Endpoint extraído por declaração de rota (developers_pt_changelog.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/docs": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/docs",
+        "description": "Endpoint extraído por declaração de rota (developers_pt_docs.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pagos-a-la-api-de-orders": {
+      "get": {
+        "tags": [
+          "Pagos A La Api De Orders"
+        ],
+        "summary": "Consultar Pagos A La Api De Orders",
+        "description": "Recurso identificado na documentação (developers_pt_docs_checkout-api_landing.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pagos A La Api De Orders"
+        ],
+        "summary": "Criar/Atualizar Pagos A La Api De Orders",
+        "description": "Operação de mutação para Pagos A La Api De Orders.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assinaturas": {
+      "get": {
+        "tags": [
+          "Assinaturas"
+        ],
+        "summary": "Consultar Assinaturas",
+        "description": "Recurso identificado na documentação (developers_pt_docs_subscriptions_landing.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Assinaturas"
+        ],
+        "summary": "Criar/Atualizar Assinaturas",
+        "description": "Operação de mutação para Assinaturas.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/overview": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /oauth/overview",
+        "description": "Endpoint extraído da documentação (developers_pt_reference_authentication_oauth_overview.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/_oauth_token/post": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /oauth/_oauth_token/post",
+        "description": "Endpoint extraído da documentação (developers_pt_reference_authentication_oauth__oauth_token_post.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reclamos-utilizando-el-campo": {
+      "get": {
+        "tags": [
+          "Reclamos Utilizando El Campo"
+        ],
+        "summary": "Consultar Reclamos Utilizando El Campo",
+        "description": "Recurso identificado na documentação (developers_pt_reference_claims_get-claim-notifications_get.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Reclamos Utilizando El Campo"
+        ],
+        "summary": "Criar/Atualizar Reclamos Utilizando El Campo",
+        "description": "Operação de mutação para Reclamos Utilizando El Campo.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Consultar Payments",
+        "description": "Recurso identificado na documentação (developers_pt_reference_online-payments_checkout-api_overview.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Criar/Atualizar Payments",
+        "description": "Operação de mutação para Payments.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/prefer-ncias": {
+      "get": {
+        "tags": [
+          "Preferências"
+        ],
+        "summary": "Consultar Preferências",
+        "description": "Recurso identificado na documentação (developers_pt_reference_online-payments_checkout-pro_overview.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Preferências"
+        ],
+        "summary": "Criar/Atualizar Preferências",
+        "description": "Operação de mutação para Preferências.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/relat-rios-permite-configurar": {
+      "get": {
+        "tags": [
+          "Relatórios Permite Configurar"
+        ],
+        "summary": "Consultar Relatórios Permite Configurar",
+        "description": "Recurso identificado na documentação (developers_pt_reference_reports_overview.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Relatórios Permite Configurar"
+        ],
+        "summary": "Criar/Atualizar Relatórios Permite Configurar",
+        "description": "Operação de mutação para Relatórios Permite Configurar.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/relat-rios": {
+      "get": {
+        "tags": [
+          "Relatórios"
+        ],
+        "summary": "Consultar Relatórios",
+        "description": "Recurso identificado na documentação (developers_pt_reference_reports_overview.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Relatórios"
+        ],
+        "summary": "Criar/Atualizar Relatórios",
+        "description": "Operação de mutação para Relatórios.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/mp_wcs/support/center": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/mp_wcs/support/center",
+        "description": "Endpoint extraído por declaração de rota (developers_pt_support_center.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calm/landing": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /calm/landing",
+        "description": "Endpoint extraído por declaração de rota (ferramentas-para-vender_link-de-pagamento.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/landing/partners/agencies": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/landing/partners/agencies",
+        "description": "Endpoint extraído por declaração de rota (partners_agencies_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/landing/partners/developers": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/landing/partners/developers",
+        "description": "Endpoint extraído por declaração de rota (partners_developers_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/landing/partners/platforms": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/landing/partners/platforms",
+        "description": "Endpoint extraído por declaração de rota (partners_platforms_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/landing/partners/unified": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/landing/partners/unified",
+        "description": "Endpoint extraído por declaração de rota (partners_pt.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/V1/payments": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /V1/payments",
+        "description": "Endpoint extraído da documentação (network_json_1_developers_pt_reference.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v5/1deVVCAgBIXCsExDhyHiCIhwZMGTzqBDwJjl2x5A4JX7MMsQSDBqC0EcNz1Whaw/t": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /v5/1deVVCAgBIXCsExDhyHiCIhwZMGTzqBDwJjl2x5A4JX7MMsQSDBqC0EcNz1Whaw/t",
+        "description": "Endpoint extraído da documentação (network_json_1_developers_pt_reference.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v9/Gnlf6frmqu85pq9k5HBkao3vvjii4RH4it5lNLpAlXTOELq7pSoIihcia8c0kDYKpNT0029qlR0k5/sgtX4LqrISLR": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /v9/Gnlf6frmqu85pq9k5HBkao3vvjii4RH4it5lNLpAlXTOELq7pSoIihcia8c0kDYKpNT0029qlR0k5/sgtX4LqrISLR",
+        "description": "Endpoint extraído da documentação (network_json_1_developers_pt_reference.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/reference": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/reference",
+        "description": "Endpoint extraído por declaração de rota (network_json_1_developers_pt_reference.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/licenses/mark-simonson-studio/webfont": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /licenses/mark-simonson-studio/webfont",
+        "description": "Endpoint extraído por declaração de rota (developers_panel_contact.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/autoload.php": {
+      "post": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "POST /autoload.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (developers_pt_docs_sdks-library_overview.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mercadopago/sdk-ios": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /mercadopago/sdk-ios",
+        "description": "Endpoint extraído por declaração de rota (developers_pt_docs_sdks-library_overview.md).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/F4CkxF1q4gAAADPoSYk7D3x/4JvEenlq4gAAADNo9esduOz/QAHQ6tVeryYOAAAwg1av1rry7w8UAFvdWr": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /v3/F4CkxF1q4gAAADPoSYk7D3x/4JvEenlq4gAAADNo9esduOz/QAHQ6tVeryYOAAAwg1av1rry7w8UAFvdWr",
+        "description": "Endpoint extraído da documentação (network_json_2_frontend-assets_dx-devsite_reference_53930ade_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers/panel/credentials": {
+      "get": {
+        "tags": [
+          "Mercadopago"
+        ],
+        "summary": "GET /developers/panel/credentials",
+        "description": "Endpoint extraído por declaração de rota (network_json_2_frontend-assets_dx-devsite_reference_53930ade_js.json).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via Token Bearer / JWT para Mercado Pago Payment Gateway API"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Chave de API (API Key / Token) para Mercado Pago Payment Gateway API"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Fluxo de autorização OAuth 2.0 para Mercado Pago Payment Gateway API",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.mercadopago.com/oauth/authorize",
+            "tokenUrl": "https://api.mercadopago.com/oauth/token",
+            "scopes": {
+              "read": "Leitura de recursos em Mercado Pago Payment Gateway API",
+              "write": "Gravação e mutação em Mercado Pago Payment Gateway API"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "O campo email é obrigatório."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "x-ratelimit": {
+    "description": "Políticas de Limites de Requisições e Throttling para a stack mercadopago.",
+    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
+    "headers": [
+      "X-RateLimit-Limit",
+      "X-RateLimit-Remaining",
+      "X-RateLimit-Reset"
+    ]
+  },
+  "x-retry-policy": {
+    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack mercadopago.",
+    "max_retries": 3,
+    "retry_on_status": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoff_strategy": "exponential",
+    "initial_delay_ms": 1000,
+    "max_delay_ms": 10000,
+    "jitter": true,
+    "idempotency_header": "X-Idempotency-Key"
+  },
+  "webhooks": {
+    "mercadopago_event_notification": {
+      "post": {
+        "summary": "Notificação de Eventos em Tempo Real (Mercado Pago Payment Gateway API)",
+        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Mercado Pago Payment Gateway API.",
+        "requestBody": {
+          "description": "Payload JSON com dados do evento disparado.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.created"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Dados da entidade mutada."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processado e confirmado com sucesso."
+          }
+        }
+      }
+    }
+  }
+}
