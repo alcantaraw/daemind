@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [v3.0.0] — 2026-08-31 — (HUB OMNICHANNEL DE AUTOMAÇÃO, TEMPLATES N8N & CRM 360°)
+## [v3.0.0] — (Em desenvolvimento) — (HUB OMNICHANNEL DE AUTOMAÇÃO, TEMPLATES N8N & CRM 360°)
 
 > **Marco Arquitetural 3.0:** Consolidação do **Hub Universal de Ingestão de E-Commerce, Marketplaces e CRM Omnichannel**, composto por uma suíte de **32 Templates Oficiais de Automação n8n** homologados e integrados ao PostgreSQL 17 (`loja_db`), Chatbot N1 com RAG Soberano e Memória Conversacional Nativa, e Motor de Sincronização Declarativa Plug & Play (`sync_n8n_templates.sh`).
 

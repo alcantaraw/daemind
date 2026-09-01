@@ -317,7 +317,7 @@ Todas as mudanças relevantes entre versões estão documentadas em **[CHANGELOG
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
-| [`v3.0.0`](CHANGELOG.md#v300--2026-08-31--hub-omnichannel-de-automacao-templates-n8n--crm-360) | 2026-08-31 | **Marco 3.0:** Hub Omnichannel de Automação (32 Templates n8n), Ingestão de E-Commerce/Marketplaces, Chatbot N1 com RAG & Memória e Motor Plug & Play |
+| [`v3.0.0`](CHANGELOG.md#v300--em-desenvolvimento--hub-omnichannel-de-automacao-templates-n8n--crm-360) | *Em desenvolvimento* | **Marco 3.0:** Hub Omnichannel de Automação (32 Templates n8n), Ingestão de E-Commerce/Marketplaces, Chatbot N1 com RAG & Memória e Motor Plug & Play |
 | [`v2.1.0`](CHANGELOG.md#v210--2026-08-31--catálogo-soberano-de-especificações-openapi-30) | 2026-08-31 | **Marco 2.1:** Catálogo Soberano OpenAPI 3.0 em `docs/OpenAPI/` (74 plataformas e 24.500+ endpoints em `apps/` e `services/`) com governança e resiliência |
 | [`v2.0.0`](CHANGELOG.md#v200--2026-08-29--release-estável-consolidada) | 2026-08-29 | **Marco 2.0:** Data Warehouse Zero-ETL (27 Views), Hub de Ads, Módulo B2B & Serviços, Dashboards Metabase/NocoDB e Governança Noturna SRE |
 | [`v1.0.0`](CHANGELOG.md#v100--2026-08-18--desacoplamento-completo) | 2026-08-18 | Desacoplamento completo — wizard TUI/CLI, módulos independentes, guardrails SRE |
