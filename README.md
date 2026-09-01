@@ -217,26 +217,26 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 ## 📌 Roadmap de Engenharia & Futuras Evoluções (TODO)
 
-- 🛒 **1. Templates de Automação Prontos para E-commerce & Marketplaces (n8n)**
-  - Criação de templates de automação prontos para uso no **n8n** integrando lojas virtuais (**Shopify, WooCommerce, Nuvemshop, Loja Integrada**) e marketplaces (**Mercado Livre, Amazon, Shopee**).
-  - Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX pendentes** e **Notificações de Rastreamento de Envio** diretamente via WhatsApp (*Evolution API / Chatwoot*).
-  - Algoritmos de **Throttling e Rate Limiting** nas esteiras para proteger as contas e chaves de API contra bloqueios nas plataformas parceiras.
-
-- 🤖 **2. Agentes de IA Especialistas & Protocolo MCP para Negócios**
+- 🤖 **1. Agentes de IA Especialistas & Protocolo MCP para Negócios**
   - Configuração de **Servidores MCP (Model Context Protocol)** para que os agentes de IA consultem produtos, estoques, status de pedidos e tabelas de frete em tempo real no PostgreSQL e NocoDB.
   - Criação de **Agentes SDR (Pré-vendas) e Suporte N1** treinados com RAG na base de dados da empresa para atender clientes no Chatwoot de forma autônoma e humanizada.
 
-- 🚀 **3. Omnichannel Hub Soberano (CRM, BI & App Unificado em Python/Go)**
+- 🚀 **2. Omnichannel Hub Soberano (CRM, BI & App Unificado em Python/Go)**
   - Criação de uma aplicação web simplória, ultra-leve (< 40MB RAM) e de alta performance que **substituirá integralmente o NocoDB e o Metabase na stack**, eliminando containers pesados, dependências de terceiros e paywalls.
   - **Gerador de Views Nativas:** Módulo dinâmico com alternância em 1 clique entre **Kanban (Drag & Drop)**, **Galeria Visual (Cards)**, **Grid Interativa (Planilha com Filtros)**, **Calendário (MRR & Prazos)** e **Formulários**.
   - **Centralizador de Informações & CRUD Soberano:** Leitura e gravação direta e em tempo real nas tabelas do PostgreSQL (`loja_db`) com zero intermediários.
   - **Gerador de Dashboards & Métricas:** Cockpit Executivo nativo com gráficos interativos (ApexCharts), relatórios de DRE Diário e exportação automatizada em Excel (`.xlsx`) e PDF.
 
-- 🎯 **4. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
+- 🎯 **3. Expansão Multi-Setorial (Módulos de Domínio Vertical)**
   - O **daemind.** nasce especialista em **Vendas Online & Marketing Digital**, mas sua esteira modular permite rápida expansão para outros setores:
     - 🩺 **Saúde & Clínicas:** Agendamentos inteligentes via WhatsApp, confirmação de consultas, triagem pré-atendimento e retenção de pacientes.
     - 👥 **Recursos Humanos & Departamento Pessoal:** Triagem automática de currículos por IA, onboarding de novos colaboradores e gestão de solicitações internas.
     - ⚖️ **Jurídico & Consultorias:** Acompanhamento de prazos, triagem de casos, RAG para consulta de contratos e atendimento automatizado a clientes.
+
+- ~~✅ **[CONCLUÍDO] 🛒 Templates de Automação Prontos para E-commerce, Marketplaces & CRM (n8n)**~~
+  - ~~Criação e homologação de 32 templates de automação nativos e especialistas no **n8n** integrando lojas virtuais (**Loja Integrada, Shopify, Nuvemshop, WooCommerce, VTEX, Tray, Yampi, CartPanda**), marketplaces (**Mercado Livre, Shopee, Amazon, Magalu, Olist, AnyMarket**), ERPs fiscais (**Bling, Tiny NF-e**), logística (**Melhor Envio, Frenet, Correios**), gateways (**Asaas, Stripe, Pagar.me**) e delivery (**iFood, Rappi**).~~
+  - ~~Esteiras de **Recuperação de Carrinho Abandonado**, **Cobrança Ativa de Boletos/PIX**, **Upsell 1-Clique**, **Régua RFM de Inativos**, **Transcritor de Áudios**, **Copiloto Text-to-SQL Executivo** e **Chatbot Autônomo N1 com RAG & Memória** via WhatsApp (*Evolution API / Chatwoot*).~~
+  - ~~Motor de ativação declarativa plug-and-play (`sync_n8n_templates.sh`) com controle anti-ban, delays e deduplicação global SHA-256 no PostgreSQL (`processed_events`). Documentação exaustiva em **[Manual de Templates e Workflows do n8n (docs/MANUAL_DE_TEMPLATES_E_WORKFLOWS_N8N.md)](docs/MANUAL_DE_TEMPLATES_E_WORKFLOWS_N8N.md)**.~~
 
 - ~~✅ **[CONCLUÍDO] 📈 Painéis Executivos de BI & Gestão de Lucro Real (Metabase & NocoDB)**~~
   - ~~Injeção REST API automática do Dashboard **"Cockpit Executivo Omnichannel 360°"** com 7 Cards analíticos pré-configurados (DRE Diário, Radar Cross-Sell/Upsell, Estoque Crítico, ROAS Real Caixa vs Pixel, MRR/Churn SaaS, Recuperação WhatsApp e SDR Chatwoot).~~
@@ -317,6 +317,7 @@ Todas as mudanças relevantes entre versões estão documentadas em **[CHANGELOG
 
 | Versão | Data | Descrição |
 |--------|------|-----------|
+| [`v3.0.0`](CHANGELOG.md#v300--2026-08-31--hub-omnichannel-de-automacao-templates-n8n--crm-360) | 2026-08-31 | **Marco 3.0:** Hub Omnichannel de Automação (32 Templates n8n), Ingestão de E-Commerce/Marketplaces, Chatbot N1 com RAG & Memória e Motor Plug & Play |
 | [`v2.1.0`](CHANGELOG.md#v210--2026-08-31--catálogo-soberano-de-especificações-openapi-30) | 2026-08-31 | **Marco 2.1:** Catálogo Soberano OpenAPI 3.0 em `docs/OpenAPI/` (74 plataformas e 24.500+ endpoints em `apps/` e `services/`) com governança e resiliência |
 | [`v2.0.0`](CHANGELOG.md#v200--2026-08-29--release-estável-consolidada) | 2026-08-29 | **Marco 2.0:** Data Warehouse Zero-ETL (27 Views), Hub de Ads, Módulo B2B & Serviços, Dashboards Metabase/NocoDB e Governança Noturna SRE |
 | [`v1.0.0`](CHANGELOG.md#v100--2026-08-18--desacoplamento-completo) | 2026-08-18 | Desacoplamento completo — wizard TUI/CLI, módulos independentes, guardrails SRE |

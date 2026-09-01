@@ -148,36 +148,13 @@ EOF
         sudo rm -f /etc/dnsmasq.d/n8n.conf 2>/dev/null || true
     fi
 
-    # Injeção idempotente do Workflow de Faxina Reativa 404 de Modelos de IA
-    local WF_ID=$(docker exec ${PREFIX}_postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -t -A -c "SELECT id FROM n8n_schema.workflow_entity WHERE name LIKE '%Faxina Reativa%' LIMIT 1;" 2>/dev/null || echo "")
-
-    if [ -z "$WF_ID" ]; then
-        echo "➜ [CONFIGURANDO N8N] Injetando Workflow de Faxina Reativa (404) no Orquestrador n8n..."
-
-        if [ -f "$TARGET_DIR/core/config/litellm_purge_workflow.json" ]; then
-            cp "$TARGET_DIR/core/config/litellm_purge_workflow.json" "$TARGET_DIR/volumes/n8n_data/litellm_purge_workflow.json" 2>/dev/null || true
-        elif [ -f "./core/config/litellm_purge_workflow.json" ]; then
-            cp "./core/config/litellm_purge_workflow.json" "$TARGET_DIR/volumes/n8n_data/litellm_purge_workflow.json" 2>/dev/null || true
-        fi
-
-        if [ -f "$TARGET_DIR/volumes/n8n_data/litellm_purge_workflow.json" ]; then
-            sed -i "s|##LITELLM_HOST##|${PREFIX}_litellm|g" "$TARGET_DIR/volumes/n8n_data/litellm_purge_workflow.json"
-            sed -i "s|##LITELLM_KEY##|${LITELLM_MASTER_KEY}|g" "$TARGET_DIR/volumes/n8n_data/litellm_purge_workflow.json"
-
-            docker exec -u node ${PREFIX}_n8n n8n import:workflow --input=/home/node/.n8n/litellm_purge_workflow.json > /dev/null 2>&1 || true
-
-            # Captura o ID diretamente do PostgreSQL e publica o workflow
-            WF_ID=$(docker exec ${PREFIX}_postgres psql -U "${DB_USER}" -d "${PREFIX}_db" -t -A -c "SELECT id FROM n8n_schema.workflow_entity WHERE name LIKE '%Faxina Reativa%' LIMIT 1;" 2>/dev/null || echo "")
-            if [ -n "$WF_ID" ]; then
-                docker exec -u node ${PREFIX}_n8n n8n publish:workflow --id="$WF_ID" > /dev/null 2>&1 || docker exec -u node ${PREFIX}_n8n n8n update:workflow --id="$WF_ID" --active=true > /dev/null 2>&1 || true
-            fi
-            rm -f "$TARGET_DIR/volumes/n8n_data/litellm_purge_workflow.json" 2>/dev/null || true
-            echo "➜ [SUCESSO N8N] Workflow de Faxina Reativa implantado e publicado no n8n."
-        fi
-    else
-        # Garante publicação caso o workflow já exista
-        docker exec -u node ${PREFIX}_n8n n8n publish:workflow --id="$WF_ID" > /dev/null 2>&1 || docker exec -u node ${PREFIX}_n8n n8n update:workflow --id="$WF_ID" --active=true > /dev/null 2>&1 || true
-        echo "➜ [IDEMPOTÊNCIA N8N] Workflow de Faxina Reativa de Modelos IA já presente e publicado no n8n."
+    # Sincronização e injeção declarativa idempotente dos templates oficiais do n8n
+    local SYNC_SCRIPT="$TARGET_DIR/core/scripts/sync_n8n_templates.sh"
+    [ ! -f "$SYNC_SCRIPT" ] && SYNC_SCRIPT="./core/scripts/sync_n8n_templates.sh"
+    if [ -f "$SYNC_SCRIPT" ]; then
+        echo "➜ [CONFIGURANDO N8N] Sincronizando catálogo de templates de automação..."
+        chmod +x "$SYNC_SCRIPT" 2>/dev/null || true
+        bash "$SYNC_SCRIPT" "$TARGET_DIR" || true
     fi
 
     # Ativação dinâmica dos containers e variáveis do AI Assistant quando solicitado

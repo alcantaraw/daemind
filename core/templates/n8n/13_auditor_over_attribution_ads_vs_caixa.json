@@ -1,0 +1,151 @@
+{
+  "name": "[daemind] 13 - Auditoria Diária de Over-Attribution (Ads vs Caixa Real)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "50 23 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Agendador Diário (23h50)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  CURRENT_DATE AS data_referencia,\n  COALESCE(SUM(p.valor_total), 0) AS faturamento_caixa_real,\n  COUNT(p.id) AS pedidos_pagos,\n  COALESCE((SELECT SUM(gasto_total) FROM metricas_ads WHERE data_metrica = CURRENT_DATE), 500.00) AS investimento_ads_total,\n  COALESCE((SELECT SUM(receita_reportada_pixel) FROM metricas_ads WHERE data_metrica = CURRENT_DATE), 1800.00) AS receita_reportada_pixel\nFROM pedidos p\nWHERE p.status_operacional = 'Pago'\n  AND DATE(p.data_criacao) = CURRENT_DATE;"
+      },
+      "name": "Consultar Caixa vs Ads (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -180,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - AUDITOR CONTÁBIL DE OVER-ATTRIBUTION DE ADS\n// ===============================================================================\nconst j = $json;\n\nconst caixaReal = parseFloat(j.faturamento_caixa_real || 0);\nconst investimentoAds = parseFloat(j.investimento_ads_total || 0);\nconst receitaPixel = parseFloat(j.receita_reportada_pixel || 0);\nconst pedidosPagos = parseInt(j.pedidos_pagos || 0, 10);\n\nconst roasCaixa = investimentoAds > 0 ? (caixaReal / investimentoAds) : 0;\nconst roasPixel = investimentoAds > 0 ? (receitaPixel / investimentoAds) : 0;\n\nconst diferencaAbsoluta = receitaPixel - caixaReal;\nconst overAttributionPct = caixaReal > 0 ? ((receitaPixel - caixaReal) / caixaReal) * 100 : 0;\nconst isOverAttributed = overAttributionPct >= 20.0;\n\nconst emoji = isOverAttributed ? '🚨' : '✅';\nconst statusAlerta = isOverAttributed ? 'ALERTA_SOBREATRIBUICAO' : 'ROAS_SAUDAVEL';\n\nconst msg = `${emoji} *DAEMIND SRE - AUDITORIA DE ADS vs CAIXA REAL* ${emoji}\\n\\n📅 *Data:* ${j.data_referencia}\\n💰 *Caixa Real (Banco):* R$ ${caixaReal.toFixed(2)} (${pedidosPagos} pedidos pagos)\\n📊 *Receita Pixel (Gerenciadores Ads):* R$ ${receitaPixel.toFixed(2)}\\n🎯 *Investimento em Ads:* R$ ${investimentoAds.toFixed(2)}\\n\\n📈 *ROAS Real Caixa:* ${roasCaixa.toFixed(2)}x\\n📉 *ROAS Pixel Reportado:* ${roasPixel.toFixed(2)}x\\n\\n${isOverAttributed ? `⚠️ *Discrepância / Over-Attribution:* +${overAttributionPct.toFixed(1)}% (R$ ${diferencaAbsoluta.toFixed(2)} inflados pelas plataformas)` : '✨ Métricas de atribuição alinhadas com o caixa real.'}`;\n\nreturn [{\n  json: {\n    ...j,\n    caixa_real: caixaReal,\n    investimento_ads: investimentoAds,\n    receita_pixel: receitaPixel,\n    roas_caixa: roasCaixa,\n    roas_pixel: roasPixel,\n    over_attribution_pct: overAttributionPct,\n    is_over_attributed: isOverAttributed,\n    relatorio_whatsapp: msg\n  }\n}];"
+      },
+      "name": "Calcular Discrepância e ROAS",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$env.ADMIN_WHATSAPP || '5521999999999'}}\",\n  \"text\": \"{{$json.relatorio_whatsapp}}\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar Relatório Diretoria (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'auditoria_ads_caixa',\n  'financeiro',\n  '{{$env.ADMIN_WHATSAPP || '5521999999999'}}',\n  '{\"caixa\": {{$json.caixa_real}}, \"investimento\": {{$json.investimento_ads}}, \"roas_caixa\": {{$json.roas_caixa}}, \"over_attribution_pct\": {{$json.over_attribution_pct}}}'::jsonb,\n  'concluido',\n  'auditoria_ads_' || CURRENT_DATE\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Log no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        540,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Agendador Diário (23h50)": {
+      "main": [
+        [
+          {
+            "node": "Consultar Caixa vs Ads (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Caixa vs Ads (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Calcular Discrepância e ROAS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calcular Discrepância e ROAS": {
+      "main": [
+        [
+          {
+            "node": "Disparar Relatório Diretoria (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar Relatório Diretoria (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Log no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

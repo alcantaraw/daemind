@@ -1,0 +1,207 @@
+{
+  "name": "[daemind] 30 - Delivery: iFood & Rappi (Comanda, Pedidos & Status em Tempo Real)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-delivery-orders",
+        "options": {}
+      },
+      "name": "Webhook Delivery Orders",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-delivery-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER CANÔNICO DE DELIVERY (IFOOD, RAPPI, ANOTA AI, AIQFOME)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\nlet deliveryPlat = 'iFood';\nif (body.orderId && body.code) deliveryPlat = 'iFood';\nelse if (body.rappi_order_id || body.store_id) deliveryPlat = 'Rappi';\nelse if (body.anota_id || body.customer_phone) deliveryPlat = 'Anota AI';\nelse deliveryPlat = 'Delivery App';\n\nconst customer = body.customer || {};\nlet rawPhone = (customer.phone?.number || customer.phone || body.customer_phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (customer.name || body.customer_name || 'Cliente Delivery').trim();\nconst orderId = (body.orderId || body.id || body.displayId || Date.now()).toString();\nconst numeroPedido = parseInt(orderId.replace(/\\D/g, '').slice(-8) || Date.now().toString().slice(-8), 10);\nconst valorTotal = parseFloat(body.total?.orderAmount || body.order_total || body.total || 0);\nconst status = (body.code || body.status || 'PLACED').toUpperCase();\n\nlet statusOperacional = 'Pendente';\nif (['CONFIRMED', 'PLACED', 'PREPARING', 'READY_TO_PICKUP'].includes(status)) {\n  statusOperacional = 'Pago';\n} else if (['DISPATCHED'].includes(status)) {\n  statusOperacional = 'Enviado';\n} else if (['CANCELLED'].includes(status)) {\n  statusOperacional = 'Cancelado';\n}\n\nconst items = (body.items || []).map(i => ({\n  produto_nome: i.name || 'Item Delivery',\n  quantidade: parseInt(i.quantity || 1, 10),\n  preco_unitario: parseFloat(i.unitPrice || i.price || 0),\n  observacao: i.observations || ''\n}));\n\nconst dedupHash = crypto.createHash('sha256').update(`${deliveryPlat}_${orderId}_${statusOperacional}_${valorTotal}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    delivery_plataforma: deliveryPlat,\n    order_id: orderId,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_whatsapp: rawPhone,\n    valor_total: valorTotal,\n    status_operacional: statusOperacional,\n    items: items\n  }\n}];"
+      },
+      "name": "Parser Delivery",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  '{{$json.delivery_plataforma}}',\n  '{{$json.dedup_hash}}',\n  'pedido_{{$json.status_operacional}}'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH ins_cli AS (\n  INSERT INTO clientes (nome, whatsapp, origem_principal)\n  VALUES (\n    '{{$('Parser Delivery').item.json.cliente_nome}}',\n    NULLIF('{{$('Parser Delivery').item.json.cliente_whatsapp}}', ''),\n    '{{$('Parser Delivery').item.json.delivery_plataforma}}'\n  )\n  ON CONFLICT (whatsapp) DO UPDATE \n  SET nome = EXCLUDED.nome,\n      updated_at = CURRENT_TIMESTAMP\n  RETURNING id\n)\nINSERT INTO pedidos (numero_pedido, cliente_id, valor_total, status_operacional, data_criacao)\nVALUES (\n  {{$('Parser Delivery').item.json.numero_pedido}},\n  (SELECT id FROM ins_cli UNION SELECT id FROM clientes WHERE whatsapp = '{{$('Parser Delivery').item.json.cliente_whatsapp}}' LIMIT 1),\n  {{$('Parser Delivery').item.json.valor_total}},\n  '{{$('Parser Delivery').item.json.status_operacional}}',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (numero_pedido) DO UPDATE \nSET status_operacional = EXCLUDED.status_operacional,\n    valor_total = EXCLUDED.valor_total,\n    updated_at = CURRENT_TIMESTAMP\nRETURNING id, numero_pedido, cliente_id, valor_total, status_operacional;"
+      },
+      "name": "Persistir no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser Delivery').item.json.cliente_whatsapp}}\",\n  \"text\": \"🛵 *Pedido Recebido na Cozinha ({{$('Parser Delivery').item.json.delivery_plataforma}})!*\\n\\nOlá, *{{$('Parser Delivery').item.json.cliente_nome}}*!\\nSeu pedido *#{{$('Parser Delivery').item.json.order_id}}* de *R$ {{$('Parser Delivery').item.json.valor_total.toFixed(2)}}* já foi confirmado e está em preparo.\\n\\nBom apetite! 🍽️✨\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'pedido_delivery',\n  'pedidos',\n  {{$json.id}},\n  '{{$('Parser Delivery').item.json.cliente_whatsapp}}',\n  '{\"app\": \"{{$('Parser Delivery').item.json.delivery_plataforma}}\", \"pedido\": \"{{$('Parser Delivery').item.json.order_id}}\", \"status\": \"{{$json.status_operacional}}\"}'::jsonb,\n  'concluido',\n  'deliv_ped_{{$('Parser Delivery').item.json.order_id}}_{{$json.status_operacional}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1000,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Delivery Orders": {
+      "main": [
+        [
+          {
+            "node": "Parser Delivery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Delivery": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Persistir no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persistir no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

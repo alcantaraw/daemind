@@ -1,0 +1,106 @@
+{
+  "name": "[daemind] 31 - Hub Roteador Universal de Webhooks & Fallback CRM 360°",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ecommerce-inbound-universal",
+        "options": {}
+      },
+      "name": "Webhook Universal E-Commerce",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-ecommerce-universal-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - HUB ROTEADOR UNIVERSAL E FALLBACK DE E-COMMERCE & MARKETPLACES\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\nlet origem = ($json.query?.origem || body.origem || 'E-Commerce Universal').toString();\nlet rawPhone = (body.cliente?.telefone || body.customer?.phone || body.phone || body.whatsapp || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (body.cliente?.nome || body.customer?.name || body.name || 'Cliente').trim();\nconst clienteEmail = (body.cliente?.email || body.customer?.email || body.email || '').trim().toLowerCase();\nconst numeroPedido = parseInt(body.numero || body.id || Date.now(), 10);\nconst valorTotal = parseFloat(body.valor_total || body.total || 0);\n\nconst dedupHash = crypto.createHash('sha256').update(`${origem}_${numeroPedido}_${valorTotal}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    origem: origem,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_email: clienteEmail,\n    cliente_whatsapp: rawPhone,\n    valor_total: valorTotal\n  }\n}];"
+      },
+      "name": "Roteador Universal",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  '{{$json.origem}}',\n  '{{$json.dedup_hash}}',\n  'webhook_fallback'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência Global",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'webhook_fallback',\n  'pedidos',\n  {{$json.numero_pedido}},\n  '{{$json.cliente_whatsapp}}',\n  '{\"origem\": \"{{$json.origem}}\", \"valor\": {{$json.valor_total}}}'::jsonb,\n  'concluido',\n  'fb_ped_{{$json.numero_pedido}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar na Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        280,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Universal E-Commerce": {
+      "main": [
+        [
+          {
+            "node": "Roteador Universal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Roteador Universal": {
+      "main": [
+        [
+          {
+            "node": "Idempotência Global",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência Global": {
+      "main": [
+        [
+          {
+            "node": "Registrar na Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

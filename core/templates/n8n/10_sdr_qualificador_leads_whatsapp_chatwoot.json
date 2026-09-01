@@ -1,0 +1,254 @@
+{
+  "name": "[daemind] 10 - SDR & Triagem Autônoma de Leads com IA (Chatwoot + NocoDB)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sdr-lead-inbound",
+        "options": {}
+      },
+      "name": "Webhook Lead WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-sdr-lead-inbound"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE MENSAGEM DO LEAD\n// ===============================================================================\nconst body = $json.body || $json;\nconst data = body.data || body;\nconst sender = (data.key?.remoteJid || body.sender || '').toString().replace(/@.*$/, '').replace(/\\D/g, '');\nconst messageText = (data.message?.conversation || data.message?.extendedTextMessage?.text || body.content || body.text || '').trim();\nconst senderName = (data.pushName || body.sender_name || 'Lead Novo').trim();\n\nreturn [{\n  json: {\n    whatsapp: sender,\n    nome: senderName,\n    mensagem: messageText,\n    raw_id: data.key?.id || Date.now().toString()\n  }\n}];"
+      },
+      "name": "Sanitizar Dados do Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é um SDR especialista em qualificação de leads B2B/B2C. Analise a mensagem recebida e classifique o lead. Responda ESTRITAMENTE em formato JSON com as chaves: 'score' (inteiro de 0 a 100 indicando potencial de compra), 'interesse_principal' (string), 'tipo_lead' ('QUALIFICADO_ALTO_VALOR', 'DUVIDA_SUPORTE', 'CURIOSO_BAIXO_VALOR'), 'resposta_sugerida' (texto profissional para responder ao lead no WhatsApp).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Nome do Lead: '{{$json.nome}}'. Mensagem enviada: '{{$json.mensagem}}'\"\n    }\n  ],\n  \"temperature\": 0.2\n}",
+        "options": {}
+      },
+      "name": "Qualificar Lead via IA (LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER E CLASSIFICAÇÃO DE SCORE\n// ===============================================================================\nconst rawContent = $json.choices?.[0]?.message?.content || '{}';\nlet parsed = {};\ntry {\n  const cleanJson = rawContent.replace(/```json\\n?|```/g, '').trim();\n  parsed = JSON.parse(cleanJson);\n} catch (e) {\n  parsed = {\n    score: 50,\n    interesse_principal: 'Geral',\n    tipo_lead: 'DUVIDA_SUPORTE',\n    resposta_sugerida: 'Olá! Como posso ajudar você hoje?'\n  };\n}\n\nreturn [{\n  json: {\n    ...parsed,\n    lead_score: parseInt(parsed.score || 50, 10),\n    whatsapp: $('Sanitizar Dados do Lead').item.json.whatsapp,\n    nome: $('Sanitizar Dados do Lead').item.json.nome,\n    mensagem_original: $('Sanitizar Dados do Lead').item.json.mensagem\n  }\n}];"
+      },
+      "name": "Processar Decisão SDR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.lead_score}}",
+              "operation": "largerEqual",
+              "value2": 70
+            }
+          ]
+        }
+      },
+      "name": "É Lead Qualificado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        540,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO clientes (nome, whatsapp)\nVALUES ('{{$json.nome}}', '{{$json.whatsapp}}')\nON CONFLICT (whatsapp) DO UPDATE SET nome = EXCLUDED.nome, updated_at = CURRENT_TIMESTAMP;\n\nINSERT INTO fila_mensageria (event_type, aggregate_type, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'lead_qualificado_sdr',\n  'crm',\n  '{{$json.whatsapp}}',\n  '{\"score\": {{$json.lead_score}}, \"interesse\": \"{{$json.interesse_principal}}\", \"origem\": \"SDR_IA\"}'::jsonb,\n  'concluido',\n  'sdr_lead_{{$json.whatsapp}}_' || TO_CHAR(CURRENT_DATE, 'YYYYMMDD')\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar CRM no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        780,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$env.ADMIN_WHATSAPP || '5521999999999'}}\",\n  \"text\": \"🔥 *NOVO LEAD QUALIFICADO (Score: {{$('Processar Decisão SDR').item.json.lead_score}}/100)* 🔥\\n\\n👤 *Nome:* {{$('Processar Decisão SDR').item.json.nome}}\\n📱 *WhatsApp:* {{$('Processar Decisão SDR').item.json.whatsapp}}\\n🎯 *Interesse:* {{$('Processar Decisão SDR').item.json.interesse_principal}}\\n💬 *Mensagem:* \\\"{{$('Processar Decisão SDR').item.json.mensagem_original}}\\\"\\n\\n⚡ Lead inserido no CRM e pronto para fechamento!\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Alertar Vendedor Humano (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Processar Decisão SDR').item.json.whatsapp}}\",\n  \"text\": \"{{$('Processar Decisão SDR').item.json.resposta_sugerida}}\",\n  \"delay\": 1500\n}",
+        "options": {}
+      },
+      "name": "Responder ao Lead no WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Lead WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Dados do Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Dados do Lead": {
+      "main": [
+        [
+          {
+            "node": "Qualificar Lead via IA (LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qualificar Lead via IA (LiteLLM)": {
+      "main": [
+        [
+          {
+            "node": "Processar Decisão SDR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processar Decisão SDR": {
+      "main": [
+        [
+          {
+            "node": "É Lead Qualificado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É Lead Qualificado?": {
+      "main": [
+        [
+          {
+            "node": "Registrar CRM no loja_db",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Responder ao Lead no WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder ao Lead no WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar CRM no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Alertar Vendedor Humano (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

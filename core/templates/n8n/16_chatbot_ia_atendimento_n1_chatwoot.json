@@ -1,0 +1,410 @@
+{
+  "name": "[daemind] 16 - Chatbot Autônomo de Atendimento N1 com RAG e Memória (Chatwoot + LiteLLM)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chatbot-chatwoot-inbound",
+        "options": {}
+      },
+      "name": "Webhook Chatwoot Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-chatbot-chatwoot-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - FILTRO ANTI-LOOP E EXTRAÇÃO DE CONTEXTO DO CHATWOOT\n// ===============================================================================\nconst body = $json.body || $json;\n\n// 1. Validação de evento: Processa apenas mensagens INCOMING (do cliente) e NÃO privadas\nconst messageType = body.message_type || (body.event === 'message_created' ? body.message_type : '');\nconst isPrivate = Boolean(body.private);\nconst isIncoming = messageType === 'incoming' || body.event === 'message_created' && messageType === 0;\n\nif (isPrivate || !isIncoming) {\n  return [{\n    json: {\n      should_process: false,\n      reason: 'Mensagem enviada por atendente/bot ou é nota privada. Ignorando para evitar loop.'\n    }\n  }];\n}\n\nconst content = (body.content || '').trim();\nif (!content) {\n  return [{\n    json: {\n      should_process: false,\n      reason: 'Mensagem sem conteúdo textual.'\n    }\n  }];\n}\n\nconst conversationId = body.conversation?.id || body.conversation_id || 1;\nconst accountId = body.account?.id || body.account_id || 1;\nconst sender = body.sender || {};\nconst contactName = (sender.name || 'Cliente').trim();\nconst rawPhone = (sender.phone_number || '').toString().replace(/\\D/g, '');\nconst email = (sender.email || '').trim().toLowerCase();\n\nreturn [{\n  json: {\n    should_process: true,\n    conversation_id: conversationId,\n    account_id: accountId,\n    cliente_nome: contactName,\n    cliente_telefone: rawPhone,\n    cliente_email: email,\n    mensagem_cliente: content,\n    created_at: body.created_at || Date.now()\n  }\n}];"
+      },
+      "name": "Filtrar e Sanitizar Mensagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.should_process}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "Mensagem Válida do Cliente?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH historico_cliente AS (\n  SELECT \n    p.numero_pedido,\n    p.valor_total,\n    p.status_operacional,\n    p.codigo_rastreio,\n    p.data_criacao,\n    pi.produto_nome,\n    pi.quantidade\n  FROM pedidos p\n  JOIN clientes c ON p.cliente_id = c.id\n  LEFT JOIN pedidos_itens pi ON pi.pedido_id = p.id\n  WHERE (c.whatsapp LIKE '%' || NULLIF('{{$json.cliente_telefone}}', '') OR c.email = NULLIF('{{$json.cliente_email}}', ''))\n  ORDER BY p.data_criacao DESC\n  LIMIT 3\n),\npoliticas_faq AS (\n  SELECT 'Garantia e Trocas' AS topico, 'Trocas podem ser solicitadas em até 30 dias após o recebimento. Para devoluções por arrependimento, o prazo é de 7 dias úteis sem custos.' AS conteudo\n  UNION ALL\n  SELECT 'Prazos de Envio', 'Pedidos confirmados até 14h são despachados no mesmo dia útil. O código de rastreio é enviado automaticamente por WhatsApp e e-mail.'\n  UNION ALL\n  SELECT 'Formas de Pagamento', 'Aceitamos PIX com 5% de desconto imediato, Cartão de Crédito em até 12x e Boleto Bancário.'\n)\nSELECT \n  (SELECT json_agg(h) FROM historico_cliente h) AS pedidos_contexto,\n  (SELECT json_agg(f) FROM politicas_faq f) AS rag_politicas;"
+      },
+      "name": "Recuperar RAG e Dados do Cliente (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        300,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://chatwoot:3000/api/v1/accounts/{{$('Filtrar e Sanitizar Mensagem').item.json.account_id}}/conversations/{{$('Filtrar e Sanitizar Mensagem').item.json.conversation_id}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{$env.CHATWOOT_ACCESS_TOKEN || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Buscar Memória Conversacional (Chatwoot)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - COMPILADOR DE RAG, MEMÓRIA HISTÓRICA E DIRETRIZES DE IA\n// ===============================================================================\nconst clienteData = $('Filtrar e Sanitizar Mensagem').item.json;\nconst ragData = $('Recuperar RAG e Dados do Cliente (PostgreSQL)').item.json;\nconst rawMessages = $json.payload || [];\n\n// 1. Extração e montagem da memória das últimas 6 mensagens\nconst historicoMensagens = rawMessages\n  .filter(m => !m.private && m.content)\n  .slice(-6)\n  .map(m => `[${m.message_type === 0 ? 'Cliente' : 'Atendente IA'}]: ${m.content}`)\n  .join('\\n');\n\n// 2. Compilação de dados de RAG (Pedidos recentes + FAQ da Empresa)\nconst pedidosContexto = JSON.stringify(ragData.pedidos_contexto || []);\nconst faqContexto = JSON.stringify(ragData.rag_politicas || []);\n\nconst systemPrompt = `Você é o Especialista de Atendimento Autônomo da empresa. Seu objetivo é atender ${clienteData.cliente_nome} com cordialidade, precisão e elegância.\n\n### DIRETRIZES DE ATENDIMENTO:\n1. Responda de forma direta, acolhedora e concisa (máximo 2 a 3 parágrafos curtos).\n2. Utilize as informações de RAG fornecidas abaixo para tirar dúvidas reais sobre pedidos, rastreio, estoque e políticas da empresa.\n3. Se o cliente solicitar explicitamente um atendente humano, estiver visivelmente irritado, ou se você não tiver certeza absoluta sobre a resposta, acione o Human Handoff (handoff_humano: true).\n\n### CONTEXTO DE RAG DA EMPRESA:\n- Pedidos Recentes do Cliente: ${pedidosContexto}\n- Políticas e FAQs Corporativas: ${faqContexto}\n\n### HISTÓRICO RECENTE DA CONVERSA (MEMÓRIA):\n${historicoMensagens}\n\n### FORMATO ESTRITO DE RESPOSTA:\nResponda ESTRITAMENTE em formato JSON com as chaves:\n- 'resposta_cliente': (Texto formatado em markdown WhatsApp para enviar ao cliente)\n- 'handoff_humano': (Booleano: true se precisa transferir para humano, false se resolvido por IA)\n- 'motivo_handoff': (String explicando o motivo caso handoff_humano seja true)\n- 'resumo_atendente': (Síntese concisa de 2 linhas para a equipe interna)`;\n\nreturn [{\n  json: {\n    system_prompt: systemPrompt,\n    mensagem_atual: clienteData.mensagem_cliente,\n    conversation_id: clienteData.conversation_id,\n    account_id: clienteData.account_id,\n    cliente_nome: clienteData.cliente_nome\n  }\n}];"
+      },
+      "name": "Compilar RAG e Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        780,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"{{$json.system_prompt.replace(/\\\"/g, '\\\\\"').replace(/\\n/g, '\\\\n')}}\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Mensagem do cliente: '{{$json.mensagem_atual}}'\"\n    }\n  ],\n  \"temperature\": 0.2\n}",
+        "options": {}
+      },
+      "name": "Processar IA com LiteLLM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE RESPOSTA E DECISÃO DE HANDOFF\n// ===============================================================================\nconst rawContent = $json.choices?.[0]?.message?.content || '{}';\nlet parsed = {};\n\ntry {\n  const cleanJson = rawContent.replace(/```json\\n?|```/g, '').trim();\n  parsed = JSON.parse(cleanJson);\n} catch (e) {\n  parsed = {\n    resposta_cliente: 'Olá! Recebi sua mensagem e estou transferindo para um de nossos atendentes especialistas para te ajudar da melhor forma.',\n    handoff_humano: true,\n    motivo_handoff: 'Falha no parse do LLM',\n    resumo_atendente: 'Cliente enviou mensagem. Transcrição manual requerida.'\n  };\n}\n\nconst comp = $('Compilar RAG e Prompt').item.json;\nconst isHandoff = Boolean(parsed.handoff_humano);\n\nconst notaPrivada = `🤖 **DAEMIND AI - RESUMO DE TRANSIÇÃO HUMAN HANDOFF**\\n\\n👤 **Cliente:** ${comp.cliente_nome}\\n🎯 **Motivo:** ${parsed.motivo_handoff || 'Solicitação do cliente ou complexidade alta'}\\n📝 **Resumo do Caso:** ${parsed.resumo_atendente || 'Cliente aguardando suporte humano no chat.'}\\n💡 **Status:** Atendimento transferido para a fila humana.`;\n\nreturn [{\n  json: {\n    ...parsed,\n    is_handoff: isHandoff,\n    nota_privada_formatada: notaPrivada,\n    account_id: comp.account_id,\n    conversation_id: comp.conversation_id,\n    cliente_nome: comp.cliente_nome\n  }\n}];"
+      },
+      "name": "Parsear Decisão da IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.is_handoff}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "Precisa de Handoff Humano?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1500,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/{{$json.account_id}}/conversations/{{$json.conversation_id}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{$env.CHATWOOT_ACCESS_TOKEN || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"{{$json.nota_privada_formatada}}\",\n  \"message_type\": \"outgoing\",\n  \"private\": true\n}",
+        "options": {}
+      },
+      "name": "Injetar Nota de Transição (Chatwoot)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1740,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/{{$json.account_id}}/conversations/{{$json.conversation_id}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{$env.CHATWOOT_ACCESS_TOKEN || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"{{$json.resposta_cliente || 'Transferindo você agora para um de nossos atendentes humanos. Um momento, por favor! ✨'}}\",\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}",
+        "options": {}
+      },
+      "name": "Avisar Cliente da Transição (Chatwoot)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1980,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/{{$json.account_id}}/conversations/{{$json.conversation_id}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{$env.CHATWOOT_ACCESS_TOKEN || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"{{$json.resposta_cliente}}\",\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}",
+        "options": {}
+      },
+      "name": "Enviar Resposta Autônoma IA (Chatwoot)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1740,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, payload, status, idempotency_key)\nVALUES (\n  'chatbot_atendimento_ia',\n  'conversas',\n  {{$json.conversation_id}},\n  '{\"tipo\": \"resposta_ia\", \"handoff\": false}'::jsonb,\n  'concluido',\n  'ia_chat_{{$json.conversation_id}}_' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD_HH24MISS')\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Log no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1980,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Chatwoot Inbound": {
+      "main": [
+        [
+          {
+            "node": "Filtrar e Sanitizar Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar e Sanitizar Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Mensagem Válida do Cliente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem Válida do Cliente?": {
+      "main": [
+        [
+          {
+            "node": "Recuperar RAG e Dados do Cliente (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recuperar RAG e Dados do Cliente (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Buscar Memória Conversacional (Chatwoot)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Memória Conversacional (Chatwoot)": {
+      "main": [
+        [
+          {
+            "node": "Compilar RAG e Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compilar RAG e Prompt": {
+      "main": [
+        [
+          {
+            "node": "Processar IA com LiteLLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processar IA com LiteLLM": {
+      "main": [
+        [
+          {
+            "node": "Parsear Decisão da IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Decisão da IA": {
+      "main": [
+        [
+          {
+            "node": "Precisa de Handoff Humano?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Precisa de Handoff Humano?": {
+      "main": [
+        [
+          {
+            "node": "Injetar Nota de Transição (Chatwoot)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar Resposta Autônoma IA (Chatwoot)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Injetar Nota de Transição (Chatwoot)": {
+      "main": [
+        [
+          {
+            "node": "Avisar Cliente da Transição (Chatwoot)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Resposta Autônoma IA (Chatwoot)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Log no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

@@ -1,0 +1,207 @@
+{
+  "name": "[daemind] 23 - Mercado Livre: Ingestão de Pedidos, Taxas ML & Envios Full/Flex",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-mercadolivre-orders",
+        "options": {}
+      },
+      "name": "Webhook Mercado Livre",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-mercadolivre-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER CANÔNICO DO MERCADO LIVRE (BUYER, TAXAS ML, SHIPPING)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\nconst buyer = body.buyer || {};\nlet rawPhone = (buyer.phone?.number || buyer.phone?.area_code ? `${buyer.phone?.area_code || ''}${buyer.phone?.number || ''}` : '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (buyer.nickname || `${buyer.first_name || 'Comprador'} ${buyer.last_name || 'Mercado Livre'}`).trim();\nconst clienteEmail = (buyer.email || '').trim().toLowerCase();\nconst clienteDoc = (buyer.billing_info?.doc_number || '').toString().replace(/\\D/g, '');\n\nconst numeroPedido = parseInt(body.id || Date.now(), 10);\nconst valorTotal = parseFloat(body.total_amount || 0);\nconst status = (body.status || '').toLowerCase();\n\nlet statusOperacional = 'Pendente';\nif (['paid'].includes(status)) {\n  statusOperacional = 'Pago';\n} else if (['cancelled'].includes(status)) {\n  statusOperacional = 'Cancelado';\n}\n\n// Extração de taxas de venda da comissão do Mercado Livre\nlet totalTaxasML = 0;\nconst orderItems = (body.order_items || []).map(item => {\n  const saleFee = parseFloat(item.sale_fee || 0);\n  totalTaxasML += saleFee;\n  return {\n    produto_nome: item.item?.title || 'Produto Mercado Livre',\n    sku: item.item?.seller_custom_field || item.item?.id || 'MLB_SKU',\n    quantidade: parseInt(item.quantity || 1, 10),\n    preco_unitario: parseFloat(item.unit_price || 0),\n    taxa_comissao_ml: saleFee\n  };\n});\n\nconst dedupHash = crypto.createHash('sha256').update(`mercadolivre_${numeroPedido}_${statusOperacional}_${valorTotal}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_email: clienteEmail,\n    cliente_whatsapp: rawPhone,\n    cliente_doc: clienteDoc,\n    valor_total: valorTotal,\n    taxas_marketplace: totalTaxasML,\n    status_operacional: statusOperacional,\n    order_items: orderItems,\n    shipping_id: body.shipping?.id || ''\n  }\n}];"
+      },
+      "name": "Parser Mercado Livre",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  'Mercado Livre',\n  '{{$json.dedup_hash}}',\n  'pedido_{{$json.status_operacional}}'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH ins_cli AS (\n  INSERT INTO clientes (nome, email, whatsapp, origem_principal)\n  VALUES (\n    '{{$('Parser Mercado Livre').item.json.cliente_nome}}',\n    NULLIF('{{$('Parser Mercado Livre').item.json.cliente_email}}', ''),\n    NULLIF('{{$('Parser Mercado Livre').item.json.cliente_whatsapp}}', ''),\n    'Mercado Livre'\n  )\n  ON CONFLICT (email) DO UPDATE \n  SET whatsapp = COALESCE(EXCLUDED.whatsapp, clientes.whatsapp),\n      nome = EXCLUDED.nome,\n      updated_at = CURRENT_TIMESTAMP\n  RETURNING id\n)\nINSERT INTO pedidos (numero_pedido, cliente_id, valor_total, status_operacional, data_criacao)\nVALUES (\n  {{$('Parser Mercado Livre').item.json.numero_pedido}},\n  (SELECT id FROM ins_cli UNION SELECT id FROM clientes WHERE email = '{{$('Parser Mercado Livre').item.json.cliente_email}}' OR whatsapp = '{{$('Parser Mercado Livre').item.json.cliente_whatsapp}}' LIMIT 1),\n  {{$('Parser Mercado Livre').item.json.valor_total}},\n  '{{$('Parser Mercado Livre').item.json.status_operacional}}',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (numero_pedido) DO UPDATE \nSET status_operacional = EXCLUDED.status_operacional,\n    valor_total = EXCLUDED.valor_total,\n    updated_at = CURRENT_TIMESTAMP\nRETURNING id, numero_pedido, cliente_id, valor_total, status_operacional;"
+      },
+      "name": "Persistir no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser Mercado Livre').item.json.cliente_whatsapp}}\",\n  \"text\": \"📦 *Venda Confirmada no Mercado Livre!*\\n\\nOlá, *{{$('Parser Mercado Livre').item.json.cliente_nome}}*!\\nConfirmamos sua compra *#{{$('Parser Mercado Livre').item.json.numero_pedido}}* no valor de *R$ {{$('Parser Mercado Livre').item.json.valor_total.toFixed(2)}}* realizada via Mercado Livre.\\n\\nSeu pacote já está em processo de despacho no Mercado Envios! 🚀\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'pedido_mercadolivre',\n  'pedidos',\n  {{$json.id}},\n  '{{$('Parser Mercado Livre').item.json.cliente_whatsapp}}',\n  '{\"pedido\": {{$json.numero_pedido}}, \"status\": \"{{$json.status_operacional}}\", \"taxas_ml\": {{$('Parser Mercado Livre').item.json.taxas_marketplace}}, \"origem\": \"Mercado Livre\"}'::jsonb,\n  'concluido',\n  'ml_ped_{{$json.numero_pedido}}_{{$json.status_operacional}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1000,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Mercado Livre": {
+      "main": [
+        [
+          {
+            "node": "Parser Mercado Livre",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Mercado Livre": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Persistir no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persistir no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

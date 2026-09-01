@@ -1,0 +1,207 @@
+{
+  "name": "[daemind] 18 - Shopify: Ingestão de Vendas, Tags de Clientes & Fulfillments",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-shopify-orders",
+        "options": {}
+      },
+      "name": "Webhook Shopify Orders",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-shopify-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER CANÔNICO DA SHOPIFY (TAGS, LINE ITEMS, FULFILLMENT)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\n// 1. Extração e sanitização do cliente\nconst customer = body.customer || {};\nlet rawPhone = (customer.phone || customer.default_address?.phone || body.billing_address?.phone || body.phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst firstName = customer.first_name || body.billing_address?.first_name || 'Cliente';\nconst lastName = customer.last_name || body.billing_address?.last_name || '';\nconst clienteNome = `${firstName} ${lastName}`.trim();\nconst clienteEmail = (customer.email || body.email || body.contact_email || '').trim().toLowerCase();\nconst customerTags = (customer.tags || '').split(',').map(t => t.trim()).filter(Boolean);\n\n// 2. Valores e pedidos\nconst numeroPedido = parseInt(body.order_number || body.number || body.id || Date.now(), 10);\nconst valorTotal = parseFloat(body.total_price || body.current_total_price || 0);\nconst valorFrete = parseFloat(body.total_shipping_price_set?.shop_money?.amount || body.shipping_lines?.[0]?.price || 0);\nconst financialStatus = (body.financial_status || 'pending').toLowerCase();\nconst fulfillmentStatus = (body.fulfillment_status || 'unfulfilled').toLowerCase();\n\nlet statusOperacional = 'Pendente';\nif (['paid', 'authorized'].includes(financialStatus)) {\n  statusOperacional = 'Pago';\n} else if (['refunded', 'voided'].includes(financialStatus)) {\n  statusOperacional = 'Cancelado';\n}\n\nif (fulfillmentStatus === 'fulfilled') {\n  statusOperacional = 'Enviado';\n}\n\n// 3. Parsing dos Itens\nconst lineItems = (body.line_items || []).map(li => ({\n  produto_nome: li.title || li.name || 'Produto',\n  sku: li.sku || 'SHOPIFY_SKU',\n  quantidade: parseInt(li.quantity || 1, 10),\n  preco_venda: parseFloat(li.price || 0)\n}));\n\nconst dedupHash = crypto.createHash('sha256').update(`shopify_${numeroPedido}_${statusOperacional}_${valorTotal}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_email: clienteEmail,\n    cliente_whatsapp: rawPhone,\n    cliente_tags: customerTags,\n    valor_total: valorTotal,\n    valor_frete: valorFrete,\n    status_operacional: statusOperacional,\n    line_items: lineItems\n  }\n}];"
+      },
+      "name": "Parser Shopify",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  'Shopify',\n  '{{$json.dedup_hash}}',\n  'pedido_{{$json.status_operacional}}'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH ins_cli AS (\n  INSERT INTO clientes (nome, email, whatsapp, origem_principal)\n  VALUES (\n    '{{$('Parser Shopify').item.json.cliente_nome}}',\n    NULLIF('{{$('Parser Shopify').item.json.cliente_email}}', ''),\n    NULLIF('{{$('Parser Shopify').item.json.cliente_whatsapp}}', ''),\n    'Shopify'\n  )\n  ON CONFLICT (email) DO UPDATE \n  SET whatsapp = COALESCE(EXCLUDED.whatsapp, clientes.whatsapp),\n      nome = EXCLUDED.nome,\n      updated_at = CURRENT_TIMESTAMP\n  RETURNING id\n)\nINSERT INTO pedidos (numero_pedido, cliente_id, valor_total, valor_frete, status_operacional, data_criacao)\nVALUES (\n  {{$('Parser Shopify').item.json.numero_pedido}},\n  (SELECT id FROM ins_cli UNION SELECT id FROM clientes WHERE email = '{{$('Parser Shopify').item.json.cliente_email}}' OR whatsapp = '{{$('Parser Shopify').item.json.cliente_whatsapp}}' LIMIT 1),\n  {{$('Parser Shopify').item.json.valor_total}},\n  {{$('Parser Shopify').item.json.valor_frete}},\n  '{{$('Parser Shopify').item.json.status_operacional}}',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (numero_pedido) DO UPDATE \nSET status_operacional = EXCLUDED.status_operacional,\n    valor_total = EXCLUDED.valor_total,\n    updated_at = CURRENT_TIMESTAMP\nRETURNING id, numero_pedido, cliente_id, valor_total, status_operacional;"
+      },
+      "name": "Persistir no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser Shopify').item.json.cliente_whatsapp}}\",\n  \"text\": \"🚀 *Pedido Confirmado na Shopify!*\\n\\nOlá, *{{$('Parser Shopify').item.json.cliente_nome}}*!\\nSeu pedido *#{{$('Parser Shopify').item.json.numero_pedido}}* de *R$ {{$('Parser Shopify').item.json.valor_total.toFixed(2)}}* foi confirmado com sucesso.\\n\\nEstamos preparando tudo com o maior carinho para envio! ✨\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'pedido_shopify',\n  'pedidos',\n  {{$json.id}},\n  '{{$('Parser Shopify').item.json.cliente_whatsapp}}',\n  '{\"pedido\": {{$json.numero_pedido}}, \"status\": \"{{$json.status_operacional}}\", \"origem\": \"Shopify\"}'::jsonb,\n  'concluido',\n  'shopify_ped_{{$json.numero_pedido}}_{{$json.status_operacional}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1000,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Shopify Orders": {
+      "main": [
+        [
+          {
+            "node": "Parser Shopify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Shopify": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Persistir no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persistir no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

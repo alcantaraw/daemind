@@ -1,0 +1,207 @@
+{
+  "name": "[daemind] 25 - Amazon SP-API: Ingestão de Pedidos Prime, FBA/FBM & Taxas",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-amazon-orders",
+        "options": {}
+      },
+      "name": "Webhook Amazon SP-API",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-amazon-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER CANÔNICO DA AMAZON SP-API (PRIME, FBA, BUYER_INFO)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\nconst amazonOrderId = body.AmazonOrderId || body.amazon_order_id || Date.now().toString();\nconst buyerInfo = body.BuyerInfo || body.buyer_info || {};\nlet rawPhone = (buyerInfo.BuyerPhone || body.ShippingAddress?.Phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (buyerInfo.BuyerName || body.ShippingAddress?.Name || 'Cliente Amazon').trim();\nconst clienteEmail = (buyerInfo.BuyerEmail || '').trim().toLowerCase();\n\nconst numeroPedido = parseInt(amazonOrderId.replace(/\\D/g, '') || Date.now(), 10);\nconst valorTotal = parseFloat(body.OrderTotal?.Amount || body.order_total || 0);\nconst orderStatus = (body.OrderStatus || body.order_status || '').toLowerCase();\nconst isPrime = Boolean(body.IsPrime || body.is_prime);\nconst fulfillmentChannel = body.FulfillmentChannel || 'MFN';\n\nlet statusOperacional = 'Pendente';\nif (['unshipped', 'partiallyshipped', 'shipped'].includes(orderStatus)) {\n  statusOperacional = 'Pago';\n} else if (['canceled'].includes(orderStatus)) {\n  statusOperacional = 'Cancelado';\n}\n\nconst dedupHash = crypto.createHash('sha256').update(`amazon_${amazonOrderId}_${statusOperacional}_${valorTotal}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    amazon_order_id: amazonOrderId,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_email: clienteEmail,\n    cliente_whatsapp: rawPhone,\n    valor_total: valorTotal,\n    is_prime: isPrime,\n    fulfillment_channel: fulfillmentChannel,\n    status_operacional: statusOperacional\n  }\n}];"
+      },
+      "name": "Parser Amazon",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  'Amazon',\n  '{{$json.dedup_hash}}',\n  'pedido_{{$json.status_operacional}}'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH ins_cli AS (\n  INSERT INTO clientes (nome, email, whatsapp, origem_principal)\n  VALUES (\n    '{{$('Parser Amazon').item.json.cliente_nome}}',\n    NULLIF('{{$('Parser Amazon').item.json.cliente_email}}', ''),\n    NULLIF('{{$('Parser Amazon').item.json.cliente_whatsapp}}', ''),\n    'Amazon'\n  )\n  ON CONFLICT (email) DO UPDATE \n  SET whatsapp = COALESCE(EXCLUDED.whatsapp, clientes.whatsapp),\n      nome = EXCLUDED.nome,\n      updated_at = CURRENT_TIMESTAMP\n  RETURNING id\n)\nINSERT INTO pedidos (numero_pedido, cliente_id, valor_total, status_operacional, data_criacao)\nVALUES (\n  {{$('Parser Amazon').item.json.numero_pedido}},\n  (SELECT id FROM ins_cli UNION SELECT id FROM clientes WHERE email = '{{$('Parser Amazon').item.json.cliente_email}}' OR whatsapp = '{{$('Parser Amazon').item.json.cliente_whatsapp}}' LIMIT 1),\n  {{$('Parser Amazon').item.json.valor_total}},\n  '{{$('Parser Amazon').item.json.status_operacional}}',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (numero_pedido) DO UPDATE \nSET status_operacional = EXCLUDED.status_operacional,\n    valor_total = EXCLUDED.valor_total,\n    updated_at = CURRENT_TIMESTAMP\nRETURNING id, numero_pedido, cliente_id, valor_total, status_operacional;"
+      },
+      "name": "Persistir no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser Amazon').item.json.cliente_whatsapp}}\",\n  \"text\": \"📦 *Pedido Confirmado na Amazon!*\\n\\nOlá, *{{$('Parser Amazon').item.json.cliente_nome}}*!\\nConfirmamos sua compra *#{{$('Parser Amazon').item.json.amazon_order_id}}* no valor de *R$ {{$('Parser Amazon').item.json.valor_total.toFixed(2)}}* na Amazon.\\n\\nSeu pacote já está sendo preparado para envio! 🚀✨\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'pedido_amazon',\n  'pedidos',\n  {{$json.id}},\n  '{{$('Parser Amazon').item.json.cliente_whatsapp}}',\n  '{\"pedido\": \"{{$('Parser Amazon').item.json.amazon_order_id}}\", \"status\": \"{{$json.status_operacional}}\", \"origem\": \"Amazon\"}'::jsonb,\n  'concluido',\n  'amz_ped_{{$('Parser Amazon').item.json.amazon_order_id}}_{{$json.status_operacional}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1000,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Amazon SP-API": {
+      "main": [
+        [
+          {
+            "node": "Parser Amazon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Amazon": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Persistir no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persistir no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

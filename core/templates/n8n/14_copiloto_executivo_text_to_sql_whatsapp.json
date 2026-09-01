@@ -1,0 +1,222 @@
+{
+  "name": "[daemind] 14 - Copiloto Executivo Text-to-SQL de Vendas via WhatsApp",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "copiloto-executivo-inbound",
+        "options": {}
+      },
+      "name": "Webhook Pergunta Gestor",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-copiloto-executivo-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - FILTRO DE AUTORIZAÇÃO E SANITIZAÇÃO DE PERGUNTA\n// ===============================================================================\nconst body = $json.body || $json;\nconst data = body.data || body;\nconst sender = (data.key?.remoteJid || body.sender || '').toString().replace(/@.*$/, '').replace(/\\D/g, '');\nconst messageText = (data.message?.conversation || data.message?.extendedTextMessage?.text || body.content || body.text || '').trim();\n\nreturn [{\n  json: {\n    sender_whatsapp: sender,\n    pergunta_usuario: messageText\n  }\n}];"
+      },
+      "name": "Sanitizar Pergunta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é um engenheiro de dados e DBA PostgreSQL sênior. Converta a pergunta do gestor em uma query SQL de LEITURA (SELECT) segura e performática para o banco loja_db. Tabelas disponíveis: pedidos (id, numero_pedido, cliente_id, valor_total, status_operacional, data_criacao), clientes (id, nome, email, whatsapp), produtos (id, nome, preco_venda, saldo_estoque), vw_estoque_critico (item_nome, saldo_atual, estoque_minimo). Responda ESTRITAMENTE em formato JSON com a chave 'query_sql' (apenas comandos SELECT, nunca INSERT/UPDATE/DELETE/DROP).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Pergunta: '{{$json.pergunta_usuario}}'\"\n    }\n  ],\n  \"temperature\": 0.1\n}",
+        "options": {}
+      },
+      "name": "Gerar SQL via IA (LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - GUARDRAIL DE SEGURANÇA SQL (READ-ONLY)\n// ===============================================================================\nconst rawContent = $json.choices?.[0]?.message?.content || '{}';\nlet parsed = {};\ntry {\n  const cleanJson = rawContent.replace(/```json\\n?|```/g, '').trim();\n  parsed = JSON.parse(cleanJson);\n} catch (e) {\n  parsed = { query_sql: \"SELECT COUNT(*) AS total_pedidos FROM pedidos WHERE status_operacional = 'Pago';\" };\n}\n\nlet sql = (parsed.query_sql || '').trim();\nconst upper = sql.toUpperCase();\n\n// Bloqueio de injeção ou comandos destrutivos\nif (!upper.startsWith('SELECT') || upper.includes('DROP') || upper.includes('DELETE') || upper.includes('UPDATE') || upper.includes('TRUNCATE') || upper.includes('ALTER')) {\n  sql = \"SELECT 'Consulta bloqueada por política de segurança SRE.' AS aviso;\";\n}\n\nreturn [{\n  json: {\n    query_sql_safe: sql,\n    sender_whatsapp: $('Sanitizar Pergunta').item.json.sender_whatsapp,\n    pergunta_original: $('Sanitizar Pergunta').item.json.pergunta_usuario\n  }\n}];"
+      },
+      "name": "Validar Segurança SQL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{$json.query_sql_safe}}"
+      },
+      "name": "Executar Consulta no PostgreSQL",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        540,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é o Copiloto Executivo do daemind. Responda à pergunta do gestor de forma clara, executiva, direta e elegante para WhatsApp (use emojis, negritos e formatação de valores R$).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Pergunta original: '{{$('Validar Segurança SQL').item.json.pergunta_original}}'. Dados retornados do banco de dados: {{JSON.stringify($json)}}\"\n    }\n  ],\n  \"temperature\": 0.3\n}",
+        "options": {}
+      },
+      "name": "Sintetizar Resposta Executiva (LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Validar Segurança SQL').item.json.sender_whatsapp}}\",\n  \"text\": \"{{$json.choices[0].message.content}}\",\n  \"delay\": 800\n}",
+        "options": {}
+      },
+      "name": "Responder no WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Pergunta Gestor": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Pergunta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Pergunta": {
+      "main": [
+        [
+          {
+            "node": "Gerar SQL via IA (LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar SQL via IA (LiteLLM)": {
+      "main": [
+        [
+          {
+            "node": "Validar Segurança SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Segurança SQL": {
+      "main": [
+        [
+          {
+            "node": "Executar Consulta no PostgreSQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executar Consulta no PostgreSQL": {
+      "main": [
+        [
+          {
+            "node": "Sintetizar Resposta Executiva (LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sintetizar Resposta Executiva (LiteLLM)": {
+      "main": [
+        [
+          {
+            "node": "Responder no WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

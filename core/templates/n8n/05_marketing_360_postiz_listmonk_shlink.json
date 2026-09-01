@@ -1,0 +1,252 @@
+{
+  "name": "[daemind] 05 - Marketing 360° com IA (LiteLLM + Postiz + Listmonk + Shlink + Umami)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lancar-campanha-marketing",
+        "options": {}
+      },
+      "name": "Webhook Nova Campanha",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-lancar-campanha-marketing"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSING DE DADOS DE CAMPANHA MULTICANAL\n// ===============================================================================\nconst body = $json.body || $json;\n\nconst nomeCampanha = (body.nome_campanha || body.campaign_name || 'Lancamento_VIP_2026').trim().replace(/\\s+/g, '_');\nconst tituloProduto = body.titulo_produto || body.product_name || 'Oferta Exclusiva';\nconst beneficios = body.beneficios || body.descricao || 'Alta qualidade, entrega rápida e garantia total.';\nconst precoPromocional = parseFloat(body.preco || body.price || 0);\nconst urlDestino = body.url_destino || body.target_url || 'https://minhaloja.com.br';\nconst orcamentoPlanejado = parseFloat(body.orcamento || body.budget || 500.00);\n\nreturn [{\n  json: {\n    nome_campanha: nomeCampanha,\n    titulo_produto: tituloProduto,\n    beneficios: beneficios,\n    preco_promocional: precoPromocional,\n    url_destino: urlDestino,\n    orcamento_planejado: orcamentoPlanejado\n  }\n}];"
+      },
+      "name": "Sanitizar Dados da Campanha",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é um Copywriter e Diretor de Marketing de Alta Performance. Gere copys persuasivas para um lançamento. Responda ESTRITAMENTE em formato JSON com as chaves: 'post_social_media' (texto com emojis e hashtags para Instagram/LinkedIn), 'newsletter_assunto' (título de e-mail chamativo com alto CTR) e 'newsletter_html' (código HTML limpo e responsivo com botão CTA).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Produto: '{{$json.titulo_produto}}'. Benefícios: '{{$json.beneficios}}'. Preço: R$ {{$json.preco_promocional.toFixed(2)}}.\"\n    }\n  ],\n  \"temperature\": 0.7\n}",
+        "options": {}
+      },
+      "name": "Gerar Copies com IA (LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE RESPOSTA DO COPYWRITING IA\n// ===============================================================================\nconst rawContent = $json.choices?.[0]?.message?.content || '{}';\nlet parsed = {};\n\ntry {\n  const cleanJson = rawContent.replace(/```json\\n?|```/g, '').trim();\n  parsed = JSON.parse(cleanJson);\n} catch (e) {\n  parsed = {\n    post_social_media: `Confira nosso lançamento: ${$('Sanitizar Dados da Campanha').item.json.titulo_produto}! Garanta já o seu.`,\n    newsletter_assunto: `🔥 Novidade imperdível: ${$('Sanitizar Dados da Campanha').item.json.titulo_produto}`,\n    newsletter_html: `<div style=\"font-family:sans-serif;padding:20px;\"><h2>${$('Sanitizar Dados da Campanha').item.json.titulo_produto}</h2><p>${$('Sanitizar Dados da Campanha').item.json.beneficios}</p></div>`\n  };\n}\n\nreturn [{\n  json: {\n    ...parsed,\n    nome_campanha: $('Sanitizar Dados da Campanha').item.json.nome_campanha,\n    url_destino: $('Sanitizar Dados da Campanha').item.json.url_destino,\n    orcamento_planejado: $('Sanitizar Dados da Campanha').item.json.orcamento_planejado\n  }\n}];"
+      },
+      "name": "Parsear Copies",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"{{$json.url_destino}}?utm_source=postiz&utm_medium=social_media&utm_campaign={{$json.nome_campanha}}\",\n  \"tags\": [\"postiz\", \"campanha_360\", \"{{$json.nome_campanha}}\"]\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Social Media (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"{{$('Parsear Copies').item.json.url_destino}}?utm_source=listmonk&utm_medium=email&utm_campaign={{$('Parsear Copies').item.json.nome_campanha}}\",\n  \"tags\": [\"listmonk\", \"campanha_360\", \"{{$('Parsear Copies').item.json.nome_campanha}}\"]\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Newsletter (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO campanhas_marketing (\n  nome_campanha, canal, orcamento_planejado, utm_source, utm_medium, utm_campaign, data_inicio, status\n)\nVALUES (\n  '{{$('Parsear Copies').item.json.nome_campanha}}',\n  'Multicanal (Postiz + Listmonk)',\n  {{$('Parsear Copies').item.json.orcamento_planejado}},\n  'multi',\n  '360',\n  '{{$('Parsear Copies').item.json.nome_campanha}}',\n  CURRENT_DATE,\n  'Ativa'\n)\nRETURNING id;"
+      },
+      "name": "Registrar em campanhas_marketing (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1020,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://listmonk:9000/api/campaigns",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{$('Parsear Copies').item.json.nome_campanha}}\",\n  \"subject\": \"{{$('Parsear Copies').item.json.newsletter_assunto}}\",\n  \"lists\": [1],\n  \"type\": \"regular\",\n  \"content_type\": \"html\",\n  \"body\": \"{{$('Parsear Copies').item.json.newsletter_html}}<p><a href=\\\"{{$('Gerar Link Newsletter (Shlink)').item.json.shortUrl}}\\\" style=\\\"display:inline-block;padding:12px 24px;background:#0066cc;color:#fff;text-decoration:none;border-radius:6px;\\\">Acessar Oferta Agora</a></p>\",\n  \"tags\": [\"daemind_360\", \"{{$('Parsear Copies').item.json.nome_campanha}}\"]\n}",
+        "options": {}
+      },
+      "name": "Criar Campanha no Listmonk",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1260,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Nova Campanha": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Dados da Campanha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Dados da Campanha": {
+      "main": [
+        [
+          {
+            "node": "Gerar Copies com IA (LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Copies com IA (LiteLLM)": {
+      "main": [
+        [
+          {
+            "node": "Parsear Copies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Copies": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Social Media (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Social Media (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Newsletter (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Newsletter (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Registrar em campanhas_marketing (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar em campanhas_marketing (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Criar Campanha no Listmonk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

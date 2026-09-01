@@ -1,0 +1,207 @@
+{
+  "name": "[daemind] 26 - Hubs: Magalu, Olist & AnyMarket (Ingestão & Sincronização)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-marketplace-hubs",
+        "options": {}
+      },
+      "name": "Webhook Marketplace Hubs",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-hubs-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER CANÔNICO DE HUBS (MAGALU, OLIST, ANYMARKET, SKYHUB)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\nlet hubOrigem = 'Magalu';\nif (body.Marketplace || body.partner_id || body.anymarket_id) hubOrigem = 'AnyMarket';\nelse if (body.channel || body.olist_order_id) hubOrigem = 'Olist';\nelse if (body.skyhub_id || body.code) hubOrigem = 'SkyHub';\nelse if (body.Magalu || body.LuizaLabs) hubOrigem = 'Magalu';\n\nconst customer = body.Customer || body.customer || body.cliente || {};\nlet rawPhone = (customer.Phone || customer.phone || body.phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (customer.Name || customer.name || 'Cliente Hub').trim();\nconst clienteEmail = (customer.Email || customer.email || '').trim().toLowerCase();\nconst clienteDoc = (customer.Cpf || customer.cpf || customer.document || '').toString().replace(/\\D/g, '');\n\nconst numeroPedido = parseInt(body.Id || body.id || body.order_id || Date.now(), 10);\nconst valorTotal = parseFloat(body.Total || body.total || body.total_amount || 0);\nconst status = (body.Status || body.status || '').toLowerCase();\n\nlet statusOperacional = 'Pendente';\nif (['approved', 'paid', 'pago', 'faturado'].includes(status)) {\n  statusOperacional = 'Pago';\n} else if (['canceled', 'cancelado'].includes(status)) {\n  statusOperacional = 'Cancelado';\n}\n\nconst dedupHash = crypto.createHash('sha256').update(`${hubOrigem}_${numeroPedido}_${statusOperacional}_${valorTotal}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    hub_origem: hubOrigem,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_email: clienteEmail,\n    cliente_whatsapp: rawPhone,\n    cliente_doc: clienteDoc,\n    valor_total: valorTotal,\n    status_operacional: statusOperacional\n  }\n}];"
+      },
+      "name": "Parser Hubs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  '{{$json.hub_origem}}',\n  '{{$json.dedup_hash}}',\n  'pedido_{{$json.status_operacional}}'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH ins_cli AS (\n  INSERT INTO clientes (nome, email, whatsapp, origem_principal)\n  VALUES (\n    '{{$('Parser Hubs').item.json.cliente_nome}}',\n    NULLIF('{{$('Parser Hubs').item.json.cliente_email}}', ''),\n    NULLIF('{{$('Parser Hubs').item.json.cliente_whatsapp}}', ''),\n    '{{$('Parser Hubs').item.json.hub_origem}}'\n  )\n  ON CONFLICT (email) DO UPDATE \n  SET whatsapp = COALESCE(EXCLUDED.whatsapp, clientes.whatsapp),\n      nome = EXCLUDED.nome,\n      updated_at = CURRENT_TIMESTAMP\n  RETURNING id\n)\nINSERT INTO pedidos (numero_pedido, cliente_id, valor_total, status_operacional, data_criacao)\nVALUES (\n  {{$('Parser Hubs').item.json.numero_pedido}},\n  (SELECT id FROM ins_cli UNION SELECT id FROM clientes WHERE email = '{{$('Parser Hubs').item.json.cliente_email}}' OR whatsapp = '{{$('Parser Hubs').item.json.cliente_whatsapp}}' LIMIT 1),\n  {{$('Parser Hubs').item.json.valor_total}},\n  '{{$('Parser Hubs').item.json.status_operacional}}',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (numero_pedido) DO UPDATE \nSET status_operacional = EXCLUDED.status_operacional,\n    valor_total = EXCLUDED.valor_total,\n    updated_at = CURRENT_TIMESTAMP\nRETURNING id, numero_pedido, cliente_id, valor_total, status_operacional;"
+      },
+      "name": "Persistir no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser Hubs').item.json.cliente_whatsapp}}\",\n  \"text\": \"🛍️ *Pedido Confirmado via {{$('Parser Hubs').item.json.hub_origem}}!*\\n\\nOlá, *{{$('Parser Hubs').item.json.cliente_nome}}*!\\nConfirmamos sua compra *#{{$('Parser Hubs').item.json.numero_pedido}}* no valor de *R$ {{$('Parser Hubs').item.json.valor_total.toFixed(2)}}*.\\n\\nSeu pacote já está em processo de expedição! 🚀✨\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'pedido_hub',\n  'pedidos',\n  {{$json.id}},\n  '{{$('Parser Hubs').item.json.cliente_whatsapp}}',\n  '{\"pedido\": {{$json.numero_pedido}}, \"status\": \"{{$json.status_operacional}}\", \"origem\": \"{{$('Parser Hubs').item.json.hub_origem}}\"}'::jsonb,\n  'concluido',\n  'hub_ped_{{$json.numero_pedido}}_{{$json.status_operacional}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1000,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Marketplace Hubs": {
+      "main": [
+        [
+          {
+            "node": "Parser Hubs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Hubs": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Persistir no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persistir no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

@@ -1,0 +1,151 @@
+{
+  "name": "[daemind] 07 - Recuperação de Boleto & PIX com Escassez Real de Estoque",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "name": "Agendador a cada 30 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.id AS pedido_id, p.numero_pedido, p.valor_total, p.data_criacao, c.nome AS cliente_nome, c.whatsapp, c.email, pi.produto_nome, pi.quantidade, COALESCE(e.saldo_atual, 10) AS saldo_estoque\nFROM pedidos p\nJOIN clientes c ON p.cliente_id = c.id\nLEFT JOIN pedidos_itens pi ON pi.pedido_id = p.id\nLEFT JOIN vw_estoque_critico e ON e.item_nome = pi.produto_nome\nWHERE p.status_operacional IN ('Pendente', 'Pendente_PIX', 'Pendente_Boleto')\n  AND p.data_criacao >= (CURRENT_TIMESTAMP - INTERVAL '24 hours')\n  AND p.data_criacao <= (CURRENT_TIMESTAMP - INTERVAL '30 minutes')\n  AND NOT EXISTS (\n    SELECT 1 FROM fila_mensageria f \n    WHERE f.aggregate_id = p.id \n      AND f.event_type = 'urgencia_estoque_pix_boleto'\n  )\nORDER BY p.data_criacao ASC\nLIMIT 15;"
+      },
+      "name": "Buscar Pedidos Pendentes com Estoque",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -180,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - GERADOR DE COPY DE ESCASSEZ BASEADO EM ESTOQUE FÍSICO REAL\n// ===============================================================================\nconst items = $input.all();\nif (!items || items.length === 0 || !items[0].json?.pedido_id) {\n  return [];\n}\n\nreturn items.map(item => {\n  const j = item.json;\n  const saldo = parseInt(j.saldo_estoque || 10, 10);\n  let escassezTexto = '';\n  \n  if (saldo <= 3) {\n    escassezTexto = `🚨 *Atenção:* Restam apenas *${saldo} unidades* do item *${j.produto_nome || 'seu produto'}* em nosso estoque físico!`;\n  } else if (saldo <= 8) {\n    escassezTexto = `⚡ O item *${j.produto_nome || 'seu produto'}* está com alta procura e poucas unidades restantes.`;\n  } else {\n    escassezTexto = `⏳ A sua reserva de estoque expira em breve.`;\n  }\n  \n  const msg = `Olá, *${j.cliente_nome}*! Tudo bem?\\n\\nPassando para avisar sobre o seu pedido *#${j.numero_pedido}* de *R$ ${parseFloat(j.valor_total).toFixed(2)}*.\\n\\n${escassezTexto}\\n\\nPara garantir que o seu pacote seja separado hoje mesmo, conclua o pagamento do seu PIX/Boleto.\\n\\nSe precisar de ajuda com a 2ª via ou tiver qualquer dúvida, responda a esta mensagem! 🛍️`;\n  \n  return {\n    json: {\n      ...j,\n      mensagem_whatsapp: msg,\n      idempotency_key: `urgencia_ped_${j.pedido_id}_${j.numero_pedido}`\n    }\n  };\n});"
+      },
+      "name": "Montar Mensagem de Escassez",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$json.whatsapp}}\",\n  \"text\": \"{{$json.mensagem_whatsapp}}\",\n  \"delay\": 1200\n}",
+        "options": {}
+      },
+      "name": "Disparar Urgência (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'urgencia_estoque_pix_boleto',\n  'pedidos',\n  {{$json.pedido_id}},\n  '{{$json.whatsapp}}',\n  '{\"pedido\": {{$json.numero_pedido}}, \"saldo\": {{$json.saldo_estoque}}}'::jsonb,\n  'concluido',\n  '{{$json.idempotency_key}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar na Fila de Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        540,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Agendador a cada 30 min": {
+      "main": [
+        [
+          {
+            "node": "Buscar Pedidos Pendentes com Estoque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Pedidos Pendentes com Estoque": {
+      "main": [
+        [
+          {
+            "node": "Montar Mensagem de Escassez",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Mensagem de Escassez": {
+      "main": [
+        [
+          {
+            "node": "Disparar Urgência (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar Urgência (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar na Fila de Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

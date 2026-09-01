@@ -1,0 +1,222 @@
+{
+  "name": "[daemind] 15 - Repurposing Autônomo de Conteúdo (Postiz + Listmonk + Shlink)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "repurpose-conteudo",
+        "options": {}
+      },
+      "name": "Webhook Nova Pauta ou Artigo",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-repurpose-conteudo"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE CONTEÚDO BRUTO\n// ===============================================================================\nconst body = $json.body || $json;\n\nconst temaPrincipal = (body.tema || body.title || body.assunto || 'Inovação e Vendas Digitais').trim();\nconst textoBase = (body.conteudo || body.content || body.texto || 'Dicas práticas para escalar sua operação sem aumentar custos de equipe.').trim();\nconst urlDestino = (body.url || body.link || 'https://minhaloja.com.br/artigo').trim();\n\nreturn [{\n  json: {\n    tema_principal: temaPrincipal,\n    texto_base: textoBase,\n    url_destino: urlDestino\n  }\n}];"
+      },
+      "name": "Sanitizar Dados da Pauta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é um Diretor de Content Marketing & Growth. Desmembre a pauta fornecida em 2 formatos de alto impacto. Responda ESTRITAMENTE em formato JSON com as chaves: 'post_social_media' (texto engajador para Instagram/LinkedIn com emojis e 4 hashtags relevantes), 'newsletter_assunto' (título de e-mail com alto open rate) e 'newsletter_html' (código HTML limpo, moderno e responsivo para e-mail marketing).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Tema: '{{$json.tema_principal}}'. Conteúdo Base: '{{$json.texto_base}}'\"\n    }\n  ],\n  \"temperature\": 0.7\n}",
+        "options": {}
+      },
+      "name": "Desmembrar Conteúdo com IA (LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE CONTEÚDO ESTRUTURADO\n// ===============================================================================\nconst rawContent = $json.choices?.[0]?.message?.content || '{}';\nlet parsed = {};\ntry {\n  const cleanJson = rawContent.replace(/```json\\n?|```/g, '').trim();\n  parsed = JSON.parse(cleanJson);\n} catch (e) {\n  parsed = {\n    post_social_media: $('Sanitizar Dados da Pauta').item.json.texto_base,\n    newsletter_assunto: $('Sanitizar Dados da Pauta').item.json.tema_principal,\n    newsletter_html: `<p>${$('Sanitizar Dados da Pauta').item.json.texto_base}</p>`\n  };\n}\n\nreturn [{\n  json: {\n    ...parsed,\n    tema: $('Sanitizar Dados da Pauta').item.json.tema_principal,\n    url_destino: $('Sanitizar Dados da Pauta').item.json.url_destino\n  }\n}];"
+      },
+      "name": "Parsear Formatos de Conteúdo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"{{$json.url_destino}}?utm_source=repurposing&utm_medium=omnichannel&utm_campaign=pauta_{{Date.now()}}\",\n  \"tags\": [\"repurposing\", \"content\", \"social\"],\n  \"crawlable\": false\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Rastreável (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://listmonk:9000/api/campaigns",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"[Rascunho] {{$('Parsear Formatos de Conteúdo').item.json.tema}}\",\n  \"subject\": \"{{$('Parsear Formatos de Conteúdo').item.json.newsletter_assunto}}\",\n  \"lists\": [1],\n  \"type\": \"regular\",\n  \"content_type\": \"html\",\n  \"body\": \"{{$('Parsear Formatos de Conteúdo').item.json.newsletter_html}}<p style=\\\"margin-top:20px;\\\"><a href=\\\"{{$json.shortUrl}}\\\" style=\\\"padding:10px 20px;background:#0070f3;color:#fff;text-decoration:none;border-radius:5px;\\\">Ler Artigo Completo</a></p>\",\n  \"tags\": [\"repurposing_ia\", \"newsletter\"]\n}",
+        "options": {}
+      },
+      "name": "Criar Campanha no Listmonk",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$env.ADMIN_WHATSAPP || '5521999999999'}}\",\n  \"text\": \"✨ *NOVA PAUTA DESMEMBRADA COM SUCESSO!* ✨\\n\\n📌 *Tema:* {{$('Parsear Formatos de Conteúdo').item.json.tema}}\\n\\n📱 *Post Sugerido para Redes:*\\n\\\"{{$('Parsear Formatos de Conteúdo').item.json.post_social_media}}\\\"\\n\\n✉️ *E-mail Marketing:* Rascunho de campanha criado no **Listmonk** com o assunto *\\\"{{$('Parsear Formatos de Conteúdo').item.json.newsletter_assunto}}\\\"* e link rastreado no **Shlink**.\\n\\n🚀 Acesse os painéis para agendar ou disparar!\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Notificar Gestor de Conteúdo (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Nova Pauta ou Artigo": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Dados da Pauta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Dados da Pauta": {
+      "main": [
+        [
+          {
+            "node": "Desmembrar Conteúdo com IA (LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desmembrar Conteúdo com IA (LiteLLM)": {
+      "main": [
+        [
+          {
+            "node": "Parsear Formatos de Conteúdo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Formatos de Conteúdo": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Rastreável (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Rastreável (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Criar Campanha no Listmonk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Campanha no Listmonk": {
+      "main": [
+        [
+          {
+            "node": "Notificar Gestor de Conteúdo (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

@@ -1,0 +1,248 @@
+{
+  "name": "[daemind] 28 - Logística: Melhor Envio, Frenet & Correios (Rastreio & Insumos)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-logistica-etiquetas",
+        "options": {}
+      },
+      "name": "Webhook Logística",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-logistica-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER CANÔNICO DE LOGÍSTICA (MELHOR ENVIO, FRENET, CORREIOS, JADLOG)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\nconst recipient = body.to || body.destinatario || body.recipient || {};\nlet rawPhone = (recipient.phone || body.phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (recipient.name || 'Cliente').trim();\nconst trackingCode = (body.tracking || body.tracking_code || body.codigo_rastreio || body.protocol || 'RASTREIO_PENDENTE').toString().trim().toUpperCase();\nconst carrier = (body.agency?.name || body.carrier || body.transportadora || 'Correios/Jadlog').trim();\nconst numeroPedido = parseInt(body.order_id || body.numero_pedido || body.id || Date.now(), 10);\n\nconst dedupHash = crypto.createHash('sha256').update(`logistica_${trackingCode}_${numeroPedido}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    tracking_code: trackingCode,\n    carrier: carrier,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_whatsapp: rawPhone\n  }\n}];"
+      },
+      "name": "Parser Logística",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  'Logística',\n  '{{$json.dedup_hash}}',\n  'etiqueta_gerada'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE pedidos \nSET status_operacional = 'Enviado',\n    codigo_rastreio = '{{$('Parser Logística').item.json.tracking_code}}',\n    updated_at = CURRENT_TIMESTAMP\nWHERE numero_pedido = {{$('Parser Logística').item.json.numero_pedido}}\n   OR cliente_id = (SELECT id FROM clientes WHERE whatsapp = '{{$('Parser Logística').item.json.cliente_whatsapp}}' LIMIT 1)\nRETURNING id, numero_pedido, cliente_id;"
+      },
+      "name": "Atualizar Rastreio no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"https://rastreamento.correios.com.br/app/index.php?codigo={{$('Parser Logística').item.json.tracking_code}}\",\n  \"tags\": [\"rastreio\", \"logistica\", \"{{$('Parser Logística').item.json.carrier}}\"],\n  \"crawlable\": false\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Rastreio (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser Logística').item.json.cliente_whatsapp}}\",\n  \"text\": \"🚚 *Seu Pacote Está a Caminho!*\\n\\nOlá, *{{$('Parser Logística').item.json.cliente_nome}}*!\\nSeu pedido foi despachado via *{{$('Parser Logística').item.json.carrier}}*.\\n\\n📦 *Código de Rastreamento:*\\n`{{$('Parser Logística').item.json.tracking_code}}`\\n\\n🔗 *Acompanhe a Entrega em 1 Clique:*\\n{{$json.shortUrl || 'https://rastreamento.correios.com.br'}}\\n\\nQualquer dúvida, estamos à disposição! ✨\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'rastreio_despachado',\n  'pedidos',\n  COALESCE({{$('Atualizar Rastreio no loja_db').item.json.id}}, 0),\n  '{{$('Parser Logística').item.json.cliente_whatsapp}}',\n  '{\"rastreio\": \"{{$('Parser Logística').item.json.tracking_code}}\", \"transportadora\": \"{{$('Parser Logística').item.json.carrier}}\"}'::jsonb,\n  'concluido',\n  'track_{{$('Parser Logística').item.json.tracking_code}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1240,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Logística": {
+      "main": [
+        [
+          {
+            "node": "Parser Logística",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Logística": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Rastreio no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Rastreio no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Rastreio (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Rastreio (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

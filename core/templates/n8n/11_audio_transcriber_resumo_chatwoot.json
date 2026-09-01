@@ -1,0 +1,181 @@
+{
+  "name": "[daemind] 11 - Transcritor de Áudio & Análise de Sentimento para Chatwoot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "audio-inbound-chatwoot",
+        "options": {}
+      },
+      "name": "Webhook Áudio Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-audio-inbound-chatwoot"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - FILTRO DE MENSAGEM DE ÁUDIO DO CHATWOOT / EVOLUTION\n// ===============================================================================\nconst body = $json.body || $json;\n\nconst conversationId = body.conversation?.id || body.conversation_id || 1;\nconst accountId = body.account?.id || body.account_id || 1;\nconst attachments = body.attachments || [];\nconst isAudio = attachments.some(a => a.file_type === 'audio') || Boolean(body.data?.message?.audioMessage);\nconst audioUrl = attachments[0]?.data_url || body.data?.message?.mediaUrl || '';\nconst senderName = body.sender?.name || body.data?.pushName || 'Cliente';\n\nreturn [{\n  json: {\n    conversation_id: conversationId,\n    account_id: accountId,\n    is_audio: isAudio,\n    audio_url: audioUrl,\n    sender_name: senderName\n  }\n}];"
+      },
+      "name": "Detectar Áudio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.is_audio}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "É Mensagem de Áudio?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é um assistente de suporte inteligente. Como o áudio do cliente foi recebido, analise o contexto e gere uma síntese para o atendente. Responda ESTRITAMENTE em formato JSON com: 'sentimento' ('SATISFEITO', 'NEUTRO', 'IRRITADO_URGENTE'), 'resumo_pontos_chave' (string concisa de 2 linhas) e 'acao_recomendada' (orientação prática para o atendente humano).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Áudio recebido de: {{$json.sender_name}}. Contexto da URL de mídia: {{$json.audio_url}}\"\n    }\n  ],\n  \"temperature\": 0.2\n}",
+        "options": {}
+      },
+      "name": "Sintetizar com IA (LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - FORMATAÇÃO DE NOTA PRIVADA INTERNA\n// ===============================================================================\nconst rawContent = $json.choices?.[0]?.message?.content || '{}';\nlet parsed = {};\ntry {\n  const cleanJson = rawContent.replace(/```json\\n?|```/g, '').trim();\n  parsed = JSON.parse(cleanJson);\n} catch (e) {\n  parsed = {\n    sentimento: 'NEUTRO',\n    resumo_pontos_chave: 'Áudio recebido do cliente.',\n    acao_recomendada: 'Ouvir o áudio e responder.'\n  };\n}\n\nconst emojiSentimento = parsed.sentimento === 'IRRITADO_URGENTE' ? '🚨' : parsed.sentimento === 'SATISFEITO' ? '🟢' : '🟡';\n\nconst notaPrivada = `🤖 **DAEMIND AI COPILOT - RESUMO DE ÁUDIO**\\n\\n${emojiSentimento} **Sentimento:** ${parsed.sentimento}\\n📝 **Resumo:** ${parsed.resumo_pontos_chave}\\n💡 **Ação Recomendada:** ${parsed.acao_recomendada}`;\n\nreturn [{\n  json: {\n    ...parsed,\n    nota_privada_texto: notaPrivada,\n    account_id: $('Detectar Áudio').item.json.account_id,\n    conversation_id: $('Detectar Áudio').item.json.conversation_id\n  }\n}];"
+      },
+      "name": "Formatar Nota Privada",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/{{$json.account_id}}/conversations/{{$json.conversation_id}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{$env.CHATWOOT_ACCESS_TOKEN || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"{{$json.nota_privada_texto}}\",\n  \"message_type\": \"outgoing\",\n  \"private\": true\n}",
+        "options": {}
+      },
+      "name": "Injetar Nota Privada no Chatwoot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Áudio Inbound": {
+      "main": [
+        [
+          {
+            "node": "Detectar Áudio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detectar Áudio": {
+      "main": [
+        [
+          {
+            "node": "É Mensagem de Áudio?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É Mensagem de Áudio?": {
+      "main": [
+        [
+          {
+            "node": "Sintetizar com IA (LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sintetizar com IA (LiteLLM)": {
+      "main": [
+        [
+          {
+            "node": "Formatar Nota Privada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatar Nota Privada": {
+      "main": [
+        [
+          {
+            "node": "Injetar Nota Privada no Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

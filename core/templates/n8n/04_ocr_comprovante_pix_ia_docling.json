@@ -1,0 +1,271 @@
+{
+  "name": "[daemind] 04 - OCR e Conciliação Autônoma de Comprovantes PIX via IA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-comprovante-whatsapp",
+        "options": {}
+      },
+      "name": "Webhook Mensagem WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-comprovante-whatsapp-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - FILTRO DE MÍDIA E INTENÇÃO DE COMPROVANTE\n// ===============================================================================\nconst body = $json.body || $json;\n\n// Suporta formato Evolution API e Chatwoot\nconst data = body.data || body;\nconst message = data.message || {};\nconst sender = (data.key?.remoteJid || body.sender || '').toString().replace(/@.*$/, '').replace(/\\D/g, '');\nconst caption = (message.imageMessage?.caption || message.documentMessage?.caption || message.conversation || body.content || '').toLowerCase();\nconst hasMedia = Boolean(message.imageMessage || message.documentMessage || message.extendedTextMessage?.contextInfo?.quotedMessage?.imageMessage || body.attachments?.length > 0);\n\nconst isPixIntent = caption.includes('pix') || caption.includes('comprovante') || caption.includes('paguei') || caption.includes('pago') || caption.includes('transferencia') || caption.includes('segue');\n\nconst base64Media = data.message?.base64 || body.base64 || '';\nconst mediaUrl = data.message?.mediaUrl || body.media_url || '';\n\nreturn [{\n  json: {\n    sender_whatsapp: sender,\n    caption: caption,\n    has_media: hasMedia,\n    is_pix_intent: isPixIntent,\n    base64_media: base64Media,\n    media_url: mediaUrl,\n    raw_event_id: data.key?.id || body.id || Date.now().toString()\n  }\n}];"
+      },
+      "name": "Detectar Mídia e Intenção",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.has_media || $json.is_pix_intent}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "É Comprovante?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://litellm:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.LITELLM_MASTER_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gemini-2.5-flash\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é um auditor financeiro autônomo. Sua função é extrair dados de comprovantes de pagamento bancário ou PIX. Responda ESTRITAMENTE em formato JSON com as chaves: 'valor' (número decimal), 'autenticacao_bancaria' (string), 'data_pagamento' (string YYYY-MM-DD), 'beneficiario' (string) e 'valido' (booleano).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Analise este comprovante e extraia os dados: Legenda: '{{$('Detectar Mídia e Intenção').item.json.caption}}'\"\n    }\n  ],\n  \"temperature\": 0.1\n}",
+        "options": {}
+      },
+      "name": "Extrair Dados via IA (LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE RESPOSTA ESTRUTURADA DA IA\n// ===============================================================================\nconst rawContent = $json.choices?.[0]?.message?.content || '{}';\nlet parsed = {};\n\ntry {\n  const cleanJson = rawContent.replace(/```json\\n?|```/g, '').trim();\n  parsed = JSON.parse(cleanJson);\n} catch (e) {\n  parsed = {\n    valor: 0.0,\n    autenticacao_bancaria: 'MANUAL_REVIEW',\n    valido: false\n  };\n}\n\nreturn [{\n  json: {\n    ...parsed,\n    valor_extraido: parseFloat(parsed.valor || 0),\n    sender_whatsapp: $('Detectar Mídia e Intenção').item.json.sender_whatsapp\n  }\n}];"
+      },
+      "name": "Parsear Extração da IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.id, p.numero_pedido, p.cliente_id, p.valor_total, c.nome, c.whatsapp\nFROM pedidos p\nJOIN clientes c ON p.cliente_id = c.id\nWHERE p.status_operacional IN ('Pendente', 'Pendente_PIX')\n  AND (c.whatsapp = '{{$json.sender_whatsapp}}' OR ABS(p.valor_total - {{$json.valor_extraido}}) < 0.10)\nORDER BY p.data_criacao DESC\nLIMIT 1;"
+      },
+      "name": "Localizar Pedido Pendente (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        780,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Pedido Localizado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE pedidos\nSET status_operacional = 'Pago',\n    updated_at = CURRENT_TIMESTAMP\nWHERE id = {{$json.id}};\n\nINSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'comprovante_conciliado',\n  'pedidos',\n  {{$json.id}},\n  '{{$json.whatsapp}}',\n  '{\"valor\": {{$json.valor_total}}, \"status\": \"aprovado_autonomo\"}'::jsonb,\n  'concluido',\n  'concilia_pix_{{$json.id}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Aprovar Pedido (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1260,
+        -100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Localizar Pedido Pendente (PostgreSQL)').item.json.whatsapp}}\",\n  \"text\": \"🎉 *Comprovante validado com sucesso!*\\n\\nConfirmamos o recebimento de *R$ {{$('Localizar Pedido Pendente (PostgreSQL)').item.json.valor_total.toFixed(2)}}* para o pedido *#{{$('Localizar Pedido Pendente (PostgreSQL)').item.json.numero_pedido}}*.\\n\\nSua compra já entrou em separação e você receberá o código de rastreio assim que for despachada. Muito obrigado! 🚀\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Confirmar no WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1500,
+        -100
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Mensagem WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Detectar Mídia e Intenção",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detectar Mídia e Intenção": {
+      "main": [
+        [
+          {
+            "node": "É Comprovante?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É Comprovante?": {
+      "main": [
+        [
+          {
+            "node": "Extrair Dados via IA (LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Dados via IA (LiteLLM)": {
+      "main": [
+        [
+          {
+            "node": "Parsear Extração da IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Extração da IA": {
+      "main": [
+        [
+          {
+            "node": "Localizar Pedido Pendente (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Localizar Pedido Pendente (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Pedido Localizado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedido Localizado?": {
+      "main": [
+        [
+          {
+            "node": "Aprovar Pedido (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aprovar Pedido (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Confirmar no WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

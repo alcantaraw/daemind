@@ -1,0 +1,248 @@
+{
+  "name": "[daemind] 01 - Recuperação de Carrinho Abandonado (WhatsApp + Shlink)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "recuperacao-carrinho",
+        "options": {}
+      },
+      "name": "Webhook Inbound Carrinho",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-carrinho-abandonado-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - DEDUPLICAÇÃO & SANITIZAÇÃO DE CONTATOS (SHA-256)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\n// 1. Extração e normalização de telefone\nlet rawPhone = (body.cliente_whatsapp || body.telefone || body.phone || body.customer?.phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\n// 2. Extração de dados da transação\nconst clienteNome = (body.cliente_nome || body.nome || body.customer?.first_name || 'Cliente').trim();\nconst email = (body.cliente_email || body.email || body.customer?.email || '').trim().toLowerCase();\nconst valorTotal = parseFloat(body.valor_total || body.total || body.cart_total || 0);\nconst checkoutUrl = body.checkout_url || body.link_carrinho || body.cart_url || 'https://minhaloja.com.br/checkout';\nconst cupomDesconto = body.cupom || 'VOLTA10';\nconst rawId = body.carrinho_id || body.id || (email + '_' + valorTotal);\n\n// 3. Cálculo de hash de idempotência SHA-256\nconst dedupHash = crypto.createHash('sha256').update(String(rawId) + '_' + email + '_' + valorTotal).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    carrinho_id_externo: String(rawId),\n    cliente_nome: clienteNome,\n    whatsapp: rawPhone,\n    email: email,\n    valor_total: valorTotal,\n    checkout_url: checkoutUrl,\n    cupom_desconto: cupomDesconto,\n    origem: body.origem || 'ecommerce'\n  }\n}];"
+      },
+      "name": "Deduplicar e Sanitizar (SHA-256)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic) VALUES ('ecommerce', '{{$json.dedup_hash}}', 'carrinho_abandonado') ON CONFLICT (source_system, event_id) DO NOTHING RETURNING event_id;"
+      },
+      "name": "Verificar Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO clientes (nome, email, whatsapp) VALUES ('{{$('Deduplicar e Sanitizar (SHA-256)').item.json.cliente_nome}}', NULLIF('{{$('Deduplicar e Sanitizar (SHA-256)').item.json.email}}', ''), NULLIF('{{$('Deduplicar e Sanitizar (SHA-256)').item.json.whatsapp}}', '')) ON CONFLICT (email) DO UPDATE SET whatsapp = EXCLUDED.whatsapp, nome = EXCLUDED.nome, updated_at = CURRENT_TIMESTAMP;\n\nINSERT INTO carrinhos_abandonados (cliente_nome, whatsapp, email, valor_carrinho, link_checkout_recuperacao, tipo_pendencia, status_recuperacao) VALUES ('{{$('Deduplicar e Sanitizar (SHA-256)').item.json.cliente_nome}}', '{{$('Deduplicar e Sanitizar (SHA-256)').item.json.whatsapp}}', '{{$('Deduplicar e Sanitizar (SHA-256)').item.json.email}}', {{$('Deduplicar e Sanitizar (SHA-256)').item.json.valor_total}}, '{{$('Deduplicar e Sanitizar (SHA-256)').item.json.checkout_url}}', 'Carrinho Abandonado', 'Pendente') RETURNING id;"
+      },
+      "name": "Persistir no loja_db (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"{{$('Deduplicar e Sanitizar (SHA-256)').item.json.checkout_url}}?utm_source=whatsapp&utm_medium=recuperacao&utm_campaign=carrinho_abandonado&cupom={{$('Deduplicar e Sanitizar (SHA-256)').item.json.cupom_desconto}}\",\n  \"tags\": [\"recuperacao\", \"carrinho\", \"whatsapp\"],\n  \"crawlable\": false,\n  \"forwardQuery\": true\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Curto (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Deduplicar e Sanitizar (SHA-256)').item.json.whatsapp}}\",\n  \"text\": \"Oi {{$('Deduplicar e Sanitizar (SHA-256)').item.json.cliente_nome}}! Tudo bem?\\n\\nNotamos que você não finalizou o seu pedido de R$ {{$('Deduplicar e Sanitizar (SHA-256)').item.json.valor_total.toFixed(2)}}.\\n\\nSeparamos um presente especial: use o cupom *{{$('Deduplicar e Sanitizar (SHA-256)').item.json.cupom_desconto}}* para garantir 10% de desconto.\\n\\n👉 Conclua seu pedido agora: {{$json.shortUrl || $json.shortUrlRaw || $('Deduplicar e Sanitizar (SHA-256)').item.json.checkout_url}}\\n\\nSe tiver qualquer dúvida, basta responder aqui! 🚀\",\n  \"delay\": 1200,\n  \"linkPreview\": true\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE carrinhos_abandonados SET status_recuperacao = 'Disparado_WhatsApp', tentativas_contato = tentativas_contato + 1, link_checkout_recuperacao = '{{$('Gerar Link Curto (Shlink)').item.json.shortUrl || $('Deduplicar e Sanitizar (SHA-256)').item.json.checkout_url}}', updated_at = CURRENT_TIMESTAMP WHERE id = {{$('Persistir no loja_db (PostgreSQL)').item.json.id}};"
+      },
+      "name": "Atualizar Status (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1240,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Inbound Carrinho": {
+      "main": [
+        [
+          {
+            "node": "Deduplicar e Sanitizar (SHA-256)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicar e Sanitizar (SHA-256)": {
+      "main": [
+        [
+          {
+            "node": "Verificar Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Persistir no loja_db (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persistir no loja_db (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Curto (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Curto (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Status (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

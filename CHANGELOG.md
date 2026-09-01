@@ -1,5 +1,64 @@
 # CHANGELOG
 
+## [v3.0.0] — 2026-08-31 — (HUB OMNICHANNEL DE AUTOMAÇÃO, TEMPLATES N8N & CRM 360°)
+
+> **Marco Arquitetural 3.0:** Consolidação do **Hub Universal de Ingestão de E-Commerce, Marketplaces e CRM Omnichannel**, composto por uma suíte de **32 Templates Oficiais de Automação n8n** homologados e integrados ao PostgreSQL 17 (`loja_db`), Chatbot N1 com RAG Soberano e Memória Conversacional Nativa, e Motor de Sincronização Declarativa Plug & Play (`sync_n8n_templates.sh`).
+
+---
+
+### 🤖 Biblioteca Oficial de 32 Templates n8n (`core/templates/n8n/`)
+
+- **[ADD] Automações de Resiliência SRE & Core IA:**
+  - `00_sre_faxina_reativa_modelos_ia_404.json`: Auto-healing e expurgo automático de modelos descontinuados no LiteLLM via API.
+- **[ADD] Esteiras de Growth, Vendas & Recuperação de Receita:**
+  - `01_ecommerce_recuperacao_carrinho_whatsapp.json`: Recuperação de carrinho com links encurtados e tags UTM via Shlink.
+  - `02_cobranca_pix_pendente_com_lembrete.json`: Notificação imediata com código Copia-e-Cola e lembrete anti-expiração.
+  - `07_recuperacao_boleto_pix_urgencia_estoque.json`: Régua de recuperação com escassez real consultando saldo físico no `loja_db`.
+  - `08_upsell_cross_sell_pos_aprovacao_shlink.json`: Disparo de oferta VIP em 1-clique baseado no radar de cross-sell.
+  - `09_reativacao_clientes_inativos_rfm_listmonk.json`: Reativação segmentada de clientes inativos (> 60 dias) via Listmonk e WhatsApp.
+- **[ADD] Inteligência Conversacional, SDR & Chatbot com RAG:**
+  - `04_ocr_comprovante_pix_ia_docling.json`: Leitura multimodal de comprovantes PIX e conciliação atômica em milissegundos.
+  - `10_sdr_qualificador_leads_whatsapp_chatwoot.json`: Triagem de leads, Lead Scoring (0-100) e alertas de oportunidades para corretores/vendedores.
+  - `11_audio_transcriber_resumo_chatwoot.json`: Transcrição de áudios de clientes e injeção de resumo e sentimento em notas privadas no Chatwoot.
+  - `14_copiloto_executivo_text_to_sql_whatsapp.json`: Copiloto Text-to-SQL para consulta de faturamento e DRE no WhatsApp em linguagem natural.
+  - `16_chatbot_ia_atendimento_n1_chatwoot.json`: **Chatbot Autônomo N1 com RAG Soberano no PostgreSQL e Memória Conversacional Nativa do Chatwoot (Buffer de Mensagens e Human Handoff Transparente sem necessidade de MCP)**.
+- **[ADD] Operações, Logística & Marketing 360°:**
+  - `03_rastreamento_envio_pos_venda.json` & `12_alerta_proativo_atraso_entrega.json`: Rastreamento em 1-clique e alertas de ocorrências de transporte.
+  - `05_marketing_360_postiz_listmonk_shlink.json` & `15_content_repurposing_postiz_listmonk.json`: Repurposing e distribuição multicanal de conteúdo.
+  - `06_alerta_estoque_insumos_nocodb.json`: Alerta preditivo de ruptura de embalagens e insumos de expedição.
+  - `13_auditor_over_attribution_ads_vs_caixa.json`: Auditoria diária de Over-Attribution cruzando ROAS de Pixel com faturamento real.
+- **[ADD] Ingestão Especialista de E-Commerce & Lojas Virtuais:**
+  - `17_ecommerce_loja_integrada_ingestao_nativa.json`: Loja Integrada (Itens SKU, NCM, CMV, Cupons, Frete e Baixa de Insumos).
+  - `18_ecommerce_shopify_vendas_e_tags_crm.json`: Shopify (Tags de cliente VIP/Atacado, Fulfillments e Line Items).
+  - `19_ecommerce_nuvemshop_pedidos_e_carrinhos.json`: Nuvemshop (Produtos, Meios de Envio e Pagamento).
+  - `20_ecommerce_woocommerce_pedidos_e_custom_fields.json`: WooCommerce (Billing, Shipping e Custom Fields de CPF/CNPJ).
+  - `21_ecommerce_vtex_orders_e_oms.json`: VTEX OMS (Split de Pagamento, Sellers e Faturamento).
+  - `22_ecommerce_tray_yampi_cartpanda_checkout.json`: Checkouts Transparentes (Tray, Yampi, CartPanda e Bagy).
+- **[ADD] Ingestão Especialista de Marketplaces & Hubs:**
+  - `23_marketplace_mercadolivre_pedidos_taxas.json`: Mercado Livre (Cálculo de Comissão ML no DRE, Mercado Envios Full/Flex e Chat Pós-Venda).
+  - `24_marketplace_shopee_pedidos_e_escrow.json`: Shopee (Comissão Shopee, Taxa de Serviço e Escrow Líquido).
+  - `25_marketplace_amazon_sp_api_orders.json`: Amazon SP-API (Prime, Canais FBA/FBM e Taxas).
+  - `26_marketplace_magalu_olist_anymarket.json`: Hubs Integradores (Magalu, Olist, AnyMarket e SkyHub).
+- **[ADD] ERPs Fiscais, Logística, Meios de Pagamento & Delivery:**
+  - `27_erp_bling_tiny_faturamento_nfe_danfe.json`: Bling e Tiny ERP (Chave de NF-e 44 dígitos e envio automático de DANFE PDF no WhatsApp).
+  - `28_logistica_melhorenvio_frenet_etiquetas.json`: Melhor Envio, Frenet e Correios (Geração de Rastreamento Shlink e Baixa de Insumos).
+  - `29_gateway_asaas_stripe_pagarme_cobrancas.json`: Gateways (Asaas, Stripe, Pagar.me, PagBank e Efí Bank para PIX, Boleto e Assinaturas).
+  - `30_delivery_ifood_rappi_pedidos_tempo_real.json`: Delivery (iFood, Rappi, Anota AI e Aiqfome com Comanda de Cozinha).
+  - `31_hub_universal_roteador_webhooks_crm.json`: Roteador Universal e Fallback de Webhooks para qualquer sistema externo.
+
+---
+
+### ⚡ Motor Declarativo Plug & Play & Documentação
+
+- **[ADD] Sincronizador Declarativo (`core/scripts/sync_n8n_templates.sh`):**
+  - Motor inteligente de validação de dependências e presença de chaves de API (`LOJA_INTEGRADA_API_KEY`, `MERCADOLIVRE_ACCESS_TOKEN`, `BLING_API_KEY`, etc.), ativando apenas os workflows cujas credenciais ou flags estejam configuradas.
+- **[ADD] Injeção no Ciclo de Vida do n8n (`core/scripts/install_n8n.sh`):**
+  - Execução automática da sincronização durante o provisionamento da stack.
+- **[ADD] Manual Completo de Workflows ([`docs/MANUAL_DE_TEMPLATES_E_WORKFLOWS_N8N.md`](docs/MANUAL_DE_TEMPLATES_E_WORKFLOWS_N8N.md)):**
+  - Guia detalhado cobrindo 100% dos 32 templates, nós de configuração, variáveis de ambiente, idempotência SHA-256 e mapeamento relacional de tabelas e views no NocoDB e Metabase.
+
+---
+
 ## [v2.1.0] — 2026-08-31 — (CATÁLOGO SOBERANO DE ESPECIFICAÇÕES OPENAPI 3.0)
 
 > **Marco Arquitetural 2.1:** Consolidação e publicação do **Catálogo Central de Especificações OpenAPI 3.0** em `docs/OpenAPI/`, cobrindo 74 plataformas e mais de 24.500 endpoints estruturados com governança padronizada de segurança, resiliência, rate limits e contratos de webhooks.

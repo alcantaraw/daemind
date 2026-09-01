@@ -1,0 +1,169 @@
+{
+  "name": "[daemind] 09 - Régua de Reativação RFM de Clientes Inativos (Listmonk + WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      },
+      "name": "Agendador Semanal (Segunda 09h)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT c.id AS cliente_id, c.nome, c.email, c.whatsapp, MAX(p.data_criacao) AS ultima_compra, COUNT(p.id) AS total_compras, SUM(p.valor_total) AS ltv_total\nFROM clientes c\nJOIN pedidos p ON p.cliente_id = c.id\nWHERE p.status_operacional = 'Pago'\nGROUP BY c.id, c.nome, c.email, c.whatsapp\nHAVING MAX(p.data_criacao) <= (CURRENT_DATE - INTERVAL '60 days')\n   AND COUNT(p.id) >= 1\n   AND NOT EXISTS (\n     SELECT 1 FROM fila_mensageria f \n     WHERE f.aggregate_id = c.id \n       AND f.event_type = 'reativacao_rfm' \n       AND f.created_at >= (CURRENT_DATE - INTERVAL '30 days')\n   )\nORDER BY ltv_total DESC\nLIMIT 20;"
+      },
+      "name": "Consultar Clientes Inativos RFM (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -180,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"https://minhaloja.com.br?cupom=VOLTA15&utm_source=whatsapp&utm_medium=reativacao_rfm&utm_campaign=cliente_{{$json.cliente_id}}\",\n  \"tags\": [\"rfm\", \"reativacao\", \"whatsapp\"],\n  \"crawlable\": false\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Reativação (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Consultar Clientes Inativos RFM (PostgreSQL)').item.json.whatsapp}}\",\n  \"text\": \"Oi {{$('Consultar Clientes Inativos RFM (PostgreSQL)').item.json.nome}}! Sentimos sua falta por aqui! ✨\\n\\nFaz um tempinho desde a sua última compra com a gente. Preparamos uma condição VIP para você matar a saudade:\\n\\n🎁 Use o cupom *VOLTA15* para garantir **15% DE DESCONTO** em qualquer produto da loja.\\n\\n👉 Acesse a loja agora: {{$json.shortUrl || $json.shortUrlRaw}}\\n\\nSe precisar de qualquer indicação ou novidade, estamos por aqui!\",\n  \"delay\": 1500,\n  \"linkPreview\": true\n}",
+        "options": {}
+      },
+      "name": "Disparar Reativação (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'reativacao_rfm',\n  'clientes',\n  {{$('Consultar Clientes Inativos RFM (PostgreSQL)').item.json.cliente_id}},\n  '{{$('Consultar Clientes Inativos RFM (PostgreSQL)').item.json.whatsapp}}',\n  '{\"tipo\": \"cupom_volta15\", \"ltv\": {{$('Consultar Clientes Inativos RFM (PostgreSQL)').item.json.ltv_total}}}'::jsonb,\n  'concluido',\n  'reativacao_{{$('Consultar Clientes Inativos RFM (PostgreSQL)').item.json.cliente_id}}_' || TO_CHAR(CURRENT_DATE, 'YYYYMM')\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar na Fila de Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        540,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Agendador Semanal (Segunda 09h)": {
+      "main": [
+        [
+          {
+            "node": "Consultar Clientes Inativos RFM (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Clientes Inativos RFM (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Reativação (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Reativação (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Disparar Reativação (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar Reativação (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar na Fila de Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

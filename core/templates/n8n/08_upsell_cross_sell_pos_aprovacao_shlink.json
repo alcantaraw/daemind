@@ -1,0 +1,213 @@
+{
+  "name": "[daemind] 08 - Upsell & Cross-Sell Pós-Aprovação em 1-Clique",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pedido-aprovado-upsell",
+        "options": {}
+      },
+      "name": "Webhook Pedido Aprovado",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-pedido-aprovado-upsell"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE PEDIDO APROVADO\n// ===============================================================================\nconst body = $json.body || $json;\n\nlet rawPhone = (body.cliente_whatsapp || body.telefone || body.phone || body.customer?.phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (body.cliente_nome || body.nome || body.customer?.first_name || 'Cliente').trim();\nconst email = (body.cliente_email || body.email || body.customer?.email || '').trim().toLowerCase();\nconst pedidoId = parseInt(body.pedido_id || body.id || Date.now(), 10);\nconst numeroPedido = parseInt(body.numero_pedido || body.order_number || pedidoId, 10);\nconst valorTotal = parseFloat(body.valor_total || body.total || 0);\nconst produtoPrincipal = (body.produto_nome || body.items?.[0]?.name || 'seu produto').trim();\n\nreturn [{\n  json: {\n    pedido_id: pedidoId,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    whatsapp: rawPhone,\n    email: email,\n    valor_total: valorTotal,\n    produto_principal: produtoPrincipal\n  }\n}];"
+      },
+      "name": "Sanitizar Dados do Pedido",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "minutes"
+      },
+      "name": "Aguardar 5 Minutos",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        60,
+        100
+      ],
+      "webhookId": "daemind-wait-upsell-5m"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.id, p.nome, p.preco_venda, ROUND((p.preco_venda * 0.75)::numeric, 2) AS preco_promocional\nFROM produtos p\nWHERE p.ativo = true\n  AND p.saldo_estoque > 5\nORDER BY p.total_vendas DESC, RANDOM()\nLIMIT 1;"
+      },
+      "name": "Localizar Produto Complementar (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        300,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"https://minhaloja.com.br/checkout-express?produto_id={{$json.id}}&cupom=UPSELLVIP&utm_source=whatsapp&utm_medium=upsell&utm_campaign=pos_aprovacao_{{$('Sanitizar Dados do Pedido').item.json.numero_pedido}}\",\n  \"tags\": [\"upsell\", \"pos_aprovacao\", \"whatsapp\"],\n  \"crawlable\": false\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Upsell (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Sanitizar Dados do Pedido').item.json.whatsapp}}\",\n  \"text\": \"🎉 Parabéns pela compra, {{$('Sanitizar Dados do Pedido').item.json.cliente_nome}}! Seu pedido *#{{$('Sanitizar Dados do Pedido').item.json.numero_pedido}}* já foi aprovado!\\n\\nComo seu pacote ainda está na bancada de separação, liberamos uma condição única:\\n\\nAdicione *{{$('Localizar Produto Complementar (PostgreSQL)').item.json.nome}}* com *25% DE DESCONTO* e **FRETE GRÁTIS NO MESMO PACOTE**!\\n\\nDe ~R$ {{$('Localizar Produto Complementar (PostgreSQL)').item.json.preco_venda}}~ por apenas *R$ {{$('Localizar Produto Complementar (PostgreSQL)').item.json.preco_promocional}}* 🚀\\n\\n👉 Aproveitar no mesmo frete: {{$json.shortUrl || $json.shortUrlRaw}}\\n\\n*(Oferta válida apenas pelos próximos 10 minutos antes do despacho)*\",\n  \"delay\": 1200,\n  \"linkPreview\": true\n}",
+        "options": {}
+      },
+      "name": "Disparar Oferta VIP (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'oferta_upsell_pos_compra',\n  'pedidos',\n  {{$('Sanitizar Dados do Pedido').item.json.pedido_id}},\n  '{{$('Sanitizar Dados do Pedido').item.json.whatsapp}}',\n  '{\"pedido\": {{$('Sanitizar Dados do Pedido').item.json.numero_pedido}}, \"produto_upsell\": \"{{$('Localizar Produto Complementar (PostgreSQL)').item.json.nome}}\"}'::jsonb,\n  'concluido',\n  'upsell_{{$('Sanitizar Dados do Pedido').item.json.pedido_id}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar na Fila de Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1020,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Pedido Aprovado": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Dados do Pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Dados do Pedido": {
+      "main": [
+        [
+          {
+            "node": "Aguardar 5 Minutos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar 5 Minutos": {
+      "main": [
+        [
+          {
+            "node": "Localizar Produto Complementar (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Localizar Produto Complementar (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Upsell (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Upsell (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Disparar Oferta VIP (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar Oferta VIP (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar na Fila de Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

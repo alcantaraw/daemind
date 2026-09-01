@@ -1,0 +1,218 @@
+{
+  "name": "[daemind] 03 - Notificação de Rastreamento de Envio & Pós-Venda VIP",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pedido-despachado",
+        "options": {}
+      },
+      "name": "Webhook Pedido Despachado",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-pedido-despachado-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSING DE DADOS DE ENVIO E TRANSPORTADORA\n// ===============================================================================\nconst body = $json.body || $json;\n\nconst pedidoId = parseInt(body.pedido_id || body.id || 0, 10);\nconst numeroPedido = parseInt(body.numero_pedido || body.order_number || pedidoId, 10);\nconst codigoRastreio = (body.codigo_rastreio || body.tracking_code || body.tracking_number || '').trim();\nconst transportadora = (body.transportadora || body.carrier || body.forma_envio || 'Correios').trim();\nlet linkRastreio = body.link_rastreio || body.tracking_url || `https://rastreamento.correios.com.br/app/index.php?codigo=${codigoRastreio}`;\nconst previsaoEntrega = body.previsao_entrega || body.delivery_estimate || 'em breve';\n\nreturn [{\n  json: {\n    pedido_id: pedidoId,\n    numero_pedido: numeroPedido,\n    codigo_rastreio: codigoRastreio,\n    transportadora: transportadora,\n    link_rastreio_original: linkRastreio,\n    previsao_entrega: previsaoEntrega\n  }\n}];"
+      },
+      "name": "Sanitizar Dados de Rastreio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE pedidos\nSET status_operacional = 'Enviado',\n    codigo_rastreio = '{{$json.codigo_rastreio}}',\n    envio_id = '{{$json.transportadora}}',\n    updated_at = CURRENT_TIMESTAMP\nWHERE id = {{$json.pedido_id}} OR numero_pedido = {{$json.numero_pedido}}\nRETURNING cliente_id, valor_total, numero_pedido;"
+      },
+      "name": "Atualizar Status no PostgreSQL",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT nome, whatsapp, chatwoot_contact_id FROM clientes WHERE id = {{$json.cliente_id}} LIMIT 1;"
+      },
+      "name": "Buscar Cliente (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        300,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://shlink:8080/rest/v3/short-urls",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.SHLINK_API_KEY || $env.DB_PASSWORD}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"longUrl\": \"{{$('Sanitizar Dados de Rastreio').item.json.link_rastreio_original}}\",\n  \"tags\": [\"rastreio\", \"pos_venda\", \"whatsapp\"],\n  \"crawlable\": false\n}",
+        "options": {}
+      },
+      "name": "Gerar Link Curto (Shlink)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Buscar Cliente (PostgreSQL)').item.json.whatsapp}}\",\n  \"text\": \"Oba, {{$('Buscar Cliente (PostgreSQL)').item.json.nome}}! Seu pedido *#{{$('Sanitizar Dados de Rastreio').item.json.numero_pedido}}* acabou de ser despachado! 🚚📦\\n\\nTransportadora: *{{$('Sanitizar Dados de Rastreio').item.json.transportadora}}*\\nCódigo de Rastreio: *`{{$('Sanitizar Dados de Rastreio').item.json.codigo_rastreio}}`*\\n\\n🔍 Acompanhe a entrega em tempo real:\\n{{$json.shortUrl || $('Sanitizar Dados de Rastreio').item.json.link_rastreio_original}}\\n\\nPrevisão: {{$('Sanitizar Dados de Rastreio').item.json.previsao_entrega}}.\\nQualquer dúvida, estamos por aqui! ✨\",\n  \"delay\": 1000,\n  \"linkPreview\": true\n}",
+        "options": {}
+      },
+      "name": "Enviar Notificação WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'notificacao_rastreio',\n  'pedidos',\n  {{$('Sanitizar Dados de Rastreio').item.json.pedido_id}},\n  '{{$('Buscar Cliente (PostgreSQL)').item.json.whatsapp}}',\n  '{\"codigo_rastreio\": \"{{$('Sanitizar Dados de Rastreio').item.json.codigo_rastreio}}\", \"transportadora\": \"{{$('Sanitizar Dados de Rastreio').item.json.transportadora}}\"}'::jsonb,\n  'concluido',\n  'rastreio_{{$('Sanitizar Dados de Rastreio').item.json.pedido_id}}_{{$('Sanitizar Dados de Rastreio').item.json.codigo_rastreio}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Log no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1020,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Pedido Despachado": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Dados de Rastreio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Dados de Rastreio": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Status no PostgreSQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Status no PostgreSQL": {
+      "main": [
+        [
+          {
+            "node": "Buscar Cliente (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Cliente (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Gerar Link Curto (Shlink)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Link Curto (Shlink)": {
+      "main": [
+        [
+          {
+            "node": "Enviar Notificação WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Notificação WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Log no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

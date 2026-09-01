@@ -1,0 +1,181 @@
+{
+  "name": "[daemind] 06 - Alerta Preditivo de Estoque Crítico e Insumos (NocoDB + WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8,14 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Agendador Diário (08h e 14h)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT item_nome, tipo_item, saldo_atual, estoque_minimo, fornecedor_nome, fornecedor_contato, status_alerta\nFROM vw_estoque_critico\nORDER BY saldo_atual ASC\nLIMIT 20;"
+      },
+      "name": "Consultar vw_estoque_critico (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -180,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - COMPILADOR DE ITENS CRÍTICOS E ALERTA EXECUTIVO\n// ===============================================================================\nconst items = $input.all();\n\nif (!items || items.length === 0 || !items[0].json?.item_nome) {\n  return [{\n    json: {\n      has_critical_items: false,\n      total_itens: 0,\n      mensagem_alerta: ''\n    }\n  }];\n}\n\nlet lines = [];\nitems.forEach((it, idx) => {\n  const j = it.json;\n  const icon = j.tipo_item === 'INSUMO_EMBALAGEM' ? '📦' : '🏷️';\n  lines.push(`${idx + 1}. ${icon} *${j.item_nome}*\\n   ↳ Saldo: *${j.saldo_atual}* (Mín: ${j.estoque_minimo}) | Fornecedor: ${j.fornecedor_nome || 'N/D'} (${j.fornecedor_contato || 'N/D'})`);\n});\n\nconst msg = `⚠️ *DAEMIND SRE - ALERTA DE ESTOQUE CRÍTICO* ⚠️\\n\\nForam identificados *${items.length} itens* abaixo do ponto de reposição no *loja_db*:\\n\\n${lines.join('\\n\\n')}\\n\\n💡 *Ação Recomendada:* Efetuar pedido de compra junto aos fornecedores imediatamente.`;\n\nreturn [{\n  json: {\n    has_critical_items: true,\n    total_itens: items.length,\n    itens_lista: items.map(i => i.json),\n    mensagem_alerta: msg\n  }\n}];"
+      },
+      "name": "Processar Itens Críticos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        60,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.has_critical_items}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "Há Itens Críticos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$env.SUPRIMENTOS_WHATSAPP || $env.ADMIN_WHATSAPP || '5521999999999'}}\",\n  \"text\": \"{{$('Processar Itens Críticos').item.json.mensagem_alerta}}\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp Gestor (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'alerta_estoque_critico',\n  'insumos',\n  '{{$env.SUPRIMENTOS_WHATSAPP || $env.ADMIN_WHATSAPP || '5521999999999'}}',\n  '{\"total_itens\": {{$('Processar Itens Críticos').item.json.total_itens}}, \"data\": \"' || CURRENT_DATE || '\"}'::jsonb,\n  'concluido',\n  'alerta_estoque_' || CURRENT_DATE || '_' || EXTRACT(HOUR FROM CURRENT_TIME)\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Log no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        780,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Agendador Diário (08h e 14h)": {
+      "main": [
+        [
+          {
+            "node": "Consultar vw_estoque_critico (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar vw_estoque_critico (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Processar Itens Críticos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processar Itens Críticos": {
+      "main": [
+        [
+          {
+            "node": "Há Itens Críticos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Há Itens Críticos?": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp Gestor (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp Gestor (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Log no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

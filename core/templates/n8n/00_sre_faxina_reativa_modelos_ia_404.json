@@ -1,0 +1,95 @@
+{
+  "name": "[daemind] 00 - [SRE] Faxina Reativa de Modelos IA no LiteLLM (Erro 404)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "litellm-falhas",
+        "options": {}
+      },
+      "name": "Webhook LiteLLM",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "litellm-falhas-sre-id"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.error_message}}",
+              "operation": "contains",
+              "value2": "404"
+            }
+          ]
+        }
+      },
+      "name": "Detectar Erro 404",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://##LITELLM_HOST##:4000/model/delete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ##LITELLM_KEY##"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{$json.body.model_id}}\"\n}",
+        "options": {}
+      },
+      "name": "Expurgar Deployment (API LiteLLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        -100
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook LiteLLM": {
+      "main": [
+        [
+          {
+            "node": "Detectar Erro 404",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detectar Erro 404": {
+      "main": [
+        [
+          {
+            "node": "Expurgar Deployment (API LiteLLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

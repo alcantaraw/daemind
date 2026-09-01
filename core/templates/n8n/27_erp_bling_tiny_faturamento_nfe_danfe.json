@@ -1,0 +1,207 @@
+{
+  "name": "[daemind] 27 - ERPs: Bling & Tiny (Faturamento, NF-e & Danfe no WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-erp-nfe-faturamento",
+        "options": {}
+      },
+      "name": "Webhook Bling Tiny NF-e",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-erp-nfe-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER CANÔNICO DE NF-E / ERP (BLING, TINY)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\nconst nota = body.notaFiscal || body.notafiscal || body.retorno?.notasfiscais?.[0]?.notafiscal || body;\nconst contato = nota.contato || nota.destinatario || body.contato || {};\n\nlet rawPhone = (contato.celular || contato.fone || contato.telefone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (contato.nome || 'Cliente').trim();\nconst clienteEmail = (contato.email || '').trim().toLowerCase();\nconst clienteDoc = (contato.cnpj || contato.cpf || '').toString().replace(/\\D/g, '');\n\nconst numeroNota = parseInt(nota.numero || nota.numeroNF || Date.now(), 10);\nconst serieNota = nota.serie || '1';\nconst chaveAcesso = (nota.chaveAcesso || nota.chave || '').toString().replace(/\\D/g, '');\nconst linkDanfe = nota.linkDanfe || nota.danfe || '';\nconst valorNota = parseFloat(nota.valorNota || nota.valor || nota.totalVenda || 0);\n\nconst dedupHash = crypto.createHash('sha256').update(`nfe_${chaveAcesso || numeroNota}_${valorNota}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    numero_nota: numeroNota,\n    serie_nota: serieNota,\n    chave_acesso: chaveAcesso,\n    link_danfe: linkDanfe,\n    valor_nota: valorNota,\n    cliente_nome: clienteNome,\n    cliente_email: clienteEmail,\n    cliente_whatsapp: rawPhone,\n    cliente_doc: clienteDoc\n  }\n}];"
+      },
+      "name": "Parser NF-e ERP",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  'ERP NF-e',\n  '{{$json.dedup_hash}}',\n  'nfe_emitida'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE pedidos \nSET status_operacional = 'Faturado',\n    updated_at = CURRENT_TIMESTAMP\nWHERE numero_pedido = {{$('Parser NF-e ERP').item.json.numero_nota}}\n   OR cliente_id = (SELECT id FROM clientes WHERE whatsapp = '{{$('Parser NF-e ERP').item.json.cliente_whatsapp}}' OR email = '{{$('Parser NF-e ERP').item.json.cliente_email}}' LIMIT 1)\nRETURNING id, numero_pedido, cliente_id;"
+      },
+      "name": "Atualizar Status no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser NF-e ERP').item.json.cliente_whatsapp}}\",\n  \"text\": \"📄 *Nota Fiscal Emitida com Sucesso!*\\n\\nOlá, *{{$('Parser NF-e ERP').item.json.cliente_nome}}*!\\nSua Nota Fiscal Eletrônica (NF-e) *Nº {{$('Parser NF-e ERP').item.json.numero_nota}}* foi emitida.\\n\\n🔑 *Chave de Acesso:*\\n`{{$('Parser NF-e ERP').item.json.chave_acesso || 'Disponível no Portal da SEFAZ'}}`\\n\\n{{$('Parser NF-e ERP').item.json.link_danfe ? '🔗 *Visualizar Danfe PDF:*\\n' + $('Parser NF-e ERP').item.json.link_danfe : ''}}\\n\\nSeu pacote segue agora para a triagem de postagem! 📦🚀\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Enviar Danfe WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'nfe_emitida',\n  'pedidos',\n  COALESCE({{$json.id}}, 0),\n  '{{$('Parser NF-e ERP').item.json.cliente_whatsapp}}',\n  '{\"nota\": {{$('Parser NF-e ERP').item.json.numero_nota}}, \"chave\": \"{{$('Parser NF-e ERP').item.json.chave_acesso}}\"}'::jsonb,\n  'concluido',\n  'nfe_ped_{{$('Parser NF-e ERP').item.json.numero_nota}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1000,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Bling Tiny NF-e": {
+      "main": [
+        [
+          {
+            "node": "Parser NF-e ERP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser NF-e ERP": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Status no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Status no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Enviar Danfe WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Danfe WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

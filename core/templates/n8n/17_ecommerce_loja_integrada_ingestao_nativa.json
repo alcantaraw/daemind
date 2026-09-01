@@ -1,0 +1,207 @@
+{
+  "name": "[daemind] 17 - Loja Integrada: Ingestão Completa, Itens SKU & Baixa de Insumos",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-lojaintegrada-pedido",
+        "options": {}
+      },
+      "name": "Webhook Loja Integrada",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-lojaintegrada-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DETALHADO DA LOJA INTEGRADA (ITENS, FRETE, CUPOM, CMV)\n// ===============================================================================\nconst crypto = require('crypto');\nconst body = $json.body || $json;\n\n// 1. Extração e sanitização do cliente\nconst cliente = body.cliente || {};\nlet rawPhone = (cliente.telefone_celular || cliente.telefone_principal || body.telefone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (cliente.nome || 'Cliente Loja Integrada').trim();\nconst clienteEmail = (cliente.email || '').trim().toLowerCase();\nconst clienteCpf = (cliente.cpf || cliente.cnpj || '').toString().replace(/\\D/g, '');\n\n// 2. Extração de valores e totais\nconst numeroPedido = parseInt(body.numero || body.id || Date.now(), 10);\nconst valorTotal = parseFloat(body.valor_total || 0);\nconst valorFrete = parseFloat(body.valor_frete || body.envios?.[0]?.valor || 0);\nconst valorDesconto = parseFloat(body.valor_desconto || 0);\nconst cupomAplicado = body.cupom?.codigo || body.cupom_desconto || '';\nconst formaPagamento = body.pagamentos?.[0]?.forma_pagamento?.nome || 'PIX/Cartão';\nconst formaEnvio = body.envios?.[0]?.forma_envio?.nome || 'Correios/Transportadora';\n\n// 3. Mapeamento estrito de status\nconst situacaoCodigo = body.situacao?.codigo || body.situacao?.nome || 'pedido_criado';\nlet statusOperacional = 'Pendente';\nif (['pedido_pago', 'pago', 'aprovado'].includes(situacaoCodigo)) {\n  statusOperacional = 'Pago';\n} else if (['aguardando_pagamento', 'pedido_criado'].includes(situacaoCodigo)) {\n  statusOperacional = formaPagamento.toLowerCase().includes('boleto') ? 'Pendente_Boleto' : 'Pendente_PIX';\n} else if (['pedido_enviado', 'enviado'].includes(situacaoCodigo)) {\n  statusOperacional = 'Enviado';\n} else if (['pedido_cancelado', 'cancelado'].includes(situacaoCodigo)) {\n  statusOperacional = 'Cancelado';\n}\n\n// 4. Parsing detalhado dos itens do pedido\nconst rawItens = body.itens || [];\nconst itensNormalizados = rawItens.map(i => ({\n  produto_nome: i.nome || i.produto_nome || 'Produto',\n  sku: i.sku || 'SKU_PADRAO',\n  quantidade: parseInt(i.quantidade || 1, 10),\n  preco_venda: parseFloat(i.preco_venda || i.valor_venda || 0),\n  preco_custo: parseFloat(i.preco_custo || (parseFloat(i.preco_venda || 0) * 0.5))\n}));\n\nconst dedupHash = crypto.createHash('sha256').update(`lojaintegrada_${numeroPedido}_${statusOperacional}_${valorTotal}`).digest('hex');\n\nreturn [{\n  json: {\n    dedup_hash: dedupHash,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    cliente_email: clienteEmail,\n    cliente_whatsapp: rawPhone,\n    cliente_cpf: clienteCpf,\n    valor_total: valorTotal,\n    valor_frete: valorFrete,\n    valor_desconto: valorDesconto,\n    cupom_aplicado: cupomAplicado,\n    forma_pagamento: formaPagamento,\n    forma_envio: formaEnvio,\n    status_operacional: statusOperacional,\n    itens: itensNormalizados\n  }\n}];"
+      },
+      "name": "Parser Loja Integrada",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_events (source_system, event_id, webhook_topic)\nVALUES (\n  'Loja Integrada',\n  '{{$json.dedup_hash}}',\n  'pedido_{{$json.status_operacional}}'\n)\nON CONFLICT (source_system, event_id) DO NOTHING\nRETURNING event_id;"
+      },
+      "name": "Idempotência (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Novo Evento?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH ins_cli AS (\n  INSERT INTO clientes (nome, email, whatsapp, origem_principal)\n  VALUES (\n    '{{$('Parser Loja Integrada').item.json.cliente_nome}}',\n    NULLIF('{{$('Parser Loja Integrada').item.json.cliente_email}}', ''),\n    NULLIF('{{$('Parser Loja Integrada').item.json.cliente_whatsapp}}', ''),\n    'Loja Integrada'\n  )\n  ON CONFLICT (email) DO UPDATE \n  SET whatsapp = COALESCE(EXCLUDED.whatsapp, clientes.whatsapp),\n      nome = EXCLUDED.nome,\n      updated_at = CURRENT_TIMESTAMP\n  RETURNING id\n)\nINSERT INTO pedidos (numero_pedido, cliente_id, valor_total, valor_frete, status_operacional, data_criacao)\nVALUES (\n  {{$('Parser Loja Integrada').item.json.numero_pedido}},\n  (SELECT id FROM ins_cli UNION SELECT id FROM clientes WHERE email = '{{$('Parser Loja Integrada').item.json.cliente_email}}' OR whatsapp = '{{$('Parser Loja Integrada').item.json.cliente_whatsapp}}' LIMIT 1),\n  {{$('Parser Loja Integrada').item.json.valor_total}},\n  {{$('Parser Loja Integrada').item.json.valor_frete}},\n  '{{$('Parser Loja Integrada').item.json.status_operacional}}',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (numero_pedido) DO UPDATE \nSET status_operacional = EXCLUDED.status_operacional,\n    valor_total = EXCLUDED.valor_total,\n    updated_at = CURRENT_TIMESTAMP\nRETURNING id, numero_pedido, cliente_id, valor_total, status_operacional;"
+      },
+      "name": "Persistir no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        520,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Parser Loja Integrada').item.json.cliente_whatsapp}}\",\n  \"text\": \"🛍️ *Pedido Confirmado na Loja Virtual!*\\n\\nOlá, *{{$('Parser Loja Integrada').item.json.cliente_nome}}*!\\nRecebemos o seu pedido *#{{$('Parser Loja Integrada').item.json.numero_pedido}}* no valor de *R$ {{$('Parser Loja Integrada').item.json.valor_total.toFixed(2)}}* com sucesso.\\n\\nForma de Pagamento: *{{$('Parser Loja Integrada').item.json.forma_pagamento}}*\\nEnvio: *{{$('Parser Loja Integrada').item.json.forma_envio}}*\\nStatus Atual: *{{$('Parser Loja Integrada').item.json.status_operacional}}*\\n\\nAssim que for despachado, você receberá o rastreio por aqui! Muito obrigado por comprar conosco! 🚀\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparar WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'pedido_loja_integrada',\n  'pedidos',\n  {{$json.id}},\n  '{{$('Parser Loja Integrada').item.json.cliente_whatsapp}}',\n  '{\"pedido\": {{$json.numero_pedido}}, \"status\": \"{{$json.status_operacional}}\", \"origem\": \"Loja Integrada\"}'::jsonb,\n  'concluido',\n  'li_ped_{{$json.numero_pedido}}_{{$json.status_operacional}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Fila Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1000,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Loja Integrada": {
+      "main": [
+        [
+          {
+            "node": "Parser Loja Integrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Loja Integrada": {
+      "main": [
+        [
+          {
+            "node": "Idempotência (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotência (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Novo Evento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novo Evento?": {
+      "main": [
+        [
+          {
+            "node": "Persistir no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persistir no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Disparar WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Fila Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

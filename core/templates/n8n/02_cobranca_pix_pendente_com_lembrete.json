@@ -1,0 +1,274 @@
+{
+  "name": "[daemind] 02 - Cobrança Ativa de PIX Pendente com Lembrete de Vencimento",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pedido-pix-criado",
+        "options": {}
+      },
+      "name": "Webhook Pedido PIX Criado",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-pedido-pix-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSING & NORMALIZAÇÃO DE PEDIDO PIX\n// ===============================================================================\nconst body = $json.body || $json;\n\n// 1. Telefone normalizado com DDI 55\nlet rawPhone = (body.cliente_whatsapp || body.telefone || body.phone || body.customer?.phone || '').toString().replace(/\\D/g, '');\nif (rawPhone.length >= 10 && rawPhone.length <= 11) {\n  rawPhone = '55' + rawPhone;\n}\n\nconst clienteNome = (body.cliente_nome || body.nome || body.customer?.first_name || 'Cliente').trim();\nconst email = (body.cliente_email || body.email || body.customer?.email || '').trim().toLowerCase();\nconst numeroPedido = parseInt(body.numero_pedido || body.order_number || body.id || Date.now(), 10);\nconst pedidoId = parseInt(body.pedido_id || body.id || numeroPedido, 10);\nconst valorTotal = parseFloat(body.valor_total || body.total || 0);\nconst pixCopiaCola = body.pix_copia_cola || body.pix_code || body.qr_code_text || '00020126580014br.gov.bcb.pix...';\nconst pixQrCodeUrl = body.pix_qr_code_url || body.qr_code_url || '';\n\nreturn [{\n  json: {\n    pedido_id: pedidoId,\n    numero_pedido: numeroPedido,\n    cliente_nome: clienteNome,\n    whatsapp: rawPhone,\n    email: email,\n    valor_total: valorTotal,\n    pix_copia_cola: pixCopiaCola,\n    pix_qr_code_url: pixQrCodeUrl\n  }\n}];"
+      },
+      "name": "Sanitizar Dados PIX",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH ins_cli AS (\n  INSERT INTO clientes (nome, email, whatsapp)\n  VALUES ('{{$json.cliente_nome}}', NULLIF('{{$json.email}}', ''), NULLIF('{{$json.whatsapp}}', ''))\n  ON CONFLICT (email) DO UPDATE SET whatsapp = EXCLUDED.whatsapp, nome = EXCLUDED.nome\n  RETURNING id\n)\nINSERT INTO pedidos (id, numero_pedido, cliente_id, valor_total, status_operacional, data_criacao)\nVALUES (\n  {{$json.pedido_id}},\n  {{$json.numero_pedido}},\n  (SELECT id FROM ins_cli UNION SELECT id FROM clientes WHERE email = '{{$json.email}}' OR whatsapp = '{{$json.whatsapp}}' LIMIT 1),\n  {{$json.valor_total}},\n  'Pendente_PIX',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (id) DO UPDATE SET status_operacional = 'Pendente_PIX', valor_total = EXCLUDED.valor_total, updated_at = CURRENT_TIMESTAMP;\n\nINSERT INTO carrinhos_abandonados (cliente_nome, whatsapp, email, valor_carrinho, tipo_pendencia, status_recuperacao, pedido_gerado_id)\nVALUES ('{{$json.cliente_nome}}', '{{$json.whatsapp}}', '{{$json.email}}', {{$json.valor_total}}, 'PIX Pendente', 'Pendente', {{$json.pedido_id}})\nON CONFLICT DO NOTHING;"
+      },
+      "name": "Registrar Staging no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Sanitizar Dados PIX').item.json.whatsapp}}\",\n  \"text\": \"Olá {{$('Sanitizar Dados PIX').item.json.cliente_nome}}! Obrigado por comprar conosco! 🛍️\\n\\nSeu pedido *#{{$('Sanitizar Dados PIX').item.json.numero_pedido}}* no valor de *R$ {{$('Sanitizar Dados PIX').item.json.valor_total.toFixed(2)}}* foi gerado com sucesso.\\n\\nCopie o código PIX abaixo para pagar no app do seu banco:\\n\\n`{{$('Sanitizar Dados PIX').item.json.pix_copia_cola}}`\\n\\nAssim que o pagamento for concluído, seu pedido será separado imediatamente! ⚡\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Disparo Imediato PIX (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 15,
+        "unit": "minutes"
+      },
+      "name": "Aguardar 15 Minutos (Wait)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        100
+      ],
+      "webhookId": "daemind-wait-pix-15m"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT status_operacional FROM pedidos WHERE numero_pedido = {{$('Sanitizar Dados PIX').item.json.numero_pedido}} LIMIT 1;"
+      },
+      "name": "Consultar Status Atual (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        780,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.status_operacional}}",
+              "operation": "contains",
+              "value2": "Pendente"
+            }
+          ]
+        }
+      },
+      "name": "Continua Pendente?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$('Sanitizar Dados PIX').item.json.whatsapp}}\",\n  \"text\": \"Oi {{$('Sanitizar Dados PIX').item.json.cliente_nome}}! Passando para avisar que a reserva dos seus itens do pedido *#{{$('Sanitizar Dados PIX').item.json.numero_pedido}}* expira em poucos minutos ⏳\\n\\nPara garantir seus produtos, basta efetuar o pagamento com o PIX abaixo:\\n\\n`{{$('Sanitizar Dados PIX').item.json.pix_copia_cola}}`\\n\\nQualquer dúvida estamos à disposição!\",\n  \"delay\": 1200\n}",
+        "options": {}
+      },
+      "name": "Disparar Lembrete Amigável (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'cobranca_recuperacao',\n  'carrinhos',\n  '{{$('Sanitizar Dados PIX').item.json.whatsapp}}',\n  '{\"tipo\": \"lembrete_pix\", \"pedido\": \"{{$('Sanitizar Dados PIX').item.json.numero_pedido}}\"}'::jsonb,\n  'concluido',\n  'lembrete_pix_{{$('Sanitizar Dados PIX').item.json.numero_pedido}}'\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar na Fila de Mensageria",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1500,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Pedido PIX Criado": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Dados PIX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Dados PIX": {
+      "main": [
+        [
+          {
+            "node": "Registrar Staging no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Staging no loja_db": {
+      "main": [
+        [
+          {
+            "node": "Disparo Imediato PIX (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparo Imediato PIX (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Aguardar 15 Minutos (Wait)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar 15 Minutos (Wait)": {
+      "main": [
+        [
+          {
+            "node": "Consultar Status Atual (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Status Atual (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Continua Pendente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Continua Pendente?": {
+      "main": [
+        [
+          {
+            "node": "Disparar Lembrete Amigável (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar Lembrete Amigável (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar na Fila de Mensageria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}

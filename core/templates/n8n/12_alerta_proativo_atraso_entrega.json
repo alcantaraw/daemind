@@ -1,0 +1,177 @@
+{
+  "name": "[daemind] 12 - Alerta Pró-Ativo de Ocorrências e Atrasos Logísticos",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ocorrencia-logistica-inbound",
+        "options": {}
+      },
+      "name": "Webhook Ocorrência Logística",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        100
+      ],
+      "webhookId": "daemind-ocorrencia-logistica"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================================================\n// DAEMIND SRE - PARSER DE OCORRÊNCIA DE TRANSPORTADORA\n// ===============================================================================\nconst body = $json.body || $json;\n\nconst codigoRastreio = (body.codigo_rastreio || body.tracking_code || body.id || '').trim();\nconst statusOcorrencia = (body.status || body.event_name || body.descricao || 'Atraso Operacional').trim();\nconst transportadora = (body.transportadora || body.carrier || 'Correios').trim();\nconst detalhesLocal = body.local || body.cidade || 'Centro de Distribuição Local';\n\nreturn [{\n  json: {\n    codigo_rastreio: codigoRastreio,\n    status_ocorrencia: statusOcorrencia,\n    transportadora: transportadora,\n    detalhes_local: detalhesLocal\n  }\n}];"
+      },
+      "name": "Sanitizar Ocorrência",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.id AS pedido_id, p.numero_pedido, c.nome AS cliente_nome, c.whatsapp\nFROM pedidos p\nJOIN clientes c ON p.cliente_id = c.id\nWHERE p.codigo_rastreio = '{{$json.codigo_rastreio}}'\nLIMIT 1;"
+      },
+      "name": "Buscar Pedido e Cliente (PostgreSQL)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        60,
+        100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.pedido_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "name": "Pedido Encontrado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution:8080/message/sendText/{{$env.EVOLUTION_INSTANCE_NAME || 'daemind'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.EVOLUTION_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$json.whatsapp}}\",\n  \"text\": \"Olá, *{{$json.cliente_nome}}*! 📦\\n\\nPassando para te atualizar sobre a entrega do seu pedido *#{{$json.numero_pedido}}*:\\n\\nA transportadora *{{$('Sanitizar Ocorrência').item.json.transportadora}}* registrou a seguinte atualização: *\\\"{{$('Sanitizar Ocorrência').item.json.status_ocorrencia}}\\\"* no local *{{$('Sanitizar Ocorrência').item.json.detalhes_local}}*.\\n\\n💡 **Fique tranquilo(a):** Nossa equipe de logística já está monitorando o seu pacote de perto para garantir que chegue com total segurança.\\n\\nSe precisar de qualquer suporte imediato, basta responder por aqui! ✨\",\n  \"delay\": 1000\n}",
+        "options": {}
+      },
+      "name": "Avisar Cliente no WhatsApp (Evolution API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO fila_mensageria (event_type, aggregate_type, aggregate_id, whatsapp, payload, status, idempotency_key)\nVALUES (\n  'alerta_ocorrencia_logistica',\n  'pedidos',\n  {{$json.pedido_id}},\n  '{{$json.whatsapp}}',\n  '{\"status\": \"{{$('Sanitizar Ocorrência').item.json.status_ocorrencia}}\", \"rastreio\": \"{{$('Sanitizar Ocorrência').item.json.codigo_rastreio}}\"}'::jsonb,\n  'concluido',\n  'alerta_rastreio_{{$json.pedido_id}}_{{$('Sanitizar Ocorrência').item.json.codigo_rastreio}}_' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD_HH24')\n)\nON CONFLICT (idempotency_key) DO NOTHING;"
+      },
+      "name": "Registrar Log no loja_db",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        780,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "daemind_postgres_creds",
+          "name": "daemind PostgreSQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Ocorrência Logística": {
+      "main": [
+        [
+          {
+            "node": "Sanitizar Ocorrência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitizar Ocorrência": {
+      "main": [
+        [
+          {
+            "node": "Buscar Pedido e Cliente (PostgreSQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Pedido e Cliente (PostgreSQL)": {
+      "main": [
+        [
+          {
+            "node": "Pedido Encontrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedido Encontrado?": {
+      "main": [
+        [
+          {
+            "node": "Avisar Cliente no WhatsApp (Evolution API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar Cliente no WhatsApp (Evolution API)": {
+      "main": [
+        [
+          {
+            "node": "Registrar Log no loja_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true
+}
