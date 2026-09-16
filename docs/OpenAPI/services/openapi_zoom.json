@@ -2,44 +2,1065 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Zoom & Buscapé Marketplace API (Mosaico)",
-    "description": "Especificação OpenAPI 3.0 consolidada para a stack zoom.",
-    "version": "1.0.0"
+    "description": "Especificação OpenAPI 3.0 compilada via Postman Collection para app.",
+    "version": "2.3.0"
   },
   "servers": [
     {
       "url": "https://api.zoom.com.br"
     }
   ],
-  "paths": {},
-  "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para Zoom & Buscapé Marketplace API (Mosaico)"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para Zoom & Buscapé Marketplace API (Mosaico)"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para Zoom & Buscapé Marketplace API (Mosaico)",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://api.zoom.com.br/oauth/authorize",
-            "tokenUrl": "https://api.zoom.com.br/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em Zoom & Buscapé Marketplace API (Mosaico)",
-              "write": "Gravação e mutação em Zoom & Buscapé Marketplace API (Mosaico)"
+  "paths": {
+    "/api/merchant/product": {
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Insere ou atualiza todos os dados de um produto",
+        "description": "<p>Este serviço permite que os lojistas insiram ou atualizem os dados de um produto por vez.</p><p>Embora o serviço tenha sido executado com sucesso, a criação/atualização pode não ser realizada imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado da criação/atualização, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p>\n\n<p>Para o campo <em><strong>condition</strong></em> são aceitos os seguintes valores:</p>\n<ul>\n<li><code>NEW</code></li>\n<li><code>USED</code></li>\n<li><code>REFURBISHED</code></li>\n<li><code>DAMAGED</code></li>\n</ul>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
             }
           }
-        }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "department": "<string>",
+                "id": "<string>",
+                "name": "<string>",
+                "price": "<double>",
+                "sub_department": "<string>",
+                "url": "<string>",
+                "url_images": [
+                  {
+                    "url": "<string>",
+                    "main": "<boolean>"
+                  },
+                  {
+                    "url": "<string>",
+                    "main": "<boolean>"
+                  }
+                ],
+                "attributes": [
+                  {
+                    "name": "<string>",
+                    "value": "<string>"
+                  },
+                  {
+                    "name": "<string>",
+                    "value": "<string>"
+                  }
+                ],
+                "availability": "<boolean>",
+                "condition": "<string>",
+                "cross_border": "<boolean>",
+                "base_price": "<double>",
+                "book": {
+                  "author": "<string>",
+                  "genre": "<string>",
+                  "isbn": "<string>",
+                  "publisher": "<string>"
+                },
+                "description": "<string>",
+                "ean": "<string>",
+                "free_shipping": "<boolean>",
+                "installments": {
+                  "amount_months": "<integer>",
+                  "price": "<double>"
+                },
+                "quantity": "<integer>",
+                "sku": "<string>",
+                "specifications": "<object>",
+                "stock_info": {
+                  "height": "<double>",
+                  "length": "<double>",
+                  "weight": "<double>",
+                  "width": "<double>",
+                  "cross_docking": "<integer>"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      },
+      "put": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Atualiza disponibilidade, preço e parcelamento de um produto",
+        "description": "<p>Este serviço permite que os lojistas atualizem a disponibilidade, preço e parcelamento de um de seus produtos. Caso o lojista esteja desabilitando (removendo) um produto, ele não poderá alterar o preço e o parcelamento do mesmo.</p><p>Embora o serviço tenha sido executado com sucesso, a atualização pode não ser realizada imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado da atualização, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p>\n\n<p>Para o campo <em><strong>condition</strong></em> são aceitos os seguintes valores:</p>\n<ul>\n<li><code>NEW</code></li>\n<li><code>USED</code></li>\n<li><code>REFURBISHED</code></li>\n<li><code>DAMAGED</code></li>\n</ul>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "availability": "<boolean>",
+                "id": "<string>",
+                "cross_docking": "<integer>",
+                "condition": "<string>",
+                "cross_border": "<boolean>",
+                "installments": {
+                  "amount_months": "<integer>",
+                  "price": "<double>"
+                },
+                "price": "<double>",
+                "quantity": "<integer>",
+                "url": "<string>"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
       }
     },
+    "/api/merchant/product/{id}": {
+      "delete": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Remove um produto",
+        "description": "<p>Este serviço permite que os lojistas removam um produto de cada vez do seu portfólio ativo dentro da Mosaico.</p><p>É importante ressaltar que \"remover\" significa desabilitar o produto.</p><p>Embora o serviço tenha sido executado com sucesso, a remoção pode não ser realizada imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado da remoção, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/product/price": {
+      "put": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Atualiza preço de um produto",
+        "description": "<p>Este serviço permite que os lojistas atualizem o preço de um de seus produtos.</p> <p>Embora o serviço tenha sido executado com sucesso, a atualização pode não ser realizada imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado da atualização, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "id": "<string>",
+                "price": "<double>"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/products": {
+      "post": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Insere ou atualiza todos os dados de produtos em lotes",
+        "description": "<p>Este serviço permite que os lojistas insiram ou atualizem os dados de seus produtos em lotes de até 1000.</p><p>Embora o serviço tenha sido executado com sucesso, as criações/atualizações podem não ser realizadas imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado das criações/atualizações, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p><p>O serviço irá retornar uma lista de resultados, onde cada elemento dessa lista representa o resultado do registro da requisição para cada produto passado no lote.</p>\n\n<p>Para o campo <em><strong>condition</strong></em> são aceitos os seguintes valores:</p>\n<ul>\n<li><code>NEW</code></li>\n<li><code>USED</code></li>\n<li><code>REFURBISHED</code></li>\n<li><code>DAMAGED</code></li>\n</ul>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "products": [
+                  {
+                    "department": "<string>",
+                    "id": "<string>",
+                    "name": "<string>",
+                    "price": "<double>",
+                    "sub_department": "<string>",
+                    "url": "<string>",
+                    "url_images": [
+                      {
+                        "url": "<string>",
+                        "main": "<boolean>"
+                      },
+                      {
+                        "url": "<string>",
+                        "main": "<boolean>"
+                      }
+                    ],
+                    "attributes": [
+                      {
+                        "name": "<string>",
+                        "value": "<string>"
+                      },
+                      {
+                        "name": "<string>",
+                        "value": "<string>"
+                      }
+                    ],
+                    "availability": "<boolean>",
+                    "condition": "<string>",
+                    "cross_border": "<boolean>",
+                    "base_price": "<double>",
+                    "book": {
+                      "author": "<string>",
+                      "genre": "<string>",
+                      "isbn": "<string>",
+                      "publisher": "<string>"
+                    },
+                    "description": "<string>",
+                    "ean": "<string>",
+                    "free_shipping": "<boolean>",
+                    "installments": {
+                      "amount_months": "<integer>",
+                      "price": "<double>"
+                    },
+                    "quantity": "<integer>",
+                    "sku": "<string>",
+                    "specifications": "<object>",
+                    "stock_info": {
+                      "height": "<double>",
+                      "length": "<double>",
+                      "weight": "<double>",
+                      "width": "<double>",
+                      "cross_docking": "<integer>"
+                    }
+                  },
+                  {
+                    "department": "<string>",
+                    "id": "<string>",
+                    "name": "<string>",
+                    "price": "<double>",
+                    "sub_department": "<string>",
+                    "url": "<string>",
+                    "url_images": [
+                      {
+                        "url": "<string>",
+                        "main": "<boolean>"
+                      },
+                      {
+                        "url": "<string>",
+                        "main": "<boolean>"
+                      }
+                    ],
+                    "attributes": [
+                      {
+                        "name": "<string>",
+                        "value": "<string>"
+                      },
+                      {
+                        "name": "<string>",
+                        "value": "<string>"
+                      }
+                    ],
+                    "availability": "<boolean>",
+                    "base_price": "<double>",
+                    "book": {
+                      "author": "<string>",
+                      "genre": "<string>",
+                      "isbn": "<string>",
+                      "publisher": "<string>"
+                    },
+                    "description": "<string>",
+                    "ean": "<string>",
+                    "free_shipping": "<boolean>",
+                    "installments": {
+                      "amount_months": "<integer>",
+                      "price": "<double>"
+                    },
+                    "quantity": "<integer>",
+                    "sku": "<string>",
+                    "specifications": "<object>",
+                    "stock_info": {
+                      "height": "<double>",
+                      "length": "<double>",
+                      "weight": "<double>",
+                      "width": "<double>",
+                      "cross_docking": "<integer>"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      },
+      "put": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Atualiza a disponibilidade, preço e parcelamento de produtos em lotes",
+        "description": "<p>Este serviço permite que os lojistas atualizem a disponibilidade, preço e parcelamento dos seus produtos em lotes de até 1000.</p><p>Embora o serviço tenha sido executado com sucesso, as atualizações podem não ser realizadas imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado das atualizações, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p><p>O serviço irá retornar uma lista de resultados, onde cada elemento dessa lista representa o resultado do registro da requisição para cada produto passado no lote.<br /></p>\n\n<p>Para o campo <em><strong>condition</strong></em> são aceitos os seguintes valores:</p>\n<ul>\n<li><code>NEW</code></li>\n<li><code>USED</code></li>\n<li><code>REFURBISHED</code></li>\n<li><code>DAMAGED</code></li>\n</ul>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "products": [
+                  {
+                    "availability": "<boolean>",
+                    "id": "<string>",
+                    "cross_docking": "<integer>",
+                    "condition": "<string>",
+                    "cross_border": "<boolean>",
+                    "installments": {
+                      "amount_months": "<integer>",
+                      "price": "<double>"
+                    },
+                    "price": "<double>",
+                    "quantity": "<integer>",
+                    "url": "<string>"
+                  },
+                  {
+                    "availability": "<boolean>",
+                    "id": "<string>",
+                    "cross_docking": "<integer>",
+                    "installments": {
+                      "amount_months": "<integer>",
+                      "price": "<double>"
+                    },
+                    "price": "<double>",
+                    "quantity": "<integer>",
+                    "url": "<string>"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      },
+      "delete": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Remove produtos em lotes",
+        "description": "<p>Este serviço permite que os lojistas removam seus produtos em lotes de até 1000.</p><p>É importante ressaltar que \"remover\" significa desabilitar o produto.</p><p>Embora o serviço tenha sido executado com sucesso, as remoções podem não ser realizadas imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado das remoções, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p><p>O serviço irá retornar uma lista de resultados, onde cada elemento dessa lista representa o resultado do registro da requisição para cada produto passado no lote.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "products": [
+                  {
+                    "id": "<string>"
+                  },
+                  {
+                    "id": "<string>"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/products/price": {
+      "put": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Atualiza preço dos produtos em lotes",
+        "description": "<p>Este serviço permite que os lojistas atualizem o preço dos seus produtos em lotes de até 1000.</p><p>Embora o serviço tenha sido executado com sucesso, as atualizações podem não ser realizadas imediatamente já que o seu processamento é assíncrono.</p><p>Para consultar o andamento e resultado das atualizações, é necessário utilizar os endpoints de receipt com o número de ticket retornado.</p><p>O serviço irá retornar uma lista de resultados, onde cada elemento dessa lista representa o resultado do registro da requisição para cada produto passado no lote.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "products": [
+                  {
+                    "id": "<string>",
+                    "price": "<double>"
+                  },
+                  {
+                    "id": "<string>",
+                    "price": "<double>"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/products/untouched": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Busca produtos sem atualização",
+        "description": "<p>Este serviço permite que os lojistas busquem os produtos, do seu portfólio, que não são atualizados a um determinado tempo.</p><p>O serviço possui uma restrição de aceitar somente uma chamada a cada 30 minutos.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/receipt/{date_and_hour}": {
+      "get": {
+        "tags": [
+          "{date and hour}"
+        ],
+        "summary": "Busca paginada por protocolos de atendimento.",
+        "description": "<p>Busca a primeira página de informações sobre requisições de atualização de produto realizadas.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "date_and_hour",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/receipt/{date_and_hour}/{next_page_id}": {
+      "get": {
+        "tags": [
+          "{date and hour}"
+        ],
+        "summary": "Avança busca paginada por protocolos de atendimento.",
+        "description": "<p>Busca a próxima página de informações sobre requisições de atualização de produto realizadas.</p><p>Caso não existam mais páginas, uma lista vazia será retornada.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "date_and_hour",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "next_page_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/receipt/{ticket}": {
+      "get": {
+        "tags": [
+          "receipt"
+        ],
+        "summary": "Obtem resultado por protocolo de atendimento.",
+        "description": "<p>Obtém as respostas de uma requisição de atualização de produto utilizando o protocolo de atendimento (ticket). Caso a requisição ainda não tenha sido totalmente processada, um resultado parcial será retornado.</p><p>A tabela a seguir detalha os status possíveis de cada tipo de requisição.</p><div class=\"marked-table\"><table><tr><th>Insere ou atualiza todos os dados de um produto</th></tr><tr><td>200</td><td>O produto foi atualizado com sucesso</td></tr><tr><td>201</td><td>O produto foi inserido com sucesso</td></tr><tr><th>Atualiza disponibilidade, preço e parcelamento de um produto</th></tr><tr><td>200</td><td>O produto foi atualizado/removido com sucesso</td></tr><tr><td>404</td><td>Quando é fornecido um id de produto que está fora do portfólio ativo dentro da Mosaico.</td></tr><tr><th>Atualiza preço de um produto</th></tr><tr><td>200</td><td>O produto foi atualizado com sucesso</td></tr><tr><td>403</td><td>Quando um lojista não marketplace tenta acessa o serviço</td></tr><tr><td>404</td><td>Quando é fornecido um id de produto que não existe na Mosaico</td></tr><tr><th>Remove um produto</th></tr><tr><td>200</td><td>O produto foi removido com sucesso</td></tr><tr><td>404</td><td>Quando é fornecido um id de produto que está fora do portfólio ativo dentro da Mosaico.</td></tr></table></div><p>Além destes, existe alguns status que podem ocorrer para qualquer um dos tipos de requisições. A tabela a seguir detalha esses status.</p><div class=\"marked-table\"><table><tr><th>Status</th><th>Descrição</th></tr><tr><td>400</td><td>Foram fornecidos dados inválidos, verificar o campo <b>message</b> para saber qual dado esta incorreto</td></tr><tr><td>409</td><td>Devido a natureza assíncrona e concorrente do processamento das requisições, essa requisição foi descartada pois se tornou obsoleta já que já foi processada uma requisição que modifica os mesmos dados que esta e que foi enviada posteriormente</td></tr></table></div><p>Mesmo quando o resultado buscado indicar que a operação realizada foi bem sucedida (status 200 ou 201), é possível que existam mensagens de aviso relacionadas a verificações internas da Mosaico. A tabela a seguir detalha quais mensagens de aviso podem ser geradas.</p><div class=\"marked-table\"><table><tr><th>Mensagem</th><th>Descrição</th></tr><tr><td>Alguns atributos foram descartados pois já haviam sido atualizados por uma requisição posterior</td><td>Devido a natureza assíncrona e concorrente do processamento das requisições, essa requisição foi modificada pois alguns campos se tornaram obsoletos já que já foi processada uma requisição que modifica esses mesmos campos e que foi enviada posteriormente</td></tr><tr><td>O produto está bloqueado pelo departamento comercial</td><td>Internamente, o departamento comercial pode bloquear um produto específico (por id) ou uma categoria da qual este produto faz parte</td></tr><tr><td>O produto foi bloqueado por mudança de preço excessiva</td><td>Por motivos de segurança, quando ocorre, uma mudança excessiva de preço, o produto é bloqueado para que o departamento comercial verifique com a loja se realmente esse preço está correto</td></tr><tr><td>O produto foi bloqueado por mudança de nome excessiva</td><td>Por motivos de segurança, uma mudança excessiva de nome, o produto é bloqueado para que o departamento comercial verifique com a loja se realmente esse nome está correto</td></tr><tr><td>Nem todos os dados do produto foram atualizados pois ele está no controle de divergência</td><td>Internamente temos um controle de divergência das informações do produto que estão na nossa base de dados com o que está sendo vinculado no site do lojista. Caso exista um controle de divergência para o produto passado na requisição, os dados de preço, parcelamento e disponibilidade não serão alterados e serão checados novamente com o site do lojista</td></tr><tr><td>O parcelamento foi zerado pois é menor que o preço</td><td>Quando a quantidade de parcelas multiplicadas pelo preço de cada parcela for menor do que o preço do produto, o parcelamento é anulado</td></tr></table></div>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "ticket",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/receipt": {
+      "get": {
+        "tags": [
+          "receipt"
+        ],
+        "summary": "Busca paginada por protocolos de atendimento.",
+        "description": "<p>Busca informações sobre requisições de atualização de produto realizadas.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/receipt/scroll/{scroll_id}": {
+      "get": {
+        "tags": [
+          "receipt"
+        ],
+        "summary": "Avança busca paginada por protocolos de atendimento.",
+        "description": "<p>Busca a próxima página de informações sobre requisições de atualização de produto realizadas.</p><p>Caso não existam mais páginas, uma lista vazia será retornada.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "scroll_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/order/{id}": {
+      "get": {
+        "tags": [
+          "{id}"
+        ],
+        "summary": "Busca pedido for ID.",
+        "description": "<p>Este serviço permite que os lojista busque um pedido feito pelo Marketplace por ID.</p>\n\n<p><strong>Promotions</strong> é a promoção pré acordado entre a loja e o nosso comercial.</p>\n<strong>total_discount_value (number)</strong> Valor total de desconto<p></p>\n<strong>total_interest_value (number)</strong> Valor total de juros<p></p><p></p>\n<h3 id=\"como-calcular-valor-total-do-pedido\">Como calcular valor total do pedido?</h3>\n<p>Valor total do pedido</p>\n<p>O valor total do pedido deve ser calculado da seguinte forma:\n<strong>items.total + shipping.freight_price - total_discount_value</strong></p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/order/{id}/withpayment": {
+      "get": {
+        "tags": [
+          "{id}"
+        ],
+        "summary": "Busca pedido for ID com informação de pagamento",
+        "description": "<p>Este serviço permite que os lojista busque um pedido, com informação de pagamento, feito pelo Marketplace por ID.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/order/{id}/processed": {
+      "put": {
+        "tags": [
+          "{id}"
+        ],
+        "summary": "Operação para informar que um pedido foi processado.",
+        "description": "<p>Operação para informar que um pedido foi processado, ou seja, o lojista confirma que tem o produto em estoque e o mesmo será entregue.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/order/{id}/shipment": {
+      "post": {
+        "tags": [
+          "{id}"
+        ],
+        "summary": "Atualiza o Pedido com os dados de envio e nota fiscal",
+        "description": "<p>Operação para informar que um pedido foi enviado, junto com os dados na nota fiscal.</p>\n\n<p>Obs: Os campos do tipo dateTime devem ser formatados no formato <code>dd/MM/yyyy hh:mm:ss</code></p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/order/{id}/delivered": {
+      "put": {
+        "tags": [
+          "{id}"
+        ],
+        "summary": "Operação para informar que um pedido foi entregue.",
+        "description": "<p>Operação para informar que um pedido foi recebido, ou seja, o lojista confirma que todos os items do pedido foram entregues. Deve ser chamada somente depois de adicionar informações sobre os item enviados.</p><p>Opcionalmente pode ser informada a data que o cliente recebeu o pedido.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/api/merchant/orders": {
+      "get": {
+        "tags": [
+          "order"
+        ],
+        "summary": "Busca pedidos",
+        "description": "<p>Este serviço permite que os lojistas busquem os pedidos feitos pelo Marketplace. A busca dos pedidos pode ser paginada, sendo necessário efetuar chamadas indicando a página requerida. Além disso, pode ser filtrado por Status e data de criação do pedido. Os pedidos são sempre ordenados por data, em ordem crescente.</p>\n\n---\n📍 **Origem:** Postman Public Collections (`documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "documenter_gw_postman_com_api_collections_13713957_Tz5v3viK_segregateAuth_true_v_24c7ee85.json"
+      }
+    },
+    "/payment-options": {
+      "get": {
+        "summary": "GET /payment-options",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json"
+      }
+    },
+    "/workflows/{id}/publish": {
+      "post": {
+        "summary": "POST /workflows/{id}/publish",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json"
+      }
+    },
+    "/workflows/{id}/unpublish": {
+      "post": {
+        "summary": "POST /workflows/{id}/unpublish",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json"
+      }
+    },
+    "/api/v1/templates/{{template_token}}": {
+      "put": {
+        "summary": "PUT /api/v1/templates/{{template_token}}",
+        "description": "Extraído de documentação interativa.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_desenvolvedores_zoom_com_br_7ece5045.json"
+      },
+      "get": {
+        "tags": [
+          "Zoom"
+        ],
+        "summary": "GET /api/v1/templates/{{template_token}}",
+        "description": "Endpoint extraído da documentação (desenvolvedores_zoom_com_br_notebook_macbook_tamanho-ate-13-polegadas_831c444e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`desenvolvedores_zoom_com_br_notebook_macbook_tamanho-ate-13-polegadas_831c444e.md`)",
+        "parameters": [
+          {
+            "name": "template_token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "desenvolvedores_zoom_com_br_notebook_macbook_tamanho-ate-13-polegadas_831c444e.md"
+      }
+    },
+    "/2022/1/docs/xxxxx-d66b-495f-9b51-xxxx.do": {
+      "post": {
+        "tags": [
+          "Zoom"
+        ],
+        "summary": "POST /2022/1/docs/xxxxx-d66b-495f-9b51-xxxx.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (desenvolvedores_zoom_com_br_notebook_macbook_tamanho-ate-13-polegadas_831c444e.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`desenvolvedores_zoom_com_br_notebook_macbook_tamanho-ate-13-polegadas_831c444e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "desenvolvedores_zoom_com_br_notebook_macbook_tamanho-ate-13-polegadas_831c444e.md"
+      }
+    },
+    "/v3/refs/saved-responses-1": {
+      "get": {
+        "tags": [
+          "Zoom"
+        ],
+        "summary": "GET /v3/refs/saved-responses-1",
+        "description": "Endpoint extraído da documentação (network_json_2_developers_activecampaign_com_activecampaign_api-next_v2_branches_3_reference_sa_b3759255.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_2_developers_activecampaign_com_activecampaign_api-next_v2_branches_3_reference_sa_b3759255.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_2_developers_activecampaign_com_activecampaign_api-next_v2_branches_3_reference_sa_b3759255.json"
+      }
+    }
+  },
+  "components": {
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -68,22 +1089,6 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
@@ -92,64 +1097,21 @@
         ]
       }
     },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via token Bearer no cabeçalho Authorization."
       },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Autenticação padrão OAuth 2.0 (Authorization Code / Client Credentials).",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.dominio.com/oauth/authorize",
+            "tokenUrl": "https://api.dominio.com/oauth/token",
+            "scopes": {}
           }
         }
       }
@@ -158,72 +1120,6 @@
   "security": [
     {
       "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
     }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack zoom.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack zoom.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "zoom_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (Zoom & Buscapé Marketplace API (Mosaico))",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Zoom & Buscapé Marketplace API (Mosaico).",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
-        }
-      }
-    }
-  }
+  ]
 }

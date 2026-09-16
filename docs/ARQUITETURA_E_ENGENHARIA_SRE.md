@@ -49,7 +49,7 @@ Whitepaper e especificação de engenharia técnica exaustiva cobrindo a arquite
   - [7.5. Deduplicação por Hash de Payload SHA-256 (n8n Webhook Fallback)](#75-deduplicação-por-hash-de-payload-sha-256-n8n-webhook-fallback)
   - [7.6. Data Warehouse Soberano & Federação Multi-Bancos (`postgres_fdw`)](#76-data-warehouse-soberano--federação-multi-bancos-postgres_fdw)
   - [7.7. AI Mesh Soberana via LiteLLM (SRE Health Prober & Virtual Aliases)](#77-ai-mesh-soberana-via-litellm-sre-health-prober--virtual-aliases)
-  - [7.8. Pipeline de RAG Soberano com Docling OCR, pgvector e S3 Storage](#78-pipeline-de-rag-soberano-com-docling-ocr-pgvector-e-s3-storage)
+  - [7.8. Pipeline de RAG Soberano com MarkItDown OCR, pgvector e S3 Storage](#78-pipeline-de-rag-soberano-com-markitdown-ocr-pgvector-e-s3-storage)
   - [7.9. Service Mesh de Variáveis de Ambiente no n8n](#79-service-mesh-de-variáveis-de-ambiente-no-n8n)
   - [7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)](#710-rastreamento-ponta-a-ponta--atribuição-de-tráfego-shlink--listmonk--umami)
   - [7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)](#711-padronização-de-aliases-de-rede-rfc-1123-mitigação-de-exceções-em-sdks-estritos)
@@ -157,7 +157,7 @@ A tabela a seguir padroniza integralmente as variáveis suportadas tanto na este
 | `USE_POSTIZ` | `s` / `n` | Postiz (Agendador & Publicador de Mídias Sociais) |
 | `USE_METABASE` | `s` / `n` | Metabase (Painéis & Dashboards Analíticos em Tempo Real) |
 | `USE_OLLAMA` | `s` / `n` *(Requer >4 vCPUs, >=16GB RAM e GPU >=4GB VRAM)* | Ollama (Inferência Local de Modelos Soberanos / LLMs) |
-| `USE_DOCLING` | `s` / `n` *(Requer >4 vCPUs e >=16GB RAM)* | Docling (OCR & Parser Avançado de Documentos/PDFs por IA) |
+| `USE_MARKITDOWN` | `s` / `n` | MarkItDown (Extração Estruturada de Documentos & Tesseract OCR) |
 | `USE_LISTMONK` | `s` / `n` | Listmonk (E-mail Marketing & Transacional Soberano) |
 | `USE_UMAMI` | `s` / `n` | Umami (Web Analytics & Privacidade sem Cookies) |
 | `USE_SHLINK` | `s` / `n` | Shlink + Web Client (Encurtador de Links, UTMs & Atribuição) |
@@ -398,7 +398,7 @@ A infraestrutura implementa a especificação de **Armazenamento Desacoplado Plu
 ---
 
 ### 🧩 4.7. Contrato de Interface Polimórfico dos Scripts Modulares (`install_<modulo>.sh`)
-Para garantir 100% de desacoplamento e iterabilidade genérica tanto no `preinstall.sh` quanto no `install.sh`, cada módulo desacoplado (`install_0ts.sh`, `install_1ia.sh`, `install_n8n.sh`, `install_openwebui.sh`, `install_s3minio.sh`, `install_evolution.sh`, `install_postiz.sh`, `install_chatwoot.sh`, `install_nocodb.sh`, `install_metabase.sh`, `install_ollama.sh`, `install_docling.sh`) expõe rigorosamente a mesma interface pública de 15 funções sem prefixos específicos:
+Para garantir 100% de desacoplamento e iterabilidade genérica tanto no `preinstall.sh` quanto no `install.sh`, cada módulo desacoplado (`install_0ts.sh`, `install_1ia.sh`, `install_n8n.sh`, `install_openwebui.sh`, `install_s3minio.sh`, `install_evolution.sh`, `install_postiz.sh`, `install_chatwoot.sh`, `install_nocodb.sh`, `install_metabase.sh`, `install_ollama.sh`) expõe rigorosamente a mesma interface pública de 15 funções sem prefixos específicos:
 
 | Nº | Função Padronizada | Descrição de Engenharia SRE |
 | :---: | :--- | :--- |
@@ -435,11 +435,11 @@ Para garantir 100% de desacoplamento e iterabilidade genérica tanto no `preinst
     - '/etc/localtime:/etc/localtime:ro'
   ```
 - **Topologia de Rede Privada com Descoberta Autônoma (Zero Hardcode):** Toda a comunicação entre microsserviços utiliza endereçamento IPv4 fixo na rede bridge interna (`instancia_net`), eliminando overhead e latência de resolução DNS. A esteira aplica um algoritmo determinístico de alocação:
-  1. **Faixa Fixa do Núcleo Core (`.1` a `.6`):**
-     - Gateway (`.1`), Postgres (`.2`), PgBouncer (`.3`), Redis (`.4`), Caddy (`.5`), LiteLLM (`.6`).
-  2. **Faixa Dinâmica dos Módulos Desacoplados (`.7+`):**
+  1. **Faixa Fixa do Núcleo Core (`.1` a `.7`):**
+     - Gateway (`.1`), Postgres (`.2`), PgBouncer (`.3`), Redis (`.4`), Caddy (`.5`), LiteLLM (`.6`), MarkItDown (`.7`).
+  2. **Faixa Dinâmica dos Módulos Desacoplados (`.8+`):**
      - O provisionador escaneia os scripts `core/scripts/install_<modulo>.sh` em ordem alfabética e lê a **Linha 2** de cada arquivo (onde os nós são declarados como metadados, ex: `# CHATWOOT` ou `# POSTIZ TEMPORAL`).
-     - Cada nó recebe sequencialmente um IP parametrizado (`${IP_CHATWOOT}="172.25.0.7"`, `${IP_EVOLUTION}="172.25.0.8"`, etc.), garantindo que novos módulos sejam adicionados sem alteração manual no orquestrador principal.
+     - Cada nó recebe sequencialmente um IP parametrizado (`${IP_CHATWOOT}="172.25.0.8"`, `${IP_EVOLUTION}="172.25.0.9"`, etc.), garantindo que novos módulos sejam adicionados sem alteração manual no orquestrador principal.
 
 ---
 
@@ -450,7 +450,7 @@ A infraestrutura do **daemind.** opera com a matriz de imagens e versões audita
 | :--- | :--- | :--- | :--- | :--- |
 | `${PREFIXO_CONTAINER}_caddy` | `caddy:alpine` | `alpine` | **2.11.4** | Reverse Proxy & WAF com SSL Automático |
 | `${PREFIXO_CONTAINER}_chatwoot` | `chatwoot/chatwoot` | `latest` | **4.17.0** | Inbox Omnichannel & Atendimento *(Módulo Opcional Desacoplado)* |
-| `${PREFIXO_CONTAINER}_docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` | **2.121.0** | Motor de OCR & Parsing de Documentos *(Módulo Opcional Desacoplado)* |
+| `${PREFIXO_CONTAINER}_markitdown` | `${PREFIXO_CONTAINER}_markitdown` | `latest` | **1.0.0** | Motor de Extração de Documentos & Tesseract OCR *(Núcleo Core Obrigatório)* |
 | `${PREFIXO_CONTAINER}_evolution` | `evoapicloud/evolution-api` | `latest` | **2.3.7** | Gateway WhatsApp & Chatwoot Bridge *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_listmonk` | `listmonk/listmonk` | `latest` | **6.2.0** | E-mail Marketing & Transacional *(Módulo Opcional Desacoplado)* |
 | `${PREFIXO_CONTAINER}_litellm` | `ghcr.io/berriai/litellm` | `main-latest` | **1.99.0** | Gateway & Roteador de Modelos de IA |
@@ -618,20 +618,20 @@ Para garantir tempos de resposta de consulta otimizados e evitar inchaço no ban
 - **Isolamento no `model_alias_map`:** Os modelos padrão exigidos por bibliotecas parceiras (`gpt-4.1`, `gpt-4o`, `gpt-3.5-turbo`) são traduzidos internamente pelo LiteLLM, mantendo o dropdown público do Open WebUI limpo e imune a truncamento visual.
 - **Wildcard Fallback Universal (`*`):** A esteira de fallback configurada no LiteLLM redireciona requisições de modelos desconhecidos ou offline para o modelo saudável eleito, garantindo zero paradas em robôs e copilotos.
 
-### 📑 7.8. Pipeline de RAG Soberano com Docling OCR, pgvector e S3 Storage
-- **IBM Docling Serve:** Microserviço dedicado em `:5001` responsável pelo parsing visual de PDFs, DOCX e escaneamentos, transformando documentos complexos e tabelas em Markdown estruturado.
+### 📑 7.8. Pipeline de RAG Soberano com MarkItDown OCR, pgvector e S3 Storage
+- **MarkItDown & Tesseract OCR:** Microserviço leve dedicado em `:5001` responsável pela conversão estruturada de PDFs, DOCX, planilhas e escaneamentos, unificando Microsoft MarkItDown e Tesseract OCR (PT-BR/ENG) em Markdown limpo.
 - **Vetorização no PostgreSQL (`pgvector`):** Extensão `vector` ativada condicionalmente no `openwebui_db` para indexação matemática de embeddings vetoriais com busca semântica de alta velocidade.
 - **Desacoplamento de Armazenamento:** Uploads e bases de conhecimento do Open WebUI são persistidos no bucket `openwebui` no MinIO S3.
 
 ### ⚡ 7.9. Service Mesh de Variáveis de Ambiente no n8n
-- Injeção declarativa de variáveis inter-serviços no container `n8n` (`DOCLING_API_URL`, `SHLINK_API_URL`, `EVOLUTION_API_URL`, `CHATWOOT_API_URL`, `MINIO_ENDPOINT`, `LISTMONK_API_URL`, `POSTIZ_API_URL`), permitindo que nós de automação e Agentes LangChain se comuniquem com qualquer ferramenta da stack via `$env.NOME_VAR`.
+- Injeção declarativa de variáveis inter-serviços no container `n8n` (`MARKITDOWN_API_URL`, `SHLINK_API_URL`, `EVOLUTION_API_URL`, `CHATWOOT_API_URL`, `MINIO_ENDPOINT`, `LISTMONK_API_URL`, `POSTIZ_API_URL`), permitindo que nós de automação e Agentes LangChain se comuniquem com qualquer ferramenta da stack via `$env.NOME_VAR`.
 
 ### 🔗 7.10. Rastreamento Ponta a Ponta & Atribuição de Tráfego (Shlink + Listmonk + Umami)
 - **Atribuição UTM Unificada:** Disparos de campanhas pelo Listmonk utilizam o template padrão auto-formatado com UTMs (`utm_source=listmonk`, `utm_medium=email`, `utm_campaign`), integrados aos links encurtados do Shlink e monitorados pelo Umami Analytics, consolidando a atribuição no Data Warehouse sem rastreadores invasivos de terceiros.
 
 ### 🌐 7.11. Padronização de Aliases de Rede RFC 1123 (Mitigação de Exceções em SDKs Estritos)
 - **O Problema de Nomenclatura Docker (`_` vs RFC 1123):** Por padrão, containers Docker costumam adotar nomes estruturados com prefixos corporativos contendo underlines (ex: `${PREFIXO}_s3minio`, `loja_litellm`). No entanto, bibliotecas e SDKs estritos com validação de hostname conforme as normas **RFC 1123 e RFC 952 (DNS Standards)** — como o **`botocore`** (AWS SDK em Python utilizado por Open WebUI/LiteLLM), **AWS SDK v3** (Node.js/Go/Ruby) e parsers de URL HTTP modernos — rejeitam terminantemente nomes de host com underline (`_`), disparando exceções de inicialização como `ValueError: Invalid endpoint: http://loja_s3minio:9000`.
-- **Solução Arquitetural por Aliases Canônicos:** Todos os 14 arquivos `docker-compose*.yml` da stack declaram explicitamente a propriedade `aliases` dentro do bloco `networks.instancia_net`. Isso estabelece nomes DNS canônicos e limpos (`s3minio`, `litellm`, `docling`, `postgres`, `pgbouncer`, `redis`, `n8n`, `evolution`, `chatwoot`, `metabase`, `nocodb`, `openwebui`, `postiz`, `temporal`, `shlink`, `shlink-web`, `umami`, `caddy`, `listmonk`, `ollama`), garantindo 100% de conformidade RFC 1123 e eliminando qualquer risco de falha de conexão entre os microsserviços.
+- **Solução Arquitetural por Aliases Canônicos:** Todos os 14 arquivos `docker-compose*.yml` da stack declaram explicitamente a propriedade `aliases` dentro do bloco `networks.instancia_net`. Isso estabelece nomes DNS canônicos e limpos (`s3minio`, `litellm`, `markitdown`, `postgres`, `pgbouncer`, `redis`, `n8n`, `evolution`, `chatwoot`, `metabase`, `nocodb`, `openwebui`, `postiz`, `temporal`, `shlink`, `shlink-web`, `umami`, `caddy`, `listmonk`, `ollama`), garantindo 100% de conformidade RFC 1123 e eliminando qualquer risco de falha de conexão entre os microsserviços.
 
 ### 🔇 7.12. Hardening e Supressão Global de Logs (Piso Mínimo WARN/ERROR & Debloat de I/O)
 - **Mitigação de Degradação de I/O em Disco:** Em ambientes de produção, aplicações com logs em níveis `INFO` ou `DEBUG` geram gigabytes de dados desnecessários por mês, competindo por IOPS de disco e poluindo as ferramentas de observabilidade com rotinas rotineiras (ex: healthcheck pings, compilações de assets, introspecção de esquemas e migrações silenciosas).

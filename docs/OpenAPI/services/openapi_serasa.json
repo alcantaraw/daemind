@@ -1,0 +1,1846 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Serasa Experian Score, Dívidas & Antifraude API",
+    "description": "Especificação OpenAPI 3.0 sintetizada via tratamento local em texto para devs.plataformadatatrust.serasaexperian.com.br.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.serasaexperian.com.br"
+    }
+  ],
+  "paths": {
+    "/v1/transaction/{id}/biometrics": {
+      "get": {
+        "summary": "GET /v1/transaction/{id}/biometrics",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase2_synthesized_devs_plataformadatatrust_serasaexperian_com_br_7fe0af5c.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase2_synthesized_devs_plataformadatatrust_serasaexperian_com_br_7fe0af5c.json"
+      }
+    },
+    "/v1/authentication": {
+      "post": {
+        "tags": [
+          "Authorization"
+        ],
+        "summary": "Gerar Token de autenticação",
+        "description": "Todas as requisições submetidas à nossa API devem contemplar um token de autenticação gerado através de um usuário e senha que devem ser fornecidos pela ClearSale. Neste processo, além do token retornamos seu tempo de expiração em segundos. Portanto, é necessário que contemple no seu desenvolvimento o gerenciamento da vida útil do token com base nesse tempo de expiração.\n\nPara o recebimento desse dado é necessário que reserve um espaço de 2048 caracteres.\n\n---\n📍 **Origem:** Tráfego de Rede Playwright (JSON Capturado) (`network_json_2_devs_plataformadatatrust_serasaexperian_com_br_clearsale-poc_api-next_v2_branche_754ea947.json`)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "username": "Seu usuário",
+                "password": "Sua senha"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "username": "Seu usuário",
+                "password": "Sua senha"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "username": "Seu usuário",
+                "password": "Sua senha"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginSuccessfulResponseExample"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-daemind-source": "Tráfego de Rede Playwright (JSON Capturado)",
+        "x-daemind-source-file": "network_json_2_devs_plataformadatatrust_serasaexperian_com_br_clearsale-poc_api-next_v2_branche_754ea947.json"
+      },
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/authentication",
+        "description": "Endpoint extraído da documentação (devs_plataformadatatrust_serasaexperian_com_br_reference_e4c05caa.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`devs_plataformadatatrust_serasaexperian_com_br_reference_e4c05caa.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "devs_plataformadatatrust_serasaexperian_com_br_reference_e4c05caa.md"
+      }
+    },
+    "/v1/{transactionId}/perfillaranja": {
+      "post": {
+        "summary": "POST /v1/{transactionId}/perfillaranja",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase2_synthesized_devs_plataformadatatrust_serasaexperian_com_br_7fe0af5c.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase2_synthesized_devs_plataformadatatrust_serasaexperian_com_br_7fe0af5c.json"
+      },
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/{transactionId}/perfillaranja",
+        "description": "Endpoint extraído da documentação (devs_plataformadatatrust_serasaexperian_com_br_reference_getperfillaranja_39749e77.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`devs_plataformadatatrust_serasaexperian_com_br_reference_getperfillaranja_39749e77.md`)",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "devs_plataformadatatrust_serasaexperian_com_br_reference_getperfillaranja_39749e77.md"
+      }
+    },
+    "/pix.antifraud.do": {
+      "post": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "POST /pix.antifraud.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/4-Web/0-Introdu": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/4-Web/0-Introdu",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/4-Web/3-Migra": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/4-Web/3-Migra",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/4-Web/1-Passo": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/4-Web/1-Passo",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/7-Checklists/1-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/7-Checklists/1-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-iOS/1-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-iOS/1-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-iOS/0-Primeiros": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-iOS/0-Primeiros",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-iOS/2-Liveness": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-iOS/2-Liveness",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-iOS/7-Migra": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-iOS/7-Migra",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/1-Produtos/1-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/1-Produtos/1-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/0-Introdu": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/0-Introdu",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/5-Outras": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/5-Outras",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/6-API/3-Autoriza": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/6-API/3-Autoriza",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/6-API/5-Revoga": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/6-API/5-Revoga",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/6-API/6-Migra": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/6-API/6-Migra",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/6-API/1-Valida": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/6-API/1-Valida",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/6-API/0-Autentica": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/6-API/0-Autentica",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-Android/1-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-Android/1-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-Android/0-Primeiros": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-Android/0-Primeiros",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-Android/2-Liveness": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-Android/2-Liveness",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-Android/7-Migra": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-Android/7-Migra",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/7-Customiza": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/7-Customiza",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/5-React": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/5-React",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/1-Introdu": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/1-Introdu",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/5-Licen": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/5-Licen",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/1-Introdu": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/1-Introdu",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/1": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/1",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/10": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/10",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/2": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/2",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/3": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/3",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/4": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/4",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/5": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/5",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/6": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/6",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/7": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/7",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/8": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/8",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v2/9": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v2/9",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-Authentica": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-Authentica",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-Modulos/1-Liveness/swagger.yaml": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-Modulos/1-Liveness/swagger.yaml",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/NuvemShop/Decis": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/NuvemShop/Decis",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/Shopify/Decis": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/Shopify/Decis",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/Magento-1/Decis": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/Magento-1/Decis",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/Introdu": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/Introdu",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/WooCommerce/Decis": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/WooCommerce/Decis",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/Magento-2/Decis": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/Magento-2/Decis",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/1-Android/3-Captura": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/1-Android/3-Captura",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/1-Android/1-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/1-Android/1-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/1-Android/0-Primeiros": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/1-Android/0-Primeiros",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/1-Android/5-Migra": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/1-Android/5-Migra",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/0-Primeiros": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/0-Primeiros",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-iOS/3-Captura": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-iOS/3-Captura",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-iOS/1-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-iOS/1-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-iOS/0-Primeiros": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-iOS/0-Primeiros",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/2-iOS/6-Migra": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/2-iOS/6-Migra",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-Web/3-Captura": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-Web/3-Captura",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-Web/1-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-Web/1-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-Web/0-Primeiros": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-Web/0-Primeiros",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-Web/4-Reuso": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-Web/4-Reuso",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/3-Web/5-Migra": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/3-Web/5-Migra",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/5-API/1-Autentica": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/5-API/1-Autentica",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/5-API/0-Introdu": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/5-API/0-Introdu",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/5-API/4-Captura": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/5-API/4-Captura",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/5-API/2-Device": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/5-API/2-Device",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/v1/4-Outras": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /v1/4-Outras",
+        "description": "Endpoint extraído da documentação (network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_developer_serasaexperian_com_br_data_apis_json_e30639d8.json"
+      }
+    },
+    "/biolink-1": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /biolink-1",
+        "description": "Endpoint derivado da referência oficial (biolink-1).\n\n---\n📍 **Origem:** Página de Referência Técnica (`devs_plataformadatatrust_serasaexperian_com_br_reference_biolink-1_0009aa12.md#biolink-1`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "devs_plataformadatatrust_serasaexperian_com_br_reference_biolink-1_0009aa12.md#biolink-1"
+      }
+    },
+    "/getperfillaranja": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /getperfillaranja",
+        "description": "Endpoint derivado da referência oficial (getperfillaranja).\n\n---\n📍 **Origem:** Página de Referência Técnica (`devs_plataformadatatrust_serasaexperian_com_br_reference_getperfillaranja_39749e77.md#getperfillaranja`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "devs_plataformadatatrust_serasaexperian_com_br_reference_getperfillaranja_39749e77.md#getperfillaranja"
+      }
+    },
+    "/get-v1-transaction-transactionid-biometrics-score-watermarked-image": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /get-v1-transaction-transactionid-biometrics-score-watermarked-image",
+        "description": "Endpoint derivado da referência oficial (get_v1-transaction-transactionid-biometrics-score-watermarked-image).\n\n---\n📍 **Origem:** Página de Referência Técnica (`devs_plataformadatatrust_serasaexperian_com_br_reference_get_v1-transaction-tran_e473c24b.md#get_v1-transaction-transactionid-biometrics-score-watermarked-image`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "devs_plataformadatatrust_serasaexperian_com_br_reference_get_v1-transaction-tran_e473c24b.md#get_v1-transaction-transactionid-biometrics-score-watermarked-image"
+      }
+    },
+    "/post-v1-authentication": {
+      "get": {
+        "tags": [
+          "Serasa"
+        ],
+        "summary": "GET /post-v1-authentication",
+        "description": "Endpoint derivado da referência oficial (post_v1-authentication).\n\n---\n📍 **Origem:** Página de Referência Técnica (`devs_plataformadatatrust_serasaexperian_com_br_reference_post_v1-authentication_83874cb4.md#post_v1-authentication`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "devs_plataformadatatrust_serasaexperian_com_br_reference_post_v1-authentication_83874cb4.md#post_v1-authentication"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via token Bearer no cabeçalho Authorization."
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}

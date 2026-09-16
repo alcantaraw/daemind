@@ -11,13 +11,13 @@
     }
   ],
   "paths": {
-    "/api/v1/autentica-o-est-depreciada": {
+    "/authenticatev2": {
       "get": {
         "tags": [
-          "Autenticação Está Depreciada"
+          "Loggi"
         ],
-        "summary": "Consultar Autenticação Está Depreciada",
-        "description": "Recurso identificado na documentação (reference_authenticatev1.md).",
+        "summary": "GET /authenticatev2",
+        "description": "Endpoint derivado da referência oficial (authenticatev2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_authenticatev2_3006823c.md#authenticatev2`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -29,237 +29,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      },
-      "post": {
-        "tags": [
-          "Autenticação Está Depreciada"
-        ],
-        "summary": "Criar/Atualizar Autenticação Está Depreciada",
-        "description": "Operação de mutação para Autenticação Está Depreciada.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md#authenticatev2"
       }
     },
-    "/api/v1/autentica-o": {
-      "get": {
-        "tags": [
-          "Autenticação"
-        ],
-        "summary": "Consultar Autenticação",
-        "description": "Recurso identificado na documentação (reference_authenticatev1.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/autentica-o-v1": {
       "post": {
         "tags": [
-          "Autenticação"
+          "Loggi"
         ],
-        "summary": "Criar/Atualizar Autenticação",
-        "description": "Operação de mutação para Autenticação.",
+        "summary": "POST /autentica-o-v1",
+        "description": "Endpoint extraído do índice de navegação (Autenticação V1).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -271,68 +53,250 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/autentica-o-v2": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /autentica-o-v2",
+        "description": "Endpoint extraído do índice de navegação (Autenticação V2).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/ativar-desativar-integrador": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /ativar-desativar-integrador",
+        "description": "Endpoint extraído do índice de navegação (Ativar/Desativar Integrador).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/criar-cota-o": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /criar-cota-o",
+        "description": "Endpoint extraído do índice de navegação (Criar Cotação).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/criar-shipment-ass-ncrono": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /criar-shipment-ass-ncrono",
+        "description": "Endpoint extraído do índice de navegação (Criar Shipment assíncrono.).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/criar-etiqueta": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /criar-etiqueta",
+        "description": "Endpoint extraído do índice de navegação (Criar Etiqueta).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/atualizar-dados-de-um-pacote": {
+      "patch": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "PATCH /atualizar-dados-de-um-pacote",
+        "description": "Endpoint extraído do índice de navegação (Atualizar dados de um pacote).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/cancelar-envio": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /cancelar-envio",
+        "description": "Endpoint extraído do índice de navegação (Cancelar envio).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/detalhes-do-pacote": {
+      "get": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "GET /detalhes-do-pacote",
+        "description": "Endpoint extraído do índice de navegação (Detalhes do pacote).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/rastrear-pacote": {
+      "get": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "GET /rastrear-pacote",
+        "description": "Endpoint extraído do índice de navegação (Rastrear Pacote).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
+      }
+    },
+    "/listar-loggi-pontos": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /listar-loggi-pontos",
+        "description": "Endpoint extraído do índice de navegação (Listar Loggi Pontos.).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
       }
     },
     "/v2/oauth2/token": {
@@ -341,7 +305,7 @@
           "Loggi"
         ],
         "summary": "GET /v2/oauth2/token",
-        "description": "Endpoint extraído da documentação (reference_authenticatev2.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_authenticatev2_3006823c.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_authenticatev2_3006823c.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -353,77 +317,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_authenticatev2_3006823c.md"
       }
     },
-    "/v2/oauth2/tokencURL": {
+    "/createasyncshipment": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v2/oauth2/tokencURL",
-        "description": "Endpoint extraído da documentação (reference_authenticatev2.md).",
+        "summary": "GET /createasyncshipment",
+        "description": "Endpoint derivado da referência oficial (createasyncshipment).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_createasyncshipment_2523f366.md#createasyncshipment`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -435,68 +341,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_createasyncshipment_2523f366.md#createasyncshipment"
       }
     },
     "/v1/companies/{company_id}/async-shipments": {
@@ -505,7 +353,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/companies/{company_id}/async-shipments",
-        "description": "Endpoint extraído da documentação (reference_createasyncshipment.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_createasyncshipment_2523f366.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_createasyncshipment_2523f366.md`)",
         "parameters": [
           {
             "name": "company_id",
@@ -526,168 +374,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_createasyncshipment_2523f366.md"
       }
     },
-    "/v1/companies/{company_id}/async-shipmentscURL": {
+    "/createintegratorcompany": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/{company_id}/async-shipmentscURL",
-        "description": "Endpoint extraído da documentação (reference_createasyncshipment.md).",
-        "parameters": [
-          {
-            "name": "company_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/companies/company_id/async-shipments": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /v1/companies/company_id/async-shipments",
-        "description": "Endpoint extraído da documentação (reference_createasyncshipment.md).",
+        "summary": "GET /createintegratorcompany",
+        "description": "Endpoint derivado da referência oficial (createintegratorcompany).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md#createintegratorcompany`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -699,68 +398,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md#createintegratorcompany"
       }
     },
     "/v1/integrator/activateRecent": {
@@ -769,7 +410,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/integrator/activateRecent",
-        "description": "Endpoint extraído da documentação (reference_createintegratorcompany.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -781,150 +422,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/v1/integrator/activatecURL": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /v1/integrator/activatecURL",
-        "description": "Endpoint extraído da documentação (reference_createintegratorcompany.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md"
       }
     },
     "/v1/integrator/activate": {
@@ -933,7 +434,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/integrator/activate",
-        "description": "Endpoint extraído da documentação (reference_createintegratorcompany.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -945,68 +446,34 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_createintegratorcompany_fcdad915.md"
+      }
+    },
+    "/criaretiqueta-1": {
+      "post": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "POST /criaretiqueta-1",
+        "description": "Endpoint derivado da referência oficial (criaretiqueta-1).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_criaretiqueta-1_780174fd.md#criaretiqueta-1`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_criaretiqueta-1_780174fd.md#criaretiqueta-1"
       }
     },
     "/v1/companies/{company_id}/labels": {
@@ -1015,7 +482,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/companies/{company_id}/labels",
-        "description": "Endpoint extraído da documentação (reference_criaretiqueta-1.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_criaretiqueta-1_780174fd.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_criaretiqueta-1_780174fd.md`)",
         "parameters": [
           {
             "name": "company_id",
@@ -1036,168 +503,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_criaretiqueta-1_780174fd.md"
       }
     },
-    "/v1/companies/{company_id}/labelscURL": {
+    "/labelapi-1": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/{company_id}/labelscURL",
-        "description": "Endpoint extraído da documentação (reference_criaretiqueta-1.md).",
-        "parameters": [
-          {
-            "name": "company_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/companies/company_id/labels": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /v1/companies/company_id/labels",
-        "description": "Endpoint extraído da documentação (reference_criaretiqueta-1.md).",
+        "summary": "GET /labelapi-1",
+        "description": "Endpoint derivado da referência oficial (labelapi-1).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_labelapi-1_e364430a.md#labelapi-1`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -1209,68 +527,34 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_labelapi-1_e364430a.md#labelapi-1"
+      }
+    },
+    "/packagecancelapi": {
+      "get": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "GET /packagecancelapi",
+        "description": "Endpoint derivado da referência oficial (packagecancelapi).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_packagecancelapi_217f4686.md#packagecancelapi`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packagecancelapi_217f4686.md#packagecancelapi"
       }
     },
     "/v1/companies/{company_id}/packages/cancel": {
@@ -1279,7 +563,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/companies/{company_id}/packages/cancel",
-        "description": "Endpoint extraído da documentação (reference_packagecancel.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_packagecancelapi_217f4686.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_packagecancelapi_217f4686.md`)",
         "parameters": [
           {
             "name": "company_id",
@@ -1300,87 +584,20 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packagecancelapi_217f4686.md"
       }
     },
-    "/v1/companies/{company_id}/packages/cancelcURL": {
+    "/packagecancel": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/{company_id}/packages/cancelcURL",
-        "description": "Endpoint extraído da documentação (reference_packagecancel.md).",
-        "parameters": [
-          {
-            "name": "company_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "summary": "GET /packagecancel",
+        "description": "Endpoint derivado da referência oficial (packagecancel).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_packagecancel_f22071db.md#packagecancel`)",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -1391,77 +608,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packagecancel_f22071db.md#packagecancel"
       }
     },
-    "/v1/companies/company_id/packages/cancel": {
+    "/packagedetailstrackingcode": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/company_id/packages/cancel",
-        "description": "Endpoint extraído da documentação (reference_packagecancel.md).",
+        "summary": "GET /packagedetailstrackingcode",
+        "description": "Endpoint derivado da referência oficial (packagedetailstrackingcode).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_packagedetailstrackingcode_449b118b.md#packagedetailstrackingcode`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -1473,230 +632,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/api/v1/envio": {
-      "get": {
-        "tags": [
-          "Envio"
-        ],
-        "summary": "Consultar Envio",
-        "description": "Recurso identificado na documentação (reference_packagecancel.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Envio"
-        ],
-        "summary": "Criar/Atualizar Envio",
-        "description": "Operação de mutação para Envio.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packagedetailstrackingcode_449b118b.md#packagedetailstrackingcode"
       }
     },
     "/v1/companies/{company_id}/packages/{tracking_code}": {
@@ -1705,7 +644,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/companies/{company_id}/packages/{tracking_code}",
-        "description": "Endpoint extraído da documentação (reference_packagedetailstrackingcode.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_packagedetailstrackingcode_449b118b.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_packagedetailstrackingcode_449b118b.md`)",
         "parameters": [
           {
             "name": "company_id",
@@ -1734,176 +673,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packagedetailstrackingcode_449b118b.md"
       }
     },
-    "/v1/companies/{company_id}/packages/{tracking_code}cURL": {
+    "/packageupdateapi": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/{company_id}/packages/{tracking_code}cURL",
-        "description": "Endpoint extraído da documentação (reference_packagedetailstrackingcode.md).",
-        "parameters": [
-          {
-            "name": "company_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "tracking_code",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/companies/company_id/packages/tracking_code": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /v1/companies/company_id/packages/tracking_code",
-        "description": "Endpoint extraído da documentação (reference_packagedetailstrackingcode.md).",
+        "summary": "GET /packageupdateapi",
+        "description": "Endpoint derivado da referência oficial (packageupdateapi).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_packageupdateapi_33b36461.md#packageupdateapi`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -1915,68 +697,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packageupdateapi_33b36461.md#packageupdateapi"
       }
     },
     "/v1/companies/{company_id}/packages": {
@@ -1985,7 +709,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/companies/{company_id}/packages",
-        "description": "Endpoint extraído da documentação (reference_packageupdate.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_packageupdateapi_33b36461.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_packageupdateapi_33b36461.md`)",
         "parameters": [
           {
             "name": "company_id",
@@ -2006,168 +730,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packageupdateapi_33b36461.md"
       }
     },
-    "/v1/companies/{company_id}/packagescURL": {
+    "/packageupdate": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/{company_id}/packagescURL",
-        "description": "Endpoint extraído da documentação (reference_packageupdate.md).",
-        "parameters": [
-          {
-            "name": "company_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/companies/company_id/packages": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /v1/companies/company_id/packages",
-        "description": "Endpoint extraído da documentação (reference_packageupdate.md).",
+        "summary": "GET /packageupdate",
+        "description": "Endpoint derivado da referência oficial (packageupdate).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_packageupdate_e03cb40b.md#packageupdate`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2179,68 +754,34 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_packageupdate_e03cb40b.md#packageupdate"
+      }
+    },
+    "/quotationapi": {
+      "get": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "GET /quotationapi",
+        "description": "Endpoint derivado da referência oficial (quotationapi).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_quotationapi_6c724df8.md#quotationapi`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_quotationapi_6c724df8.md#quotationapi"
       }
     },
     "/v1/companies/{company_id}/quotations": {
@@ -2249,7 +790,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/companies/{company_id}/quotations",
-        "description": "Endpoint extraído da documentação (reference_quote.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_quotationapi_6c724df8.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_quotationapi_6c724df8.md`)",
         "parameters": [
           {
             "name": "company_id",
@@ -2270,168 +811,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_quotationapi_6c724df8.md"
       }
     },
-    "/v1/companies/{company_id}/quotationscURL": {
+    "/quote": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/{company_id}/quotationscURL",
-        "description": "Endpoint extraído da documentação (reference_quote.md).",
-        "parameters": [
-          {
-            "name": "company_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/companies/company_id/quotations": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /v1/companies/company_id/quotations",
-        "description": "Endpoint extraído da documentação (reference_quote.md).",
+        "summary": "GET /quote",
+        "description": "Endpoint derivado da referência oficial (quote).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_quote_e1c1af63.md#quote`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2443,68 +835,58 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_quote_e1c1af63.md#quote"
+      }
+    },
+    "/shipmentapi-1": {
+      "get": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "GET /shipmentapi-1",
+        "description": "Endpoint derivado da referência oficial (shipmentapi-1).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_shipmentapi-1_2d8ff220.md#shipmentapi-1`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_shipmentapi-1_2d8ff220.md#shipmentapi-1"
+      }
+    },
+    "/trackpackagetrackingcode": {
+      "get": {
+        "tags": [
+          "Loggi"
+        ],
+        "summary": "GET /trackpackagetrackingcode",
+        "description": "Endpoint derivado da referência oficial (trackpackagetrackingcode).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_trackpackagetrackingcode_b1bf04df.md#trackpackagetrackingcode`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_trackpackagetrackingcode_b1bf04df.md#trackpackagetrackingcode"
       }
     },
     "/v1/companies/{company_id}/packages/{tracking_code}/tracking": {
@@ -2513,7 +895,7 @@
           "Loggi"
         ],
         "summary": "GET /v1/companies/{company_id}/packages/{tracking_code}/tracking",
-        "description": "Endpoint extraído da documentação (reference_trackpackagetrackingcode.md).",
+        "description": "Endpoint extraído da documentação (docs_api_loggi_com_reference_trackpackagetrackingcode_b1bf04df.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_api_loggi_com_reference_trackpackagetrackingcode_b1bf04df.md`)",
         "parameters": [
           {
             "name": "company_id",
@@ -2542,176 +924,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_trackpackagetrackingcode_b1bf04df.md"
       }
     },
-    "/v1/companies/{company_id}/packages/{tracking_code}/trackingcURL": {
+    "/webhook": {
       "get": {
         "tags": [
           "Loggi"
         ],
-        "summary": "GET /v1/companies/{company_id}/packages/{tracking_code}/trackingcURL",
-        "description": "Endpoint extraído da documentação (reference_trackpackagetrackingcode.md).",
-        "parameters": [
-          {
-            "name": "company_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "tracking_code",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/companies/company_id/packages/tracking_code/tracking": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /v1/companies/company_id/packages/tracking_code/tracking",
-        "description": "Endpoint extraído da documentação (reference_trackpackagetrackingcode.md).",
+        "summary": "GET /webhook",
+        "description": "Endpoint derivado da referência oficial (webhook).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_api_loggi_com_reference_webhook_5513fafa.md#webhook`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2723,1802 +948,14 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/API/URL": {
-      "get": {
-        "tags": [
-          "Loggi"
-        ],
-        "summary": "GET /API/URL",
-        "description": "Endpoint extraído da documentação (network_json_10_reference_authenticatev1.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/freightpricequotation": {
-      "get": {
-        "tags": [
-          "Freightpricequotation"
-        ],
-        "summary": "Consultar Freightpricequotation",
-        "description": "Recurso identificado na documentação (network_json_19_reference_quote.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Freightpricequotation"
-        ],
-        "summary": "Criar/Atualizar Freightpricequotation",
-        "description": "Operação de mutação para Freightpricequotation.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/shipments": {
-      "get": {
-        "tags": [
-          "Shipments"
-        ],
-        "summary": "Consultar Shipments",
-        "description": "Recurso identificado na documentação (network_json_22_reference_createasyncshipment.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Shipments"
-        ],
-        "summary": "Criar/Atualizar Shipments",
-        "description": "Operação de mutação para Shipments.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/shipment": {
-      "get": {
-        "tags": [
-          "Shipment"
-        ],
-        "summary": "Consultar Shipment",
-        "description": "Recurso identificado na documentação (network_json_22_reference_createasyncshipment.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Shipment"
-        ],
-        "summary": "Criar/Atualizar Shipment",
-        "description": "Operação de mutação para Shipment.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/labels": {
-      "get": {
-        "tags": [
-          "Labels"
-        ],
-        "summary": "Consultar Labels",
-        "description": "Recurso identificado na documentação (network_json_25_reference_criaretiqueta-1.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Labels"
-        ],
-        "summary": "Criar/Atualizar Labels",
-        "description": "Operação de mutação para Labels.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/atualizar-dados-de-um-pacote": {
-      "get": {
-        "tags": [
-          "Atualizar Dados De Um Pacote"
-        ],
-        "summary": "Consultar Atualizar Dados De Um Pacote",
-        "description": "Recurso identificado na documentação (network_json_28_reference_packageupdate.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Atualizar Dados De Um Pacote"
-        ],
-        "summary": "Criar/Atualizar Atualizar Dados De Um Pacote",
-        "description": "Operação de mutação para Atualizar Dados De Um Pacote.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/cancelamento-de-pacotes": {
-      "get": {
-        "tags": [
-          "Cancelamento De Pacotes"
-        ],
-        "summary": "Consultar Cancelamento De Pacotes",
-        "description": "Recurso identificado na documentação (network_json_28_reference_packageupdate.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Cancelamento De Pacotes"
-        ],
-        "summary": "Criar/Atualizar Cancelamento De Pacotes",
-        "description": "Operação de mutação para Cancelamento De Pacotes.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/detalhes": {
-      "get": {
-        "tags": [
-          "Detalhes"
-        ],
-        "summary": "Consultar Detalhes",
-        "description": "Recurso identificado na documentação (network_json_34_reference_packagedetailstrackingcode.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Detalhes"
-        ],
-        "summary": "Criar/Atualizar Detalhes",
-        "description": "Operação de mutação para Detalhes.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/tracking": {
-      "get": {
-        "tags": [
-          "Tracking"
-        ],
-        "summary": "Consultar Tracking",
-        "description": "Recurso identificado na documentação (network_json_37_reference_trackingapi.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Tracking"
-        ],
-        "summary": "Criar/Atualizar Tracking",
-        "description": "Operação de mutação para Tracking.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/loggi-pontos": {
-      "get": {
-        "tags": [
-          "Loggi Pontos"
-        ],
-        "summary": "Consultar Loggi Pontos",
-        "description": "Recurso identificado na documentação (network_json_46_reference_listdropofflocations.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Loggi Pontos"
-        ],
-        "summary": "Criar/Atualizar Loggi Pontos",
-        "description": "Operação de mutação para Loggi Pontos.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/locations": {
-      "get": {
-        "tags": [
-          "Locations"
-        ],
-        "summary": "Consultar Locations",
-        "description": "Recurso identificado na documentação (network_json_46_reference_listdropofflocations.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Locations"
-        ],
-        "summary": "Criar/Atualizar Locations",
-        "description": "Operação de mutação para Locations.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_api_loggi_com_reference_webhook_5513fafa.md#webhook"
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para Loggi Express & Entrega Urbana API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para Loggi Express & Entrega Urbana API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para Loggi Express & Entrega Urbana API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://api.loggi.com/v1/oauth/authorize",
-            "tokenUrl": "https://api.loggi.com/v1/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em Loggi Express & Entrega Urbana API",
-              "write": "Gravação e mutação em Loggi Express & Entrega Urbana API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -4547,22 +984,6 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
@@ -4571,64 +992,20 @@
         ]
       }
     },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Autenticação básica HTTP com usuário e senha ou token Base64."
       },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Autenticação padrão OAuth 2.0 (Authorization Code / Client Credentials).",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.dominio.com/oauth/authorize",
+            "tokenUrl": "https://api.dominio.com/oauth/token",
+            "scopes": {}
           }
         }
       }
@@ -4636,44 +1013,15 @@
   },
   "security": [
     {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
+      "BasicAuth": []
     }
   ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack loggi.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack loggi.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
   "webhooks": {
-    "loggi_event_notification": {
+    "ee_created": {
+      "description": "Notificação de webhook disparada no evento 'ee.createD'.",
       "post": {
-        "summary": "Notificação de Eventos em Tempo Real (Loggi Express & Entrega Urbana API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Loggi Express & Entrega Urbana API.",
+        "summary": "Evento de Webhook: ee.createD",
         "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
           "required": true,
           "content": {
             "application/json": {
@@ -4682,15 +1030,15 @@
                 "properties": {
                   "event": {
                     "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
+                    "example": "ee.createD"
                   },
                   "data": {
                     "type": "object",
-                    "description": "Dados da entidade mutada."
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
                   }
                 }
               }
@@ -4699,7 +1047,184 @@
         },
         "responses": {
           "200": {
-            "description": "Webhook processado e confirmado com sucesso."
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "status_updated": {
+      "description": "Notificação de webhook disparada no evento 'status.updated'.",
+      "post": {
+        "summary": "Evento de Webhook: status.updated",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "status.updated"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "t_created": {
+      "description": "Notificação de webhook disparada no evento 't.createD'.",
+      "post": {
+        "summary": "Evento de Webhook: t.createD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "t.createD"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "ee_created": {
+      "description": "Notificação de webhook disparada no evento 'ee.createD'.",
+      "post": {
+        "summary": "Evento de Webhook: ee.createD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "ee.createD"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "status_updated": {
+      "description": "Notificação de webhook disparada no evento 'status.updated'.",
+      "post": {
+        "summary": "Evento de Webhook: status.updated",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "status.updated"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "t_created": {
+      "description": "Notificação de webhook disparada no evento 't.createD'.",
+      "post": {
+        "summary": "Evento de Webhook: t.createD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "t.createD"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
           }
         }
       }

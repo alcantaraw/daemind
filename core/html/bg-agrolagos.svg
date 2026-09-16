@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <!-- Céu Crepúsculo Dourado do Campo -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a1912"/>
+      <stop offset="35%" stop-color="#122a1e"/>
+      <stop offset="65%" stop-color="#2a4228"/>
+      <stop offset="85%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+
+    <!-- Brilho do Sol Poente no Horizonte -->
+    <radialGradient id="sunGlow" cx="50%" cy="65%" r="60%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.9"/>
+      <stop offset="25%" stop-color="#f59e0b" stop-opacity="0.6"/>
+      <stop offset="55%" stop-color="#d97706" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#051009" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Gradientes de Colinas Verdes -->
+    <linearGradient id="hillGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d5a27"/>
+      <stop offset="100%" stop-color="#142e12"/>
+    </linearGradient>
+
+    <linearGradient id="hillGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b7233"/>
+      <stop offset="100%" stop-color="#193816"/>
+    </linearGradient>
+
+    <linearGradient id="hillGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d3f1a"/>
+      <stop offset="100%" stop-color="#09180a"/>
+    </linearGradient>
+
+    <!-- Overlay Escuro Tech-Glass para contraste de cards -->
+    <linearGradient id="techVignette" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#030805" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#040c07" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#020603" stop-opacity="0.92"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Céu -->
+  <rect width="1920" height="1080" fill="url(#skyGrad)"/>
+
+  <!-- Sol no Horizonte -->
+  <circle cx="960" cy="620" r="350" fill="url(#sunGlow)"/>
+  <circle cx="960" cy="620" r="85" fill="#fef3c7" opacity="0.95"/>
+
+  <!-- Camada de Montanhas ao Fundo -->
+  <path d="M0 640 Q250 560 500 610 T1000 580 T1500 620 Q1750 570 1920 630 L1920 1080 L0 1080 Z" fill="#1b361e" opacity="0.7"/>
+
+  <!-- Colinas Agrícolas Médias com Linhas de Curva de Nível -->
+  <path d="M0 680 Q320 600 700 660 T1400 630 Q1700 680 1920 660 L1920 1080 L0 1080 Z" fill="url(#hillGrad1)"/>
+
+  <!-- Curvas de Nível / Linhas de Safra no Campo -->
+  <path d="M0 720 Q350 650 750 710 T1500 680 Q1750 730 1920 710" fill="none" stroke="#4ade80" stroke-width="2" opacity="0.25"/>
+  <path d="M0 755 Q380 690 800 745 T1550 720 Q1780 770 1920 745" fill="none" stroke="#22c55e" stroke-width="2.5" opacity="0.3"/>
+  <path d="M0 795 Q420 730 850 785 T1600 760 Q1800 810 1920 785" fill="none" stroke="#16a34a" stroke-width="3" opacity="0.35"/>
+
+  <!-- Colinas em Primeiro Plano -->
+  <path d="M0 790 Q400 710 900 810 Q1400 900 1920 770 L1920 1080 L0 1080 Z" fill="url(#hillGrad2)"/>
+  <path d="M0 860 Q500 780 1000 880 Q1500 970 1920 840 L1920 1080 L0 1080 Z" fill="url(#hillGrad3)"/>
+
+  <!-- Grid Geométrico Sutil do Agronegócio 4.0 / GPS Agrícola -->
+  <g opacity="0.08" stroke="#86efac" stroke-width="1">
+    <line x1="0" y1="200" x2="1920" y2="200"/>
+    <line x1="0" y1="400" x2="1920" y2="400"/>
+    <line x1="0" y1="600" x2="1920" y2="600"/>
+    <line x1="0" y1="800" x2="1920" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="1080"/>
+    <line x1="600" y1="0" x2="600" y2="1080"/>
+    <line x1="960" y1="0" x2="960" y2="1080"/>
+    <line x1="1300" y1="0" x2="1300" y2="1080"/>
+    <line x1="1600" y1="0" x2="1600" y2="1080"/>
+  </g>
+
+  <!-- Filtro Vignette Noturno Premium para leitura impecável dos cartões -->
+  <rect width="1920" height="1080" fill="url(#techVignette)"/>
+</svg>

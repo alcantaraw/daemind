@@ -11,93 +11,13 @@
     }
   ],
   "paths": {
-    "/api/v1/tracking": {
-      "get": {
-        "tags": [
-          "Tracking"
-        ],
-        "summary": "Consultar Tracking",
-        "description": "Recurso identificado na documentação (avisos-importantes-jadlog.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/wp-admin/authorize-application.php": {
       "post": {
         "tags": [
-          "Tracking"
+          "Jadlog"
         ],
-        "summary": "Criar/Atualizar Tracking",
-        "description": "Operação de mutação para Tracking.",
+        "summary": "POST /wp-admin/authorize-application.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -109,77 +29,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/pedido/incluir": {
+    "/v1/site-editor": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/pedido/incluir",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/site-editor",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -191,77 +53,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/pedido/cancelar": {
+    "/v1/site-editor/templates": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/pedido/cancelar",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/site-editor/templates",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -273,77 +77,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/tracking/consultar": {
+    "/v1/site-editor/conditions-config": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/tracking/consultar",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/site-editor/conditions-config",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -355,77 +101,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/tracking/simples/consultar": {
+    "/v1/site-editor/templates-conditions": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/tracking/simples/consultar",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/site-editor/templates-conditions",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -437,77 +125,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/frete/valor": {
+    "/v1/site-editor/templates-conditions-conflicts": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/frete/valor",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/site-editor/templates-conditions-conflicts",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -519,77 +149,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/cte/xml": {
+    "/v1/core/site/data/setup-tag": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/cte/xml",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/core/site/data/setup-tag",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -601,77 +173,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/07334200008233": {
+    "/v1/core/site/data/connection": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/07334200008233",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/core/site/data/connection",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -683,77 +197,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/V6/TPeH6zX6/XPeH": {
+    "/v1/core/user/data/authentication": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /V6/TPeH6zX6/XPeH",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/core/user/data/authentication",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -765,77 +221,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/api/tracking/incluir_tratativa": {
+    "/v1/core/user/data/disconnect": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /api/tracking/incluir_tratativa",
-        "description": "Endpoint extraído da documentação (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/core/user/data/disconnect",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -847,77 +245,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     },
-    "/embarcador/api/tracking/incluir_tratativa": {
+    "/v1/core/user/data/get-token": {
       "get": {
         "tags": [
           "Jadlog"
         ],
-        "summary": "GET /embarcador/api/tracking/incluir_tratativa",
-        "description": "Endpoint extraído por declaração de rota (pdf_manual_jadlog_v2_3.md).",
+        "summary": "GET /v1/core/user/data/get-token",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -929,100 +269,2582 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/user-input-settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/user-input-settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/audience-settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/audience-settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/conversion-reporting-settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/conversion-reporting-settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/email-reporting-settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/email-reporting-settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/email-reporting-next-report": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/email-reporting-next-report",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/initial-setup-settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/initial-setup-settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/modules/data/list": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/modules/data/list",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/modules/data/activation": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/modules/data/activation",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/modules/data/info": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/modules/data/info",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/modules/data/check-access": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/modules/data/check-access",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/modules": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/modules",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/modules/data/recover-modules": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/modules/data/recover-modules",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/modules/data/sharing-settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/modules/data/sharing-settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/dismissed-items": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/dismissed-items",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/dismiss-item": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/dismiss-item",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/expirable-items": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/expirable-items",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/set-expirable-item-timers": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/set-expirable-item-timers",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/permissions": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/permissions",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/nonces": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/nonces",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/survey-trigger": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/survey-trigger",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/survey-event": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/survey-event",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/survey-timeouts": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/survey-timeouts",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/survey": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/survey",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/reset": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/reset",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/reset-persistent": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/reset-persistent",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/developer-plugin": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/developer-plugin",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/tracking": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/tracking",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/search/data/entity-search": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/search/data/entity-search",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/admin-bar-settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/admin-bar-settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/notifications": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/notifications",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/mark-notification": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/mark-notification",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/site-health-tag-placement-test": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/site-health-tag-placement-test",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/health-checks": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/health-checks",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/dismissed-tours": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/dismissed-tours",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/dismiss-tour": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/dismiss-tour",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/key-metrics": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/key-metrics",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/dismissed-prompts": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/dismissed-prompts",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/user/data/dismiss-prompt": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/user/data/dismiss-prompt",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/consent-mode": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/consent-mode",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/consent-api-info": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/consent-api-info",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/consent-api-activate": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/consent-api-activate",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/ads-measurement-status": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/ads-measurement-status",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/conversion-tracking": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/conversion-tracking",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/email-reporting": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/email-reporting",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/email-reporting-eligible-subscribers": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/email-reporting-eligible-subscribers",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/email-reporting-subscribed-users": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/email-reporting-subscribed-users",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/email-reporting-unsubscribe-user": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/email-reporting-unsubscribe-user",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/email-reporting-errors": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/email-reporting-errors",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/core/site/data/email-reporting-invite-user": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/core/site/data/email-reporting-invite-user",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/globals": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/globals",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/globals/colors": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/globals/colors",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/globals/typography": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/globals/typography",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/favorites": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/favorites",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/kit-elements-defaults": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/kit-elements-defaults",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/template-library/templates": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/template-library/templates",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/global-widget/templates": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/global-widget/templates",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/posts-widget": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/posts-widget",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/form-submissions": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/form-submissions",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/form-submissions/restore": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/form-submissions/restore",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/form-submissions/export": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/form-submissions/export",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/form-submissions/referer": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/form-submissions/referer",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/forms": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/forms",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/send-event": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/send-event",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/posts": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/posts",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/pages": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/pages",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/media": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/media",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/menu-items": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/menu-items",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/blocks": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/blocks",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/templates": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/templates",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/templates/lookup": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/templates/lookup",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/template-parts": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/template-parts",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/template-parts/lookup": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/template-parts/lookup",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/navigation": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/navigation",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/font-families": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/font-families",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/types": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/types",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/statuses": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/statuses",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/taxonomies": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/taxonomies",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/categories": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/categories",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/tags": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/tags",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/menus": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/menus",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/wp_pattern_category": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/wp_pattern_category",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/users": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/users",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/users/me": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/users/me",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/comments": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/comments",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/search": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/search",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/block-types": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/block-types",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/settings": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/settings",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/themes": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/themes",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/plugins": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/plugins",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/sidebars": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/sidebars",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/widget-types": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/widget-types",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/widgets": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/widgets",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/block-directory/search": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/block-directory/search",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/pattern-directory/patterns": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/pattern-directory/patterns",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/block-patterns/patterns": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/block-patterns/patterns",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/block-patterns/categories": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/block-patterns/categories",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/directory-sizes": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/directory-sizes",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/url-details": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/url-details",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/menu-locations": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/menu-locations",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/export": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/export",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/navigation-fallback": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/navigation-fallback",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/font-collections": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/font-collections",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/categories": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/categories",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v1/abilities": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v1/abilities",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/icons": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/icons",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/icon-collections": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/icon-collections",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
+      }
+    },
+    "/v2/view-config": {
+      "get": {
+        "tags": [
+          "Jadlog"
+        ],
+        "summary": "GET /v2/view-config",
+        "description": "Endpoint extraído da documentação (network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "network_json_1_integracoes_jadlog_com_br_wp-json_94b03520.json"
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para Jadlog DPDgroup Express Tracking & Shipping API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para Jadlog DPDgroup Express Tracking & Shipping API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para Jadlog DPDgroup Express Tracking & Shipping API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://www.jadlog.com.br/embarcador/api/oauth/authorize",
-            "tokenUrl": "https://www.jadlog.com.br/embarcador/api/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em Jadlog DPDgroup Express Tracking & Shipping API",
-              "write": "Gravação e mutação em Jadlog DPDgroup Express Tracking & Shipping API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -1051,161 +2873,12 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
           "status",
           "detail"
         ]
-      }
-    },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      }
-    }
-  },
-  "security": [
-    {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
-    }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack jadlog.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack jadlog.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "jadlog_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (Jadlog DPDgroup Express Tracking & Shipping API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Jadlog DPDgroup Express Tracking & Shipping API.",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
-        }
       }
     }
   }

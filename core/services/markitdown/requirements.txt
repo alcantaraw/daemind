@@ -1,0 +1,7 @@
+markitdown
+pytesseract
+Pillow
+pdf2image
+fastapi
+uvicorn
+python-multipart

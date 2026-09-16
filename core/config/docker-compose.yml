@@ -132,6 +132,7 @@ services:
     ports:
       - "${PROXY_PORT:-80}:80/tcp"
       - "4000:4000/tcp" # LiteLLM (Gateway API)
+      - "${HOST_MARKITDOWN_PORT:-5001}:5001/tcp" # MarkItDown & Tesseract OCR API
     healthcheck:
       test: [ "CMD", "caddy", "version" ]
       interval: 30s
@@ -204,3 +205,39 @@ services:
       timeout: 5s
       retries: 5
       start_period: 60s
+
+  # --- MARKITDOWN & TESSERACT OCR MICROSERVICE (CORE STACK) ---
+  markitdown:
+    build:
+      context: ./core/services/markitdown
+      dockerfile: Dockerfile
+    image: '${PREFIXO_CONTAINER}_markitdown:latest'
+    container_name: '${PREFIXO_CONTAINER}_markitdown'
+    restart: unless-stopped
+    networks:
+      instancia_net:
+        ipv4_address: ${IP_MARKITDOWN}
+        aliases:
+          - markitdown
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_MARKITDOWN:-1.0}'
+          memory: '${MEM_MARKITDOWN:-512M}'
+        reservations:
+          memory: '${RES_MARKITDOWN:-64M}'
+    environment:
+      - TZ=America/Sao_Paulo
+      - PORT=5001
+      - HOST=0.0.0.0
+    volumes:
+      - './volumes/markitdown_data:/data'
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://127.0.0.1:5001/health || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+

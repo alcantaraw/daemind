@@ -55,7 +55,7 @@ Aplicações e serviços self-hosted que compõem a infraestrutura interna do am
 | Aplicação / Módulo | Arquivo de Contrato | Título Oficial da API | Versão | Endpoints | Base URL Local |
 | :--- | :--- | :--- | :---: | :---: | :--- |
 | **Chatwoot** | [`openapi_chatwoot.json`](apps/openapi_chatwoot.json) | Chatwoot Omnichannel API v1 | `1.0.0` | 286 | `http://chatwoot:3000` |
-| **Docling** | [`openapi_docling.json`](apps/openapi_docling.json) | Docling Document OCR & PDF Processing API | `1.0.0` | 35 | `http://docling:5001` |
+| **MarkItDown** | [`openapi_markitdown.json`](apps/openapi_markitdown.json) | MarkItDown & Tesseract OCR Service API | `1.0.0` | 4 | `http://markitdown:5001` |
 | **Evolution API** | [`openapi_evolution.json`](apps/openapi_evolution.json) | Evolution WhatsApp API v2.3 | `1.0.0` | 913 | `http://evolution:8080` |
 | **Listmonk** | [`openapi_listmonk.json`](apps/openapi_listmonk.json) | Listmonk Newsletter & Mailing API | `1.0.0` | 107 | `http://listmonk:9000` |
 | **LiteLLM** | [`openapi_litellm.json`](apps/openapi_litellm.json) | LiteLLM AI Gateway & Router API | `0.1.0` | 579 | `http://litellm:4000` |

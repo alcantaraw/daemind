@@ -1,0 +1,969 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ReceitaWS Consulta CNPJ & QSA API",
+    "version": "1.0",
+    "description": "A **API** do [receitaws.com.br](https://receitaws.com.br) é disponibilizada em duas versões, sendo uma versão gratuita e aberta (chamada de **API Pública**), e outra versão autenticada (chamada de **API Comercial**) que deve ser acessada através de uma assinatura de um dos planos disponíveis em nosso site.\n## API Pública\nO acesso à **API Pública** não requer autenticação, e permite até 3 consultas por minuto. Esta API retorna dados apenas para CNPJs que já existem em nosso banco de dados (cache). Caso o CNPJ consultado não esteja em nosso banco de dados, a API retornará um erro indicando que a informação não está disponível em cache.\n## API Comercial\n### Uso da defasagem máxima\nAo realizar uma consulta utilizando esta API, o sistema irá primeiramente verificar se o CNPJ consultado existe em nossa base de dados (cache).\nNo caso em que o CNPJ **não está** no cache: a consulta é considerada em tempo real.\nNo caso em que o CNPJ **está** no cache: é feita uma comparação entre a data da última atualização deste CNPJ (campo `ultima_atualizacao`) e o parâmetro `days` utilizado na requisição. Se o CNPJ foi atualizado há menos de `days` dias em nossa base de dados, o retorno será dos dados do cache, caso contrário é realizada uma consulta em tempo real.\n### Uso do fallback\nÉ possível controlar o comportamento da API em caso de erros ou indisponibilidade da consulta em tempo real através do parâmetro `fallback`. Caso o valor seja `cacheOnError`, que é o valor padrão, e a consulta em tempo real não tenha sido resolvida em até 30 segundos, o retorno será dos dados do cache, caso estejam disponíveis. Caso o valor seja `noCache`, a API não retornará dados do cache em casos de erros ou indisponibilidade da consulta em tempo real.\n### Consumo dos Limites\nO limite que será consumido durante a consulta é determinado de acordo com a lógica descrita acima, que pode resultar em uma consulta de nosso cache ou uma consulta em tempo real. O limite correspondente será verificado antes da execução da consulta, e será debitado no retorno das informações.\nNo caso da requisição precisar de um limite que a conta não tem disponível, o código HTTP de retorno será o `402`.\n### Timeouts\nConsultas em tempo real podem gerar timeouts devido a natureza da consulta a fonte de dados de terceiros. Nestes casos o código HTTP de retorno será `504` após 50 segundos de execução. Caso a consulta não seja resolvida neste período e este código seja retornado, não há dedução do limite de consultas.",
+    "termsOfService": "https://receitaws.com.br/terms.pdf",
+    "contact": {
+      "email": "contato@receitaws.com.br"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://receitaws.com.br/v1"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "accountQuotaResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "quota": {
+            "type": "object",
+            "description": "Detalhes sobre a quota disponível",
+            "properties": {
+              "from_database": {
+                "description": "Quota disponível para consultas do banco de dados (cache)",
+                "type": "number",
+                "example": 27212
+              },
+              "from_external": {
+                "description": "Quota disponível para consultas em tempo real",
+                "type": "number",
+                "example": 1429
+              },
+              "next_renewal_date": {
+                "description": "Data da próxima renovação da quota",
+                "type": "string",
+                "example": "2022-01-05T14:09:27.563Z"
+              }
+            }
+          }
+        }
+      },
+      "simplesResultSuccess": {
+        "type": "object",
+        "properties": {
+          "cnpj": {
+            "type": "string",
+            "example": "00000000000191"
+          },
+          "simples": {
+            "description": "Informações sobre a opção pelo Simples Nacional",
+            "type": "object",
+            "properties": {
+              "optante": {
+                "type": "boolean",
+                "description": "Indica se é optante pelo Simples"
+              },
+              "data_opcao": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Data de opção pelo Simples"
+              },
+              "historico": {
+                "description": "Histórico de opções pelo Simples Nacional",
+                "type": "object",
+                "properties": {
+                  "periodos_anteriores": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "inicio": {
+                          "type": "string",
+                          "description": "Data de início do período"
+                        },
+                        "fim": {
+                          "type": "string",
+                          "description": "Data de fim do período"
+                        },
+                        "detalhamento": {
+                          "type": "string",
+                          "description": "Detalhamento do período"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "simei": {
+            "description": "Informações sobre a opção pelo SIMEI",
+            "type": "object",
+            "properties": {
+              "optante": {
+                "type": "boolean",
+                "description": "Indica se é optante pelo SIMEI"
+              },
+              "data_opcao": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Data de opção pelo SIMEI"
+              },
+              "historico": {
+                "description": "Histórico de opções pelo SIMEI",
+                "type": "object",
+                "properties": {
+                  "periodos_anteriores": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "inicio": {
+                          "type": "string",
+                          "description": "Data de início do período"
+                        },
+                        "fim": {
+                          "type": "string",
+                          "description": "Data de fim do período"
+                        },
+                        "detalhamento": {
+                          "type": "string",
+                          "description": "Detalhamento do período"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "billing": {
+            "description": "Informações sobre o uso de limites da consulta",
+            "type": "object",
+            "properties": {
+              "free": {
+                "description": "Indica se a consulta utilizou a API Gratuita",
+                "type": "boolean"
+              },
+              "database": {
+                "description": "Indica se a consulta foi resolvida com dados do cache",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "callsReportResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "calls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "ID da chamada realizada",
+                  "type": "string"
+                },
+                "start": {
+                  "description": "Horário do início da consulta",
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-01-05T14:09:27.563Z"
+                },
+                "end": {
+                  "description": "Horário do fim da consulta. Este valor pode ser nulo\n(**null**) no caso da consulta não ter sido resolvida. É\npossível que a diferença entre este campo e o campo **start**\nseja maior que 50 segundos, sendo considerado *timeout* e não\nsendo contabilizado no uso da quota.\n",
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-01-05T14:26:13.912Z"
+                },
+                "token": {
+                  "description": "Nome do token utilizado",
+                  "type": "string",
+                  "example": "my-token"
+                },
+                "cnpj": {
+                  "description": "CNPJ consultado",
+                  "type": "string",
+                  "example": "11378117000120"
+                },
+                "days": {
+                  "description": "Defasagem máxima utilizada na consulta",
+                  "type": "string",
+                  "example": "10"
+                },
+                "type": {
+                  "description": "Tipo da consulta realizada",
+                  "type": "string",
+                  "enum": [
+                    "ccc",
+                    "rf",
+                    "simples"
+                  ],
+                  "default": "rf"
+                },
+                "invalid": {
+                  "description": "Indica se a o CNPJ consultado era inválido, ou seja, um CNPJ\nque foi rejeitado pela Receita Federal. Consultas a CNPJs\ninválidos são deduzidos da quota do plano da mesma forma que\nCNPJs existentes.\n",
+                  "type": "boolean",
+                  "example": true
+                },
+                "from_database": {
+                  "description": "Indica se a consulta foi resolvida utilizando o\nbanco de dados (cache)\n",
+                  "type": "boolean",
+                  "example": false
+                },
+                "from_external": {
+                  "description": "Indica se a consulta foi resolvida utilizando uma\nverificação em tempo real na Receita Federal\n",
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "rfResultRejected": {
+        "description": "CNPJ Rejeitado",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ERROR"
+          },
+          "message": {
+            "type": "string",
+            "example": "CNPJ rejeitado pela Receita Federal"
+          }
+        }
+      },
+      "resultInvalidCNPJ": {
+        "description": "CNPJ Inválido",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ERROR"
+          },
+          "message": {
+            "type": "string",
+            "example": "CNPJ inválido"
+          }
+        }
+      },
+      "rfResultSuccess": {
+        "type": "object",
+        "description": "Descrição da resposta",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "ultima_atualizacao": {
+            "description": "Data da última atualização dos dados",
+            "type": "string",
+            "format": "date-time"
+          },
+          "cnpj": {
+            "description": "CNPJ da Empresa",
+            "type": "string"
+          },
+          "tipo": {
+            "description": "Tipo da Empresa",
+            "type": "string",
+            "enum": [
+              "MATRIZ",
+              "FILIAL"
+            ]
+          },
+          "porte": {
+            "description": "Porte da Empresa",
+            "type": "string"
+          },
+          "nome": {
+            "description": "Razão Social",
+            "type": "string"
+          },
+          "fantasia": {
+            "description": "Nome Fantasia",
+            "type": "string"
+          },
+          "abertura": {
+            "description": "Data de Abertura",
+            "type": "string"
+          },
+          "atividade_principal": {
+            "description": "Atividade Principal",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "description": "Código da Atividade",
+                  "type": "string"
+                },
+                "text": {
+                  "description": "Descrição da Atividade",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "atividades_secundarias": {
+            "description": "Atividades Secundárias",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "description": "Código da Atividade",
+                  "type": "string"
+                },
+                "text": {
+                  "description": "Descrição da Atividade",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "natureza_juridica": {
+            "description": "Natureza Jurídica",
+            "type": "string"
+          },
+          "logradouro": {
+            "description": "Logradouro",
+            "type": "string"
+          },
+          "numero": {
+            "description": "Número",
+            "type": "string"
+          },
+          "complemento": {
+            "description": "Complemento",
+            "type": "string"
+          },
+          "cep": {
+            "description": "CEP",
+            "type": "string"
+          },
+          "bairro": {
+            "description": "Bairro",
+            "type": "string"
+          },
+          "municipio": {
+            "description": "Município",
+            "type": "string"
+          },
+          "uf": {
+            "description": "Estado",
+            "type": "string"
+          },
+          "email": {
+            "description": "Email",
+            "type": "string"
+          },
+          "telefone": {
+            "description": "Telefone",
+            "type": "string"
+          },
+          "efr": {
+            "description": "Ente Federativo Responsável",
+            "type": "string"
+          },
+          "situacao": {
+            "description": "Situação",
+            "type": "string"
+          },
+          "data_situacao": {
+            "description": "Data da Situação",
+            "type": "string"
+          },
+          "motivo_situacao": {
+            "description": "Motivo da Situação",
+            "type": "string"
+          },
+          "situacao_especial": {
+            "description": "Situação Especial",
+            "type": "string"
+          },
+          "data_situacao_especial": {
+            "description": "Data da Situação Especial",
+            "type": "string"
+          },
+          "capital_social": {
+            "description": "Capital Social",
+            "type": "string"
+          },
+          "qsa": {
+            "description": "Quadro Societário",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "description": "Nome do Sócio",
+                  "type": "string"
+                },
+                "qual": {
+                  "description": "Qualificação do Sócio",
+                  "type": "string"
+                },
+                "pais_origem": {
+                  "description": "País de Origem do Sócio",
+                  "type": "string"
+                },
+                "nome_rep_legal": {
+                  "description": "Nome do Representante Legal",
+                  "type": "string"
+                },
+                "qual_rep_legal": {
+                  "description": "Qualificação do Representante Legal",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "simples": {
+            "description": "Opção pelo regime tributário do Simples Nacional",
+            "type": "object",
+            "properties": {
+              "optante": {
+                "description": "Optante pelo Simples Nacional",
+                "type": "boolean"
+              },
+              "data_opcao": {
+                "description": "Data da Opção pelo Simples Nacional",
+                "type": "string",
+                "format": "date-time"
+              },
+              "data_exclusao": {
+                "description": "Data da Exclusão do Simples Nacional",
+                "type": "string",
+                "format": "date-time"
+              },
+              "ultima_atualizacao": {
+                "description": "Data da última atualização dos dados referentes ao Simples Nacional",
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "simei": {
+            "description": "Enquadramento no MEI (Microempreendedor Individual)",
+            "type": "object",
+            "properties": {
+              "optante": {
+                "description": "Optante pelo MEI",
+                "type": "boolean"
+              },
+              "data_opcao": {
+                "description": "Data da Opção pelo MEI",
+                "type": "string",
+                "format": "date-time"
+              },
+              "data_exclusao": {
+                "description": "Data da Exclusão do MEI",
+                "type": "string",
+                "format": "date-time"
+              },
+              "ultima_atualizacao": {
+                "description": "Data da última atualização dos dados referentes ao MEI",
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "billing": {
+            "description": "Informações sobre o uso de limites da consulta",
+            "type": "object",
+            "properties": {
+              "free": {
+                "description": "Indica se a consulta utilizou a API Gratuita",
+                "type": "boolean"
+              },
+              "database": {
+                "description": "Indica se a consulta foi resolvida com dados do cache",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "cccResultSuccess": {
+        "type": "object",
+        "description": "Descrição da resposta da consulta ao CCC",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "ultima_atualizacao": {
+            "description": "Data da última atualização dos dados",
+            "type": "string",
+            "format": "date-time"
+          },
+          "cnpj": {
+            "description": "CNPJ da Empresa",
+            "type": "string"
+          },
+          "registros": {
+            "description": "Atividades Secundárias",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uf": {
+                  "description": "UF da Inscrição Estadual",
+                  "type": "string"
+                },
+                "ie": {
+                  "description": "Número da Inscrição Estadual",
+                  "type": "string"
+                },
+                "tipo_ie": {
+                  "description": "Tipo da Inscrição Estadual",
+                  "type": "string"
+                },
+                "situacao_ie": {
+                  "description": "Situação da Inscrição Estadual",
+                  "type": "string"
+                },
+                "data_situacao": {
+                  "description": "Data da Situação da Inscrição Estadual",
+                  "type": "string"
+                },
+                "regime_icms": {
+                  "description": "Regime do ICMS",
+                  "type": "string"
+                },
+                "situacao_cnpj": {
+                  "description": "Situação do CNPJ na UF",
+                  "type": "string"
+                },
+                "data_atualizacao": {
+                  "description": "Data da última atualização dos dados deste registro",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "billing": {
+            "description": "Informações sobre o uso de limites da consulta",
+            "type": "object",
+            "properties": {
+              "free": {
+                "description": "Indica se a consulta utilizou a API Gratuita",
+                "type": "boolean"
+              },
+              "database": {
+                "description": "Indica se a consulta foi resolvida com dados do cache",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/cnpj/{cnpj}": {
+      "get": {
+        "summary": "Receita Federal",
+        "operationId": "queryRFFree",
+        "tags": [
+          "API Pública"
+        ],
+        "description": "Método para recuperar as informações de uma empresa brasileira através\ndo seu CNPJ. As informações são exatamente as mesmas informações\nretornadas pelo site da Receita Federal Brasileira.\n\n### Rate Limits\n\nEsta API permite 3 consultas por minuto. No caso do limite ser\nexcedido, o código HTTP retornado é o `429`.\n\n### Timeouts\n\nNesta API Pública não há resolução de consultas que precisam dados\nem tempo real. Os dados são retornados apenas para consultas\nrealizadas no banco de dados. Outras consultas retornam o código\nHTTP `504` indicando timeout.\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json`)",
+        "parameters": [
+          {
+            "name": "cnpj",
+            "in": "path",
+            "description": "CNPJ a ser consultado sem formatação (12 caracteres alfanuméricos + 2 dígitos de DV)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 14,
+              "pattern": "[A-Z0-9]{12}[0-9]{2}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso (ver possíveis resultados)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/rfResultSuccess"
+                    },
+                    {
+                      "$ref": "#/components/schemas/resultInvalidCNPJ"
+                    },
+                    {
+                      "$ref": "#/components/schemas/rfResultRejected"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests"
+          },
+          "504": {
+            "description": "Timeout"
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json"
+      }
+    },
+    "/cnpj/{cnpj}/days/{days}": {
+      "get": {
+        "summary": "Receita Federal",
+        "operationId": "queryRF",
+        "tags": [
+          "API Comercial"
+        ],
+        "description": "Método para recuperar as informações da **Receita Federal** sobre uma\nempresa brasileira através do seu CNPJ e respeitando a defasagem máxima\ndos dados de acordo com o parâmetro `days`. As informações retornadas\nneste endpoint são exatamente as mesmas disponíveis no site da\nReceita Federal Brasileira.\n\nConsulte informações sobre a API Comercial e seus detalhes [aqui](/).\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json`)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cnpj",
+            "in": "path",
+            "description": "CNPJ a ser consultado sem formatação (12 caracteres alfanuméricos + 2 dígitos de DV)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 14,
+              "pattern": "[A-Z0-9]{12}[0-9]{2}"
+            }
+          },
+          {
+            "name": "days",
+            "in": "path",
+            "description": "Defasagem máxima dos dados",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "pattern": "[0-9]*"
+            }
+          },
+          {
+            "name": "fallback",
+            "in": "query",
+            "description": "Indica a estratégia de fallback da consulta",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "noCache",
+                "cacheOnError"
+              ],
+              "default": "cacheOnError"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso (ver possíveis resultados)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/rfResultSuccess"
+                    },
+                    {
+                      "$ref": "#/components/schemas/resultInvalidCNPJ"
+                    },
+                    {
+                      "$ref": "#/components/schemas/rfResultRejected"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Limites de consulta excedido"
+          },
+          "504": {
+            "description": "Timeout"
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json"
+      }
+    },
+    "/ccc/{cnpj}/days/{days}": {
+      "get": {
+        "summary": "Cadastro de Contribuinte (IE)",
+        "operationId": "queryCCC",
+        "tags": [
+          "API Comercial"
+        ],
+        "description": "Método para recuperar as informações do **Cadastro Centralizado de\nContribuinte (CCC)** de uma empresa brasileira através do seu CNPJ e\nrespeitando a defasagem máxima dos dados de acordo com o\nparâmetro `days`. Os dados retornados neste endpoint são referentes às\n**Inscrições Estaduais (IE)** da empresa.\n\nConsulte informações sobre a API Comercial e seus detalhes [aqui](/).\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json`)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cnpj",
+            "in": "path",
+            "description": "CNPJ a ser consultado sem formatação (12 caracteres alfanuméricos + 2 dígitos de DV)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 14,
+              "pattern": "[A-Z0-9]{12}[0-9]{2}"
+            }
+          },
+          {
+            "name": "days",
+            "in": "path",
+            "description": "Defasagem máxima dos dados",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "pattern": "[0-9]*"
+            }
+          },
+          {
+            "name": "fallback",
+            "in": "query",
+            "description": "Indica a estratégia de fallback da consulta",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "noCache",
+                "cacheOnError"
+              ],
+              "default": "cacheOnError"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso (ver possíveis resultados)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/cccResultSuccess"
+                    },
+                    {
+                      "$ref": "#/components/schemas/resultInvalidCNPJ"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Limites de consulta excedido"
+          },
+          "504": {
+            "description": "Timeout"
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json"
+      }
+    },
+    "/simples/{cnpj}/days/{days}": {
+      "get": {
+        "summary": "Simples Nacional",
+        "operationId": "querySimples",
+        "tags": [
+          "API Comercial"
+        ],
+        "description": "Método para recuperar as informações do **Simples Nacional** de uma\nempresa brasileira através do seu CNPJ e respeitando a defasagem máxima\ndos dados de acordo com o parâmetro `days`. Os dados retornados neste\nendpoint são exatamente os mesmos disponíveis no acesso através do\nsite da Consulta de Optantes do Simples Nacional.\n\nConsulte informações sobre a API Comercial e seus detalhes [aqui](/).\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json`)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cnpj",
+            "in": "path",
+            "description": "CNPJ a ser consultado sem formatação (12 caracteres alfanuméricos + 2 dígitos de DV)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 14,
+              "pattern": "[A-Z0-9]{12}[0-9]{2}"
+            }
+          },
+          {
+            "name": "days",
+            "in": "path",
+            "description": "Quantidade máxima de dias de defasagem dos dados",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "pattern": "[0-9]*"
+            }
+          },
+          {
+            "name": "fallback",
+            "in": "query",
+            "description": "Indica a estratégia de fallback da consulta",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "noCache",
+                "cacheOnError"
+              ],
+              "default": "cacheOnError"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/simplesResultSuccess"
+                    },
+                    {
+                      "$ref": "#/components/schemas/resultInvalidCNPJ"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Limites de consulta excedido"
+          },
+          "504": {
+            "description": "Timeout"
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json"
+      }
+    },
+    "/account/quota": {
+      "get": {
+        "summary": "Quota da Conta",
+        "operationId": "accountQuota",
+        "tags": [
+          "API Comercial"
+        ],
+        "description": "Recuperar informações sobre a quota de consultas disponíveis no\nciclo atual. As quotas são divididos em consultas realizadas diretamente\ndo nosso banco de dados (cache) e consultas realizadas em tempo real,\nou seja, consultas que necessitam uma atualização dos dados junto à\nReceita Federal.\n\nAs quotas são reiniciadas de acordo com o plano escolhido a cada mês\ne não são cumulativas.\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json`)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/accountQuotaResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json"
+      }
+    },
+    "/account/calls/report": {
+      "get": {
+        "summary": "Relatório de Consultas Realizadas",
+        "operationId": "accountCallsReport",
+        "tags": [
+          "API Comercial"
+        ],
+        "description": "Recuperar informações sobre os chamadas de API realizadas. Esta API\nretorna as **10mil** requisições mais recentes, excluindo consultas\nrealizadas nos últimos 2 minutos.\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json`)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/callsReportResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_developers_receitaws_com_br_receitaws_yaml_c91b4623.json"
+      }
+    }
+  }
+}

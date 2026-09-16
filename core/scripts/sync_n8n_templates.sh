@@ -65,7 +65,7 @@ check_dependencies() {
             ! is_active "${USE_EVOLUTION:-n}" && missing="${missing}USE_EVOLUTION "
             ! is_active "${USE_SHLINK:-n}" && missing="${missing}USE_SHLINK "
             ;;
-        "04_ocr_comprovante_pix_ia_docling.json")
+        "04_ocr_comprovante_pix_ia_markitdown.json")
             ! is_active "${USE_EVOLUTION:-n}" && missing="${missing}USE_EVOLUTION "
             ;;
         "05_marketing_360_postiz_listmonk_shlink.json")

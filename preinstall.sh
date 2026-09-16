@@ -83,34 +83,59 @@ if ! command -v dialog &>/dev/null || ! command -v git &>/dev/null; then
 fi
 
 # =========================================================================
-# 📥 CLONAGEM / SINCRONIZAÇÃO SILENCIOSA IMEDIATA DO REPOSITÓRIO (/opt/daemind)
+# 📥 CLONAGEM / SINCRONIZAÇÃO DO REPOSITÓRIO (/opt/daemind)
+# SRE IoC Guardrail: Prioriza estrutura local caso o operador esteja executando de um clone/cópia local
 # =========================================================================
 TARGET_DIR="${TARGET_DIR:-/opt/daemind}"
-REPO_URL="https://github.com/alcantaraw/daemind.git"
-CURRENT_GIT_BRANCH=""
-if [ -d "${TARGET_DIR}/.git" ]; then
-    CURRENT_GIT_BRANCH=$(cd "${TARGET_DIR}" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-fi
-REPO_BRANCH="${TARGET_BRANCH:-${CURRENT_GIT_BRANCH:-test}}"
+CURRENT_EXEC_DIR="$(pwd)"
+LOCAL_SOURCE_DIR=""
 
-if ! getent hosts github.com >/dev/null 2>&1; then
-    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf >/dev/null || true
-    echo "nameserver 1.1.1.1" | sudo tee -a /etc/resolv.conf >/dev/null || true
+# Se o script estiver sendo executado onde ./core/scripts/install.sh existe:
+if [ -d "${CURRENT_EXEC_DIR}/core/scripts" ]; then
+    LOCAL_SOURCE_DIR="${CURRENT_EXEC_DIR}"
+elif [ -d "$(dirname "$0")/core/scripts" ]; then
+    LOCAL_SOURCE_DIR="$(cd "$(dirname "$0")" && pwd)"
 fi
 
 sudo mkdir -p "${TARGET_DIR}"
-if [ -d "${TARGET_DIR}/.git" ]; then
-    (cd "${TARGET_DIR}" && sudo git fetch --all -q >/dev/null 2>&1 && sudo git checkout -f "${REPO_BRANCH}" >/dev/null 2>&1 || sudo git checkout -b "${REPO_BRANCH}" "origin/${REPO_BRANCH}" >/dev/null 2>&1 || true && sudo git reset --hard "origin/${REPO_BRANCH}" >/dev/null 2>&1)
-elif [ -d "${TARGET_DIR}" ] && [ "$(ls -A "${TARGET_DIR}" 2>/dev/null)" ]; then
-    TEMP_CLONE=$(mktemp -d)
-    sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TEMP_CLONE}" > /dev/null 2>&1 || true
-    if [ -d "${TEMP_CLONE}/core" ]; then
-        sudo cp -rf "${TEMP_CLONE}"/* "${TARGET_DIR}/" 2>/dev/null || true
-        sudo cp -rf "${TEMP_CLONE}"/.git "${TARGET_DIR}/" 2>/dev/null || true
-    fi
-    sudo rm -rf "${TEMP_CLONE}"
+
+if [ -n "$LOCAL_SOURCE_DIR" ] && [ "$LOCAL_SOURCE_DIR" != "$TARGET_DIR" ]; then
+    log_info "Detectada estrutura de instalação local em: ${LOCAL_SOURCE_DIR}"
+    log_info "Sincronizando arquivos locais para ${TARGET_DIR} (sem sobrescrever pelo Git remoto)..."
+    sudo cp -rf "${LOCAL_SOURCE_DIR}/core" "${TARGET_DIR}/" 2>/dev/null || true
+    [ -d "${LOCAL_SOURCE_DIR}/modules" ] && sudo cp -rf "${LOCAL_SOURCE_DIR}/modules" "${TARGET_DIR}/" 2>/dev/null || true
+    [ -f "${LOCAL_SOURCE_DIR}/preinstall.sh" ] && sudo cp -f "${LOCAL_SOURCE_DIR}/preinstall.sh" "${TARGET_DIR}/" 2>/dev/null || true
+    [ -f "${LOCAL_SOURCE_DIR}/autotune.sh" ] && sudo cp -f "${LOCAL_SOURCE_DIR}/autotune.sh" "${TARGET_DIR}/" 2>/dev/null || true
+    log_success "Estrutura local sincronizada com sucesso para ${TARGET_DIR}!"
+elif [ "$LOCAL_SOURCE_DIR" = "$TARGET_DIR" ]; then
+    log_info "Executando diretamente no diretório de destino (${TARGET_DIR}). Mantendo estrutura local."
 else
-    sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TARGET_DIR}" > /dev/null 2>&1 || true
+    log_info "Nenhuma estrutura local detectada. Puxando repositório oficial do GitHub..."
+    REPO_URL="https://github.com/alcantaraw/daemind.git"
+    CURRENT_GIT_BRANCH=""
+    if [ -d "${TARGET_DIR}/.git" ]; then
+        CURRENT_GIT_BRANCH=$(cd "${TARGET_DIR}" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+    fi
+    REPO_BRANCH="${TARGET_BRANCH:-${CURRENT_GIT_BRANCH:-test}}"
+
+    if ! getent hosts github.com >/dev/null 2>&1; then
+        echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf >/dev/null || true
+        echo "nameserver 1.1.1.1" | sudo tee -a /etc/resolv.conf >/dev/null || true
+    fi
+
+    if [ -d "${TARGET_DIR}/.git" ]; then
+        (cd "${TARGET_DIR}" && sudo git fetch --all -q >/dev/null 2>&1 && sudo git checkout -f "${REPO_BRANCH}" >/dev/null 2>&1 || sudo git checkout -b "${REPO_BRANCH}" "origin/${REPO_BRANCH}" >/dev/null 2>&1 || true && sudo git reset --hard "origin/${REPO_BRANCH}" >/dev/null 2>&1)
+    elif [ -d "${TARGET_DIR}" ] && [ "$(ls -A "${TARGET_DIR}" 2>/dev/null)" ]; then
+        TEMP_CLONE=$(mktemp -d)
+        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TEMP_CLONE}" > /dev/null 2>&1 || true
+        if [ -d "${TEMP_CLONE}/core" ]; then
+            sudo cp -rf "${TEMP_CLONE}"/* "${TARGET_DIR}/" 2>/dev/null || true
+            sudo cp -rf "${TEMP_CLONE}"/.git "${TARGET_DIR}/" 2>/dev/null || true
+        fi
+        sudo rm -rf "${TEMP_CLONE}"
+    else
+        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TARGET_DIR}" > /dev/null 2>&1 || true
+    fi
 fi
 
 # =========================================================================
@@ -777,23 +802,23 @@ if [ "$USE_TUI" = "true" ] && command -v dialog &>/dev/null; then
     # =====================================================================
     gerar_dialogrc
 
-    # 🖥️ Tela 0: Boas-vindas & Apresentação Oficial daemind. v2.0
+    # 🖥️ Tela 0: Boas-vindas & Apresentação Oficial daemind. v3.0
     BANNER_TEXT=$(cat << 'EOF'
 ============================================================
-             d a e m i n d .   v 2 . 0
+             d a e m i n d .   v 3 . 0
       Sistema Operacional Autônomo para Negócios Digitais
 ============================================================
 
-• Arquitetura SRE Production-Ready 2.0 (Zero-ETL Data Warehouse)
+• Arquitetura SRE Production-Ready 3.0 (Zero-ETL Data Warehouse)
 • Topologia Zero-Trust & Self-Hosted Soberana
 • Isolamento Perimetral & Virtualização Otimizada
 • Cockpit Executivo 360° & Hub de Inteligência de Negócios
 
-Bem-vindo ao Assistente de Deploy Automatizado do daemind v2.0.
+Bem-vindo ao Assistente de Deploy Automatizado do daemind v3.0.
 Navegue usando [Tab], [Setas], [Barra de Espaço] ou [Mouse].
 EOF
 )
-    tui_dialog --title "daemind. v2.0 - Sistema Operacional Autônomo" --msgbox "$BANNER_TEXT" 16 68 || true
+    tui_dialog --title "daemind. v3.0 - Sistema Operacional Autônomo" --msgbox "$BANNER_TEXT" 16 68 || true
 
     # 🔄 Tela 1: Reutilização de Cache (se existir)
     if [ -f "$CACHE_WIZARD_FILE" ]; then
@@ -1651,6 +1676,7 @@ IP_PGBOUNCER="${BASE_IP}.3"
 IP_REDIS="${BASE_IP}.4"
 IP_CADDY="${BASE_IP}.5"
 IP_LITELLM="${BASE_IP}.6"
+IP_MARKITDOWN="${BASE_IP}.7"
 
 # --- Descoberta Autônoma dos Módulos Desacoplados (Linha 2 de cada install_*.sh) ---
 ALL_NODES=()
@@ -1665,7 +1691,7 @@ done
 # Ordena todos os nós coletados em ordem alfabética estrita
 SORTED_NODES=($(printf "%s\n" "${ALL_NODES[@]}" | sort -u))
 
-IP_OFFSET=7
+IP_OFFSET=8
 MODULOS_NETWORK_VARS=()
 for node in "${SORTED_NODES[@]}"; do
     VAR_NAME="IP_${node}"
@@ -1755,6 +1781,7 @@ TS_EMAIL="${CLIENTE_EMAIL}"
 CHAVE_PUBLICA_B64="${CHAVE_PUBLICA_B64}"
 HASH_ESPERADO="${HASH_ESPERADO}"
 HOST_CADDY_PORT="80"
+HOST_MARKITDOWN_PORT="5001"
 LITELLM_MASTER_KEY="sk-admin-${DB_PASSWORD}"
 
 # --- Mapeamento Estático de Rede (SSOT Core) ---
@@ -1765,6 +1792,7 @@ IP_PGBOUNCER="$IP_PGBOUNCER"
 IP_REDIS="$IP_REDIS"
 IP_CADDY="$IP_CADDY"
 IP_LITELLM="$IP_LITELLM"
+IP_MARKITDOWN="$IP_MARKITDOWN"
 EOF
 
 # Injeção Dinâmica dos IPs dos Módulos Desacoplados

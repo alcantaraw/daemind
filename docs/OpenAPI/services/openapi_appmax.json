@@ -1,0 +1,3560 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Appmax Plataforma de Pagamentos & Checkout API",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack appmax.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://admin.appmax.com.br/api/v3"
+    }
+  ],
+  "paths": {
+    "/v1/customers": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/customers",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_customers_criar-atualizar_dbd53698.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_customers_criar-atualizar_dbd53698.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_customers_criar-atualizar_dbd53698.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/customers",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md"
+      }
+    },
+    "/v1/orders": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_orders_calculo-valor_77401f69.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_orders_calculo-valor_77401f69.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_orders_calculo-valor_77401f69.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/orders",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md"
+      }
+    },
+    "/v1/orders/shipping-tracking-code": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders/shipping-tracking-code",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_orders_codigo-rastreio_9f24b42d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_orders_codigo-rastreio_9f24b42d.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_orders_codigo-rastreio_9f24b42d.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/orders/shipping-tracking-code",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/v1/orders/{order_id}": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders/{order_id}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_orders_consultar-pedido_3d44b226.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_orders_consultar-pedido_3d44b226.md`)",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_orders_consultar-pedido_3d44b226.md"
+      }
+    },
+    "/v1/orders/upsell": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders/upsell",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_orders_upsell_8ebddbc8.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_orders_upsell_8ebddbc8.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_orders_upsell_8ebddbc8.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/orders/upsell",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/v1/payment-link": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payment-link",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md"
+      },
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payment-link",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payment-links_criar-link-pagamento_79bc13ad.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payment-links_criar-link-pagamento_79bc13ad.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payment-links_criar-link-pagamento_79bc13ad.md"
+      }
+    },
+    "/v1/payment-link/{payment_link_id}/orders": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payment-link/{payment_link_id}/orders",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md`)",
+        "parameters": [
+          {
+            "name": "payment_link_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md"
+      }
+    },
+    "/v1/payment-link/1/orders": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payment-link/1/orders",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payment-links_consultar-link-pagamento_dbaae2ca.md"
+      }
+    },
+    "/v1/payments/apple-pay": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payments/apple-pay",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_apple-pay-appmax-js_e438d27f.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_api-reference_payments_apple-pay-appmax-js_e438d27f.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_apple-pay-appmax-js_e438d27f.md"
+      },
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payments/apple-pay",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md"
+      }
+    },
+    "/v1/apple-pay/merchant-session": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/apple-pay/merchant-session",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md"
+      }
+    },
+    "/subdominio.do": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST //subdominio.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_apple-pay_f74ef7ee.md"
+      }
+    },
+    "/v1/payments/boleto": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payments/boleto",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_boleto_535708bc.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payments_boleto_535708bc.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_boleto_535708bc.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payments/boleto",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/payments/tokenizee": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payments/tokenizee",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md"
+      }
+    },
+    "/v1/payments/tokenize": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payments/tokenize",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payments/tokenize",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_assets_api-reference_payments_cartao-credito_md_COcdU2F3_lean_b8519685.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_assets_api-reference_payments_cartao-credito_md_COcdU2F3_lean_b8519685.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_assets_api-reference_payments_cartao-credito_md_COcdU2F3_lean_b8519685.md"
+      }
+    },
+    "/v1/payments/credit-card": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payments/credit-card",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_cartao-credito_bc58fabb.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payments/credit-card",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_assets_api-reference_payments_cartao-credito_md_COcdU2F3_lean_b8519685.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_assets_api-reference_payments_cartao-credito_md_COcdU2F3_lean_b8519685.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_assets_api-reference_payments_cartao-credito_md_COcdU2F3_lean_b8519685.md"
+      }
+    },
+    "/v1/payments/installments": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payments/installments",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_parcelas_e262bf1a.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payments_parcelas_e262bf1a.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_parcelas_e262bf1a.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payments/installments",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/v1/payments/pix": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/payments/pix",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_payments_pix_7537dd2d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_payments_pix_7537dd2d.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_payments_pix_7537dd2d.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/payments/pix",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/products/{id}": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/products/{id}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_products_atualizar-produto_284f0928.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_products_atualizar-produto_284f0928.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_products_atualizar-produto_284f0928.md"
+      },
+      "put": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PUT /v1/products/{id}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      },
+      "delete": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "DELETE /v1/products/{id}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/products": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/products",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_products_criar-produto_7a67fe5a.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_products_criar-produto_7a67fe5a.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_products_criar-produto_7a67fe5a.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/products",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/orders/refund-request": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders/refund-request",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_refunds_criar-estorno_56106472.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_refunds_criar-estorno_56106472.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_refunds_criar-estorno_56106472.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/orders/refund-request",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_assets_api-reference_refunds_criar-estorno_md_Reek-GFc_lean_j_16df9b4e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_assets_api-reference_refunds_criar-estorno_md_Reek-GFc_lean_j_16df9b4e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_assets_api-reference_refunds_criar-estorno_md_Reek-GFc_lean_j_16df9b4e.md"
+      }
+    },
+    "/v1/recipient/{recipient_hash}/withdraw-request/anticipation": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/recipient/{recipient_hash}/withdraw-request/anticipation",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_antecipacao_2250cebf.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_antecipacao_2250cebf.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_antecipacao_2250cebf.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/recipient/{recipient_hash}/withdraw-request/anticipation",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/recipient/{recipient_hash}/status": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/recipient/{recipient_hash}/status",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_consultar-recebedor_82a065cb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_consultar-recebedor_82a065cb.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_consultar-recebedor_82a065cb.md"
+      }
+    },
+    "/v1/withdraw-request/{withdrawRequestId}": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/withdraw-request/{withdrawRequestId}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_consultar-solicitacao-saque_f12f07aa.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_consultar-solicitacao-saque_f12f07aa.md`)",
+        "parameters": [
+          {
+            "name": "withdrawRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_consultar-solicitacao-saque_f12f07aa.md"
+      }
+    },
+    "/v1/recipient": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/recipient",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_criar-recebedor_045ac23b.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_criar-recebedor_045ac23b.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_criar-recebedor_045ac23b.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/recipient",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/orders/{orderId}/split-order": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders/{orderId}/split-order",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_criar-split-pedido_76c8be54.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_criar-split-pedido_76c8be54.md`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_criar-split-pedido_76c8be54.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/orders/{orderId}/split-order",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/recipient/{recipient_hash}/facematch-link": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/recipient/{recipient_hash}/facematch-link",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_facematch-link_972ba4a9.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_facematch-link_972ba4a9.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_facematch-link_972ba4a9.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/recipient/{recipient_hash}/facematch-link",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/recipient/{recipient_hash}/balances": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/recipient/{recipient_hash}/balances",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_saldos_a11389d3.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_saldos_a11389d3.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_saldos_a11389d3.md"
+      }
+    },
+    "/v1/recipient/{recipient_hash}/withdraw-request/available": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/recipient/{recipient_hash}/withdraw-request/available",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_saque-disponivel_0b0a60e0.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_saque-disponivel_0b0a60e0.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_saque-disponivel_0b0a60e0.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/recipient/{recipient_hash}/withdraw-request/available",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/recipient/{recipient_hash}/withdraw-request/anticipation/simulate": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/recipient/{recipient_hash}/withdraw-request/anticipation/simulate",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_split_simular-antecipacao_71f8d34c.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_split_simular-antecipacao_71f8d34c.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_split_simular-antecipacao_71f8d34c.md"
+      }
+    },
+    "/v1/subscriptions/{id}/products": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/products",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_adicionar-produtos_9d121a3e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_adicionar-produtos_9d121a3e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_adicionar-produtos_9d121a3e.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/subscriptions/{id}/products",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/charge-day": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/charge-day",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_alterar-dia-cobranca_0524f62c.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_alterar-dia-cobranca_0524f62c.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_alterar-dia-cobranca_0524f62c.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/charge-day",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/frequency": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/frequency",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_alterar-periodicidade_92e05fab.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_alterar-periodicidade_92e05fab.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_alterar-periodicidade_92e05fab.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/frequency",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/products/{variantId}/quantity": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/products/{variantId}/quantity",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_alterar-quantidade-produto_73a8ab9e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_alterar-quantidade-produto_73a8ab9e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_alterar-quantidade-produto_73a8ab9e.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/products/{variantId}/quantity",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/address": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/address",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_atualizar-endereco_527bc96d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_atualizar-endereco_527bc96d.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_atualizar-endereco_527bc96d.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/address",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/tag": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/tag",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_atualizar-tag_7a814883.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_atualizar-tag_7a814883.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_atualizar-tag_7a814883.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/tag",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/cancel": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/cancel",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_cancelar-assinatura_c597c8c7.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_cancelar-assinatura_c597c8c7.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_cancelar-assinatura_c597c8c7.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/cancel",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_consultar-assinatura_ce5ad54f.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_consultar-assinatura_ce5ad54f.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_consultar-assinatura_ce5ad54f.md"
+      }
+    },
+    "/v1/subscriptions": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_criar-assinatura_af73050e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_criar-assinatura_af73050e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_criar-assinatura_af73050e.md"
+      },
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /v1/subscriptions",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_assets_api-reference_subscriptions_criar-assinatura_md_CxOuRB_d6783886.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_assets_api-reference_subscriptions_criar-assinatura_md_CxOuRB_d6783886.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_assets_api-reference_subscriptions_criar-assinatura_md_CxOuRB_d6783886.md"
+      }
+    },
+    "/v1/subscriptions/{id}/cycles/{cycleIndex}/unskip": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/cycles/{cycleIndex}/unskip",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_desfazer-skip-ciclo_bccae17d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_desfazer-skip-ciclo_bccae17d.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cycleIndex",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_desfazer-skip-ciclo_bccae17d.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/cycles/{cycleIndex}/unskip",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cycleIndex",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/pause": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/pause",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_pausar-assinatura_8edf6342.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_pausar-assinatura_8edf6342.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_pausar-assinatura_8edf6342.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/pause",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/available-products": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/available-products",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_produtos-disponiveis_55417a6c.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_produtos-disponiveis_55417a6c.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_produtos-disponiveis_55417a6c.md"
+      }
+    },
+    "/v1/subscriptions/{id}/cycles/{cycleIndex}/skip": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/cycles/{cycleIndex}/skip",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_pular-ciclo_85974fce.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_pular-ciclo_85974fce.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cycleIndex",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_pular-ciclo_85974fce.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/cycles/{cycleIndex}/skip",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cycleIndex",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/activate": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/activate",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_reativar-assinatura_d683645e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_reativar-assinatura_d683645e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_reativar-assinatura_d683645e.md"
+      },
+      "patch": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "PATCH /v1/subscriptions/{id}/activate",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/v1/subscriptions/{id}/products/{variantId}": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/subscriptions/{id}/products/{variantId}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_api-reference_subscriptions_remover-produto_dad5a5be.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_api-reference_subscriptions_remover-produto_dad5a5be.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_api-reference_subscriptions_remover-produto_dad5a5be.md"
+      },
+      "delete": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "DELETE /v1/subscriptions/{id}/products/{variantId}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms_txt_a8b8d30e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms_txt_a8b8d30e.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms_txt_a8b8d30e.md"
+      }
+    },
+    "/ip": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /ip",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_appmax-js_10d0bdb3.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_appmax-js_10d0bdb3.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_appmax-js_10d0bdb3.md"
+      }
+    },
+    "/appmax/callback": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /appmax/callback",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_automatizar-criacao-credenciais_c1d56363.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_automatizar-criacao-credenciais_c1d56363.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_automatizar-criacao-credenciais_c1d56363.md"
+      }
+    },
+    "/v5/pgxpool": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v5/pgxpool",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_automatizar-criacao-credenciais_c1d56363.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_en_guides_automatizar-criacao-credenciais_c1d56363.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_automatizar-criacao-credenciais_c1d56363.md"
+      }
+    },
+    "/v1/orders/3531": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders/3531",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_exemplo-integracao_d114e60d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_en_guides_exemplo-integracao_d114e60d.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_exemplo-integracao_d114e60d.md"
+      }
+    },
+    "/v1/orders/4001": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/orders/4001",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_exemplo-parcelamento_778a152e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_en_guides_exemplo-parcelamento_778a152e.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_exemplo-parcelamento_778a152e.md"
+      }
+    },
+    "/app/authorize": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /app/authorize",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_external-id_59e64b31.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_external-id_59e64b31.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_external-id_59e64b31.md"
+      }
+    },
+    "/app/client/generate": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /app/client/generate",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_external-id_59e64b31.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_external-id_59e64b31.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_external-id_59e64b31.md"
+      }
+    },
+    "/oauth2/token": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /oauth2/token",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_faq_4cdb1801.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_faq_4cdb1801.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_faq_4cdb1801.md"
+      }
+    },
+    "/oauth2/tokenwith": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /oauth2/tokenwith",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_ia-ferramentas_c246ea22.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_ia-ferramentas_c246ea22.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_ia-ferramentas_c246ea22.md"
+      }
+    },
+    "/v1/customers.": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /v1/customers.",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_ia_0b48ef15.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_appmax_com_br_en_guides_ia_0b48ef15.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_ia_0b48ef15.md"
+      }
+    },
+    "/app/client/generateaborts": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /app/client/generateaborts",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_identificadores-do-app_65443184.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_identificadores-do-app_65443184.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_identificadores-do-app_65443184.md"
+      }
+    },
+    "/appmax/validate": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /appmax/validate",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_implementar-url-validacao_ba358aed.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_implementar-url-validacao_ba358aed.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_implementar-url-validacao_ba358aed.md"
+      }
+    },
+    "/oauth2/tokenbash": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /oauth2/tokenbash",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_instalacao_34dc9950.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_instalacao_34dc9950.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_instalacao_34dc9950.md"
+      }
+    },
+    "/app/authorizebash": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /app/authorizebash",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_instalacao_34dc9950.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_instalacao_34dc9950.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_instalacao_34dc9950.md"
+      }
+    },
+    "/app/client/generatebash": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /app/client/generatebash",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_instalacao_34dc9950.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_instalacao_34dc9950.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_instalacao_34dc9950.md"
+      }
+    },
+    "/subdomain.do": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST //subdomain.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_appmax_com_br_en_guides_recuperacao-vendas-ia_90e2099c.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`docs_appmax_com_br_en_guides_recuperacao-vendas-ia_90e2099c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_recuperacao-vendas-ia_90e2099c.md"
+      }
+    },
+    "/recipient": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/recipient/{recipient_hash}/facematch-link": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient/{recipient_hash}/facematch-link",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/recipient/{recipient_hash}/status": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /recipient/{recipient_hash}/status",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/orders/{orderId}/split-order": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /orders/{orderId}/split-order",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/recipient/{recipient_hash}/balances": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /recipient/{recipient_hash}/balances",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/recipient/{recipient_hash}/withdraw-request/anticipation/simulate": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /recipient/{recipient_hash}/withdraw-request/anticipation/simulate",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/recipient/{recipient_hash}/withdraw-request/anticipation": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient/{recipient_hash}/withdraw-request/anticipation",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/recipient/{recipient_hash}/withdraw-request/available": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient/{recipient_hash}/withdraw-request/available",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/withdraw-request/{withdrawRequestId}": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /withdraw-request/{withdrawRequestId}",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md`)",
+        "parameters": [
+          {
+            "name": "withdrawRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-pagamentos_dd77ccde.md"
+      }
+    },
+    "/recipient/{recipient_hash}/facematch-linkwith": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient/{recipient_hash}/facematch-linkwith",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-perguntas-frequentes_8f043216.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-perguntas-frequentes_8f043216.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-perguntas-frequentes_8f043216.md"
+      }
+    },
+    "/balances": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /balances",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-status_722bc7eb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-status_722bc7eb.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-status_722bc7eb.md"
+      }
+    },
+    "/recipient/{hash}/balances": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /recipient/{hash}/balances",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_en_guides_split-status_722bc7eb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_en_guides_split-status_722bc7eb.md`)",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_en_guides_split-status_722bc7eb.md"
+      }
+    },
+    "/oauth2/tokencom": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /oauth2/tokencom",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_guides_ia-ferramentas_adef54a6.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_guides_ia-ferramentas_adef54a6.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_guides_ia-ferramentas_adef54a6.md"
+      }
+    },
+    "/recipient/{recipient_hash}/facematch-linkcom": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient/{recipient_hash}/facematch-linkcom",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_guides_split-perguntas-frequentes_8aa9fc78.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_guides_split-perguntas-frequentes_8aa9fc78.md`)",
+        "parameters": [
+          {
+            "name": "recipient_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_guides_split-perguntas-frequentes_8aa9fc78.md"
+      }
+    },
+    "/recipient/{hash}/facematch-link": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient/{hash}/facematch-link",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/recipient/{hash}/status": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /recipient/{hash}/status",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/recipient/{hash}/withdraw-request/anticipation/simulate": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /recipient/{hash}/withdraw-request/anticipation/simulate",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/recipient/{hash}/withdraw-request/anticipation": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /recipient/{hash}/withdraw-request/anticipation",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/facematch-link": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /facematch-link",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/withdraw-request": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /withdraw-request",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/withdraw-request/available": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /withdraw-request/available",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/withdraw-request/anticipation": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /withdraw-request/anticipation",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/status": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /status",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/split-order/{id}/status": {
+      "get": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "GET /split-order/{id}/status",
+        "description": "Endpoint extraído da documentação (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/api.php": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /api.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/Http/Controllers/WebhookController.php": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /Http/Controllers/WebhookController.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    },
+    "/Jobs/ProcessWebhook.php": {
+      "post": {
+        "tags": [
+          "Appmax"
+        ],
+        "summary": "POST /Jobs/ProcessWebhook.php",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_appmax_com_br_llms-en_txt_0cefa435.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`docs_appmax_com_br_llms-en_txt_0cefa435.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "docs_appmax_com_br_llms-en_txt_0cefa435.md"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via token Bearer no cabeçalho Authorization."
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Autenticação padrão OAuth 2.0 (Authorization Code / Client Credentials).",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.dominio.com/oauth/authorize",
+            "tokenUrl": "https://api.dominio.com/oauth/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "webhooks": {
+    "total_paid": {
+      "description": "Notificação de webhook disparada no evento 'total_paid'.",
+      "post": {
+        "summary": "Evento de Webhook: total_paid",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "total_paid"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "total_paid": {
+      "description": "Notificação de webhook disparada no evento 'total_paid'.",
+      "post": {
+        "summary": "Evento de Webhook: total_paid",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "total_paid"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  }
+}

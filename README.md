@@ -110,7 +110,7 @@ Em vez de pagar centenas de dólares mensais por plataformas isoladas que cobram
 - **Radar de Oportunidades Cross-Sell & Upsell 360°**: Algoritmo de identificação automática de clientes híbridos com cálculo de *Share of Wallet* (% produtos vs % serviços) para acionamento de gatilhos no n8n.
 - **Atribuição First-Touch & Marketing 360°**: O **Listmonk** provisiona templates com tags UTM automáticas integradas ao **Shlink** (encurtador de links) e ao **Umami Analytics** (conversões sem cookies), gerando rastreabilidade completa de cliques até o checkout.
 - **WhatsApp ➔ CRM Zero-Touch**: A **Evolution API** auto-cria instâncias e conecta diretamente a Caixa de Entrada no **Chatwoot**, persistindo mídias e áudios no storage **MinIO S3**.
-- **AI Mesh Corporativa**: O **LiteLLM** atua como AI Gateway unificado conectando modelos na nuvem e locais (**Ollama**) para alimentar o Copiloto do **Chatwoot**, geração de posts do **Postiz**, automações do **n8n** e o chat corporativo do **Open WebUI** com OCR avançado via **Docling**.
+- **AI Mesh Corporativa**: O **LiteLLM** atua como AI Gateway unificado conectando modelos na nuvem e locais (**Ollama**) para alimentar o Copiloto do **Chatwoot**, geração de posts do **Postiz**, automações do **n8n** e o chat corporativo do **Open WebUI** com OCR avançado via **MarkItDown** & Tesseract.
 
 ### ✉️ 5. E-mail Marketing, Campanhas e Atribuição Soberana
 - **Disparos em Massa & Transacionais**: Envie newsletters, fluxos de onboarding e e-mails de confirmação de compra sem pagar por volume de contatos via **Listmonk**.
@@ -192,7 +192,7 @@ Cada aplicação opera como um módulo 100% desacoplado (`docker-compose.<modulo
 - 📈 **Umami Analytics**: Web analytics moderno, leve e 100% aderente à LGPD/GDPR sem cookies invasivos.
 - 🗄️ **MinIO S3 / Storage Flexível**: Gestão de mídias e arquivos (Soberano, Disco Local ou Cloud S3).
 - 📈 **Metabase BI**: Painéis analíticos, dashboards e relatórios executivos em tempo real.
-- 🦙 **Ollama & Docling**: Motor local de modelos de linguagem soberanos e OCR/parsing avançado de documentos.
+- 🦙 **Ollama & MarkItDown**: Motor local de modelos de linguagem soberanos e OCR/parsing avançado de documentos.
 
 > [!NOTE]
 > 📊 **Matriz de Versões Auditadas (SRE BOM):** Para a lista exaustiva de contêineres, tags e versões internas auditadas em tempo de execução, consulte o [Manual de Arquitetura & Engenharia SRE (docs/ARQUITETURA_E_ENGENHARIA_SRE.md)](docs/ARQUITETURA_E_ENGENHARIA_SRE.md#410-matriz-dinâmica-de-versões-e-imagens-docker-sre-bom).
@@ -209,7 +209,7 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 - 🔒 **Hardening Perimetral & Segurança Zero-Trust:** Regras estritas no Firewall IPTables, isolamento de rede privada e proteção contra acessos externos não autorizados.
 - ⚡ **Auto-Tuning Dinâmico de Hardware:** Inspeção autônoma do servidor (CPU, RAM e Disco) com otimização profunda de memória, CPU e I/O de disco aplicada individualmente a cada microsserviço para garantir máxima performance sem estouros.
 - 🐘 **Banco de Dados Escalável & Data Warehouse:** PostgreSQL 17 com `pgvector` e federação `postgres_fdw` unificando 100% dos microsserviços com **27 Views Analíticas Executivas** e Cockpit Omnichannel auto-injetado no Metabase e NocoDB.
-- 🤖 **AI Mesh Soberana, Web Search & Text-to-SQL:** Roteador de IA com failover resiliente via LiteLLM (atendendo Chatwoot, Postiz, n8n, Evolution, Open WebUI e Metabase Text-to-SQL), busca na web soberana com SearXNG, inferência local soberana (Ollama) e motor de OCR avançado para documentos (Docling).
+- 🤖 **AI Mesh Soberana, Web Search & Text-to-SQL:** Roteador de IA com failover resiliente via LiteLLM (atendendo Chatwoot, Postiz, n8n, Evolution, Open WebUI e Metabase Text-to-SQL), busca na web soberana com SearXNG, inferência local soberana (Ollama) e motor de extração de documentos e OCR (MarkItDown + Tesseract).
 - 🔑 **Identidade Global Unificada & SSOT de Credenciais:** Uma única conta universal (`$TS_EMAIL` + `$DB_PASSWORD`) autentica 100% dos painéis e integrações da stack com zero fricção de onboarding manual.
 - 🧼 **Sanitização de Segredos:** Expurgo automático de chaves e credenciais da memória após o boot para zero vazamento.
 
@@ -253,10 +253,10 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
   - ~~🗃️ **NocoDB como Painel de Gestão Visual (Listmonk & Shlink):** Vinculação declarativa das bases e views analíticas no **NocoDB**, permitindo visualização, segmentação e gestão de inscritos e links encurtados em formato de planilha visual (Airtable soberano).~~
   - ~~🗄️ **Armazenamento Desacoplado no NocoDB (MinIO S3 Attachments):** Injeção das variáveis de S3 (`NC_S3_BUCKET`, `NC_S3_KEY`, `NC_S3_SECRET`) roteando todos os uploads de anexos e mídias diretamente ao bucket dedicado `nocodb` do MinIO S3.~~
 
-- ~~✅ **[CONCLUÍDO] 🧠 IA Local Soberana & Parsing Avançado de Documentos (Open WebUI + Ollama + Docling)**~~
+- ~~✅ **[CONCLUÍDO] 🧠 IA Local Soberana & Parsing Avançado de Documentos (Open WebUI + Ollama + MarkItDown)**~~
   - ~~(Módulo Opcional de Alto Desempenho - Host com > 4 Cores e > 16GB RAM)~~
   - ~~Implementação de detecção dinâmica de capacidade de hardware desacoplada via `autotune.sh` no `preinstall.sh` (inspeção de RAM e CPU Cores).~~
-  - ~~Alocação inteligente e automatizada de sizing pesado dos serviços de inferência local (Ollama) e extração de documentos (Docling), garantindo alta performance em servidores dedicados e estabilidade sem travamentos em VPSs modestas.~~
+  - ~~Alocação inteligente e automatizada de sizing dos serviços de inferência local (Ollama) e extração de documentos (MarkItDown), garantindo alta performance em servidores dedicados e estabilidade sem travamentos em VPSs modestas.~~
 
 - ~~✅ **[CONCLUÍDO] 🔌 Desacoplamento da Rede Tailscale (`core/scripts/install_0ts.sh`) e Catálogo de IA (`core/scripts/install_1ia.sh`)**~~
   - ~~Isolamento da lógica de provisionamento, autenticação OAuth, criação de nós satélites, auto-cura/recovery e expurgo da rede VPN perimetral **Tailscale** no módulo padronizado `core/scripts/install_0ts.sh`.~~
@@ -264,7 +264,7 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 - ~~✅ **[CONCLUÍDO] 🧩 Arquitetura de Núcleo Core Único Imutável, Auto-Descoberta Total & Inversão de Controle (IoC)**~~
   - ~~Consolidação do **Núcleo Core Imutável** (PostgreSQL 17, PgBouncer, Redis, Caddy WAF e LiteLLM Gateway) em manifesto monolítico de alta coesão e performance.~~
-  - ~~Desacoplamento integral de **todos os serviços superiores** (**n8n**, **Open WebUI**, **Chatwoot**, **Evolution API**, **Postiz**, **NocoDB**, **S3MinIO**, **Metabase**, **Ollama** e **Docling**) em manifestos `docker-compose.<modulo>.yml` e scripts de ciclo de vida com contrato universal de 15 funções (`install_<modulo>.sh`).~~
+  - ~~Desacoplamento integral de **todos os serviços superiores** (**n8n**, **Open WebUI**, **Chatwoot**, **Evolution API**, **Postiz**, **NocoDB**, **S3MinIO**, **Metabase**, **Ollama** e **MarkItDown**) em manifestos `docker-compose.<modulo>.yml` e scripts de ciclo de vida com contrato universal de 15 funções (`install_<modulo>.sh`).~~
   - ~~Implementação do padrão **Inversion of Control (IoC)** no `preinstall.sh`: auto-descoberta total e dinâmica de perguntas (`collect_wizard_inputs`) e variáveis de ambiente (`build_envs`) com preservação estrita do **Wizard Cache** (`.daemind_wizard_cache.env`), eliminando para sempre edições manuais no `preinstall.sh` ao criar novos módulos.~~
   - ~~Consolidação do guia oficial de desenvolvimento de novas extensões em **[Manual de Engenharia SRE: Desacoplamento Modular & Integração de Novos Módulos (docs/MANUAL_DE_DESACOPLAMENTO_E_NOVOS_MODULOS.md)](docs/MANUAL_DE_DESACOPLAMENTO_E_NOVOS_MODULOS.md)**.~~
 
@@ -274,7 +274,7 @@ O **daemind.** não é apenas um conjunto de contêineres, mas uma infraestrutur
 
 O **daemind.** é uma solução de orquestração de infraestrutura, automação e integração que se conecta a múltiplos softwares de código aberto (*Open Source*) e plataformas/APIs de terceiros, incluindo:
 
-- 📦 **Pilha de Software Interna:** NocoDB, n8n, Evolution API, Chatwoot, Postiz, S3MinIO, LiteLLM, Open WebUI, PostgreSQL, PgBouncer, Redis, Caddy, Tailscale, Ollama, Docling, Metabase, entre outros.
+- 📦 **Pilha de Software Interna:** NocoDB, n8n, Evolution API, Chatwoot, Postiz, S3MinIO, LiteLLM, Open WebUI, PostgreSQL, PgBouncer, Redis, Caddy, Tailscale, Ollama, MarkItDown, Metabase, entre outros.
 - 🛍️ **Plataformas de E-commerce & Marketplaces Integrados ou a Integrar:** Loja Integrada, Mercado Livre, Amazon, Magalu, Shopee, Shopify, WooCommerce, Nuvemshop, Bling, Tiny ERP, etc.
 
 > [!NOTE]

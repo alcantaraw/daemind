@@ -26,7 +26,7 @@ O **daemind.** é projetado para rodar de forma leve e otimizada sobre qualquer 
 * **Armazenamento:** 60 GB+ em SSD ou NVMe
 * **Sistema Operacional:** Ubuntu Server (22.04 LTS, 24.04 LTS ou 26.04 LTS — *instalação mínima/headless*)
 
-### 🧠 Requisitos para Módulos de IA Local & OCR Pesado (Ollama / Docling):
+### 🧠 Requisitos para Módulos de IA Local Pesada (Ollama):
 * **Processador:** > 4 Cores (vCPUs)
 * **Memória RAM:** $\ge$ 16 GB
 * **GPU Dedicada com VRAM > 4 GB (Desktop ou Notebook/Mobile):**
@@ -227,7 +227,7 @@ O provisionamento do **daemind.** é **Low-Touch / Assistido**: em vez de exigir
   - `[X] Listmonk (E-mail Marketing & Transacional)`
   - `[X] Umami (Web Analytics & Privacidade sem Cookies)`
   - `[X] Shlink + Web Client (Encurtador de Links Soberano & UTMs)`
-  - `[ ] Ollama & Docling` *(Exibidos em hosts/notebooks com > 4 vCPUs, >= 16GB RAM e GPU dedicada compatível > 4GB VRAM: NVIDIA RTX, Radeon RX 6000-9000 ou Intel Arc)*.
+  - `[ ] Ollama` *(Exibido em hosts/notebooks com > 4 vCPUs, >= 16GB RAM e GPU dedicada compatível > 4GB VRAM: NVIDIA RTX, Radeon RX 6000-9000 ou Intel Arc)*.
 - **Arquitetura de Storage (`--radiolist`):** Define armazenamento Local Direto (disco), MinIO S3 Soberano (local) ou Provedor S3 Cloud Externo (Cloudflare R2 / AWS S3).
 
 #### 4️⃣ Passo 4/6: Malha de Inteligência Artificial (`--checklist` & `--mixedform`)
@@ -287,7 +287,9 @@ O wizard consulta interativamente se o operador deseja instalar cada uma das apl
 - **`Umami (Web Analytics)`** [`[S/n]`]: Telemetria web e privacidade sem cookies (Padrão: `S`).
 - **`Shlink (Encurtador de Links)`** [`[S/n]`]: Links encurtados, QR Codes e tags UTM (Padrão: `S`).
 - **`Ollama (Local AI Engine)`** [`[S/n]`]: Motor local de modelos de linguagem soberanos (Ativação condicionada a hosts/notebooks com **> 4 Cores, >= 16 GB RAM e GPU dedicada compatível > 4 GB VRAM**: NVIDIA RTX, Radeon RX 6000-9000 ou Intel Arc).
-- **`Docling (Document Parsing)`** [`[S/n]`]: Extração e OCR avançado de documentos e PDFs (Ativação condicionada a hosts com **> 4 Cores e >= 16 GB RAM** e com Open WebUI ou n8n ativos).
+
+> [!NOTE]
+> **Provisionamento Automático de OCR & Document Parsing:** O microsserviço **MarkItDown & Tesseract OCR** (`${PREFIX}_markitdown:5001`) é provisionado automaticamente de forma integrada caso o **Open WebUI** (`USE_OPENWEBUI=s`) **OU** o **n8n** (`USE_N8N=s`) estejam habilitados, fornecendo capacidade de extração e OCR sob demanda para ambos os ecossistemas com padrão Scale-to-Zero.
 
 > [!TIP]
 > **Normalização Estrita:** Todas as respostas são normalizadas automaticamente para `s` ou `n`. Caso o usuário desative um módulo (`N`), a esteira omitirá os containers, rotas de proxy WAF Caddy, cards no portal web e volume de dados do serviço, otimizando o consumo de RAM do servidor. O **Núcleo Core** (`PostgreSQL 17`, `PgBouncer`, `Redis`, `Caddy WAF` e `LiteLLM`) permanece sempre ativo e imutável.
@@ -345,7 +347,7 @@ O **daemind.** orquestra microsserviços organizados de forma desacoplada e aut�
 | **S3MinIO** | `${PREFIXO}_s3minio` | `s3minio` | `alpine/minio` | `latest-release` | **2025-10-25** | `9000` (API) / `9001` (UI) | Opcional Desacoplado |
 | **Metabase BI** | `${PREFIXO}_metabase` | `metabase` | `metabase/metabase` | `latest` | **0.63.14.3** | `3000` / `3030` | Opcional Desacoplado |
 | **Ollama AI** | `${PREFIXO}_ollama` | `ollama` | `ollama/ollama` | `latest` | **0.32.15** | `11434` | Opcional Desacoplado |
-| **Docling OCR** | `${PREFIXO}_docling` | `docling` | `quay.io/docling-project/docling-serve-cpu` | `latest` | **2.121.0** | `5001` | Opcional Desacoplado |
+| **MarkItDown & OCR** | `${PREFIXO}_markitdown` | `markitdown` | `${PREFIXO}_markitdown` | `latest` | **1.0.0** | `5001` | Opcional Desacoplado |
 | **Listmonk Mailer** | `${PREFIXO}_listmonk` | `listmonk` | `listmonk/listmonk` | `latest` | **6.2.0** | `9005` (9000) | Opcional Desacoplado |
 | **Umami Analytics** | `${PREFIXO}_umami` | `umami` | `ghcr.io/umami-software/umami` | `postgresql-latest` | **3.3.1** | `3008` (3000) | Opcional Desacoplado |
 | **Shlink API** | `${PREFIXO}_shlink` | `shlink` | `shlinkio/shlink` | `stable` | **5.1.5** | `8081` (8080) | Opcional Desacoplado |

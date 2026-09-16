@@ -17,7 +17,7 @@
   - `08_upsell_cross_sell_pos_aprovacao_shlink.json`: Disparo de oferta VIP em 1-clique baseado no radar de cross-sell.
   - `09_reativacao_clientes_inativos_rfm_listmonk.json`: Reativação segmentada de clientes inativos (> 60 dias) via Listmonk e WhatsApp.
 - **[ADD] Inteligência Conversacional, SDR & Chatbot com RAG:**
-  - `04_ocr_comprovante_pix_ia_docling.json`: Leitura multimodal de comprovantes PIX e conciliação atômica em milissegundos.
+  - `04_ocr_comprovante_pix_ia_markitdown.json`: Leitura multimodal de comprovantes PIX (MarkItDown/Tesseract) e conciliação atômica em milissegundos.
   - `10_sdr_qualificador_leads_whatsapp_chatwoot.json`: Triagem de leads, Lead Scoring (0-100) e alertas de oportunidades para corretores/vendedores.
   - `11_audio_transcriber_resumo_chatwoot.json`: Transcrição de áudios de clientes e injeção de resumo e sentimento em notas privadas no Chatwoot.
   - `14_copiloto_executivo_text_to_sql_whatsapp.json`: Copiloto Text-to-SQL para consulta de faturamento e DRE no WhatsApp em linguagem natural.
@@ -45,6 +45,17 @@
   - `29_gateway_asaas_stripe_pagarme_cobrancas.json`: Gateways (Asaas, Stripe, Pagar.me, PagBank e Efí Bank para PIX, Boleto e Assinaturas).
   - `30_delivery_ifood_rappi_pedidos_tempo_real.json`: Delivery (iFood, Rappi, Anota AI e Aiqfome com Comanda de Cozinha).
   - `31_hub_universal_roteador_webhooks_crm.json`: Roteador Universal e Fallback de Webhooks para qualquer sistema externo.
+
+---
+
+### 📄 Migração Arquitetural de Documentos & OCR (MarkItDown + Tesseract)
+
+- **[CHG] Substituição Completa do IBM Docling por MarkItDown & Tesseract OCR:**
+  - **Eficiência Extrema de Hardware:** Desativação do container pesado do IBM Docling (`quay.io/docling-project/docling-serve-cpu`, ~3.5GB+ e consumo de gigabytes de RAM em PyTorch) e substituição por microsserviço dedicado leve em `core/services/markitdown/` construído com `python:slim` (~350MB, ~80-150MB RAM).
+  - **Arquitetura Unificada:** MarkItDown para conversão estruturada de arquivos Office/PDFs vetoriais e Tesseract OCR (PT-BR/ENG) para escaneamentos, comprovantes PIX e imagens.
+  - **Open WebUI & n8n:** Integração nativa na porta `:5001` emulando endpoint Tika (`TIKA_SERVER_URL=http://markitdown:5001`) e barramento `MARKITDOWN_API_URL` no n8n.
+  - **Alocação de Rede no Core:** Alocação de IP estático `IP_MARKITDOWN="${BASE_IP}.7"` na malha principal em `preinstall.sh` e `install.sh`.
+  - **Contratos OpenAPI:** Publicação de `docs/OpenAPI/apps/openapi_markitdown.json`.
 
 ---
 

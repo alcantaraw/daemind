@@ -1,23 +1,20 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Dafiti, Kanui & Tricae (GFG) Marketplace API",
-    "description": "Especificação OpenAPI 3.0 consolidada para a stack dafiti.",
+    "title": "Dafiti (Seller Center / GFG) Marketplace API",
+    "description": "Especificação OpenAPI 3.0 sintetizada via tratamento local em texto para api.sellercenter.com.br.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://sellercenter-api.dafiti.com.br"
+      "url": "https://api.sellercenter.com.br"
     }
   ],
   "paths": {
-    "/v2/swagger.json": {
-      "post": {
-        "tags": [
-          "Dafiti"
-        ],
-        "summary": "POST /v2/swagger.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_2_docs_assets_swagger-ui-bundle_js.json).",
+    "/oauth/client-credentials": {
+      "get": {
+        "summary": "GET /oauth/client-credentials",
+        "description": "Extraído de tabela/cabeçalho de documentação.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -29,75 +26,355 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/product-update": {
+      "post": {
+        "summary": "POST /v2/import/product-update",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
-      },
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/product-creation": {
+      "post": {
+        "summary": "POST /v2/import/product-creation",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/product-creation-xml-import": {
+      "post": {
+        "summary": "POST /v2/import/product-creation-xml-import",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/product-update-xml-import": {
+      "post": {
+        "summary": "POST /v2/import/product-update-xml-import",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/product-removal": {
+      "post": {
+        "summary": "POST /v2/import/product-removal",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/stock-update": {
+      "post": {
+        "summary": "POST /v2/import/stock-update",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/product-stock-update-xml": {
+      "post": {
+        "summary": "POST /v2/import/product-stock-update-xml",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/import/image-update": {
+      "post": {
+        "summary": "POST /v2/import/image-update",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/users/import/api_keys/removal": {
+      "post": {
+        "summary": "POST /v2/users/import/api_keys/removal",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/users/import/seller_access": {
+      "post": {
+        "summary": "POST /v2/users/import/seller_access",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/users/import/status": {
+      "post": {
+        "summary": "POST /v2/users/import/status",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/orders": {
+      "get": {
+        "summary": "GET /v2/orders",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/orders/anonymize": {
+      "post": {
+        "summary": "POST /v2/orders/anonymize",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/orders/{orderId}": {
+      "get": {
+        "summary": "GET /v2/orders/{orderId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/orders/search": {
+      "get": {
+        "summary": "GET /v2/orders/search",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/v2/orders-counters": {
+      "get": {
+        "summary": "GET /v2/orders-counters",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_api_sellercenter_com_br_90e800e5.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_api_sellercenter_com_br_90e800e5.json"
+      }
+    },
+    "/oauth/...": {
       "get": {
         "tags": [
           "Dafiti"
         ],
-        "summary": "GET /v2/swagger.json",
-        "description": "Endpoint extraído da documentação (network_json_2_docs_assets_swagger-ui-bundle_js.json).",
+        "summary": "GET /oauth/...",
+        "description": "Endpoint extraído da documentação (api_sellercenter_com_br_doc_authorization_0d8b9b11.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`api_sellercenter_com_br_doc_authorization_0d8b9b11.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -109,100 +386,14 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "api_sellercenter_com_br_doc_authorization_0d8b9b11.md"
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para Dafiti, Kanui & Tricae (GFG) Marketplace API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para Dafiti, Kanui & Tricae (GFG) Marketplace API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para Dafiti, Kanui & Tricae (GFG) Marketplace API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://sellercenter-api.dafiti.com.br/oauth/authorize",
-            "tokenUrl": "https://sellercenter-api.dafiti.com.br/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em Dafiti, Kanui & Tricae (GFG) Marketplace API",
-              "write": "Gravação e mutação em Dafiti, Kanui & Tricae (GFG) Marketplace API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -231,22 +422,6 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
@@ -255,64 +430,32 @@
         ]
       }
     },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+    "securitySchemes": {
+      "ApiKey_token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token",
+        "description": "Chave de API enviada no cabeçalho token."
       },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+      "ApiKey_access_token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "access_token",
+        "description": "Chave de API enviada no cabeçalho access_token."
       },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Autenticação básica HTTP com usuário e senha ou token Base64."
       },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Autenticação padrão OAuth 2.0 (Authorization Code / Client Credentials).",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.dominio.com/oauth/authorize",
+            "tokenUrl": "https://api.dominio.com/oauth/token",
+            "scopes": {}
           }
         }
       }
@@ -320,44 +463,15 @@
   },
   "security": [
     {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
+      "ApiKey_token": []
     }
   ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack dafiti.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack dafiti.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
   "webhooks": {
-    "dafiti_event_notification": {
+    "status_canceled": {
+      "description": "Notificação de webhook disparada no evento 'status_canceled'.",
       "post": {
-        "summary": "Notificação de Eventos em Tempo Real (Dafiti, Kanui & Tricae (GFG) Marketplace API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Dafiti, Kanui & Tricae (GFG) Marketplace API.",
+        "summary": "Evento de Webhook: status_canceled",
         "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
           "required": true,
           "content": {
             "application/json": {
@@ -366,15 +480,15 @@
                 "properties": {
                   "event": {
                     "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
+                    "example": "status_canceled"
                   },
                   "data": {
                     "type": "object",
-                    "description": "Dados da entidade mutada."
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
                   }
                 }
               }
@@ -383,7 +497,44 @@
         },
         "responses": {
           "200": {
-            "description": "Webhook processado e confirmado com sucesso."
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "status_canceled": {
+      "description": "Notificação de webhook disparada no evento 'status_canceled'.",
+      "post": {
+        "summary": "Evento de Webhook: status_canceled",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "status_canceled"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
           }
         }
       }

@@ -1,0 +1,939 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Lalamove Entregas Rápidas Urbanas API",
+    "description": "Especificação OpenAPI 3.0 compilada via Postman Collection para app.",
+    "version": "2.3.0"
+  },
+  "servers": [
+    {
+      "url": "https://rest.sandbox.lalamove.com/v3"
+    }
+  ],
+  "paths": {
+    "/v3/quotations": {
+      "post": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Get Quotation (HK)",
+        "description": "Endpoint POST /v3/quotations\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      },
+      "get": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "GET /v3/quotations",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/orders": {
+      "post": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Place Order (HK)",
+        "description": "Endpoint POST /v3/orders\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      },
+      "get": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "GET /v3/orders",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/orders/{orderId}/priority-fee": {
+      "post": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Add Priority Fee (HK)",
+        "description": "Endpoint POST /v3/orders/{orderId}/priority-fee\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      },
+      "get": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "GET /v3/orders/{orderId}/priority-fee",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Get Order Details (HK)",
+        "description": "Endpoint GET /v3/orders/{orderId}\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      },
+      "patch": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Edit Order (HK)",
+        "description": "Endpoint PATCH /v3/orders/{orderId}\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      },
+      "delete": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Cancel Order (HK)",
+        "description": "Endpoint DELETE /v3/orders/{orderId}\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      }
+    },
+    "/v3/quotations/{quotationId}": {
+      "get": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Get Quotation Details (HK)",
+        "description": "Endpoint GET /v3/quotations/{quotationId}\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [
+          {
+            "name": "quotationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quotationId",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      }
+    },
+    "/v3/cities": {
+      "get": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Get City Info (HK)",
+        "description": "Endpoint GET /v3/cities\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [
+          {
+            "name": "quotationId",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      }
+    },
+    "/v3/orders/{orderId}/drivers/{driverId}": {
+      "get": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Get Driver Details (HK)",
+        "description": "Endpoint GET /v3/orders/{orderId}/drivers/{driverId}\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "driverId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      },
+      "delete": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "DELETE //v3/orders/{orderId}/drivers/{driverId}",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "driverId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/webhook": {
+      "patch": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Webhook",
+        "description": "Endpoint PATCH /v3/webhook\n\n---\n📍 **Origem:** Postman Public Collections (`native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Postman Public Collections",
+        "x-daemind-source-file": "native_openapi_spec_developers_lalamove_com_files_HK_postman_v3_4collection_json_a75fcf7b.json"
+      },
+      "get": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "GET /v3/webhook",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/orders/{id}": {
+      "get": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "GET /v3/orders/{id}",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/orders/{orderId}/drivers/{id}": {
+      "get": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "GET /v3/orders/{orderId}/drivers/{id}",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/quotationsand/v3/orders.": {
+      "get": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "GET /v3/quotationsand/v3/orders.",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_cca597d2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_lalamove_com_cca597d2.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_lalamove_com_cca597d2.md"
+      }
+    },
+    "/v3/webhook:": {
+      "patch": {
+        "tags": [
+          "Lalamove"
+        ],
+        "summary": "PATCH /v3/webhook:",
+        "description": "Endpoint extraído da documentação (developers_lalamove_com_files_v3_Webhook_v1_5_pdf_ab3aae43.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`developers_lalamove_com_files_v3_Webhook_v1_5_pdf_ab3aae43.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "developers_lalamove_com_files_v3_Webhook_v1_5_pdf_ab3aae43.md"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "ApiKey_API_KEY": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "API_KEY",
+        "description": "Chave de API enviada no cabeçalho API_KEY."
+      },
+      "ApiKey_TOKEN": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "TOKEN",
+        "description": "Chave de API enviada no cabeçalho TOKEN."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKey_API_KEY": []
+    }
+  ],
+  "webhooks": {
+    "order_created": {
+      "description": "Notificação de webhook disparada no evento 'ORDER_CREATED'.",
+      "post": {
+        "summary": "Evento de Webhook: ORDER_CREATED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "ORDER_CREATED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "concluded_canceled": {
+      "description": "Notificação de webhook disparada no evento 'concluded.CANCELED'.",
+      "post": {
+        "summary": "Evento de Webhook: concluded.CANCELED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "concluded.CANCELED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "order_completed": {
+      "description": "Notificação de webhook disparada no evento 'order.COMPLETED'.",
+      "post": {
+        "summary": "Evento de Webhook: order.COMPLETED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.COMPLETED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "order_created": {
+      "description": "Notificação de webhook disparada no evento 'ORDER_CREATED'.",
+      "post": {
+        "summary": "Evento de Webhook: ORDER_CREATED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "ORDER_CREATED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "concluded_canceled": {
+      "description": "Notificação de webhook disparada no evento 'concluded.CANCELED'.",
+      "post": {
+        "summary": "Evento de Webhook: concluded.CANCELED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "concluded.CANCELED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "order_completed": {
+      "description": "Notificação de webhook disparada no evento 'order.COMPLETED'.",
+      "post": {
+        "summary": "Evento de Webhook: order.COMPLETED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "order.COMPLETED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-ratelimit": {
+    "quotas": [],
+    "headers": [
+      "RateLimit-Limit"
+    ],
+    "status_code": 429,
+    "description": "Taxa de requisições limitada. Quotas documentadas: Consulte os headers. Em caso de excesso, a API retorna HTTP 429."
+  },
+  "x-idempotency": {
+    "supported": true,
+    "headers": [
+      "Request-ID"
+    ]
+  },
+  "x-retry-policy": {
+    "exponential_backoff": false,
+    "retryable_status_codes": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ]
+  }
+}

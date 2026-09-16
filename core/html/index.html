@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>daemind. | Infraestrutura Autônoma</title>
-    <link rel="icon" type="image/png" href="favicon.png?v=3">
-
+    <title>Agrolagos | Portal de Operações &amp; Inteligência Rural</title>
+    <link rel="icon" type="image/svg+xml" href="logo-agrolagos.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-overlay: rgba(15, 23, 42, 0.85);
-            --card-bg: rgba(30, 41, 59, 0.4);
-            --card-border: rgba(255, 255, 255, 0.05);
-            --card-border-hover: rgba(56, 189, 248, 0.4);
-            --accent-cyan: #00f0ff;
-            --accent-violet: #a855f7;
-            --text-primary: #ffffff;
+            --primary: #52673D;
+            --primary-light: #708c53;
+            --primary-dark: #374627;
+            --gold: #d4af37;
+            --gold-light: #f59e0b;
+            --emerald: #22c55e;
+            --card-bg: rgba(14, 25, 17, 0.75);
+            --card-border: rgba(112, 140, 83, 0.28);
+            --card-hover-border: rgba(212, 175, 55, 0.5);
+            --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-tertiary: #64748b;
+            --accent-cyan: #38bdf8;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: all 0.2s ease-in-out;
         }
 
         body {
-            background-color: #050b14;
-            background-image: url('bg-daemind.jpg');
+            background-color: #061109;
+            background-image: url('agrolagos_hero_bg_1789518686350.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -41,6 +46,7 @@
             align-items: center;
             overflow-x: hidden;
             position: relative;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body::before {
@@ -50,8 +56,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at center, transparent 0%, rgba(5, 11, 20, 0.8) 100%),
-                linear-gradient(to bottom, rgba(5, 11, 20, 0.6) 0%, rgba(5, 11, 20, 0.9) 100%);
+            background: 
+                radial-gradient(circle at 50% 20%, rgba(82, 103, 61, 0.3) 0%, transparent 60%),
+                linear-gradient(to bottom, rgba(6, 17, 9, 0.72) 0%, rgba(6, 17, 9, 0.88) 100%);
             z-index: 0;
             pointer-events: none;
         }
@@ -59,190 +66,219 @@
         .container {
             width: 100%;
             max-width: 1440px;
-            padding: 2rem 1.5rem;
+            padding: 2.5rem 1.5rem;
             z-index: 1;
         }
 
         header {
             text-align: center;
-            margin-bottom: 2.2rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(82, 103, 61, 0.3);
+            border: 1px solid rgba(112, 140, 83, 0.35);
+            padding: 5px 15px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #bbf7d0;
+            font-weight: 700;
+            margin-bottom: 14px;
+            backdrop-filter: blur(8px);
+        }
+
+        .brand-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--emerald);
+            box-shadow: 0 0 10px var(--emerald);
         }
 
         .brand {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             margin-bottom: 0.4rem;
         }
 
         .brand img {
-            width: 40px;
-            height: 40px;
-            filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.3));
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 4px 12px rgba(82, 103, 61, 0.5));
         }
 
         .brand h1 {
-            font-size: 2.2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.6rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            background: linear-gradient(135deg, #ffffff 40%, #e2e8f0 70%, #d4af37 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
+            color: #cbd5e1;
+            font-size: 1.05rem;
             font-weight: 400;
             letter-spacing: 0.3px;
+            margin-bottom: 12px;
+        }
+
+        .store-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            background: rgba(14, 25, 17, 0.65);
+            border: 1px solid rgba(112, 140, 83, 0.3);
+            border-radius: 8px;
+            padding: 6px 14px;
+            backdrop-filter: blur(8px);
+        }
+
+        .store-pill a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .store-pill a:hover {
+            text-decoration: underline;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 1.1rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.25rem;
             width: 100%;
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 1.15rem;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            position: relative;
-            overflow: hidden;
+            border-radius: 14px;
+            padding: 1.4rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 195px;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: all 0.25s ease;
+            position: relative;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.45);
         }
 
         .card:hover {
-            transform: translateY(-3px);
-            border-color: var(--card-border-hover);
-            box-shadow: 0 8px 24px -6px rgba(0, 240, 255, 0.18);
-            background: rgba(30, 41, 59, 0.65);
-        }
-
-        .card:hover::before {
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            transform: translateY(-4px);
+            background: rgba(20, 36, 24, 0.85);
+            border-color: var(--card-hover-border);
+            box-shadow: 0 16px 32px -8px rgba(82, 103, 61, 0.35);
         }
 
         .card-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
+            gap: 12px;
+            margin-bottom: 0.8rem;
         }
 
-        .icon {
-            font-size: 1.4rem;
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(82, 103, 61, 0.3);
+            border: 1px solid rgba(112, 140, 83, 0.35);
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
+            font-size: 1.3rem;
+            color: #bbf7d0;
+            flex-shrink: 0;
         }
 
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.68rem;
-            color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            padding: 2px 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
+        .card:hover .card-icon {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--gold);
         }
 
-        .status-dot {
-            width: 5px;
-            height: 5px;
-            background-color: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 6px #10b981;
-        }
-
-        .card h3 {
-            font-size: 1.05rem;
+        .card-title {
+            font-size: 1.15rem;
             font-weight: 700;
-            margin-bottom: 0.35rem;
-            color: var(--text-primary);
-            letter-spacing: -0.2px;
+            color: #ffffff;
         }
 
-        .card p.description {
+        .card-desc {
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            font-size: 0.8rem;
-            line-height: 1.4;
-            margin-bottom: 0.9rem;
+            line-height: 1.45;
+            margin-bottom: 1.2rem;
             flex-grow: 1;
         }
 
         .card-footer {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.72rem;
+            justify-content: space-between;
+            font-size: 0.8rem;
             color: var(--text-tertiary);
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 0.65rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 0.75rem;
         }
 
         .port {
             font-family: monospace;
             font-size: 0.75rem;
-            color: var(--accent-cyan);
-            background: rgba(0, 240, 255, 0.06);
-            padding: 1px 5px;
+            color: #86efac;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 2px 6px;
             border-radius: 4px;
             font-weight: 600;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .card-arrow {
+            color: var(--gold);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .footer-note {
             text-align: center;
-            margin-top: 2.5rem;
-            color: var(--text-tertiary);
-            font-size: 0.8rem;
+            margin-top: 2.8rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .secure-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.05);
-            padding: 4px 12px;
+            color: #86efac;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 5px 14px;
             border-radius: 16px;
-            border: 1px solid rgba(56, 189, 248, 0.1);
-            font-size: 0.75rem;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            font-size: 0.78rem;
+            font-weight: 600;
         }
 
         @media (max-width: 640px) {
@@ -251,7 +287,7 @@
             }
 
             .brand h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
             .grid {
@@ -264,11 +300,20 @@
 <body>
     <div class="container">
         <header>
-            <div class="brand">
-                <img src="favicon-daemind.png" alt="daemind.">
-                <h1>daemind.</h1>
+            <div class="brand-badge">
+                <span class="dot"></span>
+                Agrolagos Shopping Rural • Hub Operacional
             </div>
-            <p class="subtitle">Sistema Operacional Autônomo para Negócios Digitais</p>
+            <div class="brand">
+                <img src="logo-agrolagos.svg" alt="Agrolagos">
+                <h1>Agrolagos</h1>
+            </div>
+            <p class="subtitle">Central Inteligente de Serviços, Automação &amp; Inteligência Agrícola Integrada</p>
+            <div class="store-pill">
+                <span>🛒 Loja Oficial:</span>
+                <a href="https://www.agrolagos-shopping-rural.com.br/" target="_blank" rel="noopener noreferrer">agrolagos-shopping-rural.com.br</a>
+                <span>• Atendimento: (22) 99912-7900</span>
+            </div>
         </header>
 
         <div class="grid">
@@ -276,14 +321,14 @@
 
         <div class="footer-note">
             <div class="secure-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
-                Tráfego Criptografado (Tailscale Mesh)
+                Agrolagos OS • Tráfego Seguro Tailscale Mesh
             </div>
-            <span>daemind SRE Engine • Monitoramento Ativo</span>
+            <span>Infraestrutura Rural Gerenciada • Monitoramento &amp; SRE Engine Ativo</span>
         </div>
     </div>
 

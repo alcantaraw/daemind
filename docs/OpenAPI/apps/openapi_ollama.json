@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Ollama LLM Engine REST API",
-    "description": "Especificação OpenAPI 3.0 consolidada para a stack ollama.",
+    "description": "Especificação OpenAPI 3.0 sintetizada via tratamento local em texto para docs.ollama.com.",
     "version": "1.0.0"
   },
   "servers": [
@@ -11,13 +11,10 @@
     }
   ],
   "paths": {
-    "/api/generate": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api/generate",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+    "/api/delete": {
+      "delete": {
+        "summary": "DELETE /api/delete",
+        "description": "Extraído de exemplo cURL.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_ollama_com_559fcc3c.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -30,14 +27,40 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_ollama_com_559fcc3c.json"
       },
+      "get": {
+        "tags": [
+          "Ollama"
+        ],
+        "summary": "GET /api/delete",
+        "description": "Endpoint extraído da documentação (docs_ollama_com_api_delete_ea856278.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_ollama_com_api_delete_ea856278.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_ollama_com_api_delete_ea856278.md"
+      }
+    },
+    "/api/generate": {
       "get": {
         "tags": [
           "Ollama"
         ],
         "summary": "GET /api/generate",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "description": "Endpoint extraído da documentação (docs_ollama_com_api_8df71c4d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_ollama_com_api_8df71c4d.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -50,36 +73,18 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_ollama_com_api_8df71c4d.md"
       }
     },
-    "/api/chat": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api/chat",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/create": {
       "get": {
         "tags": [
           "Ollama"
         ],
-        "summary": "GET /api/chat",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "summary": "GET /create",
+        "description": "Endpoint derivado da referência oficial (create).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_ollama_com_api_create_16e329c3.md#create`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -92,16 +97,18 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_ollama_com_api_create_16e329c3.md#create"
       }
     },
-    "/api/embed": {
-      "post": {
+    "/api/create": {
+      "get": {
         "tags": [
           "Ollama"
         ],
-        "summary": "POST /api/embed",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "summary": "GET /api/create",
+        "description": "Endpoint extraído da documentação (docs_ollama_com_api_create_16e329c3.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_ollama_com_api_create_16e329c3.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -114,14 +121,66 @@
               }
             }
           }
-        }
-      },
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_ollama_com_api_create_16e329c3.md"
+      }
+    },
+    "/delete": {
+      "get": {
+        "tags": [
+          "Ollama"
+        ],
+        "summary": "GET /delete",
+        "description": "Endpoint derivado da referência oficial (delete).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_ollama_com_api_delete_ea856278.md#delete`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_ollama_com_api_delete_ea856278.md#delete"
+      }
+    },
+    "/embed": {
+      "get": {
+        "tags": [
+          "Ollama"
+        ],
+        "summary": "GET /embed",
+        "description": "Endpoint derivado da referência oficial (embed).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_ollama_com_api_embed_afd5a97e.md#embed`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_ollama_com_api_embed_afd5a97e.md#embed"
+      }
+    },
+    "/api/embed": {
       "get": {
         "tags": [
           "Ollama"
         ],
         "summary": "GET /api/embed",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "description": "Endpoint extraído da documentação (docs_ollama_com_api_embed_afd5a97e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_ollama_com_api_embed_afd5a97e.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -134,16 +193,18 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_ollama_com_api_embed_afd5a97e.md"
       }
     },
-    "/api/tags": {
+    "/generate": {
       "get": {
         "tags": [
           "Ollama"
         ],
-        "summary": "GET /api/tags",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "summary": "GET /generate",
+        "description": "Endpoint derivado da referência oficial (generate).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_ollama_com_api_generate_98fb0200.md#generate`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -156,7 +217,33 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_ollama_com_api_generate_98fb0200.md#generate"
+      }
+    },
+    "/ps": {
+      "get": {
+        "tags": [
+          "Ollama"
+        ],
+        "summary": "GET /ps",
+        "description": "Endpoint derivado da referência oficial (ps).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_ollama_com_api_ps_31193a4d.md#ps`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_ollama_com_api_ps_31193a4d.md#ps"
       }
     },
     "/api/ps": {
@@ -165,7 +252,7 @@
           "Ollama"
         ],
         "summary": "GET /api/ps",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "description": "Endpoint extraído da documentação (docs_ollama_com_api_ps_31193a4d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_ollama_com_api_ps_31193a4d.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -178,36 +265,18 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_ollama_com_api_ps_31193a4d.md"
       }
     },
-    "/api/show": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api/show",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/push": {
       "get": {
         "tags": [
           "Ollama"
         ],
-        "summary": "GET /api/show",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "summary": "GET /push",
+        "description": "Endpoint derivado da referência oficial (push).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_ollama_com_api_push_2aec78de.md#push`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -220,162 +289,18 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/create": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api/create",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/create",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/copy": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api/copy",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/copy",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/pull": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api/pull",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/pull",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_ollama_com_api_push_2aec78de.md#push"
       }
     },
     "/api/push": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api/push",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
       "get": {
         "tags": [
           "Ollama"
         ],
         "summary": "GET /api/push",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "description": "Endpoint extraído da documentação (docs_ollama_com_api_push_2aec78de.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_ollama_com_api_push_2aec78de.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -388,36 +313,18 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_ollama_com_api_push_2aec78de.md"
       }
     },
-    "/api/delete": {
-      "delete": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "DELETE /api/delete",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/streaming": {
       "get": {
         "tags": [
           "Ollama"
         ],
-        "summary": "GET /api/delete",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "summary": "GET /streaming",
+        "description": "Endpoint derivado da referência oficial (streaming).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_ollama_com_api_streaming_3987ae9d.md#streaming`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -430,117 +337,9 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/version": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/version",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/docs.json": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /docs.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/versionDefault": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/versionDefault",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/introduction": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/introduction",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/authentication": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/authentication",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_ollama_com_api_streaming_3987ae9d.md#streaming"
       }
     },
     "/api/streaming": {
@@ -549,7 +348,7 @@
           "Ollama"
         ],
         "summary": "GET /api/streaming",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
+        "description": "Endpoint extraído da documentação (docs_ollama_com_api_streaming_3987ae9d.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_ollama_com_api_streaming_3987ae9d.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -562,1186 +361,13 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/usage": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/usage",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/errors": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/errors",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/openai-compatibility": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/openai-compatibility",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/anthropic-compatibility": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/anthropic-compatibility",
-        "description": "Endpoint extraído da documentação (api-reference_get-version.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/messagesexample": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/messagesexample",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/messages": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/messages",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /v1/messages",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/messages/count_tokensToken": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/messages/count_tokensToken",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/messages/batchesfor": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/messages/batchesfor",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/anthropic-compatibility.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/anthropic-compatibility.md",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/messages": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/messages",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/messages/count_tokens": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/messages/count_tokens",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/messages/batches": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/messages/batches",
-        "description": "Endpoint extraído da documentação (api_anthropic-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/chat.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/chat.md",
-        "description": "Endpoint extraído da documentação (api_chat.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/copyCopy": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/copyCopy",
-        "description": "Endpoint extraído da documentação (api_copy.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/copy.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/copy.md",
-        "description": "Endpoint extraído da documentação (api_copy.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/create.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/create.md",
-        "description": "Endpoint extraído da documentação (api_create.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/deleteDelete": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/deleteDelete",
-        "description": "Endpoint extraído da documentação (api_delete.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/delete.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/delete.md",
-        "description": "Endpoint extraído da documentação (api_delete.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/embed.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/embed.md",
-        "description": "Endpoint extraído da documentação (api_embed.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/errors.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/errors.md",
-        "description": "Endpoint extraído da documentação (api_errors.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/generate.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/generate.md",
-        "description": "Endpoint extraído da documentação (api_generate.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/chat/completionsexample": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/chat/completionsexample",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/chat/completions": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/chat/completions",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /v1/chat/completions",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/responsesexample": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/responsesexample",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/responses": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/responses",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /v1/responses",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/chat/completionswith": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/chat/completionswith",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/completions": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/completions",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/models": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/models",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/models/{model}": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/models/{model}",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [
-          {
-            "name": "model",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/embeddings": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/embeddings",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/openai-compatibility.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/openai-compatibility.md",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/chat/completions-example": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/chat/completions-example",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/responses-example": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/responses-example",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/chat/completions-with-vision-example": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/chat/completions-with-vision-example",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/models/model": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1/models/model",
-        "description": "Endpoint extraído da documentação (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/psList": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/psList",
-        "description": "Endpoint extraído da documentação (api_ps.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ps.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/ps.md",
-        "description": "Endpoint extraído da documentação (api_ps.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/pull.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/pull.md",
-        "description": "Endpoint extraído da documentação (api_pull.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/push.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/push.md",
-        "description": "Endpoint extraído da documentação (api_push.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/generate.": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/generate.",
-        "description": "Endpoint extraído da documentação (api_streaming.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/streaming.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/streaming.md",
-        "description": "Endpoint extraído da documentação (api_streaming.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/tagsList": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/tagsList",
-        "description": "Endpoint extraído da documentação (api_tags.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/tags.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/tags.md",
-        "description": "Endpoint extraído da documentação (api_tags.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/generatemay": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/generatemay",
-        "description": "Endpoint extraído da documentação (api_usage.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/usage.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/usage.md",
-        "description": "Endpoint extraído da documentação (api_usage.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api-reference/openapi.json": {
-      "post": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "POST /api-reference/openapi.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (llms_txt.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/introduction.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/introduction.md",
-        "description": "Endpoint extraído da documentação (llms_txt.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/authentication.md": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /api/authentication.md",
-        "description": "Endpoint extraído da documentação (llms_txt.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1": {
-      "get": {
-        "tags": [
-          "Ollama"
-        ],
-        "summary": "GET /v1",
-        "description": "Endpoint extraído por declaração de rota (api_openai-compatibility.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_ollama_com_api_streaming_3987ae9d.md"
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para Ollama LLM Engine REST API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para Ollama LLM Engine REST API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para Ollama LLM Engine REST API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "http://ollama:11434/oauth/authorize",
-            "tokenUrl": "http://ollama:11434/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em Ollama LLM Engine REST API",
-              "write": "Gravação e mutação em Ollama LLM Engine REST API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -1770,161 +396,12 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
           "status",
           "detail"
         ]
-      }
-    },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      }
-    }
-  },
-  "security": [
-    {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
-    }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack ollama.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack ollama.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "ollama_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (Ollama LLM Engine REST API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Ollama LLM Engine REST API.",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
-        }
       }
     }
   }

@@ -11,583 +11,13 @@
     }
   ],
   "paths": {
-    "/api/v1/integra-o-de-an-ncios-da-olx": {
-      "get": {
-        "tags": [
-          "Integração De Anúncios Da Olx"
-        ],
-        "summary": "Consultar Integração De Anúncios Da Olx",
-        "description": "Recurso identificado na documentação (anuncio_api_ads_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Integração De Anúncios Da Olx"
-        ],
-        "summary": "Criar/Atualizar Integração De Anúncios Da Olx",
-        "description": "Operação de mutação para Integração De Anúncios Da Olx.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/oauth/token": {
-      "post": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "POST /oauth/token",
-        "description": "Endpoint extraído da documentação (anuncio_api_oauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "GET /oauth/token",
-        "description": "Endpoint extraído da documentação (anuncio_api_oauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/oauth_api/basic_user_info": {
-      "post": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "POST /oauth_api/basic_user_info",
-        "description": "Endpoint extraído da documentação (anuncio_api_oauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/oauth.php": {
-      "post": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "POST /oauth.php",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (anuncio_api_oauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/oauth": {
-      "get": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "GET /oauth",
-        "description": "Endpoint extraído por declaração de rota (anuncio_api_oauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/published": {
       "get": {
         "tags": [
           "Olx"
         ],
         "summary": "GET /v1/published",
-        "description": "Endpoint extraído da documentação (anuncio_api_published_ads_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_anuncio_api_published_ads_html_9acbecbc.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_anuncio_api_published_ads_html_9acbecbc.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -599,78 +29,29 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_anuncio_api_published_ads_html_9acbecbc.md"
       }
     },
-    "/api/v1/integra-o-de-an-ncios": {
-      "get": {
+    "/autoupload/v1/bump/ad/{list_id}": {
+      "put": {
         "tags": [
-          "Integração De Anúncios"
+          "Olx"
         ],
-        "summary": "Consultar Integração De Anúncios",
-        "description": "Recurso identificado na documentação (anuncio_home_html.md).",
-        "parameters": [],
+        "summary": "PUT /autoupload/v1/bump/ad/{list_id}",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -681,157 +62,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      },
-      "post": {
-        "tags": [
-          "Integração De Anúncios"
-        ],
-        "summary": "Criar/Atualizar Integração De Anúncios",
-        "description": "Operação de mutação para Integração De Anúncios.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
       }
     },
-    "/watch": {
+    "/api/oauth": {
       "get": {
         "tags": [
           "Olx"
         ],
-        "summary": "GET /watch",
-        "description": "Endpoint extraído por declaração de rota (anuncio_xml_real_estate_home_html.md).",
+        "summary": "GET /api/oauth",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -843,68 +86,538 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/import": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/import",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autos/sub_auto": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autos/sub_auto",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autos/{id}": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autos/sub_motorcycle",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autos/sub_bus": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autos/sub_bus",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autos/sub_truck": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autos/sub_truck",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autoparts/sub_autos": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autoparts/sub_autos",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autoparts/{id}": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autoparts/sub_motorcycle",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autoparts/sub_bus": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autoparts/sub_bus",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autoparts/sub_truck": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autoparts/sub_truck",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/autos/car_models": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/autos/car_models",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/electronics/{id}": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/electronics/sub_cellphone",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/electronics/cellphone_models": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/electronics/cellphone_models",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/real_estate/{id}": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/real_estate/sub_season",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/real_estate/sub_house": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/real_estate/sub_house",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/real_estate/sub_land": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/real_estate/sub_land",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/agro/agro": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/agro/agro",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/agro/rural_production": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/agro/rural_production",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/agro/industrial_production": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/agro/industrial_production",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/published_ads": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/published_ads",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/published_ads_deprecated": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/published_ads_deprecated",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/publishing_status": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/publishing_status",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/api/published_ads_status": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /api/published_ads_status",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
       }
     },
     "/v1/chat": {
@@ -913,7 +626,7 @@
           "Olx"
         ],
         "summary": "GET /v1/chat",
-        "description": "Endpoint extraído da documentação (chat_receive_message_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -925,150 +638,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/autoservice/v1/chat": {
-      "get": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "GET /autoservice/v1/chat",
-        "description": "Endpoint extraído por declaração de rota (chat_receive_message_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
       }
     },
     "/v1/chat/send": {
@@ -1077,7 +650,7 @@
           "Olx"
         ],
         "summary": "GET /v1/chat/send",
-        "description": "Endpoint extraído da documentação (chat_send_message_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -1089,312 +662,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/autoservice/v1/chat/send": {
-      "get": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "GET /autoservice/v1/chat/send",
-        "description": "Endpoint extraído por declaração de rota (chat_send_message_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/consulta-de-destaques": {
-      "get": {
-        "tags": [
-          "Consulta De Destaques"
-        ],
-        "summary": "Consultar Consulta De Destaques",
-        "description": "Recurso identificado na documentação (destaque_bumps_get_deprecated_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Consulta De Destaques"
-        ],
-        "summary": "Criar/Atualizar Consulta De Destaques",
-        "description": "Operação de mutação para Consulta De Destaques.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
       }
     },
     "/v1/bump/ads": {
@@ -1403,7 +674,7 @@
           "Olx"
         ],
         "summary": "GET /v1/bump/ads",
-        "description": "Endpoint extraído da documentação (destaque_bumps_get_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -1415,68 +686,91 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/v1/bump/ad/{list_id}": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /v1/bump/ad/{list_id}",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/autoservice/v1/chat": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /autoservice/v1/chat",
+        "description": "Endpoint extraído por declaração de rota (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Declaração Explícita de Rota (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Declaração Explícita de Rota",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
+      }
+    },
+    "/autoservice/v1/chat/send": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /autoservice/v1/chat/send",
+        "description": "Endpoint extraído por declaração de rota (developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md).\n\n---\n📍 **Origem:** Declaração Explícita de Rota (`developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Declaração Explícita de Rota",
+        "x-daemind-source-file": "developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.md"
       }
     },
     "/autoupload/bump/ad/{ad_id}": {
@@ -1485,7 +779,7 @@
           "Olx"
         ],
         "summary": "PUT /autoupload/bump/ad/{ad_id}",
-        "description": "Endpoint extraído da documentação (destaque_bumps_put_deprecated_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_destaque_bumps_put_deprecated_html_87de740e.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`developers_olx_com_br_destaque_bumps_put_deprecated_html_87de740e.md`)",
         "parameters": [
           {
             "name": "ad_id",
@@ -1506,574 +800,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/autoupload/v1/bump/ad/{list_id}": {
-      "put": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "PUT /autoupload/v1/bump/ad/{list_id}",
-        "description": "Endpoint extraído da documentação (destaque_bumps_put_html.md).",
-        "parameters": [
-          {
-            "name": "list_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/bump/ad/{list_id}": {
-      "get": {
-        "tags": [
-          "Olx"
-        ],
-        "summary": "GET /v1/bump/ad/{list_id}",
-        "description": "Endpoint extraído da documentação (destaque_bumps_put_html.md).",
-        "parameters": [
-          {
-            "name": "list_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/destaques": {
-      "get": {
-        "tags": [
-          "Destaques"
-        ],
-        "summary": "Consultar Destaques",
-        "description": "Recurso identificado na documentação (destaque_bumps_put_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Destaques"
-        ],
-        "summary": "Criar/Atualizar Destaques",
-        "description": "Operação de mutação para Destaques.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/integra-o-de-leads": {
-      "get": {
-        "tags": [
-          "Integração De Leads"
-        ],
-        "summary": "Consultar Integração De Leads",
-        "description": "Recurso identificado na documentação (lead_home_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Integração De Leads"
-        ],
-        "summary": "Criar/Atualizar Integração De Leads",
-        "description": "Operação de mutação para Integração De Leads.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "developers_olx_com_br_destaque_bumps_put_deprecated_html_87de740e.md"
       }
     },
     "/v1/lead": {
@@ -2082,7 +812,7 @@
           "Olx"
         ],
         "summary": "GET /v1/lead",
-        "description": "Endpoint extraído da documentação (lead_how_to_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_lead_how_to_html_05f1f110.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_lead_how_to_html_05f1f110.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2094,68 +824,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_lead_how_to_html_05f1f110.md"
       }
     },
     "/v1/lead/:id": {
@@ -2164,7 +836,7 @@
           "Olx"
         ],
         "summary": "GET /v1/lead/:id",
-        "description": "Endpoint extraído da documentação (lead_how_to_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_lead_how_to_html_05f1f110.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_lead_how_to_html_05f1f110.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2176,77 +848,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_lead_how_to_html_05f1f110.md"
       }
     },
-    "/v1/lead/154f10e7-2586-4699-be05-f3587ac7e4fe": {
+    "/v1/lead/{uuid}": {
       "get": {
         "tags": [
           "Olx"
         ],
         "summary": "GET /v1/lead/154f10e7-2586-4699-be05-f3587ac7e4fe",
-        "description": "Endpoint extraído da documentação (lead_how_to_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_lead_how_to_html_05f1f110.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_lead_how_to_html_05f1f110.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2258,68 +872,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_lead_how_to_html_05f1f110.md"
       }
     },
     "/v1/ads/renewals": {
@@ -2328,7 +884,7 @@
           "Olx"
         ],
         "summary": "GET /v1/ads/renewals",
-        "description": "Endpoint extraído da documentação (renewals_home_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_renewals_home_html_5d38cf7f.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_renewals_home_html_5d38cf7f.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2340,230 +896,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/api/v1/renova-o": {
-      "get": {
-        "tags": [
-          "Renovação"
-        ],
-        "summary": "Consultar Renovação",
-        "description": "Recurso identificado na documentação (renewals_home_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Renovação"
-        ],
-        "summary": "Criar/Atualizar Renovação",
-        "description": "Operação de mutação para Renovação.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_renewals_home_html_5d38cf7f.md"
       }
     },
     "/v1/notification": {
@@ -2572,7 +908,7 @@
           "Olx"
         ],
         "summary": "GET /v1/notification",
-        "description": "Endpoint extraído da documentação (webhooks_notifications_configuration_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_webhooks_notifications_configuration_html_3385e154.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_webhooks_notifications_configuration_html_3385e154.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -2584,68 +920,10 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_webhooks_notifications_configuration_html_3385e154.md"
       }
     },
     "/v1/notification/{id}": {
@@ -2654,7 +932,7 @@
           "Olx"
         ],
         "summary": "GET /v1/notification/{id}",
-        "description": "Endpoint extraído da documentação (webhooks_notifications_configuration_html.md).",
+        "description": "Endpoint extraído da documentação (developers_olx_com_br_webhooks_notifications_configuration_html_3385e154.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_olx_com_br_webhooks_notifications_configuration_html_3385e154.md`)",
         "parameters": [
           {
             "name": "id",
@@ -2675,100 +953,62 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_olx_com_br_webhooks_notifications_configuration_html_3385e154.md"
+      }
+    },
+    "/oauth": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /oauth",
+        "description": "Endpoint descoberto via análise estática do bundle JS (bundle_routes_developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.json).\n\n---\n📍 **Origem:** Bundle JS (Análise Estática) (`bundle_routes_developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Bundle JS (Análise Estática)",
+        "x-daemind-source-file": "bundle_routes_developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.json"
+      }
+    },
+    "/oauth/token": {
+      "get": {
+        "tags": [
+          "Olx"
+        ],
+        "summary": "GET /oauth/token",
+        "description": "Endpoint descoberto via análise estática do bundle JS (bundle_routes_developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.json).\n\n---\n📍 **Origem:** Bundle JS (Análise Estática) (`bundle_routes_developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Bundle JS (Análise Estática)",
+        "x-daemind-source-file": "bundle_routes_developers_olx_com_br_assets_app-76acc981_js_6b87bbf1.json"
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para OLX Brasil Marketplace & Integradores API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para OLX Brasil Marketplace & Integradores API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para OLX Brasil Marketplace & Integradores API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://api.olx.com.br/oauth/authorize",
-            "tokenUrl": "https://api.olx.com.br/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em OLX Brasil Marketplace & Integradores API",
-              "write": "Gravação e mutação em OLX Brasil Marketplace & Integradores API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -2797,22 +1037,6 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
@@ -2821,64 +1045,27 @@
         ]
       }
     },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via token Bearer no cabeçalho Authorization."
       },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+      "ApiKey_token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token",
+        "description": "Chave de API enviada no cabeçalho token."
       },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Autenticação padrão OAuth 2.0 (Authorization Code / Client Credentials).",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.dominio.com/oauth/authorize",
+            "tokenUrl": "https://api.dominio.com/oauth/token",
+            "scopes": {}
           }
         }
       }
@@ -2887,43 +1074,14 @@
   "security": [
     {
       "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
     }
   ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack olx.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack olx.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
   "webhooks": {
-    "olx_event_notification": {
+    "a_pending": {
+      "description": "Notificação de webhook disparada no evento 'a.pending'.",
       "post": {
-        "summary": "Notificação de Eventos em Tempo Real (OLX Brasil Marketplace & Integradores API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em OLX Brasil Marketplace & Integradores API.",
+        "summary": "Evento de Webhook: a.pending",
         "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
           "required": true,
           "content": {
             "application/json": {
@@ -2932,15 +1090,15 @@
                 "properties": {
                   "event": {
                     "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
+                    "example": "a.pending"
                   },
                   "data": {
                     "type": "object",
-                    "description": "Dados da entidade mutada."
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
                   }
                 }
               }
@@ -2949,7 +1107,394 @@
         },
         "responses": {
           "200": {
-            "description": "Webhook processado e confirmado com sucesso."
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "cliente_created": {
+      "description": "Notificação de webhook disparada no evento 'cliente.created'.",
+      "post": {
+        "summary": "Evento de Webhook: cliente.created",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "cliente.created"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "consulta_pending": {
+      "description": "Notificação de webhook disparada no evento 'consulta.pending'.",
+      "post": {
+        "summary": "Evento de Webhook: consulta.pending",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "consulta.pending"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "sucessometa_failed": {
+      "description": "Notificação de webhook disparada no evento 'sucessometa.failed'.",
+      "post": {
+        "summary": "Evento de Webhook: sucessometa.failed",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "sucessometa.failed"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "v_pending": {
+      "description": "Notificação de webhook disparada no evento 'v.pending'.",
+      "post": {
+        "summary": "Evento de Webhook: v.pending",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "v.pending"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "x_pending": {
+      "description": "Notificação de webhook disparada no evento 'x.pending'.",
+      "post": {
+        "summary": "Evento de Webhook: x.pending",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "x.pending"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "a_pending": {
+      "description": "Notificação de webhook disparada no evento 'a.pending'.",
+      "post": {
+        "summary": "Evento de Webhook: a.pending",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "a.pending"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "cliente_created": {
+      "description": "Notificação de webhook disparada no evento 'cliente.created'.",
+      "post": {
+        "summary": "Evento de Webhook: cliente.created",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "cliente.created"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "consulta_pending": {
+      "description": "Notificação de webhook disparada no evento 'consulta.pending'.",
+      "post": {
+        "summary": "Evento de Webhook: consulta.pending",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "consulta.pending"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "sucessometa_failed": {
+      "description": "Notificação de webhook disparada no evento 'sucessometa.failed'.",
+      "post": {
+        "summary": "Evento de Webhook: sucessometa.failed",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "sucessometa.failed"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "v_pending": {
+      "description": "Notificação de webhook disparada no evento 'v.pending'.",
+      "post": {
+        "summary": "Evento de Webhook: v.pending",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "v.pending"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "x_pending": {
+      "description": "Notificação de webhook disparada no evento 'x.pending'.",
+      "post": {
+        "summary": "Evento de Webhook: x.pending",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "x.pending"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
           }
         }
       }

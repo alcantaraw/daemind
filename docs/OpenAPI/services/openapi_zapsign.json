@@ -1,0 +1,808 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ZapSign Assinatura de Contratos via WhatsApp & E-mail API",
+    "description": "Especificação OpenAPI 3.0 sintetizada via tratamento local em texto para docs.zapsign.com.br.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.zapsign.com.br/api/v1"
+    }
+  ],
+  "paths": {
+    "/api/v1/users/{{user_email}}": {
+      "delete": {
+        "summary": "DELETE /api/v1/users/{{user_email}}",
+        "description": "Extraído de documentação interativa.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      },
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1/users/{{user_email}}",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_conta_excluir-usuario-da-conta_47293f76.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_conta_excluir-usuario-da-conta_47293f76.md`)",
+        "parameters": [
+          {
+            "name": "user_email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_conta_excluir-usuario-da-conta_47293f76.md"
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "summary": "GET /api/v1/users",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      }
+    },
+    "/api/v1/partner/company": {
+      "post": {
+        "summary": "POST /api/v1/partner/company",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      },
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1/partner/company",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_criar-conta_9f3ad7be.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_criar-conta_9f3ad7be.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_criar-conta_9f3ad7be.md"
+      }
+    },
+    "/api/v1/checks/{{check_id}}/details": {
+      "get": {
+        "summary": "GET /api/v1/checks/{{check_id}}/details",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      }
+    },
+    "/api/v1/docs/{{doc_principal_token}}/upload-extra-doc": {
+      "post": {
+        "summary": "POST /api/v1/docs/{{doc_principal_token}}/upload-extra-doc",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      },
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1/docs/{{doc_principal_token}}/upload-extra-doc",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_documentos_adicionar-anexo-documento-extra_5f5fdb79.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_documentos_adicionar-anexo-documento-extra_5f5fdb79.md`)",
+        "parameters": [
+          {
+            "name": "doc_principal_token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_documentos_adicionar-anexo-documento-extra_5f5fdb79.md"
+      }
+    },
+    "/api/v1/docs": {
+      "get": {
+        "summary": "GET /api/v1/docs",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      }
+    },
+    "/api/v1/validate-pdf-signature": {
+      "post": {
+        "summary": "POST /api/v1/validate-pdf-signature",
+        "description": "Extraído de documentação interativa.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      },
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1/validate-pdf-signature",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_documentos_validacao-de-assinaturas_3a942029.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_documentos_validacao-de-assinaturas_3a942029.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_documentos_validacao-de-assinaturas_3a942029.md"
+      }
+    },
+    "/api/v1/templates/create": {
+      "post": {
+        "summary": "POST /api/v1/templates/create",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      },
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1/templates/create",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md"
+      }
+    },
+    "/api/v1/partner/update-payment-status": {
+      "post": {
+        "summary": "POST /api/v1/partner/update-payment-status",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      },
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1/partner/update-payment-status",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_parcerias_atualizar-status-de-pagamento_9a388021.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_parcerias_atualizar-status-de-pagamento_9a388021.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_parcerias_atualizar-status-de-pagamento_9a388021.md"
+      }
+    },
+    "/api/v1/refuse/by-user": {
+      "post": {
+        "summary": "POST /api/v1/refuse/by-user",
+        "description": "Extraído de documentação interativa.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_zapsign_com_br_c1a1b87a.json"
+      },
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1/refuse/by-user",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_signatarios_reprovar-documentos-pelo-usuario_a272dbef.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_signatarios_reprovar-documentos-pelo-usuario_a272dbef.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_signatarios_reprovar-documentos-pelo-usuario_a272dbef.md"
+      }
+    },
+    "/api/v1": {
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/v1",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_ambiente-de-testes_61c020b3.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_ambiente-de-testes_61c020b3.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_ambiente-de-testes_61c020b3.md"
+      }
+    },
+    "/v1/checks/CHKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/details": {
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /v1/checks/CHKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/details",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_detalhe-do-check_828dddcb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_detalhe-do-check_828dddcb.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_detalhe-do-check_828dddcb.md"
+      }
+    },
+    "/v1/checks/CHKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/details": {
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /v1/checks/CHKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/details",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_detalhe-do-check_828dddcb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_detalhe-do-check_828dddcb.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_detalhe-do-check_828dddcb.md"
+      }
+    },
+    "/webhooks/como-funciona": {
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /webhooks/como-funciona",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_documentos_listar-documentos_md_8a3b6da2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_documentos_listar-documentos_md_8a3b6da2.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_documentos_listar-documentos_md_8a3b6da2.md"
+      }
+    },
+    "/como-funciona-o-wid": {
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /como-funciona-o-wid",
+        "description": "Endpoint extraído do índice de navegação (Como funciona o Wid).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`docs_zapsign_com_br_llms_txt_3553b734.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "docs_zapsign_com_br_llms_txt_3553b734.md"
+      }
+    },
+    "/dev/2025/1/docs/{uuid}/{uuid}.do": {
+      "post": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "POST /dev/2025/1/docs/1b1e8e16-b9ce-45f4-8dc8-c0320af371a5/29812f55-eb17-4182-b65e-09e895a861ad.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md"
+      }
+    },
+    "/dev/2025/1/api/{uuid}.do": {
+      "post": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "POST /dev/2025/1/api/45f39edb-c78d-42e4-a450-22cd7c62d656.do",
+        "description": "Endpoint RPC/REST detectado nos exemplos da API (docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md).\n\n---\n📍 **Origem:** Exemplos de Código / Scripts (`docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Exemplos de Código / Scripts",
+        "x-daemind-source-file": "docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md"
+      }
+    },
+    "/api/{uuid}.docx": {
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /api/45f39edb-c78d-42e4-a450-22cd7c62d656.docx",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_modelos_create-template-docx_85875ec9.md"
+      }
+    },
+    "/webhooks/logs-de-webhooks": {
+      "get": {
+        "tags": [
+          "Zapsign"
+        ],
+        "summary": "GET /webhooks/logs-de-webhooks",
+        "description": "Endpoint extraído da documentação (docs_zapsign_com_br_webhooks_logs-de-webhooks_899bfc89.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_zapsign_com_br_webhooks_logs-de-webhooks_899bfc89.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_zapsign_com_br_webhooks_logs-de-webhooks_899bfc89.md"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via token Bearer no cabeçalho Authorization."
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "webhooks": {
+    "doc_created": {
+      "description": "Notificação de webhook disparada no evento 'doc_created'.",
+      "post": {
+        "summary": "Evento de Webhook: doc_created",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "doc_created"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "doc_deleted": {
+      "description": "Notificação de webhook disparada no evento 'doc_deleted'.",
+      "post": {
+        "summary": "Evento de Webhook: doc_deleted",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "doc_deleted"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "doc_created": {
+      "description": "Notificação de webhook disparada no evento 'doc_created'.",
+      "post": {
+        "summary": "Evento de Webhook: doc_created",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "doc_created"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "doc_deleted": {
+      "description": "Notificação de webhook disparada no evento 'doc_deleted'.",
+      "post": {
+        "summary": "Evento de Webhook: doc_deleted",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "doc_deleted"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  }
+}

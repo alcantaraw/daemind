@@ -173,7 +173,7 @@
           "authentication"
         ],
         "summary": "Get Access Token",
-        "description": "Requests new access token for accessing Keeta API resources. <br>\n**If you have completed the development in full compliance with the Open Delivery native protocol's `grant_type=client_credentials`, please contact Keeta.**<br>\n**If you have already completed development using `grant_type=client_credentials` and have passed SIT certification or are already in production, you can continue to use `grant_type=client_credentials` without any impact.**\n> **IMPORTANT:**  The Software Service must obtain the merchant’s authorization before accessing their data.\n\n\n##### APP Level Token mode\n1. **Application-level access_token**: The access_token can be used to access all stores authorized\n2. **grant_type = app_level_token**: Generate and refresh access_token\n##### Shop Level Authorization Code mode\n1. **Store-level access_token**: The access_token can be used to access one store authorized\n2. **grant_type = shop_level_authorization_code**: Use `authorization_code` to generate access_token, and return `refresh_token` for subsequent refresh\n3. **grant_type = refresh_toke**n: Use this parameter to refresh a new `access_token` and `refresh_token`, before the old `access_token` expires.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Requests new access token for accessing Keeta API resources. <br>\n**If you have completed the development in full compliance with the Open Delivery native protocol's `grant_type=client_credentials`, please contact Keeta.**<br>\n**If you have already completed development using `grant_type=client_credentials` and have passed SIT certification or are already in production, you can continue to use `grant_type=client_credentials` without any impact.**\n> **IMPORTANT:**  The Software Service must obtain the merchant’s authorization before accessing their data.\n\n\n##### APP Level Token mode\n1. **Application-level access_token**: The access_token can be used to access all stores authorized\n2. **grant_type = app_level_token**: Generate and refresh access_token\n##### Shop Level Authorization Code mode\n1. **Store-level access_token**: The access_token can be used to access one store authorized\n2. **grant_type = shop_level_authorization_code**: Use `authorization_code` to generate access_token, and return `refresh_token` for subsequent refresh\n3. **grant_type = refresh_toke**n: Use this parameter to refresh a new `access_token` and `refresh_token`, before the old `access_token` expires.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "requestBody": {
           "required": true,
           "content": {
@@ -236,58 +236,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/oauth/authorization/url": {
@@ -298,7 +250,7 @@
           "authentication"
         ],
         "summary": "Get Authorization URL",
-        "description": "Get Keeta merchant authorization link for merchant authorization process.<br>\n\n> **NOTE:** Merchants can click this link to complete the authorization process.\n\nThe returned URL can be used to redirect merchants to Keeta's authorization page.\n\nURL Example: \"https://merchant.mykeeta.com/m/web/openapi/authorize?locale=en&region=BR&cityId=110200008&risk_cost_id=&responseType=client_credentials&appId=2123830428&redirectUri=&state=&scope=all/#/app-activation\"<br>\n\n**Authorization Flow:**\nIf Software Services wants merchants to be redirected to your own page after authorization, you can set the `redirectUri` parameter accordingly. \n\nWhen the merchant completes authorization, they will be redirected to your specified `redirectUri` with the following parameters appended:\n\n```\nredirectUri?authId=authId&state=%s&appId=%s&timestamp=%s&keetaMerchantId=%s&code=%s\n```\n\n**Parameter definitions:**\n- **`authId`**: Unique authorization identifier for this specific authorization session. Use this ID for subsequent API calls.\n- **`state`**: State parameter for request/response correlation (matches your original request)\n- **`appId`**: Your application identifier\n- **`timestamp`**: Authorization completion timestamp\n- **`keetaMerchantId`**: The merchant ID generated by Keeta, **only returned when the application is in `shop_level_authorization_code` mode**\n- **`code`**: The authorization code generated by Keeta, **only returned when the application is in `shop_level_authorization_code` mode**\n <br>\n\nFor detailed workflow, please refer to: [Merchant Self-serve Authorization](#tag/Merchant-Self-serve-Authorization)\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>",
+        "description": "Get Keeta merchant authorization link for merchant authorization process.<br>\n\n> **NOTE:** Merchants can click this link to complete the authorization process.\n\nThe returned URL can be used to redirect merchants to Keeta's authorization page.\n\nURL Example: \"https://merchant.mykeeta.com/m/web/openapi/authorize?locale=en&region=BR&cityId=110200008&risk_cost_id=&responseType=client_credentials&appId=2123830428&redirectUri=&state=&scope=all/#/app-activation\"<br>\n\n**Authorization Flow:**\nIf Software Services wants merchants to be redirected to your own page after authorization, you can set the `redirectUri` parameter accordingly. \n\nWhen the merchant completes authorization, they will be redirected to your specified `redirectUri` with the following parameters appended:\n\n```\nredirectUri?authId=authId&state=%s&appId=%s&timestamp=%s&keetaMerchantId=%s&code=%s\n```\n\n**Parameter definitions:**\n- **`authId`**: Unique authorization identifier for this specific authorization session. Use this ID for subsequent API calls.\n- **`state`**: State parameter for request/response correlation (matches your original request)\n- **`appId`**: Your application identifier\n- **`timestamp`**: Authorization completion timestamp\n- **`keetaMerchantId`**: The merchant ID generated by Keeta, **only returned when the application is in `shop_level_authorization_code` mode**\n- **`code`**: The authorization code generated by Keeta, **only returned when the application is in `shop_level_authorization_code` mode**\n <br>\n\nFor detailed workflow, please refer to: [Merchant Self-serve Authorization](#tag/Merchant-Self-serve-Authorization)\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "parameters": [
           {
             "name": "clientId",
@@ -344,58 +296,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/oauth/authorized/{authId}/merchantInfo": {
@@ -413,7 +317,7 @@
           "authentication"
         ],
         "summary": "Get Authorized Merchant Store List",
-        "description": "Retrieves authorized merchant store list with basic store information and pagination data.<br>\n\n> **IMPORTANT:** Valid access token required to access this endpoint.\n\nReturns all authorized store information for the specified authorization ID with pagination support.\n\n> **USE CASE:** This endpoint is commonly used for **store binding** functionality, allowing service providers to retrieve authorized store details and bind them to their own systems for shop onboarding.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>",
+        "description": "Retrieves authorized merchant store list with basic store information and pagination data.<br>\n\n> **IMPORTANT:** Valid access token required to access this endpoint.\n\nReturns all authorized store information for the specified authorization ID with pagination support.\n\n> **USE CASE:** This endpoint is commonly used for **store binding** functionality, allowing service providers to retrieve authorized store details and bind them to their own systems for shop onboarding.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "parameters": [
           {
             "name": "authId",
@@ -493,48 +397,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/webhook/authorization": {
@@ -557,7 +423,7 @@
             }
           }
         ],
-        "description": "**Webhook Endpoint for Software Services**<br>\n\nThis endpoint should be implemented by Software Services to receive authorization status change notifications from Keeta system.<br>\n\n> **IMPORTANT:** This is an endpoint you need to implement on your server.\n\n**How to configure webhooks**  You can log in to the Developer Portal, where there is a webhook configuration section. You can configure webhooks there.\nPlease focus only on the webhook configuration for Formal Store. 1301 represents the webhook for new authorization notifications, and 1302 represents the webhook for authorization cancellation notifications.\n\n<p><img src=\"/apis/@opendelivery/images/webhook_for_authorization.jpg\" /></p>\n\n**Notification Triggers:**\n- Merchant adds new store authorization\n- Merchant cancels store authorization\n\n**Technical Requirements:**\n- **Method:** HTTP POST\n- **Content-Type:** application/json\n- **Response Time:** Recommended within 5 seconds\n- **HTTP Status:** Must return 200 for success\n- **Response Format:** JSON with code and message fields\n\n**Best Practices:**\n- **Idempotency:** Use authId and opType to ensure operation idempotency\n- **Async Processing:** Respond quickly, process business logic asynchronously\n- **Logging:** Log all received notifications for troubleshooting\n- **Monitoring:** Set up monitoring and alerting for webhook reception\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Service Provider**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTOA_SS.png\" />\n</div> ",
+        "description": "**Webhook Endpoint for Software Services**<br>\n\nThis endpoint should be implemented by Software Services to receive authorization status change notifications from Keeta system.<br>\n\n> **IMPORTANT:** This is an endpoint you need to implement on your server.\n\n**How to configure webhooks**  You can log in to the Developer Portal, where there is a webhook configuration section. You can configure webhooks there.\nPlease focus only on the webhook configuration for Formal Store. 1301 represents the webhook for new authorization notifications, and 1302 represents the webhook for authorization cancellation notifications.\n\n<p><img src=\"/apis/@opendelivery/images/webhook_for_authorization.jpg\" /></p>\n\n**Notification Triggers:**\n- Merchant adds new store authorization\n- Merchant cancels store authorization\n\n**Technical Requirements:**\n- **Method:** HTTP POST\n- **Content-Type:** application/json\n- **Response Time:** Recommended within 5 seconds\n- **HTTP Status:** Must return 200 for success\n- **Response Format:** JSON with code and message fields\n\n**Best Practices:**\n- **Idempotency:** Use authId and opType to ensure operation idempotency\n- **Async Processing:** Respond quickly, process business logic asynchronously\n- **Logging:** Log all received notifications for troubleshooting\n- **Monitoring:** Set up monitoring and alerting for webhook reception\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Service Provider**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTOA_SS.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "requestBody": {
           "required": true,
           "description": "Authorization status change notification data",
@@ -608,48 +474,10 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/merchantOnboarding": {
@@ -667,7 +495,7 @@
             "Sig": []
           }
         ],
-        "description": "Register and update the Merchant endpoint [GET /v1/merchant](#operation/getMerchant) information in  Keeta. <br /><br />\nFor the Software Service, **all authorized merchant will use the same token**. \nTo enable Keeta to identify which merchant needs to be registered,\nthe Software Service  must include the **Keeta merchant ID** in its requests.\n**The Software Service should also save the mapping relationship between the Keeta merchant ID and its own merchant ID in the system.**\nMerchants can obtain this merchantId from the Keeta merchant portal.\n> **IMPORTANT**: \n> 1. It is necessary to provide the Keeta merchant ID to ensure that the mapping between the merchant ID of Software Service and the merchantId of Keeta is accurate.\n> 2. If an existing `Keeta MerchantId` or `External MerchantId` under the App has been previously registered, any subsequent onboarding request containing these identifiers will result in the deletion of historical data and the creation of a new mapping configuration.\n> 3. **Store registration via onboarding endpoint must be completed prior to order flow integration.** This enables Keeta to properly identify the merchantId in your system. Otherwise, no order events will be received via polling or webhook.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPUTSS_OA.png\" />\n</div>",
+        "description": "Register and update the Merchant endpoint [GET /v1/merchant](#operation/getMerchant) information in  Keeta. <br /><br />\nFor the Software Service, **all authorized merchant will use the same token**. \nTo enable Keeta to identify which merchant needs to be registered,\nthe Software Service  must include the **Keeta merchant ID** in its requests.\n**The Software Service should also save the mapping relationship between the Keeta merchant ID and its own merchant ID in the system.**\nMerchants can obtain this merchantId from the Keeta merchant portal.\n> **IMPORTANT**: \n> 1. It is necessary to provide the Keeta merchant ID to ensure that the mapping between the merchant ID of Software Service and the merchantId of Keeta is accurate.\n> 2. If an existing `Keeta MerchantId` or `External MerchantId` under the App has been previously registered, any subsequent onboarding request containing these identifiers will result in the deletion of historical data and the creation of a new mapping configuration.\n> 3. **Store registration via onboarding endpoint must be completed prior to order flow integration.** This enables Keeta to properly identify the merchantId in your system. Otherwise, no order events will be received via polling or webhook.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPUTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "parameters": [
           {
             "in": "query",
@@ -714,28 +542,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/merchant": {
@@ -756,7 +566,7 @@
             "apiKey": []
           }
         ],
-        "description": "Endpoint to get data of a specific merchant, such as basic info, menus, and services.\n- this endpoint can **optionally** require an **apiKey** for authentication, and the Software Service that hosts the endpoint can decide whether it is needed.\n- The Software Service can pass the data through the [PUT /v1/merchantOnboarding](#operation/putMerchantOnboarding) endpoint.\n- The endpoint is designed so that <strong>each merchant has its own URL</strong>.\n- The specification recommends that the endpoint ends with the `/merchant` route, but this is <strong>not mandatory</strong>. The `Software Service` can implement the URL in any way it sees fit, as long as it contains information from <strong>only one</strong> merchant.\n> **An item must have either a delivery price or a pickup price. Currently, item with only `indoor` price is not permitted.**\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **SOFTWARE SERVICE**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETOA_SS.png\" />\n</div>",
+        "description": "Endpoint to get data of a specific merchant, such as basic info, menus, and services.\n- this endpoint can **optionally** require an **apiKey** for authentication, and the Software Service that hosts the endpoint can decide whether it is needed.\n- The Software Service can pass the data through the [PUT /v1/merchantOnboarding](#operation/putMerchantOnboarding) endpoint.\n- The endpoint is designed so that <strong>each merchant has its own URL</strong>.\n- The specification recommends that the endpoint ends with the `/merchant` route, but this is <strong>not mandatory</strong>. The `Software Service` can implement the URL in any way it sees fit, as long as it contains information from <strong>only one</strong> merchant.\n> **An item must have either a delivery price or a pickup price. Currently, item with only `indoor` price is not permitted.**\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **SOFTWARE SERVICE**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETOA_SS.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "200": {
             "description": "Successful returns Merchant information.",
@@ -781,54 +591,16 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/merchantUpdate/{merchantId}": {
       "post": {
         "summary": "New Merchant Update Notification",
-        "description": "\n> **POST /v1/merchantUpdate/{merchantId}** \n\n\nInformation about a update in the systems.\n\nThis endpoint can be used in the following ways:\n\n**1 - Sent with an empty body:**  \nThis will force Keeta to make a new request to the [GET /v1/merchant](#operation/getMerchant) endpoint to update all the merchant information.\n\n**2 - Sent with only the `merchantStatus` field:**  \nThis will force the opening or closing of the merchant within Keeta, without forcing a new [GET /v1/merchant](#operation/getMerchant) call.\n\n**3 - Sent with only the `entityType` and `updatedObjects` fields:**  \nThis will force  Keeta to update only the sent objects, without forcing a new [GET /v1/merchant](#operation/getMerchant) call.\n> **IMPORTANT:**\n> </br>1- Please do not pass `merchantStatus` and `entityType`&`updatedObjects` at the same time. When `merchantStatus` has a value, the request will be regarded as updating only merchant status, and `entityType`&`updatedObjects` will be ignored.Please update merchant status and other entity separately. \n> </br>2- When the `entityType` field is populated, the `updatedObjects` field cannot be empty.\n> </br>3- It is recommended not to pass an empty body, but to pass a specific entity to be updated to avoid invalid update operations.\n> </br>4- An item must have either a delivery price or a pickup price. Currently, item with only `indoor` price is not permitted.\n> </br>5- The business status of a store is determined by many factors (business hours, number of items available for sale, merchant status, etc.).\n> </br>6- Please do note that the number of available Options under the Option Group must meet the Option Group's `minPermitted` requirement. If not, the Option Group will become unfufillable, causing all items using this Option Group to be hidden on the APP.\n\n<br /><br />  \n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**  \n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "> **POST /v1/merchantUpdate/{merchantId}** \n\n\nInformation about a update in the systems.\n\nThis endpoint can be used in the following ways:\n\n**1 - Sent with an empty body:**  \nThis will force Keeta to make a new request to the [GET /v1/merchant](#operation/getMerchant) endpoint to update all the merchant information.\n\n**2 - Sent with only the `merchantStatus` field:**  \nThis will force the opening or closing of the merchant within Keeta, without forcing a new [GET /v1/merchant](#operation/getMerchant) call.\n\n**3 - Sent with only the `entityType` and `updatedObjects` fields:**  \nThis will force  Keeta to update only the sent objects, without forcing a new [GET /v1/merchant](#operation/getMerchant) call.\n> **IMPORTANT:**\n> </br>1- Please do not pass `merchantStatus` and `entityType`&`updatedObjects` at the same time. When `merchantStatus` has a value, the request will be regarded as updating only merchant status, and `entityType`&`updatedObjects` will be ignored.Please update merchant status and other entity separately. \n> </br>2- When the `entityType` field is populated, the `updatedObjects` field cannot be empty.\n> </br>3- It is recommended not to pass an empty body, but to pass a specific entity to be updated to avoid invalid update operations.\n> </br>4- An item must have either a delivery price or a pickup price. Currently, item with only `indoor` price is not permitted.\n> </br>5- The business status of a store is determined by many factors (business hours, number of items available for sale, merchant status, etc.).\n> </br>6- Please do note that the number of available Options under the Option Group must meet the Option Group's `minPermitted` requirement. If not, the Option Group will become unfufillable, causing all items using this Option Group to be hidden on the APP.\n\n<br /><br />  \n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**  \n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "operationId": "merchantUpdate",
         "parameters": [
           {
@@ -873,54 +645,16 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/merchant/{id}/status": {
       "get": {
         "summary": "Get Merchant Status and Service Hours",
-        "description": "\n> **Get /v1/merchant/{id}/status** \n\n\nReturn the merchant status, service hours(serviceHours), and sourceAppId.\n\n<br /><br />  \n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**  \n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>",
+        "description": "> **Get /v1/merchant/{id}/status** \n\n\nReturn the merchant status, service hours(serviceHours), and sourceAppId.\n\n<br /><br />  \n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**  \n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "operationId": "merchantStatus",
         "parameters": [
           {
@@ -974,28 +708,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/merchant/image/upload": {
@@ -1048,7 +764,7 @@
             "Sig": []
           }
         ],
-        "description": "This endpoint allows merchants to upload images to the Keeta platform. The returned image URL can be used during menu synchronization.\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "This endpoint allows merchants to upload images to the Keeta platform. The returned image URL can be used during menu synchronization.\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "200": {
             "description": "upload result",
@@ -1084,28 +800,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/events:polling": {
@@ -1177,7 +875,7 @@
             "Sig": []
           }
         ],
-        "description": "Polls events for any orders from merchants associated with the authenticated user.  \nEach event received from this endpoint must be properly acknowledged, otherwise it will continue to be returned on further requests.\n\n> Important: The software service **must first call the [Merchant Onboarding](#operation/putMerchantOnboarding) endpoint** to register the store before calling this endpoint, otherwise the polling endpoint will not be able to obtain the events.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>",
+        "description": "Polls events for any orders from merchants associated with the authenticated user.  \nEach event received from this endpoint must be properly acknowledged, otherwise it will continue to be returned on further requests.\n\n> Important: The software service **must first call the [Merchant Onboarding](#operation/putMerchantOnboarding) endpoint** to register the store before calling this endpoint, otherwise the polling endpoint will not be able to obtain the events.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "200": {
             "description": "Successful returns list of polled events .",
@@ -1203,38 +901,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/events/acknowledgment": {
@@ -1255,7 +925,7 @@
             "Sig": []
           }
         ],
-        "description": "Acknowledge a set of events, dismissing them from future polling calls.\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Acknowledge a set of events, dismissing them from future polling calls.\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "202": {
             "$ref": "#/components/responses/Accepted"
@@ -1274,28 +944,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}": {
@@ -1324,7 +976,7 @@
             "Sig": []
           }
         ],
-        "description": "Endpoint to consult the details of an order.\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>",
+        "description": "Endpoint to consult the details of an order.\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionGETSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "200": {
             "description": "Order returning success.",
@@ -1350,28 +1002,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/confirm": {
@@ -1409,7 +1043,7 @@
             "Sig": []
           }
         ],
-        "description": "Informs  **Keeta** that the order has been accepted and preparation will start soon.\n\n> It is expected to receive a `CONFIRMED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Informs  **Keeta** that the order has been accepted and preparation will start soon.\n\n> It is expected to receive a `CONFIRMED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "202": {
             "$ref": "#/components/responses/Accepted"
@@ -1431,28 +1065,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/readyForPickup": {
@@ -1481,7 +1097,7 @@
             "Sig": []
           }
         ],
-        "description": "Informs  **Keeta** that the order is ready for pickup.\n\n> It is expected to receive a `READY_FOR_PICKUP` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Informs  **Keeta** that the order is ready for pickup.\n\n> It is expected to receive a `READY_FOR_PICKUP` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "202": {
             "$ref": "#/components/responses/Accepted"
@@ -1503,28 +1119,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/dispatch": {
@@ -1562,7 +1160,7 @@
             "Sig": []
           }
         ],
-        "description": "Informs  **Keeta** that the order has been dispatched.\n\n> It is expected to receive a `DISPATCHED` event after this action.\n\n**Important:** This endpoint should be sent **only in cases where the order logistics service is provided by the Merchant and not the Marketplace**.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Informs  **Keeta** that the order has been dispatched.\n\n> It is expected to receive a `DISPATCHED` event after this action.\n\n**Important:** This endpoint should be sent **only in cases where the order logistics service is provided by the Merchant and not the Marketplace**.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "202": {
             "$ref": "#/components/responses/Accepted"
@@ -1584,28 +1182,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/delivered": {
@@ -1634,7 +1214,7 @@
             "Sig": []
           }
         ],
-        "description": "Informs  **Keeta** that the order has been delivered.\n\n> It is expected to receive a `DELIVERED` event after this action.\n\n**Important:** This endpoint is not mandatory and should be sent **only if the Ordering Application is able to receive this request and only in cases where the order logistics service is provided by the Merchant and not the Marketplace**.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Informs  **Keeta** that the order has been delivered.\n\n> It is expected to receive a `DELIVERED` event after this action.\n\n**Important:** This endpoint is not mandatory and should be sent **only if the Ordering Application is able to receive this request and only in cases where the order logistics service is provided by the Merchant and not the Marketplace**.\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "202": {
             "$ref": "#/components/responses/Accepted"
@@ -1656,28 +1236,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/tracking": {
@@ -1715,7 +1277,7 @@
             "Sig": []
           }
         ],
-        "description": "Sends information about the delivery in progress.\n\n**This endpoint should be used when the delivery is the responsibility of the Merchant, so the Software Service should send the delivery updates to the Ordering Application.**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Sends information about the delivery in progress.\n\n**This endpoint should be used when the delivery is the responsibility of the Merchant, so the Software Service should send the delivery updates to the Ordering Application.**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "202": {
             "$ref": "#/components/responses/Accepted"
@@ -1737,28 +1299,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/requestCancellation": {
@@ -1790,7 +1334,7 @@
             "Sig": []
           }
         ],
-        "description": "Request order cancellation to Keeta.\n\n> It is expected to receive a `CANCELLATION_REQUESTED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Request order cancellation to Keeta.\n\n> It is expected to receive a `CANCELLATION_REQUESTED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "202": {
             "$ref": "#/components/responses/Accepted"
@@ -1812,28 +1356,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/acceptRefund": {
@@ -1862,7 +1388,7 @@
             "Sig": []
           }
         ],
-        "description": "Informs Keeta that the refund request has been accepted and the order can be refunded.\n\n> It is expected to receive a `REFUNDED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Informs Keeta that the refund request has been accepted and the order can be refunded.\n\n> It is expected to receive a `REFUNDED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "204": {
             "description": "Order refund has been confirmed. No response content."
@@ -1884,28 +1410,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/orders/{orderId}/rejectRefund": {
@@ -1937,7 +1445,7 @@
             "Sig": []
           }
         ],
-        "description": "Informs Keeta that the refund request has been denied and the order cannot be refunded.\n\n> It is expected to receive a `REFUND_FAILED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>",
+        "description": "Informs Keeta that the refund request has been denied and the order cannot be refunded.\n\n> It is expected to receive a `REFUND_FAILED` event after this action.\n\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **Keeta**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTSS_OA.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "204": {
             "description": "Order refund has been denied. No response content."
@@ -1959,28 +1467,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/newEvent": {
@@ -2025,7 +1515,7 @@
           }
         ],
         "summary": "New Order Event Notification",
-        "description": "> **POST /v1/newEvent** \n\nInformation about a new event in the systems\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **SOFTWARE SERVICE**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTOA_SS.png\" />\n</div>",
+        "description": "> **POST /v1/newEvent** \n\nInformation about a new event in the systems\n<br /><br />\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">HOST:</span> **SOFTWARE SERVICE**\n\n<span style=\"text-decoration:underline; color:#26323880; font-size:13.006px\">DIRECTION:</span>\n<div align=\"center\">\n  <img src=\"https://abrasel-nacional.github.io/opendelivery/images/directionPOSTOA_SS.png\" />\n</div>\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "tags": [
           "ordersWebhook"
         ],
@@ -2056,38 +1546,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     },
     "/v1/batchDecrypt": {
@@ -2114,7 +1576,7 @@
             "Sig": []
           }
         ],
-        "description": "Call this endpoint to decrypt the encrypted data returned by the API.\n> 1. For **merchant self-delivery or third-party logistics (3PL)** orders, this endpoint can be called to decrypt the user's phone number and address.\n> 2. A maximum of **50** data items can be decrypted at once.\n> 3. The encrypted data generally uses `ENC_` as a prefix.\n\nThe following data returned by the order details endpoints will be encrypted data (ciphertext data prefixed with `ENC_`):\n> 1. customer.​phone.​number\n> 2. delivery.​deliveryAddress.​district\n> 3. delivery.​deliveryAddress.​number\n> 4. delivery.​deliveryAddress.complement\n> 5. delivery.​deliveryAddress.​formattedAddress",
+        "description": "Call this endpoint to decrypt the encrypted data returned by the API.\n> 1. For **merchant self-delivery or third-party logistics (3PL)** orders, this endpoint can be called to decrypt the user's phone number and address.\n> 2. A maximum of **50** data items can be decrypted at once.\n> 3. The encrypted data generally uses `ENC_` as a prefix.\n\nThe following data returned by the order details endpoints will be encrypted data (ciphertext data prefixed with `ENC_`):\n> 1. customer.​phone.​number\n> 2. delivery.​deliveryAddress.​district\n> 3. delivery.​deliveryAddress.​number\n> 4. delivery.​deliveryAddress.complement\n> 5. delivery.​deliveryAddress.​formattedAddress\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json`)",
         "responses": {
           "200": {
             "description": "Message batch decrypt success.",
@@ -2143,1504 +1605,10 @@
           },
           "503": {
             "$ref": "#/components/responses/ServiceUnavailable"
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/api/open/opendeliveryAsk": {
-      "get": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "GET /api/open/opendeliveryAsk",
-        "description": "Endpoint extraído da documentação (apis_opendelivery.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/merchantUpdate": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /merchantUpdate",
-        "description": "Endpoint extraído da documentação (apis_opendelivery_general-info.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/merchant": {
-      "get": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "GET /merchant",
-        "description": "Endpoint extraído da documentação (apis_opendelivery_general-info.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/entities/lib/maps/entities.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /entities/lib/maps/entities.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_10_runtime_chunks_chunk-WVG2U52O_js.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/artifact/org.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /artifact/org.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_13_runtime_chunks_chunk-IV2JNUKT_js.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/app-data.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /app-data.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_17_apis_opendelivery_general-info.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/page-data/apis/opendelivery/general-info/data.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /page-data/apis/opendelivery/general-info/data.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_17_apis_opendelivery_general-info.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/opendelivery.yaml.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /opendelivery.yaml.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_17_apis_opendelivery_general-info.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/page-data/shared/sidebar-sidebar.yaml__apis_opendelivery.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /page-data/shared/sidebar-sidebar.yaml__apis_opendelivery.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_17_apis_opendelivery_general-info.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/page-data/apis/opendelivery/data.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /page-data/apis/opendelivery/data.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_1_apis_opendelivery.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/traces": {
-      "get": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "GET /v1/traces",
-        "description": "Endpoint extraído da documentação (network_json_21_runtime_chunks_chunk-HKQFERDJ_js.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/oauth/callback": {
-      "get": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "GET /oauth/callback",
-        "description": "Endpoint extraído da documentação (network_json_21_runtime_chunks_chunk-HKQFERDJ_js.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/page-data/apis/opendelivery/how-to-start/data.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /page-data/apis/opendelivery/how-to-start/data.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_29_apis_opendelivery_how-to-start.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/opendelivery.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /opendelivery.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_31_page-data_shared_api-docs-apis__opendelivery_opendelivery_yaml_json.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/open/opendelivery": {
-      "get": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "GET /api/open/opendelivery",
-        "description": "Endpoint extraído da documentação (network_json_31_page-data_shared_api-docs-apis__opendelivery_opendelivery_yaml_json.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/data.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /data.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_39_runtime_chunks_chunk-5QY77N3I_js.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/page-data/apis/opendelivery/integrating-with-keeta-api/data.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /page-data/apis/opendelivery/integrating-with-keeta-api/data.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_45_apis_opendelivery_integrating-with-keeta-api.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/page-data/apis/opendelivery/basic-concepts/data.json": {
-      "post": {
-        "tags": [
-          "Keeta"
-        ],
-        "summary": "POST /page-data/apis/opendelivery/basic-concepts/data.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_52_apis_opendelivery_basic-concepts.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_auto_api-docs_mykeeta_com_bundle_apis_opendelivery_opendelivery_yaml_download_da346efe.json"
       }
     }
   },
@@ -3837,66 +1805,6 @@
           "application/problem+json": {
             "schema": {
               "$ref": "#/components/schemas/Error"
-            }
-          }
-        }
-      },
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
             }
           }
         }
@@ -10372,22 +8280,6 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
@@ -10892,77 +8784,6 @@
               ]
             }
           ]
-        }
-      }
-    }
-  },
-  "security": [
-    {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
-    }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack keeta.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack keeta.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "keeta_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (KeeTa (Meituan) Food Delivery Open API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em KeeTa (Meituan) Food Delivery Open API.",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
         }
       }
     }

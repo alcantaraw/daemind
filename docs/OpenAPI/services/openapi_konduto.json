@@ -1,0 +1,1367 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Konduto Antifraude Comportamental & E-Commerce API",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack konduto.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.konduto.com/v1"
+    }
+  ],
+  "paths": {
+    "/v1/blacklist/email": {
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/blacklist/email",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/email",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/phone": {
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/blacklist/phone",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/phone",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/ip": {
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/blacklist/ip",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/ip",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/name": {
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/blacklist/name",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/name",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/bin_last4": {
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/blacklist/bin_last4",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/bin_last4",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/zip": {
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/blacklist/zip",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/zip",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/tax_id": {
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/blacklist/tax_id",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/tax_id",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/api-de-blacklist": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /api-de-blacklist",
+        "description": "Endpoint derivado da referência oficial (api-de-blacklist).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md#api-de-blacklist`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md#api-de-blacklist"
+      }
+    },
+    "/v1/blacklist/ip/50.1.1.99": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/ip/50.1.1.99",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/name/Fulano": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/name/Fulano",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/bin_last4/555555-1234": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/bin_last4/555555-1234",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/zip/{id}": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/zip/55555123",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/v1/blacklist/tax_id/841.666.655-53": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/blacklist/tax_id/841.666.655-53",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_api-de-blacklist_469c9e34.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_api-de-blacklist_469c9e34.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_api-de-blacklist_469c9e34.md"
+      }
+    },
+    "/konduto-valida-json": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /konduto-valida-json",
+        "description": "Endpoint derivado da referência oficial (konduto-valida-json).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_konduto-valida-json_f54ec8be.md#konduto-valida-json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_konduto-valida-json_f54ec8be.md#konduto-valida-json"
+      }
+    },
+    "/v01/people/search": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v01/people/search",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_konduto-valida-json_f54ec8be.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_konduto-valida-json_f54ec8be.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_konduto-valida-json_f54ec8be.md"
+      }
+    },
+    "/konduto-valida-mais-cadastro": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /konduto-valida-mais-cadastro",
+        "description": "Endpoint derivado da referência oficial (konduto-valida-mais-cadastro).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_konduto-valida-mais-cadastro_10978930.md#konduto-valida-mais-cadastro`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_konduto-valida-mais-cadastro_10978930.md#konduto-valida-mais-cadastro"
+      }
+    },
+    "/v01/cadastro": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v01/cadastro",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_konduto-valida-mais-cadastro_10978930.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_konduto-valida-mais-cadastro_10978930.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_konduto-valida-mais-cadastro_10978930.md"
+      }
+    },
+    "/konduto-valida-mais": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /konduto-valida-mais",
+        "description": "Endpoint derivado da referência oficial (konduto-valida-mais).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_konduto-valida-mais_60441f1f.md#konduto-valida-mais`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_konduto-valida-mais_60441f1f.md#konduto-valida-mais"
+      }
+    },
+    "/v01/cartao": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v01/cartao",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_konduto-valida-mais_60441f1f.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_konduto-valida-mais_60441f1f.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_konduto-valida-mais_60441f1f.md"
+      }
+    },
+    "/konduto-valida-xml": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /konduto-valida-xml",
+        "description": "Endpoint derivado da referência oficial (konduto-valida-xml).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_konduto-valida-xml_17bab7a9.md#konduto-valida-xml`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_konduto-valida-xml_17bab7a9.md#konduto-valida-xml"
+      }
+    },
+    "/resolucao-6-consulta": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /resolucao-6-consulta",
+        "description": "Endpoint derivado da referência oficial (resolucao-6-consulta).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_resolucao-6-consulta_062b958c.md#resolucao-6-consulta`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_resolucao-6-consulta_062b958c.md#resolucao-6-consulta"
+      }
+    },
+    "/v1/consulta": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/consulta",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_resolucao-6-consulta_062b958c.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_resolucao-6-consulta_062b958c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_resolucao-6-consulta_062b958c.md"
+      }
+    },
+    "/resposta-api": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /resposta-api",
+        "description": "Endpoint derivado da referência oficial (resposta-api).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_resposta-api_6ca6cbf6.md#resposta-api`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_resposta-api_6ca6cbf6.md#resposta-api"
+      }
+    },
+    "/v1/greylist/email": {
+      "post": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "POST /v1/greylist/email",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-greylist_92ddf131.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-greylist_92ddf131.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-greylist_92ddf131.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/greylist/email",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-greylist_92ddf131.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_sobre-a-greylist_92ddf131.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-greylist_92ddf131.md"
+      }
+    },
+    "/v1/greylist/email/{email}": {
+      "put": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "PUT /v1/greylist/email/{email}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-greylist_92ddf131.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-greylist_92ddf131.md`)",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-greylist_92ddf131.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/greylist/email/{email}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-greylist_92ddf131.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-greylist_92ddf131.md`)",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-greylist_92ddf131.md"
+      },
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/greylist/email/{email}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-greylist_92ddf131.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-greylist_92ddf131.md`)",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-greylist_92ddf131.md"
+      }
+    },
+    "/sobre-a-greylist": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /sobre-a-greylist",
+        "description": "Endpoint derivado da referência oficial (sobre-a-greylist).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_sobre-a-greylist_92ddf131.md#sobre-a-greylist`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-greylist_92ddf131.md#sobre-a-greylist"
+      }
+    },
+    "/v1/whitelist/email": {
+      "post": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "POST /v1/whitelist/email",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/whitelist/email",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md"
+      }
+    },
+    "/v1/whitelist/email/{email}": {
+      "put": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "PUT /v1/whitelist/email/{email}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md`)",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/whitelist/email/{email}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md`)",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md"
+      },
+      "delete": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "DELETE /v1/whitelist/email/{email}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md`)",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md"
+      }
+    },
+    "/sobre-a-whitelist": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /sobre-a-whitelist",
+        "description": "Endpoint derivado da referência oficial (sobre-a-whitelist).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md#sobre-a-whitelist`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-a-whitelist_7fffec94.md#sobre-a-whitelist"
+      }
+    },
+    "/v1/orders": {
+      "post": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "POST /v1/orders",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/orders",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md"
+      }
+    },
+    "/v1/orders/{order_id}": {
+      "put": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "PUT /v1/orders/{order_id}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md`)",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md"
+      },
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /v1/orders/{order_id}",
+        "description": "Endpoint extraído da documentação (docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md).\n\n---\n📍 **Origem:** Documentação Técnica (Método Explícito) (`docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md`)",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Método Explícito)",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md"
+      }
+    },
+    "/sobre-as-an": {
+      "get": {
+        "tags": [
+          "Konduto"
+        ],
+        "summary": "GET /sobre-as-an",
+        "description": "Endpoint derivado da referência oficial (sobre-as-an).\n\n---\n📍 **Origem:** Página de Referência Técnica (`docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md#sobre-as-an`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "docs_konduto_com_reference_sobre-as-an_C3_A1lises_2058fe63.md#sobre-as-an"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    }
+  },
+  "webhooks": {
+    "ee_created": {
+      "description": "Notificação de webhook disparada no evento 'ee.createD'.",
+      "post": {
+        "summary": "Evento de Webhook: ee.createD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "ee.createD"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "t_created": {
+      "description": "Notificação de webhook disparada no evento 't.createD'.",
+      "post": {
+        "summary": "Evento de Webhook: t.createD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "t.createD"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "ee_created": {
+      "description": "Notificação de webhook disparada no evento 'ee.createD'.",
+      "post": {
+        "summary": "Evento de Webhook: ee.createD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "ee.createD"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "t_created": {
+      "description": "Notificação de webhook disparada no evento 't.createD'.",
+      "post": {
+        "summary": "Evento de Webhook: t.createD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "t.createD"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  }
+}

@@ -52,7 +52,7 @@ build_structure() {
             fi
             if [[ "${USE_OPENWEBUI:-s}" =~ ^[Ss]$ ]]; then
                 sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/openwebui 2>/dev/null || true
-                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/docling 2>/dev/null || true
+                sudo mkdir -p "$TARGET_DIR"/volumes/storage_data/markitdown 2>/dev/null || true
             fi
             sudo chmod -R 777 "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
             sudo chown -R "$TARGET_OWNER" "$TARGET_DIR"/volumes/storage_data 2>/dev/null || true
@@ -321,7 +321,7 @@ provision_infra() {
     local EVO_BUCKET="${S3_EVOLUTION_BUCKET_EXT:-${S3_EVOLUTION_BUCKET:-evolution}}"
     local NOCO_BUCKET="${S3_NOCODB_BUCKET_EXT:-${S3_NOCODB_BUCKET:-nocodb}}"
     local OW_BUCKET="${S3_OPENWEBUI_BUCKET_EXT:-${S3_OPENWEBUI_BUCKET:-openwebui}}"
-    local DOC_BUCKET="${S3_DOCLING_BUCKET_EXT:-${S3_DOCLING_BUCKET:-docling}}"
+    local DOC_BUCKET="${S3_MARKITDOWN_BUCKET_EXT:-${S3_MARKITDOWN_BUCKET:-markitdown}}"
     local N8N_BUCKET="${S3_N8N_BUCKET_EXT:-${S3_N8N_BUCKET:-n8n}}"
     local LM_BUCKET="${S3_LISTMONK_BUCKET_EXT:-${S3_LISTMONK_BUCKET:-listmonk}}"
 

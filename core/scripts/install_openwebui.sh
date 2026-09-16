@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# OPENWEBUI DOCLING
-# Interface Web de IA Corporativa & MCP com Docling RAG On-Demand
+# OPENWEBUI
+# Interface Web de IA Corporativa & MCP
 # ===============================================================================
 # DAEMIND SRE MODULE - PROVISIONADOR DINÂMICO OPEN WEBUI
 # Especificação: Módulo desacoplado de gerenciamento, injeção Caddy, visual e relatório Open WebUI
@@ -26,15 +26,14 @@ build_structure() {
     fi
 
     local VOL_PATH="$TARGET_DIR/volumes/openwebui_data"
-    local VOL_DOCLING="$TARGET_DIR/volumes/docling_data"
     local CURRENT_OWNER=$(stat -c '%u:%g' "$VOL_PATH" 2>/dev/null || echo "")
 
     if [ -d "$VOL_PATH" ] && [ "$CURRENT_OWNER" = "$TARGET_OWNER" ]; then
         echo "➜ [IDEMPOTÊNCIA OPENWEBUI] Estrutura de volumes de openwebui_data já alinhada (${TARGET_OWNER}). Preservando I/O."
     else
-        echo "➜ [SRE OPENWEBUI] Criando estrutura física de volumes e permissões do Open WebUI e Docling..."
-        sudo mkdir -p "$VOL_PATH" "$VOL_DOCLING" 2>/dev/null || true
-        sudo chown -R "$TARGET_OWNER" "$VOL_PATH" "$VOL_DOCLING" 2>/dev/null || true
+        echo "➜ [SRE OPENWEBUI] Criando estrutura física de volumes e permissões do Open WebUI..."
+        sudo mkdir -p "$VOL_PATH" 2>/dev/null || true
+        sudo chown -R "$TARGET_OWNER" "$VOL_PATH" 2>/dev/null || true
     fi
 }
 
@@ -107,38 +106,38 @@ EOF
         sleep 5
     done
     echo "✔ [SUCESSO OPENWEBUI] Infraestrutura relacional e API FastAPI validadas."
-    # 4. SRE Smoke Test: Valida e testa o motor Docling On-Demand (Scale-to-Zero)
-    echo "➜ [SRE DOCLING SMOKE TEST] Testando prontidão do motor Docling OCR sob demanda..."
-    if docker image inspect quay.io/docling-project/docling-serve-cpu:latest >/dev/null 2>&1; then
-        echo "  ↳ Disparando subida de validação do Docling..."
-        cd "$TARGET_DIR" && docker compose --profile ondemand up -d docling > /dev/null 2>&1 || true
+    # 4. SRE Smoke Test: Valida e testa o motor MarkItDown On-Demand (Scale-to-Zero)
+    echo "➜ [SRE MARKITDOWN SMOKE TEST] Testando prontidão do motor MarkItDown & Tesseract OCR sob demanda..."
+    if docker image inspect "${PREFIX}_markitdown:latest" >/dev/null 2>&1; then
+        echo "  ↳ Disparando subida de validação do MarkItDown..."
+        cd "$TARGET_DIR" && docker compose --profile ondemand up -d markitdown > /dev/null 2>&1 || true
         
-        local TENTATIVAS_DOCLING=0
-        local DOCLING_OK=false
-        while [ $TENTATIVAS_DOCLING -lt 15 ]; do
-            local HTTP_DOCLING
-            HTTP_DOCLING=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5001/health" 2>/dev/null || echo "000")
-            if [ "$HTTP_DOCLING" = "200" ]; then
-                DOCLING_OK=true
+        local TENTATIVAS_MARKITDOWN=0
+        local MARKITDOWN_OK=false
+        while [ $TENTATIVAS_MARKITDOWN -lt 15 ]; do
+            local HTTP_MARKITDOWN
+            HTTP_MARKITDOWN=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 "http://127.0.0.1:5001/health" 2>/dev/null || echo "000")
+            if [ "$HTTP_MARKITDOWN" = "200" ]; then
+                MARKITDOWN_OK=true
                 break
             fi
             sleep 2
-            TENTATIVAS_DOCLING=$((TENTATIVAS_DOCLING + 1))
+            TENTATIVAS_MARKITDOWN=$((TENTATIVAS_MARKITDOWN + 1))
         done
         
         # Desliga imediatamente garantindo Scale-to-Zero (0MB RAM em repouso)
-        docker stop "${PREFIX}_docling" > /dev/null 2>&1 || true
+        docker stop "${PREFIX}_markitdown" > /dev/null 2>&1 || true
         
-        if [ "$DOCLING_OK" = "true" ]; then
-            echo "✔ [SUCESSO DOCLING] Motor Docling OCR testado (HTTP 200) e retornado ao estado de repouso (Scale-to-Zero)."
+        if [ "$MARKITDOWN_OK" = "true" ]; then
+            echo "✔ [SUCESSO MARKITDOWN] Motor MarkItDown & OCR testado (HTTP 200) e retornado ao estado de repouso (Scale-to-Zero)."
         else
-            echo "⚠️ [ALERTA DOCLING] Docling demorou para responder no healthcheck, mas o container foi posicionado."
+            echo "⚠️ [ALERTA MARKITDOWN] MarkItDown demorou para responder no healthcheck, mas o container foi posicionado."
         fi
     fi
 }
 
 inject_caddy_routes() {
-    echo "➜ [SRE OPENWEBUI] Injetando rotas do Open WebUI (:3001) e Docling (:5001) no Caddyfile..."
+    echo "➜ [SRE OPENWEBUI] Injetando rotas do Open WebUI (:3001) e MarkItDown (:5001) no Caddyfile..."
     local CADDYFILE_PATH="$TARGET_DIR/Caddyfile"
     if [ ! -f "$CADDYFILE_PATH" ] && [ -f "$TARGET_DIR/core/config/Caddyfile" ]; then
         CADDYFILE_PATH="$TARGET_DIR/core/config/Caddyfile"
@@ -154,17 +153,6 @@ inject_caddy_routes() {
         level error
     }
     reverse_proxy ${PREFIX}_openwebui:8080
-}
-EOF
-        fi
-        if ! grep -q ':5001 {' "$CADDYFILE_PATH"; then
-            cat << EOF | sudo tee -a "$CADDYFILE_PATH" > /dev/null
-
-:5001 {
-    log {
-        level error
-    }
-    reverse_proxy ${PREFIX}_docling:5001
 }
 EOF
         fi
@@ -185,7 +173,7 @@ path = '$CADDYFILE_PATH'
 try:
     with open(path, 'r') as f:
         content = f.read()
-    pattern = r'(?:\n|^)\s*:(3001|5001)\s*\{[\s\S]*?\n\}'
+    pattern = r'(?:\n|^)\s*:3001\s*\{[\s\S]*?\n\}'
     new_content = re.sub(pattern, '', content)
     with open(path, 'w') as f:
         f.write(new_content.strip() + '\n')
@@ -265,31 +253,26 @@ except Exception as e:
 
 disable() {
     local PREFIX="${PREFIXO_CONTAINER}"
-    echo "➜ [SRE OPENWEBUI] Desativando e desprovisionando contêineres do Open WebUI e Docling..."
-    docker stop "${PREFIX}_openwebui" "${PREFIX}_docling" 2>/dev/null || true
-    docker rm -f "${PREFIX}_openwebui" "${PREFIX}_docling" 2>/dev/null || true
+    echo "➜ [SRE OPENWEBUI] Desativando e desprovisionando contêiner do Open WebUI..."
+    docker stop "${PREFIX}_openwebui" 2>/dev/null || true
+    docker rm -f "${PREFIX}_openwebui" 2>/dev/null || true
     remove_caddy_routes
     remove_dashboard_card
 
     # Limpeza de Regras de Firewall e DNS
     sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
-    sudo iptables -D DOCKER-USER -i tailscale0 -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 3001 -j ACCEPT 2>/dev/null || true
-    sudo iptables -D DOCKER-USER -s "${IP_NETWORK_SUBNET}" -p tcp --dport 5001 -j ACCEPT 2>/dev/null || true
     if [ -f /etc/dnsmasq.d/openwebui.conf ]; then
         sudo rm -f /etc/dnsmasq.d/openwebui.conf 2>/dev/null || true
         sudo systemctl restart dnsmasq 2>/dev/null || true
     fi
-    echo "✔ [SUCESSO OPENWEBUI] Módulo Open WebUI e Docling desativados, containers removidos, firewall e rotas limpos."
+    echo "✔ [SUCESSO OPENWEBUI] Módulo Open WebUI desativado, container removido, firewall e rotas limpos."
 }
 
 start_container() {
     local PREFIX="${PREFIXO_CONTAINER}"
-    echo "➜ [SRE OPENWEBUI] Garantindo subida integrada do Open WebUI e posicionamento do Docling (Scale-to-Zero)..."
+    echo "➜ [SRE OPENWEBUI] Garantindo subida integrada do Open WebUI..."
     cd "$TARGET_DIR" && docker compose up -d --no-deps openwebui > /dev/null 2>&1 || true
-    # Posiciona o Docling criado e em repouso absoluto (Scale-to-Zero: 0MB RAM)
-    cd "$TARGET_DIR" && (docker compose --profile ondemand create docling > /dev/null 2>&1 || true)
-    docker stop "${PREFIX}_docling" > /dev/null 2>&1 || true
 }
 
 wait_readiness() {
@@ -324,9 +307,8 @@ audit_health() {
 
 render_forensic_report() {
     local ts_domain="${1:-localhost}"
-    echo "  🧠 Inteligência (Open WebUI & Docling RAG)"
+    echo "  🧠 Inteligência (Open WebUI)"
     echo "    ↳ Painel Web (Cliente MCP):        http://${ts_domain}:3001"
-    echo "    ↳ Motor Multimodal Docling:        http://${ts_domain}:5001 (Scale-to-Zero)"
     echo "    ↳ Integração REST API:             http://${ts_domain}:3001/api/"
     echo "    ↳ Open API/Swagger:                http://${ts_domain}:3001/openapi.json"
     echo "    ↳ Healthcheck:                     http://${ts_domain}:3001/health"
@@ -392,18 +374,12 @@ build_envs() {
 
     cat << EOF >> "$env_path"
 
-# --- Configurações e Tuning do Módulo Open WebUI & Docling OCR ---
+# --- Configurações e Tuning do Módulo Open WebUI ---
 USE_OPENWEBUI="${USE_OPENWEBUI:-s}"
 HOST_OPENWEBUI_PORT="3001"
-HOST_DOCLING_PORT="5001"
 CPU_OPENWEBUI=${CPU_OPENWEBUI:-${cpu_openwebui}}
 MEM_OPENWEBUI=${MEM_OPENWEBUI:-${mem_openwebui}}
 RES_OPENWEBUI=${RES_OPENWEBUI:-${res_openwebui}}
-CPU_DOCLING=${CPU_DOCLING:-2.0}
-MEM_DOCLING=${MEM_DOCLING:-2048M}
-RES_DOCLING=${RES_DOCLING:-512M}
-DOCLING_OMP_THREADS=2
-DOCLING_TORCH_THREADS=2
 OPENWEBUI_SECRET_KEY=${FINAL_KEY}
 EOF
 }

@@ -160,8 +160,8 @@ Para ativar qualquer um dos módulos especialistas, basta definir a variável co
 
 ### 4.3 Conversational AI, SDR & Chatbots RAG (04, 10, 11, 14, 16)
 
-#### `04_ocr_comprovante_pix_ia_docling.json`
-- **Finalidade:** Leitura visual de comprovantes PIX enviados no WhatsApp por IA e baixa automática.
+#### `04_ocr_comprovante_pix_ia_markitdown.json`
+- **Finalidade:** Leitura visual de comprovantes PIX enviados no WhatsApp por IA (MarkItDown/Tesseract) e baixa automática.
 - **Gatilho:** Webhook da Evolution API recebendo mídia/imagem.
 - **Nós de Configuração:**
   - `Extrair Dados via IA (LiteLLM)`: Envia a imagem para modelo multimodal (Gemini / GPT-4o) extrair valor, autenticação e data.

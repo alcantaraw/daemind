@@ -1,445 +1,269 @@
 {
   "openapi": "3.0.3",
   "info": {
+    "version": "1.0.0",
     "title": "Kiwify Infoprodutos & Checkout API",
-    "description": "Especificação OpenAPI 3.0 consolidada para a stack kiwify.",
-    "version": "1.0.0"
+    "description": ""
   },
   "servers": [
     {
       "url": "https://api.kiwify.com.br"
     }
   ],
+  "tags": [
+    {
+      "name": "Autenticação"
+    },
+    {
+      "name": "Conta"
+    },
+    {
+      "name": "Produtos"
+    },
+    {
+      "name": "Vendas"
+    },
+    {
+      "name": "Financeiro"
+    },
+    {
+      "name": "Affiliados"
+    },
+    {
+      "name": "Webhooks"
+    },
+    {
+      "name": "Eventos"
+    }
+  ],
   "paths": {
-    "/api/v1/convers-o-do-facebook": {
-      "get": {
-        "tags": [
-          "Conversão Do Facebook"
-        ],
-        "summary": "Consultar Conversão Do Facebook",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversão Do Facebook"
-        ],
-        "summary": "Criar/Atualizar Conversão Do Facebook",
-        "description": "Operação de mutação para Conversão Do Facebook.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/convers-es": {
-      "get": {
-        "tags": [
-          "Conversões"
-        ],
-        "summary": "Consultar Conversões",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversões"
-        ],
-        "summary": "Criar/Atualizar Conversões",
-        "description": "Operação de mutação para Conversões.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/convers-o-no-facebook": {
-      "get": {
-        "tags": [
-          "Conversão No Facebook"
-        ],
-        "summary": "Consultar Conversão No Facebook",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversão No Facebook"
-        ],
-        "summary": "Criar/Atualizar Conversão No Facebook",
-        "description": "Operação de mutação para Conversão No Facebook.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/convers-o-na-kiwify": {
-      "get": {
-        "tags": [
-          "Conversão Na Kiwify"
-        ],
-        "summary": "Consultar Conversão Na Kiwify",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversão Na Kiwify"
-        ],
-        "summary": "Criar/Atualizar Conversão Na Kiwify",
-        "description": "Operação de mutação para Conversão Na Kiwify.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/convers-o-n-o-obrigat-ria": {
-      "get": {
-        "tags": [
-          "Conversão Não É Obrigatória"
-        ],
-        "summary": "Consultar Conversão Não É Obrigatória",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversão Não É Obrigatória"
-        ],
-        "summary": "Criar/Atualizar Conversão Não É Obrigatória",
-        "description": "Operação de mutação para Conversão Não É Obrigatória.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/convers-o": {
-      "get": {
-        "tags": [
-          "Conversão"
-        ],
-        "summary": "Consultar Conversão",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-a-api-de-conversao-do-facebook-194ipi9.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversão"
-        ],
-        "summary": "Criar/Atualizar Conversão",
-        "description": "Operação de mutação para Conversão.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/convers-o-do-facebook-tamb-m": {
-      "get": {
-        "tags": [
-          "Conversão Do Facebook Também"
-        ],
-        "summary": "Consultar Conversão Do Facebook Também",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-o-pixel-do-facebook-1rb2xtr.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversão Do Facebook Também"
-        ],
-        "summary": "Criar/Atualizar Conversão Do Facebook Também",
-        "description": "Operação de mutação para Conversão Do Facebook Também.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/convers-o-do-pinterest-tamb-m": {
-      "get": {
-        "tags": [
-          "Conversão Do Pinterest Também"
-        ],
-        "summary": "Consultar Conversão Do Pinterest Também",
-        "description": "Recurso identificado na documentação (pt-br_article_como-configurar-o-pixel-do-pinterest-1347mkq.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Conversão Do Pinterest Também"
-        ],
-        "summary": "Criar/Atualizar Conversão Do Pinterest Também",
-        "description": "Operação de mutação para Conversão Do Pinterest Também.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/oauth/token": {
       "post": {
         "tags": [
-          "Kiwify"
+          "Autenticação"
         ],
-        "summary": "POST /oauth/token",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "summary": "Endpoint para gerar um Bearer token utilizado como autenticação nos outros endpoints da API.",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OAuthSuccessResponse"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZV9hcGlfaW50ZWdyYXRpb25faWQiOiIzNmI1MDZlYS03M2ZmLTQ2NjQtODQ4Zi1iODFjYzllZmU0NzYiLCJzdG9yZV9pZCI6Ilh2UzBxZmtkekNaVGc4eiIsInNjb3BlIjoic3RhdHMgcHJvZHVjdHMgZXZlbnRzIHNhbGVzIHNhbGVzX3JlZnVuZCBmaW5hbmNpYWwgYWZmaWxpYXRlcyB3ZWJob29rcyIsImp0aSI6ImVkNGFlMmUyOWZhZWIxMzUwZjNmMTdjMzExYmM0NjhhIiwiZXhwIjoxNzAxMzQ4NTE1LCJpYXQiOjE3MDEyNjIxMTV9.dJWYnnQv6TREivsL3riYFQPypHg-6RqaGVff8iM4puw",
+                      "token_type": "Bearer",
+                      "expires_in": 86400,
+                      "scope": "stats products events sales sales_refund financial affiliates webhooks"
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /oauth/token",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
+          },
+          "400": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid client: client is invalid"
+                    }
+                  }
                 }
+              }
+            },
+            "description": "Solicitação Inválida"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/OAuthRequest"
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/account-details": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Conta"
         ],
-        "summary": "GET /account-details",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Get Account Details",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/AccountDetails"
+                },
+                "examples": {
+                  "AccountDetails": {
+                    "summary": "AccountDetails example",
+                    "value": {
+                      "id": "XvS0qfkdzCZTg8z",
+                      "company_name": "Teste LTDA",
+                      "director_cpf": "99999999999",
+                      "company_cnpj": "99999999999999",
+                      "legal_entities": [
+                        {
+                          "id": "d644de3d-9a02-46b1-aed4-72785fe8828f",
+                          "active": true,
+                          "company_name": "Teste LTDA",
+                          "director_cpf": "99999999999",
+                          "company_cnpj": "",
+                          "pix_key": "99999999999",
+                          "created_at": "2023-05-31T12:23:59.746Z",
+                          "updated_at": "2023-09-27T18:10:37.697Z"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "stats"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/products": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Produtos"
         ],
-        "summary": "GET /products",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Get Products",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PaginatedResponse"
+                },
+                "examples": {
+                  "Products": {
+                    "summary": "Products example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": [
+                        {
+                          "id": "1286a0c0-d492-11ed-9709-c3c5046ec174",
+                          "name": "Produto teste",
+                          "type": "membership",
+                          "created_at": "2023-04-06T15:45:36.013Z",
+                          "currency": "BRL",
+                          "price": null,
+                          "affiliate_enabled": false,
+                          "status": "active",
+                          "payment_type": "recurring"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "products"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/products/{id}": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Produtos"
         ],
-        "summary": "GET /products/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -452,47 +276,419 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Response description",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Product"
+                },
+                "examples": {
+                  "Product": {
+                    "summary": "Products example",
+                    "value": {
+                      "id": "20072760-3699-11ee-b627-87e13b212de8",
+                      "store_id": "XvS0qfkdzCZTg8z",
+                      "name": "pix test",
+                      "type": "membership",
+                      "created_at": "2023-08-09T09:42:59.074Z",
+                      "currency": "BRL",
+                      "price": 500,
+                      "affiliate_enabled": false,
+                      "status": "active",
+                      "payment_type": "charge",
+                      "shipping_options": [
+                        {
+                          "id": "928b5935-a3d9-4f21-879d-f46c1b30d9f0",
+                          "name": "Frete Gratis",
+                          "price": 0
+                        }
+                      ],
+                      "links": [
+                        {
+                          "id": "KMgND1r",
+                          "custom_name": null,
+                          "status": "active",
+                          "is_sales_page": false
+                        }
+                      ],
+                      "bumps": [
+                        {
+                          "id": "9811cdd9-45e9-456d-8c3b-114a7cf6fa33",
+                          "color": "#f7f7f7",
+                          "link": {
+                            "id": "AbDFGi0",
+                            "custom_name": null,
+                            "product_id": "828b5935-a2d9-3f21-279d-146c1b30d9f0",
+                            "status": "active",
+                            "is_sales_page": false
+                          }
+                        }
+                      ],
+                      "offers": [],
+                      "event_settings": null,
+                      "event_batches": [],
+                      "subscriptions": [],
+                      "revenue_partners": []
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "products"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/sales": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Vendas"
         ],
-        "summary": "GET /sales",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "Obtenha uma lista de todas as vendas. O período máximo entre o start_date e o end_date é de 90 dias\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SaleStatus"
+          },
+          {
+            "$ref": "#/components/parameters/ViewFullSaleDetails"
+          },
+          {
+            "$ref": "#/components/parameters/SalePaymentMethod"
+          },
+          {
+            "$ref": "#/components/parameters/SaleProductId"
+          },
+          {
+            "$ref": "#/components/parameters/SaleAffiliateId"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_start_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_end_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Get Sales",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "oneOf": [],
+                  "$ref": "#/components/schemas/PaginatedResponse"
+                },
+                "examples": {
+                  "disabilitar view_full_sale_details": {
+                    "summary": "Sales example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": [
+                        {
+                          "id": "5cbb3832-7b5f-4cf2-b04e-ca6a4289d896",
+                          "reference": "9dAQA5a",
+                          "type": "product",
+                          "created_at": "2023-10-31T16:53:05.119Z",
+                          "updated_at": "2023-10-31T16:57:01.810Z",
+                          "product": {
+                            "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                            "name": "my product"
+                          },
+                          "shipping": {
+                            "id": "255f7ae0-8694-40f9-b905-7507fe6bc58f",
+                            "name": "Entrega Grátis",
+                            "price": 0
+                          },
+                          "status": "paid",
+                          "payment_method": "boleto",
+                          "net_amount": 0,
+                          "currency": "BRL",
+                          "customer": {
+                            "id": "29eb9963-8f4f-4c03-9897-63bdba0d5eb2",
+                            "name": "my customer",
+                            "email": "mycustomer@mail.com",
+                            "cpf": "99999999999",
+                            "mobile": "+5599999999999",
+                            "instagram": "y_instagram",
+                            "country": "BR",
+                            "address": {
+                              "street": "Rua Danilo",
+                              "number": "407",
+                              "complement": "Apt. 123",
+                              "neighborhood": "Jardim dos Jardineiros",
+                              "city": "Paulista",
+                              "state": "SE",
+                              "zipcode": "46121-175"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "habilitar view_full_sale_details": {
+                    "summary": "Sales example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": [
+                        {
+                          "id": "5cbb3832-7b5f-4cf2-b04e-ca6a4289d896",
+                          "reference": "9dAQA5a",
+                          "type": "product",
+                          "created_at": "2023-10-31T16:53:05.119Z",
+                          "updated_at": "2023-10-31T16:57:01.810Z",
+                          "product": {
+                            "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                            "name": "my product"
+                          },
+                          "shipping": {
+                            "id": "255f7ae0-8694-40f9-b905-7507fe6bc58f",
+                            "name": "Entrega Grátis",
+                            "price": 0
+                          },
+                          "status": "paid",
+                          "payment_method": "boleto",
+                          "net_amount": 0,
+                          "currency": "BRL",
+                          "customer": {
+                            "id": "29eb9963-8f4f-4c03-9897-63bdba0d5eb2",
+                            "name": "my customer",
+                            "email": "mycustomer@mail.com",
+                            "cpf": "99999999999",
+                            "mobile": "+5599999999999",
+                            "instagram": "y_instagram",
+                            "country": "BR",
+                            "address": {
+                              "street": "Rua Danilo",
+                              "number": "407",
+                              "complement": "Apt. 123",
+                              "neighborhood": "Jardim dos Jardineiros",
+                              "city": "Paulista",
+                              "state": "SE",
+                              "zipcode": "46121-175"
+                            }
+                          },
+                          "approved_date": "2023-10-31T16:34:35.491Z",
+                          "boleto_url": null,
+                          "card_last_digits": "1115",
+                          "card_rejection_reason": null,
+                          "card_type": "mastercard",
+                          "installments": 12,
+                          "is_one_click": true,
+                          "parent_order_id": null,
+                          "payment": {
+                            "charge_amount": 10388,
+                            "charge_currency": "BRL",
+                            "net_amount": 8853,
+                            "product_base_price": 60037,
+                            "product_base_currency": "BRL",
+                            "settlement_amount": 8853,
+                            "settlement_currency": "USD",
+                            "fee": 984,
+                            "fee_currency": "USD",
+                            "sale_tax_rate": 5.6,
+                            "sale_tax_amount": 551
+                          },
+                          "refunded_at": null,
+                          "sale_type": "producer",
+                          "tracking": {
+                            "sck": null,
+                            "src": null,
+                            "utm_campaign": null,
+                            "utm_content": null,
+                            "utm_medium": null,
+                            "utm_source": null,
+                            "utm_term": null,
+                            "s1": null,
+                            "s2": null,
+                            "s3": null
+                          },
+                          "two_cards": false,
+                          "revenue_partners": [
+                            {
+                              "account_id": "RpL2PsVt7gEN50Q",
+                              "legal_name": "My Coproducer",
+                              "document_id": "12345678910",
+                              "percentage": 50,
+                              "net_amount_split": 4426,
+                              "charge_amount_split": 5000
+                            }
+                          ],
+                          "affiliate_commission": {
+                            "name": "My affiliate",
+                            "document": "123456789",
+                            "email": "myaffiliate@email.com",
+                            "amount": 2849
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "cliente com CNPJ": {
+                    "summary": "Sales example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": [
+                        {
+                          "id": "5cbb3832-7b5f-4cf2-b04e-ca6a4289d896",
+                          "reference": "9dAQA5a",
+                          "type": "product",
+                          "created_at": "2023-10-31T16:53:05.119Z",
+                          "updated_at": "2023-10-31T16:57:01.810Z",
+                          "product": {
+                            "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                            "name": "my product"
+                          },
+                          "shipping": {
+                            "id": "255f7ae0-8694-40f9-b905-7507fe6bc58f",
+                            "name": "Entrega Grátis",
+                            "price": 0
+                          },
+                          "status": "paid",
+                          "payment_method": "boleto",
+                          "net_amount": 0,
+                          "currency": "BRL",
+                          "customer": {
+                            "id": "29eb9963-8f4f-4c03-9897-63bdba0d5eb2",
+                            "name": "my customer",
+                            "email": "mycustomer@mail.com",
+                            "cnpj": "99999999999999",
+                            "mobile": "+5599999999999",
+                            "instagram": "y_instagram",
+                            "country": "BR",
+                            "address": {
+                              "street": "Rua Danilo",
+                              "number": "407",
+                              "complement": "Apt. 123",
+                              "neighborhood": "Jardim dos Jardineiros",
+                              "city": "Paulista",
+                              "state": "SE",
+                              "zipcode": "46121-175"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "sales"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/sales/{id}": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Vendas"
         ],
-        "summary": "GET /sales/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -505,25 +701,240 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Response description",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/SaleDetails"
+                },
+                "examples": {
+                  "cliente com CPF": {
+                    "summary": "Sale example",
+                    "value": {
+                      "id": "fc96cec5-1ff1-49b3-aa22-0e131f353b62",
+                      "reference": "iYJwhMP",
+                      "type": "product",
+                      "created_at": "2023-10-31T16:34:35.491Z",
+                      "updated_at": "2023-10-31T16:36:02.005Z",
+                      "product": {
+                        "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                        "name": "My Product"
+                      },
+                      "shipping": {
+                        "id": "255f7ae0-8694-40f9-b905-7507fe6bc58f",
+                        "name": "Entrega Grátis",
+                        "price": 0
+                      },
+                      "status": "paid",
+                      "payment_method": "credit_card",
+                      "net_amount": 8853,
+                      "currency": "USD",
+                      "customer": {
+                        "id": "b17dd04e-5acc-41ae-a4b2-cba0d2436406",
+                        "name": "my customer",
+                        "email": "mycustomer@mail.com",
+                        "cpf": "99999999999",
+                        "mobile": "+5599999999999",
+                        "instagram": "y_instagram",
+                        "country": "BR",
+                        "address": {
+                          "street": "Rua Danilo",
+                          "number": "407",
+                          "complement": "Apt. 123",
+                          "neighborhood": "Jardim dos Jardineiros",
+                          "city": "Paulista",
+                          "state": "SE",
+                          "zipcode": "46121-175"
+                        }
+                      },
+                      "approved_date": "2023-10-31T16:34:35.491Z",
+                      "boleto_url": null,
+                      "card_last_digits": "1115",
+                      "card_rejection_reason": null,
+                      "card_type": "mastercard",
+                      "installments": 12,
+                      "is_one_click": true,
+                      "parent_order_id": null,
+                      "payment": {
+                        "charge_amount": 10388,
+                        "charge_currency": "BRL",
+                        "net_amount": 8853,
+                        "product_base_price": 60037,
+                        "product_base_currency": "BRL",
+                        "settlement_amount": 8853,
+                        "settlement_currency": "USD",
+                        "fee": 984,
+                        "fee_currency": "USD",
+                        "sale_tax_rate": 5.6,
+                        "sale_tax_amount": 551
+                      },
+                      "refunded_at": null,
+                      "sale_type": "producer",
+                      "tracking": {
+                        "sck": null,
+                        "src": null,
+                        "utm_campaign": null,
+                        "utm_content": null,
+                        "utm_medium": null,
+                        "utm_source": null,
+                        "utm_term": null,
+                        "s1": null,
+                        "s2": null,
+                        "s3": null
+                      },
+                      "two_cards": false,
+                      "revenue_partners": [
+                        {
+                          "account_id": "RpL2PsVt7gEN50Q",
+                          "legal_name": "My Coproducer",
+                          "document_id": "12345678910",
+                          "percentage": 50,
+                          "net_amount_split": 4426,
+                          "charge_amount_split": 5000
+                        }
+                      ],
+                      "affiliate_commission": {
+                        "name": "My affiliate",
+                        "document": "123456789",
+                        "email": "myaffiliate@email.com",
+                        "amount": 2849
+                      }
+                    }
+                  },
+                  "cliente com CNPJ": {
+                    "summary": "Sale example",
+                    "value": {
+                      "id": "fc96cec5-1ff1-49b3-aa22-0e131f353b62",
+                      "reference": "iYJwhMP",
+                      "type": "product",
+                      "created_at": "2023-10-31T16:34:35.491Z",
+                      "updated_at": "2023-10-31T16:36:02.005Z",
+                      "product": {
+                        "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                        "name": "My Product"
+                      },
+                      "shipping": {
+                        "id": "255f7ae0-8694-40f9-b905-7507fe6bc58f",
+                        "name": "Entrega Grátis",
+                        "price": 0
+                      },
+                      "status": "paid",
+                      "payment_method": "credit_card",
+                      "net_amount": 8853,
+                      "currency": "USD",
+                      "customer": {
+                        "id": "b17dd04e-5acc-41ae-a4b2-cba0d2436406",
+                        "name": "my customer",
+                        "email": "mycustomer@mail.com",
+                        "cnpj": "99999999999999",
+                        "mobile": "+5599999999999",
+                        "instagram": "y_instagram",
+                        "country": "BR",
+                        "address": {
+                          "street": "Rua Danilo",
+                          "number": "407",
+                          "complement": "Apt. 123",
+                          "neighborhood": "Jardim dos Jardineiros",
+                          "city": "Paulista",
+                          "state": "SE",
+                          "zipcode": "46121-175"
+                        }
+                      },
+                      "approved_date": "2023-10-31T16:34:35.491Z",
+                      "boleto_url": null,
+                      "card_last_digits": "1115",
+                      "card_rejection_reason": null,
+                      "card_type": "mastercard",
+                      "installments": 12,
+                      "is_one_click": true,
+                      "parent_order_id": null,
+                      "payment": {
+                        "charge_amount": 10388,
+                        "charge_currency": "BRL",
+                        "net_amount": 8853,
+                        "product_base_price": 60037,
+                        "product_base_currency": "BRL",
+                        "settlement_amount": 8853,
+                        "settlement_currency": "USD",
+                        "fee": 984,
+                        "fee_currency": "USD",
+                        "sale_tax_rate": 5.6,
+                        "sale_tax_amount": 551
+                      },
+                      "refunded_at": null,
+                      "sale_type": "producer",
+                      "tracking": {
+                        "sck": null,
+                        "src": null,
+                        "utm_campaign": null,
+                        "utm_content": null,
+                        "utm_medium": null,
+                        "utm_source": null,
+                        "utm_term": null,
+                        "s1": null,
+                        "s2": null,
+                        "s3": null
+                      },
+                      "two_cards": false,
+                      "revenue_partners": [
+                        {
+                          "account_id": "RpL2PsVt7gEN50Q",
+                          "legal_name": "My Coproducer",
+                          "document_id": "12345678910",
+                          "percentage": 50,
+                          "net_amount_split": 4426,
+                          "charge_amount_split": 5000
+                        }
+                      ],
+                      "affiliate_commission": {
+                        "name": "My affiliate",
+                        "document": "123456789",
+                        "email": "myaffiliate@email.com",
+                        "amount": 2849
+                      }
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "sales"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/sales/{id}/refund": {
       "post": {
         "tags": [
-          "Kiwify"
+          "Vendas"
         ],
-        "summary": "POST /sales/{id}/refund",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -536,69 +947,210 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Request Refund",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/SalesRefundResponse"
+                },
+                "examples": {
+                  "Requested": {
+                    "summary": "Solicitado com sucesso",
+                    "value": {
+                      "refunded": true
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "sales_refund"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundRequest"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/stats": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Vendas"
         ],
-        "summary": "GET /stats",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SaleProductId"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Statistics data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Stats"
+                },
+                "examples": {
+                  "Stats": {
+                    "summary": "Stats example",
+                    "value": {
+                      "credit_card_approval_rate": 50,
+                      "total_sales": 3,
+                      "total_net_amount": 25956,
+                      "refund_rate": 25,
+                      "chargeback_rate": 0,
+                      "total_boleto_generated": 2,
+                      "total_boleto_paid": 1,
+                      "boleto_rate": 50
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "stats"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/balance": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Financeiro"
         ],
-        "summary": "GET /balance",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Balance data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Balance"
+                },
+                "examples": {
+                  "Balance": {
+                    "summary": "Balance example",
+                    "value": {
+                      "available": 236961,
+                      "pending": 4621,
+                      "legal_entity_id": "8dcb67d3-9217-4a0e-8f7c-916cf58f415c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitação Inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "financial"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/balance/{legal_entity_id}": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Financeiro"
         ],
-        "summary": "GET /balance/{legal_entity_id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "legal_entity_id",
@@ -611,67 +1163,215 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Balance data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Balance"
+                },
+                "examples": {
+                  "Balance": {
+                    "summary": "Balance example",
+                    "value": {
+                      "available": 236961,
+                      "pending": 4621,
+                      "legal_entity_id": "8dcb67d3-9217-4a0e-8f7c-916cf58f415c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitação Inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "financial"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/payouts": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /payouts",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
-          "Kiwify"
+          "Financeiro"
         ],
-        "summary": "POST /payouts",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "financial"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayoutRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Request Payout",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PayoutResponse"
+                },
+                "examples": {
+                  "Requested": {
+                    "summary": "Solicitado com sucesso",
+                    "value": {
+                      "id": "8606aae0-e036-4e55-998a-e0a8de7bf54f"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitação Inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
+      },
+      "get": {
+        "tags": [
+          "Financeiro"
+        ],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LegalEntityId"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get Payouts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponse"
+                },
+                "examples": {
+                  "Payouts": {
+                    "summary": "Payouts example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": [
+                        {
+                          "id": "4d569345-2002-4620-9e73-8d1a255af5c0",
+                          "amount": 99633,
+                          "status": "pending_review",
+                          "legal_entity_id": "d644de3d-9a02-46b1-aed4-72785fe8828f",
+                          "created_at": "2023-06-26T15:47:23.489Z",
+                          "updated_at": "2023-07-13T14:15:24.570Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
+          }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "financial"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/payouts/{id}": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Financeiro"
         ],
-        "summary": "GET /payouts/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -684,47 +1384,182 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Payout data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Payout"
+                },
+                "examples": {
+                  "Payout": {
+                    "summary": "Payout example",
+                    "value": {
+                      "id": "8606aae0-e036-4e55-998a-e0a8de7bf54f",
+                      "amount": 49633,
+                      "status": "pending_review",
+                      "legal_entity_id": "d644de3d-9a02-46b1-aed4-72785fe8828f",
+                      "created_at": "2023-11-29T14:38:08.740Z",
+                      "updated_at": "2023-11-29T14:38:08.740Z"
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "financial"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/affiliates": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Affiliados"
         ],
-        "summary": "GET /affiliates",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Get Affiliates",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PaginatedResponse"
+                },
+                "examples": {
+                  "Affiliates": {
+                    "summary": "Affiliates example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": [
+                        {
+                          "affiliate_id": "c52ccea4-2b5a-4d03-b53a-d9dc96756fc0",
+                          "name": "MY Affiliate",
+                          "email": "myaffiliate@mail.com",
+                          "company_name": "MY Affiliate",
+                          "director_cpf": "99999999999",
+                          "company_cnpj": "",
+                          "product": {
+                            "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                            "name": "My Product"
+                          },
+                          "commission": 4600,
+                          "status": "active",
+                          "created_at": "2023-07-24T15:56:26.189Z"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "affiliates"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/affiliates/{id}": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Affiliados"
         ],
-        "summary": "GET /affiliates/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -737,23 +1572,73 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Affiliate data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Affiliate"
+                },
+                "examples": {
+                  "Affiliate": {
+                    "summary": "Affiliate example",
+                    "value": {
+                      "affiliate_id": "c52ccea4-2b5a-4d03-b53a-d9dc96756fc0",
+                      "name": "MY Affiliate",
+                      "email": "myaffiliate@mail.com",
+                      "company_name": "MY Affiliate",
+                      "director_cpf": "99999999999",
+                      "company_cnpj": "",
+                      "product": {
+                        "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                        "name": "My Product"
+                      },
+                      "commission": 4600,
+                      "status": "active",
+                      "created_at": "2023-07-24T15:56:26.189Z"
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "affiliates"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       },
       "put": {
         "tags": [
-          "Kiwify"
+          "Affiliados"
         ],
-        "summary": "PUT /affiliates/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -766,67 +1651,280 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Affiliate data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Affiliate"
+                },
+                "examples": {
+                  "Affiliate": {
+                    "summary": "Affiliate example",
+                    "value": {
+                      "affiliate_id": "c52ccea4-2b5a-4d03-b53a-d9dc96756fc0",
+                      "name": "MY Affiliate",
+                      "email": "myaffiliate@mail.com",
+                      "company_name": "MY Affiliate",
+                      "director_cpf": "99999999999",
+                      "company_cnpj": "",
+                      "product": {
+                        "id": "aaa86f40-d7ae-11ed-acc6-e1c45591a30e",
+                        "name": "My Product"
+                      },
+                      "commission": 4600,
+                      "status": "active",
+                      "created_at": "2023-07-24T15:56:26.189Z"
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "affiliates"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AffiliateRequest"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/webhooks": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Webhooks"
         ],
-        "summary": "GET /webhooks",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Get Webhooks",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PaginatedResponse"
+                },
+                "examples": {
+                  "Webhooks": {
+                    "summary": "Webhooks example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": [
+                        {
+                          "id": "c2be7f8e-b373-4eb7-b623-16ce98d5ed44",
+                          "name": "meu webhook",
+                          "url": "https://webhook.site/73d28a2b-6c48-41e0-a8ad-0d5ef748ce41",
+                          "products": "all",
+                          "triggers": [
+                            "boleto_gerado",
+                            "pix_gerado",
+                            "carrinho_abandonado",
+                            "compra_recusada",
+                            "compra_aprovada",
+                            "compra_reembolsada",
+                            "chargeback",
+                            "subscription_canceled",
+                            "subscription_late",
+                            "subscription_renewed"
+                          ],
+                          "token": "rxue90njjv1",
+                          "created_at": "2023-11-24T10:06:47.540Z",
+                          "updated_at": "2023-11-24T10:06:47.540Z"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "webhooks"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       },
       "post": {
         "tags": [
-          "Kiwify"
+          "Webhooks"
         ],
-        "summary": "POST /webhooks",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Webhook data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Webhook"
+                },
+                "examples": {
+                  "Webhook": {
+                    "summary": "Webhook example",
+                    "value": {
+                      "id": "c2be7f8e-b373-4eb7-b623-16ce98d5ed44",
+                      "name": "meu webhook",
+                      "url": "https://webhook.site/73d28a2b-6c48-41e0-a8ad-0d5ef748ce41",
+                      "products": "ba22c4a0-5c94-11ee-9c2d-8d32d7a17894",
+                      "triggers": [
+                        "boleto_gerado",
+                        "pix_gerado",
+                        "carrinho_abandonado",
+                        "compra_recusada",
+                        "compra_aprovada",
+                        "compra_reembolsada",
+                        "chargeback",
+                        "subscription_canceled",
+                        "subscription_late",
+                        "subscription_renewed"
+                      ],
+                      "token": "rxue90njjv1",
+                      "created_at": "2023-11-24T10:06:47.540Z",
+                      "updated_at": "2023-11-24T10:06:47.540Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitação Inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "webhooks"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequest"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/webhooks/{id}": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Webhooks"
         ],
-        "summary": "GET /webhooks/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -839,23 +1937,79 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Webhook data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Webhook"
+                },
+                "examples": {
+                  "Webhook": {
+                    "summary": "Webhook example",
+                    "value": {
+                      "id": "c2be7f8e-b373-4eb7-b623-16ce98d5ed44",
+                      "name": "meu webhook",
+                      "url": "https://webhook.site/73d28a2b-6c48-41e0-a8ad-0d5ef748ce41",
+                      "products": "ba22c4a0-5c94-11ee-9c2d-8d32d7a17894",
+                      "triggers": [
+                        "boleto_gerado",
+                        "pix_gerado",
+                        "carrinho_abandonado",
+                        "compra_recusada",
+                        "compra_aprovada",
+                        "compra_reembolsada",
+                        "chargeback",
+                        "subscription_canceled",
+                        "subscription_late",
+                        "subscription_renewed"
+                      ],
+                      "token": "rxue90njjv1",
+                      "created_at": "2023-11-24T10:06:47.540Z",
+                      "updated_at": "2023-11-24T10:06:47.540Z"
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "webhooks"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       },
       "put": {
         "tags": [
-          "Kiwify"
+          "Webhooks"
         ],
-        "summary": "PUT /webhooks/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -868,23 +2022,86 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Webhook data",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Webhook"
+                },
+                "examples": {
+                  "Webhook": {
+                    "summary": "Webhook example",
+                    "value": {
+                      "id": "c2be7f8e-b373-4eb7-b623-16ce98d5ed44",
+                      "name": "meu webhook",
+                      "url": "https://webhook.site/73d28a2b-6c48-41e0-a8ad-0d5ef748ce41",
+                      "products": "ba22c4a0-5c94-11ee-9c2d-8d32d7a17894",
+                      "triggers": [
+                        "boleto_gerado",
+                        "pix_gerado",
+                        "carrinho_abandonado",
+                        "compra_recusada",
+                        "compra_aprovada",
+                        "compra_reembolsada",
+                        "chargeback",
+                        "subscription_canceled",
+                        "subscription_late",
+                        "subscription_renewed"
+                      ],
+                      "token": "rxue90njjv1",
+                      "created_at": "2023-11-24T10:06:47.540Z",
+                      "updated_at": "2023-11-24T10:06:47.540Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitação Inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "webhooks"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequest"
+              }
+            }
+          }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       },
       "delete": {
         "tags": [
-          "Kiwify"
+          "Webhooks"
         ],
-        "summary": "DELETE /webhooks/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "id",
@@ -896,26 +2113,49 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Sucesso",
+          "204": {
+            "description": "Webhook deleted"
+          },
+          "400": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
                 }
               }
-            }
+            },
+            "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "webhooks"
+            ]
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     },
     "/events/{product_id}/participants": {
       "get": {
         "tags": [
-          "Kiwify"
+          "Eventos"
         ],
-        "summary": "GET /events/{product_id}/participants",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`docs_kiwify_com_br_api-reference_openapi_json_710906a2.json`)",
         "parameters": [
           {
             "name": "product_id",
@@ -924,320 +2164,87 @@
             "schema": {
               "type": "string"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/docs.json": {
-      "post": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "POST /docs.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/openapi.json": {
-      "post": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "POST /openapi.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/banking/openapi.json": {
-      "post": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "POST /banking/openapi.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api-reference/banking/openapi.json": {
-      "post": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "POST /api-reference/banking/openapi.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api-reference/banking/openapi.pt.json": {
-      "post": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "POST /api-reference/banking/openapi.pt.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/account-details": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/account-details",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/list": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/list",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/create": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/create",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/single": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/single",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/edit": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/edit",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/delete": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/delete",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/chat/completions": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /api/v1/chat/completions",
-        "description": "Endpoint extraído da documentação (api-reference_account_account-details.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/payouts": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/payouts",
-        "description": "Endpoint extraído da documentação (api-reference_affiliates_edit.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/affiliates/{id}": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/affiliates/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_affiliates_single.md).",
-        "parameters": [
+          },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "checked_in",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_at_start_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_at_end_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_start_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_end_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "external_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "batch_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cpf",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -1245,669 +2252,1209 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Get Participants",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PaginatedResponse"
+                },
+                "examples": {
+                  "Participants": {
+                    "summary": "Participants example",
+                    "value": {
+                      "pagination": {
+                        "count": 10,
+                        "page_number": 1,
+                        "page_size": 10
+                      },
+                      "data": {
+                        "max_tickets": 10,
+                        "available": 7,
+                        "issued_tickets": 3,
+                        "sold_tickets": 2,
+                        "total_checkin": 0,
+                        "participants": [
+                          {
+                            "id": "ae1603c9-eeda-41c5-84a2-6bffb7c4b333",
+                            "external_id": "YRC3IQGCR24TWKT",
+                            "batch_id": "c880067d-5fc1-43ea-91fe-8eba9b70b2dc",
+                            "batch_name": "lote 1",
+                            "name": "Manual",
+                            "email": "mycustomer@mail.com",
+                            "cpf": "64365501194",
+                            "phone": "8229453509",
+                            "order_id": "44db0fe3-ac96-4895-8a72-8f128e9664a9",
+                            "checkin_at": null,
+                            "created_at": "2023-11-24T10:30:04.855Z",
+                            "updated_at": "2023-11-24T10:30:04.855Z"
+                          },
+                          {
+                            "id": "a3d6af9a-6b5f-4915-87ea-83033a893833",
+                            "external_id": "ZQAU4F3U2E73Z2N",
+                            "batch_id": "c880067d-5fc1-43ea-91fe-8eba9b70b2dc",
+                            "batch_name": "lote 1",
+                            "name": "My Customer",
+                            "email": "mycustomer@mail.com",
+                            "cpf": "64365501194",
+                            "phone": "8229453509",
+                            "order_id": "44db0fe3-ac96-4895-8a72-8f128e9664a9",
+                            "checkin_at": null,
+                            "created_at": "2023-11-24T10:58:11.057Z",
+                            "updated_at": "2023-11-24T10:58:11.057Z"
+                          },
+                          {
+                            "id": "0434160b-4ba2-4b0a-ba13-ff2d3427155d",
+                            "external_id": "N7HHNQCFJH0HK57",
+                            "batch_id": "c880067d-5fc1-43ea-91fe-8eba9b70b2dc",
+                            "batch_name": "lote 1",
+                            "name": "My Customer",
+                            "email": "mycustomer@mail.com",
+                            "cpf": "64365501194",
+                            "phone": "8229453509",
+                            "order_id": "44db0fe3-ac96-4895-8a72-8f128e9664a9",
+                            "checkin_at": null,
+                            "created_at": "2023-11-24T10:59:02.538Z",
+                            "updated_at": "2023-11-24T10:59:02.538Z"
+                          }
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/v1/oauth/token": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/oauth/token",
-        "description": "Endpoint extraído da documentação (api-reference_auth_oauth.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
+          },
+          "400": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OAuthErrorResponse"
+                },
+                "examples": {
+                  "InvalidClient": {
+                    "value": {
+                      "error": "auth_error",
+                      "message": "Invalid token: access token is invalid"
+                    }
+                  }
                 }
               }
-            }
+            },
+            "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
           }
-        }
-      }
-    },
-    "/oauth/tokenExperimentarEndpoint": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /oauth/tokenExperimentarEndpoint",
-        "description": "Endpoint extraído da documentação (api-reference_auth_oauth.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/events/{product_id}/participants": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/events/{product_id}/participants",
-        "description": "Endpoint extraído da documentação (api-reference_events_list.md).",
-        "parameters": [
+        },
+        "security": [
           {
-            "name": "product_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "AccountIdHeader": [],
+            "OAuth2": [
+              "events"
+            ]
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/balance": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/balance",
-        "description": "Endpoint extraído da documentação (api-reference_finance_balance_list.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/products/{id}": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/products/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_products_single.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/sales": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/sales",
-        "description": "Endpoint extraído da documentação (api-reference_sales_list.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/sales/{id}/refund": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/sales/{id}/refund",
-        "description": "Endpoint extraído da documentação (api-reference_sales_refund.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/sales/{id}": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/sales/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_sales_single.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/stats": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/stats",
-        "description": "Endpoint extraído da documentação (api-reference_sales_stats.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/create.mdx": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/create.mdx",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_create.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/webhooks/{id}": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/webhooks/{id}",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_delete.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/{id}ExperimentarcURL": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/{id}ExperimentarcURL",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_delete.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/delete.mdx": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/delete.mdx",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_delete.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/edit.mdx": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/edit.mdx",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_edit.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/webhooks": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/webhooks",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_list.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/list.mdx": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/list.mdx",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_list.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/single.mdx": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /webhooks/single.mdx",
-        "description": "Endpoint extraído da documentação (api-reference_webhooks_single.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api-reference/openapi.json": {
-      "post": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "POST /api-reference/openapi.json",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (llms_txt.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/um-curso-da-rea-de-membros": {
-      "get": {
-        "tags": [
-          "Um Curso Da Área De Membros"
-        ],
-        "summary": "Consultar Um Curso Da Área De Membros",
-        "description": "Recurso identificado na documentação (members-area_key-concepts_theme_sections.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Um Curso Da Área De Membros"
-        ],
-        "summary": "Criar/Atualizar Um Curso Da Área De Membros",
-        "description": "Operação de mutação para Um Curso Da Área De Membros.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/balance/{legal_entity_id}": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/balance/{legal_entity_id}",
-        "description": "Endpoint extraído da documentação (network_json_127_api-reference_finance_balance_single.json).",
-        "parameters": [
-          {
-            "name": "legal_entity_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/payouts/{id}": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/payouts/{id}",
-        "description": "Endpoint extraído da documentação (network_json_155_api-reference_finance_payouts_single.json).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/affiliates": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/affiliates",
-        "description": "Endpoint extraído da documentação (network_json_182_api-reference_affiliates_list.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/liquid": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /api/liquid",
-        "description": "Endpoint extraído da documentação (network_json_24_members-area_reference_liquid-language.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/products": {
-      "get": {
-        "tags": [
-          "Kiwify"
-        ],
-        "summary": "GET /v1/products",
-        "description": "Endpoint extraído da documentação (network_json_47_api-reference_products_list.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "docs_kiwify_com_br_api-reference_openapi_json_710906a2.json"
       }
     }
   },
   "components": {
     "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para Kiwify Infoprodutos & Checkout API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para Kiwify Infoprodutos & Checkout API"
-      },
       "OAuth2": {
         "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para Kiwify Infoprodutos & Checkout API",
         "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://api.kiwify.com.br/oauth/authorize",
-            "tokenUrl": "https://api.kiwify.com.br/oauth/token",
+          "clientCredentials": {
+            "tokenUrl": "/oauth/token",
             "scopes": {
-              "read": "Leitura de recursos em Kiwify Infoprodutos & Checkout API",
-              "write": "Gravação e mutação em Kiwify Infoprodutos & Checkout API"
+              "stats": "stats",
+              "products": "products",
+              "events": "events",
+              "sales": "sales",
+              "sales_refund": "sales_refund",
+              "financial": "financial",
+              "affiliates": "affiliates",
+              "webhooks": "webhooks"
             }
           }
         }
+      },
+      "AccountIdHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-kiwify-account-id"
       }
     },
     "schemas": {
+      "OAuthRequest": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "example": "be161f42-1d05-4949-8736-1a526c28672d"
+          },
+          "client_secret": {
+            "type": "string",
+            "example": "a12b34c56d78e90f1234abcd5678efgh9012ijkl3456mnop7890qrst1234uvwx"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_secret"
+        ]
+      },
+      "RefundRequest": {
+        "type": "object",
+        "properties": {
+          "pixKey": {
+            "type": "string",
+            "example": "99999999999"
+          }
+        }
+      },
+      "PayoutRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 5000
+          }
+        }
+      },
+      "AffiliateRequest": {
+        "type": "object",
+        "properties": {
+          "commission": {
+            "type": "number",
+            "example": 4600
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "blocked",
+              "refused"
+            ],
+            "example": "active"
+          }
+        }
+      },
+      "SalesRefundResponse": {
+        "type": "object",
+        "properties": {
+          "refunded": {
+            "type": "boolean",
+            "example": "true"
+          }
+        }
+      },
+      "WebhookRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "meu webhook"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://webhook.site/73d28a2b-6c48-41e0-a8ad-0d5ef748ce41"
+          },
+          "products": {
+            "type": "string",
+            "example": "all"
+          },
+          "triggers": {
+            "type": "array",
+            "example": [
+              "boleto_gerado",
+              "pix_gerado",
+              "carrinho_abandonado",
+              "compra_recusada",
+              "compra_aprovada",
+              "compra_reembolsada",
+              "chargeback",
+              "subscription_canceled",
+              "subscription_late",
+              "subscription_renewed"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "boleto_gerado",
+                "pix_gerado",
+                "carrinho_abandonado",
+                "compra_recusada",
+                "compra_aprovada",
+                "compra_reembolsada",
+                "chargeback",
+                "subscription_canceled",
+                "subscription_late",
+                "subscription_renewed"
+              ]
+            }
+          },
+          "token": {
+            "type": "string",
+            "example": "w9i3pvutvxe"
+          }
+        }
+      },
+      "OAuthSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZV9hcGlfaW50ZWdyYXRpb25faWQiOiIyZThmMzExMy0wNmE1LTQ4OTAtOTgyNC1iNWM1ZmI3YmZkYTciLCJzdG9yZV9pZCI6IlU5VmNINnlaelJrVDJmQiIsImludGVncmF0aW9uX25hbWUiOiJ0ZXN0ZSIsInNjb3BlIjoic3RhdHMiLCJqdGkiOiJhZTMwZDQ4NjU3NWJmMDBiMDFiNzFkNDFlY2M3OWM5YyIsImV4cCI6MTcwMjU5MDg0NiwiaWF0IjoxNzAyNTA0NDQ2fQ.N8Nl5Coj3bL9M6tkaAE61bL2NnqwhUYfNnRqhTMGElc"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "expires_in": {
+            "type": "string",
+            "example": "86400"
+          },
+          "scope": {
+            "type": "string",
+            "example": "stats products events sales sales_refund financial affiliates webhooks"
+          }
+        }
+      },
+      "OAuthErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "auth_error"
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid client: client is invalid"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "validation_error"
+          },
+          "message": {
+            "type": "string",
+            "example": "ValidationError: \"test\" is not allowed"
+          }
+        }
+      },
+      "PaginatedResponse": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "count": {
+                "type": "number",
+                "example": 10
+              },
+              "page_number": {
+                "type": "number",
+                "example": 1
+              },
+              "page_size": {
+                "type": "number",
+                "example": 10
+              }
+            }
+          },
+          "data": {
+            "type": "array",
+            "example": [],
+            "items": {}
+          }
+        }
+      },
+      "GenericItem": {
+        "type": "object",
+        "properties": {}
+      },
+      "LegalEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1306b3b2-49b0-417e-a9d6-d58d585ff3b9"
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          },
+          "company_name": {
+            "type": "string",
+            "example": "Minha Empresa"
+          },
+          "director_cpf": {
+            "type": "string",
+            "example": "99999999999"
+          },
+          "company_cnpj": {
+            "type": "string",
+            "example": "99999999999999"
+          },
+          "pix_key": {
+            "type": "string",
+            "example": "99999999999"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2023-05-31T12:23:59.746Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2023-05-31T12:23:59.746Z"
+          }
+        }
+      },
+      "AccountDetails": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "U9VcH6yZzRkT2fB"
+          },
+          "company_name": {
+            "type": "string",
+            "example": "Minha Empresa"
+          },
+          "director_cpf": {
+            "type": "string",
+            "example": "99999999999"
+          },
+          "company_cnpj": {
+            "type": "string",
+            "example": "99999999999999"
+          },
+          "legal_entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegalEntity"
+            }
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "49c6cd08-11d7-47a1-970c-37c2c03ea9ec"
+          },
+          "custom_name": {
+            "type": "string",
+            "example": "Meu Link"
+          },
+          "product_id": {
+            "type": "string",
+            "example": "451f39f4-cced-42e9-8597-c7fe6179537a"
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL"
+          },
+          "price": {
+            "type": "number",
+            "example": 1000
+          },
+          "status": {
+            "type": "string",
+            "example": "active"
+          },
+          "is_sales_page": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "Bump": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "b300434a-9993-4f4b-a481-f16299c5729c"
+              },
+              "action_call": {
+                "type": "string",
+                "example": "Sim, eu aceito essa oferta especial!"
+              },
+              "oto_description": {
+                "type": "string",
+                "example": "Adicione a compra"
+              },
+              "oto_headline": {
+                "type": "string",
+                "example": "Nome do seu produto"
+              },
+              "color": {
+                "type": "string",
+                "example": "#f7f7f7"
+              },
+              "show_product_image": {
+                "type": "boolean",
+                "example": false
+              },
+              "link": {
+                "$ref": "#/components/schemas/Link"
+              }
+            }
+          }
+        }
+      },
+      "Offer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "451f39f4-cced-42e9-8597-c7fe6179537a"
+          },
+          "name": {
+            "type": "string",
+            "example": "Nome do seu produto"
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL"
+          },
+          "price": {
+            "type": "number",
+            "example": 1000
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "7b5dc633-6b10-4b98-90c7-ea20a7610bd0"
+          },
+          "name": {
+            "type": "string",
+            "example": "Meu Produto"
+          },
+          "type": {
+            "type": "string",
+            "example": "membership"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2023-08-09T09:42:59.074Z"
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL"
+          },
+          "price": {
+            "type": "number",
+            "example": 1000
+          },
+          "affiliate_enabled": {
+            "type": "boolean",
+            "example": true
+          },
+          "status": {
+            "type": "string",
+            "example": "active"
+          },
+          "payment_type": {
+            "type": "string",
+            "example": "charge"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          },
+          "bumps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bump"
+            }
+          },
+          "offers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Offer"
+            }
+          },
+          "event_settings": {
+            "$ref": "#/components/schemas/EventSettings"
+          },
+          "event_batches": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventBatches"
+            }
+          },
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionResponse"
+            }
+          },
+          "revenue_partners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductRevenuePartners"
+            }
+          }
+        }
+      },
+      "SaleProduct": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "2e1d37f7-3c68-4712-907f-a14368302e69"
+          },
+          "name": {
+            "type": "string",
+            "example": "Meu Produto"
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3319e377-912c-405c-9d98-34ac241da46b"
+          },
+          "name": {
+            "type": "string",
+            "example": "Meu Cliente"
+          },
+          "email": {
+            "type": "string",
+            "example": "meucliente@mail.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "99999999999"
+          },
+          "mobile": {
+            "type": "string",
+            "example": "+5599999999999"
+          }
+        }
+      },
+      "PaymentDetails": {
+        "type": "object",
+        "properties": {
+          "charge_amount": {
+            "type": "number",
+            "example": 12048
+          },
+          "fee": {
+            "type": "number",
+            "example": 1348
+          },
+          "net_amount": {
+            "type": "number",
+            "example": 8652
+          },
+          "product_base_price": {
+            "type": "number",
+            "example": 10000
+          }
+        }
+      },
+      "Tracking": {
+        "type": "object",
+        "properties": {
+          "sck": {},
+          "src": {},
+          "utm_campaign": {},
+          "utm_content": {},
+          "utm_medium": {},
+          "utm_source": {},
+          "utm_term": {},
+          "s1": {},
+          "s2": {},
+          "s3": {}
+        }
+      },
+      "RevenuePartners": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "example": "RpL2LaVt13ENs0Q"
+          },
+          "legal_name": {
+            "type": "string",
+            "example": "My Revenue Partner"
+          },
+          "document_id": {
+            "type": "string",
+            "example": "12345678910"
+          },
+          "percentage": {
+            "type": "number",
+            "example": 50
+          },
+          "net_amount_split": {
+            "type": "number",
+            "example": 442
+          },
+          "charge_amount_split": {
+            "type": "number",
+            "example": 5011
+          }
+        }
+      },
+      "ProductRevenuePartners": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "example": "RpL2LaVt13ENs0Q"
+          },
+          "legal_name": {
+            "type": "string",
+            "example": "My Revenue Partner"
+          },
+          "status": {
+            "type": "string",
+            "example": "active"
+          },
+          "document_id": {
+            "type": "string",
+            "example": "12345678910"
+          },
+          "percentage": {
+            "type": "number",
+            "example": 50
+          },
+          "split_invoices": {
+            "type": "boolean",
+            "example": false
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          },
+          "end_date": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          }
+        }
+      },
+      "AffiliateCommission": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My Affiliate"
+          },
+          "document": {
+            "type": "string",
+            "example": "123456789"
+          },
+          "email": {
+            "type": "string",
+            "example": "myaffiliate@email.com"
+          },
+          "amount": {
+            "type": "number",
+            "example": "2480"
+          }
+        }
+      },
+      "SaleDetails": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "588aa8f4-fb61-4d26-bf61-ad4cd6de42cd"
+          },
+          "reference": {
+            "type": "string",
+            "example": "9dAQA5a"
+          },
+          "type": {
+            "type": "string",
+            "example": "product"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          },
+          "product": {
+            "$ref": "#/components/schemas/SaleProduct"
+          },
+          "status": {
+            "type": "string",
+            "example": "paid"
+          },
+          "payment_method": {
+            "type": "string",
+            "example": "credit_card"
+          },
+          "net_amount": {
+            "type": "number",
+            "example": 0
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "approved_date": {
+            "type": "string",
+            "example": "2023-10-31T16:34:35.491Z"
+          },
+          "boleto_url": {},
+          "card_last_digits": {
+            "type": "string",
+            "example": "1115"
+          },
+          "card_rejection_reason": {},
+          "card_type": {
+            "type": "string",
+            "example": "mastercard"
+          },
+          "installments": {
+            "type": "number",
+            "example": 12
+          },
+          "is_one_click": {
+            "type": "boolean",
+            "example": true
+          },
+          "parent_order_id": {},
+          "payment": {
+            "$ref": "#/components/schemas/PaymentDetails"
+          },
+          "refunded_at": {},
+          "sale_type": {
+            "type": "string",
+            "example": "producer"
+          },
+          "tracking": {
+            "$ref": "#/components/schemas/Tracking"
+          },
+          "two_cards": {
+            "type": "boolean",
+            "example": false
+          },
+          "revenue_partners": {
+            "type": "array",
+            "revenue_partners": {
+              "$ref": "#/components/schemas/RevenuePartners"
+            }
+          },
+          "affiliate_commission": {
+            "$ref": "#/components/schemas/AffiliateCommission"
+          }
+        }
+      },
+      "Stats": {
+        "type": "object",
+        "properties": {
+          "credit_card_approval_rate": {
+            "type": "number",
+            "example": 50
+          },
+          "total_sales": {
+            "type": "number",
+            "example": 3
+          },
+          "total_net_amount": {
+            "type": "number",
+            "example": 25956
+          },
+          "refund_rate": {
+            "type": "number",
+            "example": 25
+          },
+          "chargeback_rate": {
+            "type": "number",
+            "example": 0
+          },
+          "total_boleto_generated": {
+            "type": "number",
+            "example": 2
+          },
+          "total_boleto_paid": {
+            "type": "number",
+            "example": 1
+          },
+          "boleto_rate": {
+            "type": "number",
+            "example": 50
+          }
+        }
+      },
+      "Balance": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "number",
+            "example": 236961
+          },
+          "pending": {
+            "type": "number",
+            "example": 4621
+          },
+          "legal_entity_id": {
+            "type": "string",
+            "example": "7ff9e8be-3249-47d3-ac05-aeae816975fc"
+          }
+        }
+      },
+      "PayoutResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8606aae0-e036-4e55-998a-e0a8de7bf54f"
+          }
+        }
+      },
+      "Payout": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8606aae0-e036-4e55-998a-e0a8de7bf54f"
+          },
+          "amount": {
+            "type": "number",
+            "example": 49633
+          },
+          "status": {
+            "type": "string",
+            "example": "pending_review"
+          },
+          "legal_entity_id": {
+            "type": "string",
+            "example": "d644de3d-9a02-46b1-aed4-72785fe8828f"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2023-11-29T14:38:08.740Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2023-11-29T14:38:08.740Z"
+          }
+        }
+      },
+      "Affiliate": {
+        "type": "object",
+        "properties": {
+          "affiliate_id": {
+            "type": "string",
+            "example": "3d103172-04b3-44ef-b2b2-ef0f97db4f37"
+          },
+          "name": {
+            "type": "string",
+            "example": "Meu Afiliado"
+          },
+          "email": {
+            "type": "string",
+            "example": "meuafiliado@gmail.com"
+          },
+          "company_name": {
+            "type": "string",
+            "example": "Meu afiliado"
+          },
+          "director_cpf": {
+            "type": "string",
+            "example": "99999999999"
+          },
+          "company_cnpj": {
+            "type": "string",
+            "example": "99999999999999"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "dddfd7d0-82e4-427e-911a-ea0625a42e17"
+              },
+              "name": {
+                "type": "string",
+                "example": "Meu Produto"
+              }
+            }
+          },
+          "commission": {
+            "type": "number",
+            "example": 4600
+          },
+          "status": {
+            "type": "string",
+            "example": "active"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2023-07-24T15:56:26.189Z"
+          }
+        }
+      },
+      "Webhook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3d379edc-9e21-47ee-8974-ca80a4c7839d"
+          },
+          "name": {
+            "type": "string",
+            "example": "Meu Webhook"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://webhook.site/73d28a2b-6c48-41e0-a8ad-0d5ef748ce41"
+          },
+          "products": {
+            "type": "string",
+            "example": "all"
+          },
+          "triggers": {
+            "type": "array",
+            "example": [
+              "boleto_gerado",
+              "pix_gerado",
+              "carrinho_abandonado",
+              "compra_recusada",
+              "compra_aprovada",
+              "compra_reembolsada",
+              "chargeback",
+              "subscription_canceled",
+              "subscription_late",
+              "subscription_renewed"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "boleto_gerado",
+                "pix_gerado",
+                "carrinho_abandonado",
+                "compra_recusada",
+                "compra_aprovada",
+                "compra_reembolsada",
+                "chargeback",
+                "subscription_canceled",
+                "subscription_late",
+                "subscription_renewed"
+              ]
+            }
+          },
+          "token": {
+            "type": "string",
+            "example": "rxue90njjv1"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2023-11-24T10:06:47.540Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2023-11-24T10:06:47.540Z"
+          }
+        }
+      },
+      "SubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "95c8321b-2bf9-432f-aad5-7b3e8c3f2229"
+          },
+          "name": {
+            "type": "string",
+            "example": "basic"
+          },
+          "description": {
+            "type": "string",
+            "example": "my description"
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL"
+          },
+          "price": {
+            "type": "number",
+            "example": 5000
+          },
+          "frequency": {
+            "type": "string",
+            "example": "monthly"
+          },
+          "installments": {
+            "type": "number",
+            "example": 1
+          },
+          "qty_charges": {
+            "type": "number",
+            "example": 0
+          },
+          "trial_days": {
+            "type": "number",
+            "example": 0
+          },
+          "setup_fee": {
+            "type": "number",
+            "example": 500
+          },
+          "setup_fee_enabled": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "EventBatches": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "82265302-93f5-4dd8-b6dd-3b8f2c4bc07d"
+          },
+          "name": {
+            "type": "string",
+            "example": "Primeiro Lote"
+          },
+          "max_tickets": {
+            "type": "number",
+            "example": 500
+          },
+          "available_tickets": {
+            "type": "number",
+            "example": 500
+          },
+          "issued_tickets": {
+            "type": "number",
+            "example": 0
+          },
+          "sold_tickets": {
+            "type": "number",
+            "example": 0
+          },
+          "currency": {
+            "type": "string",
+            "example": "BRL"
+          },
+          "price": {
+            "type": "number",
+            "example": 45000
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          }
+        }
+      },
+      "EventSettings": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/EventAddress"
+          },
+          "enable_handtags": {
+            "type": "boolean",
+            "example": true
+          },
+          "handtag_code_type": {
+            "type": "string",
+            "example": "qr_code"
+          },
+          "handtag_auto_print": {
+            "type": "boolean",
+            "example": true
+          },
+          "description_enabled": {
+            "type": "boolean",
+            "example": true
+          },
+          "collect_phone": {
+            "type": "boolean",
+            "example": true
+          },
+          "collect_cpf": {
+            "type": "boolean",
+            "example": false
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          },
+          "end_date": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          },
+          "sale_start_at": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          },
+          "sale_end_at": {
+            "type": "string",
+            "example": "2023-10-31T16:53:05.119Z"
+          }
+        }
+      },
+      "EventAddress": {
+        "type": "object",
+        "properties": {
+          "route": {
+            "type": "string",
+            "example": "My route"
+          },
+          "administrative_area_level_2": {
+            "type": "string",
+            "example": "My City"
+          },
+          "administrative_area_level_1": {
+            "type": "string",
+            "example": "My State"
+          },
+          "country": {
+            "type": "string",
+            "example": "My country"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "32121-123"
+          },
+          "latitude": {
+            "type": "number",
+            "example": -19.2312
+          },
+          "longitude": {
+            "type": "number",
+            "example": -24.2312
+          }
+        }
+      },
       "ErrorResponse": {
         "type": "object",
         "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
@@ -1935,22 +3482,6 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
@@ -1959,136 +3490,82 @@
         ]
       }
     },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
+    "parameters": {
+      "SaleStatus": {
+        "name": "status",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "authorized",
+            "chargedback",
+            "paid",
+            "pending",
+            "pending_refund",
+            "processing",
+            "refunded",
+            "refund_requested",
+            "refused",
+            "waiting_payment"
+          ]
         }
       },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
+      "SalePaymentMethod": {
+        "name": "payment_method",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "boleto",
+            "credit_card",
+            "pix"
+          ]
         }
       },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
+      "SaleProductId": {
+        "name": "product_id",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "ba385b7c-cac1-4422-925d-7f707d8267d2"
         }
       },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
+      "SaleAffiliateId": {
+        "name": "affiliate_id",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "ba385b7c-cac1-4422-925d-7f707d8267d2"
         }
       },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
+      "LegalEntityId": {
+        "name": "legal_entity_id",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "ba385b7c-cac1-4422-925d-7f707d8267d2"
         }
       },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
+      "EventCheckedId": {
+        "name": "checked_ian",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean"
         }
-      }
-    }
-  },
-  "security": [
-    {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
-    }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack kiwify.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack kiwify.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "kiwify_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (Kiwify Infoprodutos & Checkout API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Kiwify Infoprodutos & Checkout API.",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
+      },
+      "ViewFullSaleDetails": {
+        "name": "view_full_sale_details",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean"
         }
       }
     }

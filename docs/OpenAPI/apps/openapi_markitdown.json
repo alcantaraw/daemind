@@ -1,0 +1,143 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "MarkItDown & Tesseract OCR Service API",
+    "description": "Especificação OpenAPI 3.0 para o microsserviço unificado de extração de texto, documentos Office/PDF e OCR soberano (Microsoft MarkItDown + Tesseract OCR).",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://markitdown:5001"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Healthcheck do serviço",
+        "description": "Verifica prontidão do motor MarkItDown e idiomas do Tesseract OCR.",
+        "responses": {
+          "200": {
+            "description": "Serviço operacional",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "healthy" },
+                    "service": { "type": "string", "example": "markitdown-tesseract" },
+                    "ocr_languages": { "type": "array", "items": { "type": "string" }, "example": ["por", "eng"] },
+                    "engine": { "type": "string", "example": "markitdown" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convert": {
+      "post": {
+        "summary": "Converter documento multipart para Markdown",
+        "description": "Converte PDFs, DOCX, XLSX, PPTX, áudios e imagens em Markdown limpo com fallback OCR Tesseract.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conversão bem-sucedida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filename": { "type": "string" },
+                    "content": { "type": "string" },
+                    "format": { "type": "string", "example": "markdown" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tika": {
+      "put": {
+        "summary": "Emulação Tika Raw Stream",
+        "description": "Endpoint consumido nativamente pelo Open WebUI (CONTENT_EXTRACTION_ENGINE=tika) via stream binário.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Texto extraído em texto puro / markdown",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tika/form": {
+      "post": {
+        "summary": "Emulação Tika Multipart Form",
+        "description": "Endpoint multipart consumido por clientes de extração Tika.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Texto extraído em texto puro / markdown",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

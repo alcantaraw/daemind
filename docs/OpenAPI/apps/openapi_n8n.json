@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "n8n Workflow Automation REST API",
-    "description": "Especificação OpenAPI 3.0 consolidada para a stack n8n.",
+    "description": "Especificação OpenAPI 3.0 sintetizada via tratamento local em texto para docs.n8n.io.",
     "version": "1.0.0"
   },
   "servers": [
@@ -11,13 +11,10 @@
     }
   ],
   "paths": {
-    "/api/v1/openapi.yml": {
+    "/api/v1/credentials": {
       "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1/openapi.yml",
-        "description": "Endpoint extraído da documentação (api.md).",
+        "summary": "GET /api/v1/credentials",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -30,36 +27,13 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/v1/users": {
-      "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1/users",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       },
       "post": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "POST /api/v1/users",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+        "summary": "POST /api/v1/credentials",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -72,26 +46,16 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       }
     },
-    "/api/v1/users/{id}": {
+    "/api/v1/credentials/{id}": {
       "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1/users/{id}",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "summary": "GET /api/v1/credentials/{id}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -103,24 +67,14 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       },
       "delete": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "DELETE /api/v1/users/{id}",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "summary": "DELETE /api/v1/credentials/{id}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -132,76 +86,13 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/v1/users/{id}/role": {
-      "patch": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "PATCH /api/v1/users/{id}/role",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       },
-      "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1/users/{id}/role",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/api-reference": {
-      "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/api-reference",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+      "patch": {
+        "summary": "PATCH /api/v1/credentials/{id}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -214,16 +105,15 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       }
     },
-    "/api/v1Current": {
-      "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1Current",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+    "/api/v1/credentials/{id}/test": {
+      "post": {
+        "summary": "POST /api/v1/credentials/{id}/test",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -236,16 +126,15 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       }
     },
-    "/api/v1https://example.com/api/v1/users": {
+    "/api/v1/credentials/schema/{credentialTypeName}": {
       "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1https://example.com/api/v1/users",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+        "summary": "GET /api/v1/credentials/schema/{credentialTypeName}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -258,78 +147,15 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       }
     },
-    "/api/v1https://example.com/api/v1/users/{id}": {
-      "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1https://example.com/api/v1/users/{id}",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1https://example.com/api/v1/users/{id}/role": {
-      "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /api/v1https://example.com/api/v1/users/{id}/role",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/integrations": {
-      "get": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "GET /v1/integrations",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+    "/api/v1/credentials/{id}/transfer": {
+      "put": {
+        "summary": "PUT /api/v1/credentials/{id}/transfer",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -342,7 +168,661 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/credentials/schema/{credentialTypeName}": {
+      "get": {
+        "summary": "GET /credentials/schema/{credentialTypeName}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/projects": {
+      "get": {
+        "summary": "GET /api/v1/projects",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "post": {
+        "summary": "POST /api/v1/projects",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/projects/{projectId}": {
+      "put": {
+        "summary": "PUT /api/v1/projects/{projectId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "delete": {
+        "summary": "DELETE /api/v1/projects/{projectId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/projects/{projectId}/users": {
+      "get": {
+        "summary": "GET /api/v1/projects/{projectId}/users",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "post": {
+        "summary": "POST /api/v1/projects/{projectId}/users",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/projects/{projectId}/users/{userId}": {
+      "delete": {
+        "summary": "DELETE /api/v1/projects/{projectId}/users/{userId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "patch": {
+        "summary": "PATCH /api/v1/projects/{projectId}/users/{userId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/settings/security-policy": {
+      "get": {
+        "summary": "GET /api/v1/settings/security-policy",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "put": {
+        "summary": "PUT /api/v1/settings/security-policy",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/settings/sso/oidc": {
+      "get": {
+        "summary": "GET /api/v1/settings/sso/oidc",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "put": {
+        "summary": "PUT /api/v1/settings/sso/oidc",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/source-control/pull": {
+      "post": {
+        "summary": "POST /api/v1/source-control/pull",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{id}/{versionId}": {
+      "get": {
+        "summary": "GET /api/v1/workflows/{id}/{versionId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows": {
+      "get": {
+        "summary": "GET /api/v1/workflows",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "post": {
+        "summary": "POST /api/v1/workflows",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}": {
+      "get": {
+        "summary": "GET /api/v1/workflows/{workflowId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "put": {
+        "summary": "PUT /api/v1/workflows/{workflowId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "delete": {
+        "summary": "DELETE /api/v1/workflows/{workflowId}",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/archive": {
+      "post": {
+        "summary": "POST /api/v1/workflows/{workflowId}/archive",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/unarchive": {
+      "post": {
+        "summary": "POST /api/v1/workflows/{workflowId}/unarchive",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/transfer": {
+      "put": {
+        "summary": "PUT /api/v1/workflows/{workflowId}/transfer",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/publish": {
+      "post": {
+        "summary": "POST /api/v1/workflows/{workflowId}/publish",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/unpublish": {
+      "post": {
+        "summary": "POST /api/v1/workflows/{workflowId}/unpublish",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/workflows/{id}/publish": {
+      "post": {
+        "summary": "POST /workflows/{id}/publish",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/activate": {
+      "post": {
+        "summary": "POST /api/v1/workflows/{workflowId}/activate",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/workflows/{id}/unpublish": {
+      "post": {
+        "summary": "POST /workflows/{id}/unpublish",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/deactivate": {
+      "post": {
+        "summary": "POST /api/v1/workflows/{workflowId}/deactivate",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/history": {
+      "get": {
+        "summary": "GET /api/v1/workflows/{workflowId}/history",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      }
+    },
+    "/api/v1/workflows/{workflowId}/tags": {
+      "get": {
+        "summary": "GET /api/v1/workflows/{workflowId}/tags",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
+      },
+      "put": {
+        "summary": "PUT /api/v1/workflows/{workflowId}/tags",
+        "description": "Extraído automaticamente do texto técnico.\n\n---\n📍 **Origem:** Especificação Técnica Oficial (`fase3_synthesized_docs_n8n_io_88f98b9a.json`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Especificação Técnica Oficial",
+        "x-daemind-source-file": "fase3_synthesized_docs_n8n_io_88f98b9a.json"
       }
     },
     "/api/v1": {
@@ -351,7 +831,7 @@
           "N8n"
         ],
         "summary": "GET /api/v1",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_authentication_657cc814.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_authentication_657cc814.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -364,16 +844,18 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_authentication_657cc814.md"
       }
     },
-    "/api/v1Self-hosted": {
+    "/api/v1.": {
       "get": {
         "tags": [
           "N8n"
         ],
-        "summary": "GET /api/v1Self-hosted",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+        "summary": "GET /api/v1.",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_authentication_657cc814.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_authentication_657cc814.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -386,82 +868,18 @@
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_authentication_657cc814.md"
       }
     },
-    "/credentials/:id": {
-      "patch": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "PATCH /credentials/:id",
-        "description": "Endpoint extraído da documentação (changelog.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integrations/builtin/app-nodes/n8n-nodes-base.action": {
-      "post": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "POST /integrations/builtin/app-nodes/n8n-nodes-base.action",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_1__gitbook_site-index.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.do": {
-      "post": {
-        "tags": [
-          "N8n"
-        ],
-        "summary": "POST /integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.do",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (network_json_1__gitbook_site-index.json).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/users": {
+    "/v1/credentials": {
       "get": {
         "tags": [
           "N8n"
         ],
-        "summary": "GET /v1/users",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+        "summary": "GET /v1/credentials",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_credential_f4f4f189.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_credential_f4f4f189.md`)",
         "parameters": [],
         "responses": {
           "200": {
@@ -473,77 +891,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_credential_f4f4f189.md"
       }
     },
-    "/v1/users/{id}": {
+    "/v1/credentials/{id}": {
       "get": {
         "tags": [
           "N8n"
         ],
-        "summary": "GET /v1/users/{id}",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+        "summary": "GET /v1/credentials/{id}",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_credential_f4f4f189.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_credential_f4f4f189.md`)",
         "parameters": [
           {
             "name": "id",
@@ -564,77 +924,19 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_credential_f4f4f189.md"
       }
     },
-    "/v1/users/{id}/role": {
+    "/v1/credentials/{id}/test": {
       "get": {
         "tags": [
           "N8n"
         ],
-        "summary": "GET /v1/users/{id}/role",
-        "description": "Endpoint extraído da documentação (api_api-reference.md).",
+        "summary": "GET /v1/credentials/{id}/test",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_credential_f4f4f189.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_credential_f4f4f189.md`)",
         "parameters": [
           {
             "name": "id",
@@ -655,100 +957,702 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_credential_f4f4f189.md"
+      }
+    },
+    "/v1/credentials/schema/{credentialTypeName}": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/credentials/schema/{credentialTypeName}",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_credential_f4f4f189.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_credential_f4f4f189.md`)",
+        "parameters": [
+          {
+            "name": "credentialTypeName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object"
                 }
               }
             }
           }
-        }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_credential_f4f4f189.md"
+      }
+    },
+    "/v1/credentials/{id}/transfer": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/credentials/{id}/transfer",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_credential_f4f4f189.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_credential_f4f4f189.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_credential_f4f4f189.md"
+      }
+    },
+    "/v1/projects": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/projects",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_projects_42f105eb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_projects_42f105eb.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_projects_42f105eb.md"
+      }
+    },
+    "/v1/projects/{projectId}": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/projects/{projectId}",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_projects_42f105eb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_projects_42f105eb.md`)",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_projects_42f105eb.md"
+      }
+    },
+    "/v1/projects/{projectId}/users": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/projects/{projectId}/users",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_projects_42f105eb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_projects_42f105eb.md`)",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_projects_42f105eb.md"
+      }
+    },
+    "/v1/projects/{projectId}/users/{userId}": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/projects/{projectId}/users/{userId}",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_projects_42f105eb.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_projects_42f105eb.md`)",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_projects_42f105eb.md"
+      }
+    },
+    "/v1/settings/security-policy": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/settings/security-policy",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_security-policy_ab557fd5.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_security-policy_ab557fd5.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_security-policy_ab557fd5.md"
+      }
+    },
+    "/v1/settings/sso/oidc": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/settings/sso/oidc",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_settings-sso-oidc_344e4220.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_settings-sso-oidc_344e4220.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_settings-sso-oidc_344e4220.md"
+      }
+    },
+    "/v1/source-control/pull": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/source-control/pull",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_source-control_5d0c6fb4.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_source-control_5d0c6fb4.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_source-control_5d0c6fb4.md"
+      }
+    },
+    "/api/v": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /api/v",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_use-an-api-playground_428c2939.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_use-an-api-playground_428c2939.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_use-an-api-playground_428c2939.md"
+      }
+    },
+    "/v1/workflows/{id}/{versionId}": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{id}/{versionId}",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/archive": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/archive",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/unarchive": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/unarchive",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/transfer": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/transfer",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/publish": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/publish",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/unpublish": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/unpublish",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/activate": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/activate",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/deactivate": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/deactivate",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/history": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/history",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
+      }
+    },
+    "/v1/workflows/{workflowId}/tags": {
+      "get": {
+        "tags": [
+          "N8n"
+        ],
+        "summary": "GET /v1/workflows/{workflowId}/tags",
+        "description": "Endpoint extraído da documentação (docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md`)",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "docs_n8n_io_connect_n8n-api_workflow_3a7e3e56.md"
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para n8n Workflow Automation REST API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para n8n Workflow Automation REST API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para n8n Workflow Automation REST API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "http://n8n:5678/oauth/authorize",
-            "tokenUrl": "http://n8n:5678/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em n8n Workflow Automation REST API",
-              "write": "Gravação e mutação em n8n Workflow Automation REST API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -777,22 +1681,6 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
@@ -801,138 +1689,18 @@
         ]
       }
     },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
+    "securitySchemes": {
+      "ApiKey_API-KEY": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "API-KEY",
+        "description": "Chave de API enviada no cabeçalho API-KEY."
       }
     }
   },
   "security": [
     {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
+      "ApiKey_API-KEY": []
     }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack n8n.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack n8n.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "n8n_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (n8n Workflow Automation REST API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em n8n Workflow Automation REST API.",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
-        }
-      }
-    }
-  }
+  ]
 }

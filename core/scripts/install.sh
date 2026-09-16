@@ -101,6 +101,10 @@ if [ ! -f "$TARGET_DIR/Caddyfile" ]; then
     log { level error }
     reverse_proxy ${PREFIXO_CONTAINER}_litellm:4000
 }
+:5001 {
+    log { level error }
+    reverse_proxy ${PREFIXO_CONTAINER}_markitdown:5001
+}
 EO_CAD
 fi
 
@@ -221,7 +225,7 @@ except Exception:
     fi
     
     if [ ${#base_services[@]} -eq 0 ]; then
-        base_services=("postgres" "pgbouncer" "redis" "caddy" "litellm")
+        base_services=("postgres" "pgbouncer" "redis" "caddy" "litellm" "markitdown")
     fi
     
     for svc in "${base_services[@]}"; do
@@ -763,6 +767,7 @@ IP_PGBOUNCER=${IP_PGBOUNCER}
 IP_REDIS=${IP_REDIS}
 IP_CADDY=${IP_CADDY}
 IP_LITELLM=${IP_LITELLM}
+IP_MARKITDOWN=${IP_MARKITDOWN}
 PROJETO_DIR=${PROJETO_DIR}
 PREFIXO_CONTAINER=${PREFIXO_CONTAINER}
 TS_OAUTH_ID=${TS_OAUTH_ID}
@@ -784,6 +789,7 @@ CLIENTE_NOME="${CLIENTE_NOME}"
 LITELLM_MASTER_KEY="${LITELLM_MASTER_KEY}"
 CLIENTE_SOBRENOME="${CLIENTE_SOBRENOME}"
 HOST_CADDY_PORT="${HOST_CADDY_PORT}"
+HOST_MARKITDOWN_PORT="${HOST_MARKITDOWN_PORT:-5001}"
 CHAVE_PUBLICA_B64="${CHAVE_PUBLICA_B64}"
 HASH_ESPERADO="${HASH_ESPERADO}"
 
@@ -813,7 +819,7 @@ for script in "$TARGET_DIR"/core/scripts/install_*.sh; do
     done
 done
 SORTED_NODES=($(printf "%s\n" "${ALL_NODES[@]}" | sort -u))
-IP_OFFSET=7
+IP_OFFSET=8
 for node in "${SORTED_NODES[@]}"; do
     VAR_NAME="IP_${node}"
     IP_VAL="${!VAR_NAME:-${BASE_IP}.${IP_OFFSET}}"
@@ -909,7 +915,14 @@ SERVICOS_DECLARADOS=($(docker compose --profile "*" config --services 2>/dev/nul
 TOTAL_SERVICOS=${#SERVICOS_DECLARADOS[@]}
 
 if [ "$TOTAL_SERVICOS" -gt 0 ]; then
-    # Extrai a lista de imagens declaradas no docker-compose.yml (incluindo profiles ondemand como Docling)
+    # Compila previamente quaisquer serviços que utilizem build local (ex: markitdown)
+    local SERVICOS_COM_BUILD=($(docker compose --profile "*" config 2>/dev/null | grep -B 3 'build:' | grep -E '^[a-zA-Z0-9_-]+:' | tr -d ':' || true))
+    if [ ${#SERVICOS_COM_BUILD[@]} -gt 0 ]; then
+        echo "➜ [SRE INSTALL] Compilando ${#SERVICOS_COM_BUILD[@]} imagem(ns) local(is) da stack (${SERVICOS_COM_BUILD[*]})..."
+        docker compose build "${SERVICOS_COM_BUILD[@]}" > /dev/null 2>&1 || docker compose build "${SERVICOS_COM_BUILD[@]}" || true
+    fi
+
+    # Extrai a lista de imagens declaradas no docker-compose.yml
     IMAGENS_NECESSARIAS=($(docker compose --profile "*" config 2>/dev/null | grep -E '^\s*image:' | awk '{print $2}' | tr -d '"' | tr -d "'" | sort -u || true))
     IMAGENS_FALTANDO=()
 
@@ -1130,8 +1143,8 @@ if [ -n "$INIT_SQL_PATH" ]; then
     fi
 fi
 
-# --- PREVENÇÃO SRE: CRIANDO CONFIG PLACEHOLDER ANTES DO BOOT ---
-mkdir -p "$TARGET_DIR/volumes/litellm_data" 2>/dev/null || true
+# --- PREVENÇÃO SRE: CRIANDO CONFIG PLACEHOLDER E VOLUMES DO CORE ANTES DO BOOT ---
+mkdir -p "$TARGET_DIR/volumes/litellm_data" "$TARGET_DIR/volumes/markitdown_data" 2>/dev/null || true
 if [ ! -f "$TARGET_DIR/volumes/litellm_data/config.yaml" ]; then
     echo "➜ [SRE BOOTSTRAP] Criando placeholder de config.yaml para montagem de volume do LiteLLM..."
     cat << 'EO_BASE' > "$TARGET_DIR/volumes/litellm_data/config.yaml"
@@ -1734,6 +1747,19 @@ for cnt in "${STACK_ACTIVE_CONTAINERS[@]}"; do
                     msg=$(printf "  ↳ %-32s http://%s:4000/health/liveliness  -> Status: [%s]" "AI Gateway (LiteLLM):" "${TS_DOMAIN}" "${HTTP_LITELLM}")
                     echo "litellm|${msg}" > "$AUDIT_TMP_DIR/${svc}.txt"
                     ;;
+                markitdown)
+                    hlth_mk=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{if .State.Running}}healthy{{else}}unhealthy{{end}}{{end}}' "$cnt" 2>/dev/null || echo "OFFLINE")
+                    http_mk=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:5001/health" 2>/dev/null || echo "000")
+                    if [ "$http_mk" = "200" ]; then
+                        st_mk="Saudável"
+                    elif [ "$hlth_mk" = "healthy" ]; then
+                        st_mk="Saudável"
+                    else
+                        st_mk="FALHOU"
+                    fi
+                    msg=$(printf "  ↳ %-32s http://%s:5001/health  -> Status: [%s]" "OCR & Docs (MarkItDown):" "${TS_DOMAIN}" "${st_mk}")
+                    echo "markitdown|${msg}" > "$AUDIT_TMP_DIR/${svc}.txt"
+                    ;;
                 postgres)
                     st=$(docker exec "$cnt" pg_isready -U "$DB_USER" -d "${PREFIXO_CONTAINER}_db" >/dev/null 2>&1 && echo "Saudável" || echo "FALHOU")
                     msg=$(printf "  ↳ %-32s 5432/tcp -> [%s]" "Banco Core (Postgres):" "${st}")
@@ -1789,6 +1815,11 @@ echo "    ↳ Descoberta de Modelos:           http://${TS_DOMAIN}:4000/v1/model
 echo "    ↳ Chat Completions:                http://${TS_DOMAIN}:4000/v1/chat/completions"
 echo "    ↳ Embeddings API:                  http://${TS_DOMAIN}:4000/v1/embeddings"
 echo "    ↳ Liveliness:                      http://${TS_DOMAIN}:4000/health/liveliness"
+echo ""
+echo "  📄 Motor de OCR & Documentos (MarkItDown)"
+echo "    ↳ Endpoint API:                    http://${TS_DOMAIN}:5001/v1/convert"
+echo "    ↳ Tika Emulation:                  http://${TS_DOMAIN}:5001/tika"
+echo "    ↳ Healthcheck:                     http://${TS_DOMAIN}:5001/health"
 echo ""
 [ ${#MODULOS_DESACOPLADOS_ATIVOS[@]} -eq 0 ] && resolver_modulos_desacoplados
 

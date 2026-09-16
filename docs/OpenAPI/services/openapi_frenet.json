@@ -1,787 +1,308 @@
 {
-  "openapi": "3.0.3",
+  "swagger": "2.0",
   "info": {
     "title": "Frenet Shipping Gateway API",
-    "description": "Especificação OpenAPI 3.0 consolidada para a stack frenet.",
-    "version": "1.0.0"
+    "version": "",
+    "description": "Bem vindo à documentação da API Frenet. Serão apresentados todos os serviços disponíveis em nossa API para você criar uma integração de maneira rápida e objetiva.\n\nLembre-se que para você ter acesso a API da Frenet é preciso se cadastrar no painel administrativo e obter um token de acesso. Acesse https://painel.frenet.com.br e obtenha o seu token em \"Dados Cadastrais\"."
   },
+  "paths": {
+    "/partner/register": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {
+              "application/json": {
+                "Success": true,
+                "Token": "AAABBB2222CCC222DD222"
+              }
+            }
+          }
+        },
+        "summary": "Cadastrar um novo cliente",
+        "description": "A criação de novo usuário, quando executada com sucesso pelo Frenet, retornará um token este token é exigido pela API de cotação do Frenet, por este motivo o parceiro deverá salva-lo e enviar nas chamadas do cotador Frenet.\n\nObserve que algumas informações precisam ser solicitadas ao suporte do Frenet.\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`api_frenet_com_br_swagger_json_39404b0e.json`)",
+        "tags": [
+          "Onboarding de clientes"
+        ],
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "api_frenet_com_br_swagger_json_39404b0e.json"
+      },
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {
+              "application/json": {
+                "Success": true,
+                "Token": "AAABBB2222CCC222DD222"
+              }
+            }
+          }
+        },
+        "summary": "Atualizar um cliente existente",
+        "description": "Para atualizar alguma informação do lojista o parceiro deverá chamar a API de Onboard com o novo valor para o campo, assim como na criação de novos usuários a atualização também exige algumas informações que precisam ser solicitadas ao suporte do Frenet\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`api_frenet_com_br_swagger_json_39404b0e.json`)",
+        "tags": [
+          "Onboarding de clientes"
+        ],
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "api_frenet_com_br_swagger_json_39404b0e.json"
+      }
+    },
+    "/shipping/info": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {
+              "application/json": {
+                "Message": "",
+                "ShippingSeviceAvailableArray": [
+                  {
+                    "Carrier": "TNT",
+                    "CarrierCode": "TNT",
+                    "ServiceCode": "RNC",
+                    "ServiceDescription": "TNT Rodoviário"
+                  },
+                  {
+                    "Carrier": "Correios",
+                    "CarrierCode": "COR",
+                    "ServiceCode": "40010",
+                    "ServiceDescription": "Sedex"
+                  }
+                ]
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ShippingSeviceAvailableArray": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ServiceCode": {
+                        "type": "string"
+                      },
+                      "ServiceDescription": {
+                        "type": "string"
+                      },
+                      "Carrier": {
+                        "type": "string"
+                      },
+                      "CarrierCode": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "Message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "GET",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`api_frenet_com_br_swagger_json_39404b0e.json`)",
+        "tags": [
+          "Shipping"
+        ],
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "api_frenet_com_br_swagger_json_39404b0e.json"
+      }
+    },
+    "/shipping/quote": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {
+              "application/json": {
+                "ShippingSevicesArray": [
+                  {
+                    "Carrier": "Correios",
+                    "DeliveryTime": "1",
+                    "Msg": "",
+                    "ServiceCode": "40010",
+                    "ServiceDescription": "Sedex",
+                    "ShippingPrice": "31.71"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "summary": "POST",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`api_frenet_com_br_swagger_json_39404b0e.json`)",
+        "tags": [
+          "Shipping"
+        ],
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "api_frenet_com_br_swagger_json_39404b0e.json"
+      }
+    },
+    "/tracking/trackinginfo": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {},
+            "schema": {
+              "type": "object",
+              "properties": {
+                "TrackingNumber": {
+                  "type": "string"
+                },
+                "ServiceDescrition": {
+                  "type": "string"
+                },
+                "ErrorMessage": {
+                  "type": "string"
+                },
+                "TrackingEvents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "EventDateTime": {
+                        "type": "string"
+                      },
+                      "EventLocation": {
+                        "type": "string"
+                      },
+                      "EventDescription": {
+                        "type": "string"
+                      },
+                      "EventType": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "POST",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`api_frenet_com_br_swagger_json_39404b0e.json`)",
+        "tags": [
+          "Tracking"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Token": {
+                  "type": "string"
+                },
+                "ShippingServiceCode": {
+                  "type": "string"
+                },
+                "TrackingNumber": {
+                  "type": "string"
+                },
+                "InvoiceNumber": {
+                  "type": "string"
+                },
+                "InvoiceSerie": {
+                  "type": "string"
+                },
+                "RecipientDocument": {
+                  "type": "string"
+                },
+                "OrderNumber": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "ShippingServiceCode": "04669",
+                "TrackingNumber": "TE123456785AA",
+                "InvoiceNumber": "",
+                "InvoiceSerie": "",
+                "RecipientDocument": "",
+                "OrderNumber": ""
+              }
+            }
+          }
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "api_frenet_com_br_swagger_json_39404b0e.json"
+      }
+    },
+    "/CEP/Address/{cep}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {
+              "application/json": {
+                "CEP": "04011060",
+                "City": "São Paulo",
+                "District": "Vila Mariana",
+                "Message": "ok",
+                "Street": "Rua José Antônio Coelho",
+                "UF": "SP"
+              }
+            }
+          }
+        },
+        "summary": "GET",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`api_frenet_com_br_swagger_json_39404b0e.json`)",
+        "tags": [
+          "CEP"
+        ],
+        "parameters": [
+          {
+            "name": "cep",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "api_frenet_com_br_swagger_json_39404b0e.json"
+      }
+    }
+  },
+  "definitions": {
+    "Tracking Info": {}
+  },
+  "openapi": "3.0.3",
   "servers": [
     {
       "url": "https://api.frenet.com.br"
     }
   ],
-  "paths": {
-    "//frenetapi.do": {
-      "post": {
-        "tags": [
-          "Frenet"
-        ],
-        "summary": "POST //frenetapi.do",
-        "description": "Endpoint RPC/REST detectado nos exemplos da API (api-description-document.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/cota-o-do-frenet": {
-      "get": {
-        "tags": [
-          "Cotação Do Frenet"
-        ],
-        "summary": "Consultar Cotação Do Frenet",
-        "description": "Recurso identificado na documentação (index.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Cotação Do Frenet"
-        ],
-        "summary": "Criar/Atualizar Cotação Do Frenet",
-        "description": "Operação de mutação para Cotação Do Frenet.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/partner/register": {
-      "get": {
-        "tags": [
-          "Frenet"
-        ],
-        "summary": "GET /v1/partner/register",
-        "description": "Endpoint extraído da documentação (reference_onboarding-de-clientes_v1partnerregister_atualizar-um-cliente-existente.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/options/{CarrierCode}": {
-      "get": {
-        "tags": [
-          "Frenet"
-        ],
-        "summary": "GET /v1/options/{CarrierCode}",
-        "description": "Endpoint extraído da documentação (reference_onboarding-de-clientes_v1partnerregister_atualizar-um-cliente-existente.md).",
-        "parameters": [
-          {
-            "name": "CarrierCode",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/cota-o": {
-      "get": {
-        "tags": [
-          "Cotação"
-        ],
-        "summary": "Consultar Cotação",
-        "description": "Recurso identificado na documentação (reference_onboarding-de-clientes_v1partnerregister_atualizar-um-cliente-existente.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Cotação"
-        ],
-        "summary": "Criar/Atualizar Cotação",
-        "description": "Operação de mutação para Cotação.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/cota-o-para-os-marketplaces": {
-      "get": {
-        "tags": [
-          "Cotação Para Os Marketplaces"
-        ],
-        "summary": "Consultar Cotação Para Os Marketplaces",
-        "description": "Recurso identificado na documentação (reference_onboarding-de-clientes_v1partnerregister_atualizar-um-cliente-existente.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Cotação Para Os Marketplaces"
-        ],
-        "summary": "Criar/Atualizar Cotação Para Os Marketplaces",
-        "description": "Operação de mutação para Cotação Para Os Marketplaces.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para Frenet Shipping Gateway API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para Frenet Shipping Gateway API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para Frenet Shipping Gateway API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://api.frenet.com.br/oauth/authorize",
-            "tokenUrl": "https://api.frenet.com.br/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em Frenet Shipping Gateway API",
-              "write": "Gravação e mutação em Frenet Shipping Gateway API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -810,161 +331,12 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
           "status",
           "detail"
         ]
-      }
-    },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      }
-    }
-  },
-  "security": [
-    {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
-    }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack frenet.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack frenet.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "frenet_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (Frenet Shipping Gateway API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em Frenet Shipping Gateway API.",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
-        }
       }
     }
   }

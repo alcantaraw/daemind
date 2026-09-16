@@ -1,0 +1,2521 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Cora Banco Digital PJ & Boletos API",
+    "description": "Especificação OpenAPI 3.0 consolidada para a stack cora.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.cora.com.br/v1"
+    }
+  ],
+  "paths": {
+    "/v2/invoices": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /v2/invoices",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_docs_b4adeb6a.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_docs_b4adeb6a.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_docs_b4adeb6a.md"
+      }
+    },
+    "/client-credentials-int-direta": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /client-credentials-int-direta",
+        "description": "Endpoint derivado da referência oficial (client-credentials-int-direta).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_docs_client-credentials-int-direta_155cc861.md#client-credentials-int-direta`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_docs_client-credentials-int-direta_155cc861.md#client-credentials-int-direta"
+      }
+    },
+    "/client-credentials": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /client-credentials",
+        "description": "Endpoint derivado da referência oficial (client-credentials).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_docs_client-credentials_b4c754fc.md#client-credentials`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_docs_client-credentials_b4c754fc.md#client-credentials"
+      }
+    },
+    "/oauth/token": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /oauth/token",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_docs_client-credentials_b4c754fc.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_docs_client-credentials_b4c754fc.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_docs_client-credentials_b4c754fc.md"
+      }
+    },
+    "/fluxos-de-autorizacao-e-autenticacao": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /fluxos-de-autorizacao-e-autenticacao",
+        "description": "Endpoint derivado da referência oficial (fluxos-de-autorizacao-e-autenticacao).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_docs_fluxos-de-autorizacao-e-autenticacao_1686787c.md#fluxos-de-autorizacao-e-autenticacao`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_docs_fluxos-de-autorizacao-e-autenticacao_1686787c.md#fluxos-de-autorizacao-e-autenticacao"
+      }
+    },
+    "/oauth/authorize": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /oauth/authorize",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_docs_fluxos-de-autorizacao-e-autenticacao_1686787c.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_docs_fluxos-de-autorizacao-e-autenticacao_1686787c.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_docs_fluxos-de-autorizacao-e-autenticacao_1686787c.md"
+      }
+    },
+    "/instrucoes-iniciais": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /instrucoes-iniciais",
+        "description": "Endpoint derivado da referência oficial (instrucoes-iniciais).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_docs_instrucoes-iniciais_dfc391c5.md#instrucoes-iniciais`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_docs_instrucoes-iniciais_dfc391c5.md#instrucoes-iniciais"
+      }
+    },
+    "/utiliza": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /utiliza",
+        "description": "Endpoint derivado da referência oficial (utiliza).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_docs_utiliza_C3_A7_C3_A3o-das-apis_b0f2afae.md#utiliza`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_docs_utiliza_C3_A7_C3_A3o-das-apis_b0f2afae.md#utiliza"
+      }
+    },
+    "/pagar-boleto-em-stage": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /pagar-boleto-em-stage",
+        "description": "Endpoint extraído do índice de navegação (Pagar boleto em stage).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      },
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /pagar-boleto-em-stage",
+        "description": "Endpoint derivado da referência oficial (pagar-boleto-em-stage).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_pagar-boleto-em-stage_ed4fcf0c.md#pagar-boleto-em-stage`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_pagar-boleto-em-stage_ed4fcf0c.md#pagar-boleto-em-stage"
+      }
+    },
+    "/emiss-o-de-boleto-registrado": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /emiss-o-de-boleto-registrado",
+        "description": "Endpoint extraído do índice de navegação (Emissão de boleto registrado).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/emiss-o-de-carn": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /emiss-o-de-carn",
+        "description": "Endpoint extraído do índice de navegação (Emissão de carnê).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/consulta-de-boletos": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-boletos",
+        "description": "Endpoint extraído do índice de navegação (Consulta de boletos).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/consulta-de-detalhes-do-boleto": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-detalhes-do-boleto",
+        "description": "Endpoint extraído do índice de navegação (Consulta de detalhes do boleto).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/cancelamento-de-boleto": {
+      "delete": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "DELETE /cancelamento-de-boleto",
+        "description": "Endpoint extraído do índice de navegação (Cancelamento de boleto).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      },
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cancelamento-de-boleto",
+        "description": "Endpoint derivado da referência oficial (cancelamento-de-boleto).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cancelamento-de-boleto_d9941f8b.md#cancelamento-de-boleto`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cancelamento-de-boleto_d9941f8b.md#cancelamento-de-boleto"
+      }
+    },
+    "/consulta-de-notifica-es-do-boleto": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-notifica-es-do-boleto",
+        "description": "Endpoint extraído do índice de navegação (Consulta de notificações do boleto).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/cancelamento-de-notifica-es-do-boleto": {
+      "delete": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "DELETE /cancelamento-de-notifica-es-do-boleto",
+        "description": "Endpoint extraído do índice de navegação (Cancelamento de notificações do boleto).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/emiss-o-de-qr-code-pix-v2": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /emiss-o-de-qr-code-pix-v2",
+        "description": "Endpoint extraído do índice de navegação (Emissão de QR code Pix v2).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/dados-de-conta": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /dados-de-conta",
+        "description": "Endpoint extraído do índice de navegação (Dados de Conta).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/saldo-de-conta": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /saldo-de-conta",
+        "description": "Endpoint extraído do índice de navegação (Saldo de Conta).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/consulta-de-extrato": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-extrato",
+        "description": "Endpoint extraído do índice de navegação (Consulta de Extrato).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/inicia-o-de-pagamento": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /inicia-o-de-pagamento",
+        "description": "Endpoint extraído do índice de navegação (Iniciação de pagamento).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/hist-rico-de-pagamentos": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /hist-rico-de-pagamentos",
+        "description": "Endpoint extraído do índice de navegação (Histórico de pagamentos).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/cancelamento-de-pagamento": {
+      "delete": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "DELETE /cancelamento-de-pagamento",
+        "description": "Endpoint extraído do índice de navegação (Cancelamento de pagamento).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      },
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cancelamento-de-pagamento",
+        "description": "Endpoint derivado da referência oficial (cancelamento-de-pagamento).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cancelamento-de-pagamento_16a08701.md#cancelamento-de-pagamento`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cancelamento-de-pagamento_16a08701.md#cancelamento-de-pagamento"
+      }
+    },
+    "/inicia-o-de-pagamento-darf": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /inicia-o-de-pagamento-darf",
+        "description": "Endpoint extraído do índice de navegação (Iniciação de Pagamento DARF).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/inicia-o-de-pagamento-gps": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /inicia-o-de-pagamento-gps",
+        "description": "Endpoint extraído do índice de navegação (Iniciação de Pagamento GPS).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/inicia-o-de-transfer-ncia": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /inicia-o-de-transfer-ncia",
+        "description": "Endpoint extraído do índice de navegação (Iniciação de transferência).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/lista-de-transfer-ncias": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /lista-de-transfer-ncias",
+        "description": "Endpoint extraído do índice de navegação (Lista de transferências).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/lista-de-bancos": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /lista-de-bancos",
+        "description": "Endpoint extraído do índice de navegação (Lista de bancos).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/cria-o-de-pr--cadastro": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /cria-o-de-pr--cadastro",
+        "description": "Endpoint extraído do índice de navegação (Criação de pré-cadastro).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/reporte-do-pr--cadastro": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /reporte-do-pr--cadastro",
+        "description": "Endpoint extraído do índice de navegação (Reporte do pré-cadastro).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/cria-o-de-endpoints": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /cria-o-de-endpoints",
+        "description": "Endpoint extraído do índice de navegação (Criação de endpoints).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/lista-de-endpoints": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /lista-de-endpoints",
+        "description": "Endpoint extraído do índice de navegação (Lista de endpoints).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/exclus-o-de-endpoint": {
+      "delete": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "DELETE /exclus-o-de-endpoint",
+        "description": "Endpoint extraído do índice de navegação (Exclusão de endpoint).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/exemplo-de-post-da-notifica-o": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /exemplo-de-post-da-notifica-o",
+        "description": "Endpoint extraído do índice de navegação (Exemplo de POST da Notificação).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/lista-de-cidades-dispon-veis": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /lista-de-cidades-dispon-veis",
+        "description": "Endpoint extraído do índice de navegação (Lista de cidades disponíveis).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/consulta-de-disponibilidade-de-nota-fiscal-para-o-cliente": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-disponibilidade-de-nota-fiscal-para-o-cliente",
+        "description": "Endpoint extraído do índice de navegação (Consulta de disponibilidade de nota fiscal para o cliente).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/cadastro-de-cliente-para-emiss-o-de-nfs-e": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /cadastro-de-cliente-para-emiss-o-de-nfs-e",
+        "description": "Endpoint extraído do índice de navegação (Cadastro de cliente para emissão de NFS-e).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/upload-de-certificado-e-credenciais-de-acesso": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /upload-de-certificado-e-credenciais-de-acesso",
+        "description": "Endpoint extraído do índice de navegação (Upload de certificado e credenciais de acesso).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/consulta-de-cnaes-do-cliente": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-cnaes-do-cliente",
+        "description": "Endpoint extraído do índice de navegação (Consulta de CNAEs do cliente).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/consulta-de-c-digos-de-servi-o-por-cliente": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-c-digos-de-servi-o-por-cliente",
+        "description": "Endpoint extraído do índice de navegação (Consulta de códigos de serviço por cliente).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/emiss-o-de-nota-fiscal-de-servi-o": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /emiss-o-de-nota-fiscal-de-servi-o",
+        "description": "Endpoint extraído do índice de navegação (Emissão de nota fiscal de serviço).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/consulta-de-nota-fiscal-de-servi-o": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-nota-fiscal-de-servi-o",
+        "description": "Endpoint extraído do índice de navegação (Consulta de nota fiscal de serviço).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/edi-o-de-nota-fiscal-de-servi-o": {
+      "patch": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "PATCH /edi-o-de-nota-fiscal-de-servi-o",
+        "description": "Endpoint extraído do índice de navegação (Edição de nota fiscal de serviço).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/cancelamento-de-nota-fiscal-de-servi-o": {
+      "delete": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "DELETE /cancelamento-de-nota-fiscal-de-servi-o",
+        "description": "Endpoint extraído do índice de navegação (Cancelamento de Nota Fiscal de Serviço).\n\n---\n📍 **Origem:** Índice de Navegação / Menu (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Índice de Navegação / Menu",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/v2/invoices/pay": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /v2/invoices/pay",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_reference_92ffce90.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_reference_92ffce90.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_reference_92ffce90.md"
+      }
+    },
+    "/boletos-v2": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /boletos-v2",
+        "description": "Endpoint derivado da referência oficial (boletos-v2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_boletos-v2_a5b9d481.md#boletos-v2`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_boletos-v2_a5b9d481.md#boletos-v2"
+      }
+    },
+    "/cadastro-do-emissor-de-nota-fiscal": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cadastro-do-emissor-de-nota-fiscal",
+        "description": "Endpoint derivado da referência oficial (cadastro-do-emissor-de-nota-fiscal).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cadastro-do-emissor-de-nota-fiscal_e3d8f530.md#cadastro-do-emissor-de-nota-fiscal`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cadastro-do-emissor-de-nota-fiscal_e3d8f530.md#cadastro-do-emissor-de-nota-fiscal"
+      }
+    },
+    "/cancelamento-de-boleto-copy": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cancelamento-de-boleto-copy",
+        "description": "Endpoint derivado da referência oficial (cancelamento-de-boleto-copy).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cancelamento-de-boleto-copy_4afa0726.md#cancelamento-de-boleto-copy`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cancelamento-de-boleto-copy_4afa0726.md#cancelamento-de-boleto-copy"
+      }
+    },
+    "/v2/invoices/{invoice_id}/notifications": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /v2/invoices/{invoice_id}/notifications",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_reference_cancelamento-de-boleto-copy_4afa0726.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_reference_cancelamento-de-boleto-copy_4afa0726.md`)",
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cancelamento-de-boleto-copy_4afa0726.md"
+      }
+    },
+    "/cancelamento-de-boleto-v2": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cancelamento-de-boleto-v2",
+        "description": "Endpoint derivado da referência oficial (cancelamento-de-boleto-v2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cancelamento-de-boleto-v2_45cb5062.md#cancelamento-de-boleto-v2`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cancelamento-de-boleto-v2_45cb5062.md#cancelamento-de-boleto-v2"
+      }
+    },
+    "/v2/invoices/{invoice_id}": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /v2/invoices/{invoice_id}",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_reference_cancelamento-de-boleto-v2_45cb5062.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_reference_cancelamento-de-boleto-v2_45cb5062.md`)",
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cancelamento-de-boleto-v2_45cb5062.md"
+      }
+    },
+    "/cancelamento-de-nfse": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cancelamento-de-nfse",
+        "description": "Endpoint derivado da referência oficial (cancelamento-de-nfse).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cancelamento-de-nfse_84a4354e.md#cancelamento-de-nfse`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cancelamento-de-nfse_84a4354e.md#cancelamento-de-nfse"
+      }
+    },
+    "/cidades-dispon": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cidades-dispon",
+        "description": "Endpoint derivado da referência oficial (cidades-dispon).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cidades-dispon_C3_ADveis_12ee99db.md#cidades-dispon`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cidades-dispon_C3_ADveis_12ee99db.md#cidades-dispon"
+      }
+    },
+    "/consulta-de-cnae": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-cnae",
+        "description": "Endpoint derivado da referência oficial (consulta-de-cnae).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_consulta-de-cnae_a650785d.md#consulta-de-cnae`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_consulta-de-cnae_a650785d.md#consulta-de-cnae"
+      }
+    },
+    "/consulta-de-codigo-de-servico": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-codigo-de-servico",
+        "description": "Endpoint derivado da referência oficial (consulta-de-codigo-de-servico).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_consulta-de-codigo-de-servico_e1208367.md#consulta-de-codigo-de-servico`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_consulta-de-codigo-de-servico_e1208367.md#consulta-de-codigo-de-servico"
+      }
+    },
+    "/consulta-de-nota-fiscal-de-servi": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consulta-de-nota-fiscal-de-servi",
+        "description": "Endpoint derivado da referência oficial (consulta-de-nota-fiscal-de-servi).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_consulta-de-nota-fiscal-de-servi_C3_A7o_1f1d9072.md#consulta-de-nota-fiscal-de-servi`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_consulta-de-nota-fiscal-de-servi_C3_A7o_1f1d9072.md#consulta-de-nota-fiscal-de-servi"
+      }
+    },
+    "/consultar-boletos-v2": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consultar-boletos-v2",
+        "description": "Endpoint derivado da referência oficial (consultar-boletos-v2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_consultar-boletos-v2_8653f029.md#consultar-boletos-v2`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_consultar-boletos-v2_8653f029.md#consultar-boletos-v2"
+      }
+    },
+    "/consultar-boletos": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consultar-boletos",
+        "description": "Endpoint derivado da referência oficial (consultar-boletos).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_consultar-boletos_8bbe8eec.md#consultar-boletos`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_consultar-boletos_8bbe8eec.md#consultar-boletos"
+      }
+    },
+    "/consultar-detalhes-de-um-boleto-v2": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consultar-detalhes-de-um-boleto-v2",
+        "description": "Endpoint derivado da referência oficial (consultar-detalhes-de-um-boleto-v2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_consultar-detalhes-de-um-boleto-v2_cebc5a49.md#consultar-detalhes-de-um-boleto-v2`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_consultar-detalhes-de-um-boleto-v2_cebc5a49.md#consultar-detalhes-de-um-boleto-v2"
+      }
+    },
+    "/consultar-detalhes-de-um-boleto": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /consultar-detalhes-de-um-boleto",
+        "description": "Endpoint derivado da referência oficial (consultar-detalhes-de-um-boleto).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_consultar-detalhes-de-um-boleto_2efef080.md#consultar-detalhes-de-um-boleto`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_consultar-detalhes-de-um-boleto_2efef080.md#consultar-detalhes-de-um-boleto"
+      }
+    },
+    "/cria": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /cria",
+        "description": "Endpoint derivado da referência oficial (cria).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_cria_C3_A7_C3_A3o-de-endpoints_8d7c72df.md#cria`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_cria_C3_A7_C3_A3o-de-endpoints_8d7c72df.md#cria"
+      }
+    },
+    "/disponibilidade-da-nota-fiscal-por-cliente": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /disponibilidade-da-nota-fiscal-por-cliente",
+        "description": "Endpoint derivado da referência oficial (disponibilidade-da-nota-fiscal-por-cliente).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_disponibilidade-da-nota-fiscal-por-cliente_5ea6fdbf.md#disponibilidade-da-nota-fiscal-por-cliente`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_disponibilidade-da-nota-fiscal-por-cliente_5ea6fdbf.md#disponibilidade-da-nota-fiscal-por-cliente"
+      }
+    },
+    "/editar-notificacoes-boleto": {
+      "put": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "PUT /editar-notificacoes-boleto",
+        "description": "Endpoint derivado da referência oficial (editar-notificacoes-boleto).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_editar-notificacoes-boleto_8b9f37e4.md#editar-notificacoes-boleto`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_editar-notificacoes-boleto_8b9f37e4.md#editar-notificacoes-boleto"
+      }
+    },
+    "/v2/invoices/{id_invoice}/notifications": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /v2/invoices/{id_invoice}/notifications",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_reference_editar-notificacoes-boleto_8b9f37e4.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_reference_editar-notificacoes-boleto_8b9f37e4.md`)",
+        "parameters": [
+          {
+            "name": "id_invoice",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_reference_editar-notificacoes-boleto_8b9f37e4.md"
+      }
+    },
+    "/edi": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /edi",
+        "description": "Endpoint derivado da referência oficial (edi).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_edi_C3_A7_C3_A3o-de-nota-fiscal-de-servi_C3_A7o_4ae1b5b5.md#edi`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_edi_C3_A7_C3_A3o-de-nota-fiscal-de-servi_C3_A7o_4ae1b5b5.md#edi"
+      }
+    },
+    "/emiss": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /emiss",
+        "description": "Endpoint derivado da referência oficial (emiss).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_emiss_C3_A3o-de-boleto-parcelado-v2_e54c19c2.md#emiss`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_emiss_C3_A3o-de-boleto-parcelado-v2_e54c19c2.md#emiss"
+      }
+    },
+    "/v2/invoices/installments": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /v2/invoices/installments",
+        "description": "Endpoint extraído da documentação (developers_cora_com_br_reference_emiss_C3_A3o-de-boleto-parcelado-v2_e54c19c2.md).\n\n---\n📍 **Origem:** Documentação Técnica (Webservice/REST) (`developers_cora_com_br_reference_emiss_C3_A3o-de-boleto-parcelado-v2_e54c19c2.md`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Documentação Técnica (Webservice/REST)",
+        "x-daemind-source-file": "developers_cora_com_br_reference_emiss_C3_A3o-de-boleto-parcelado-v2_e54c19c2.md"
+      }
+    },
+    "/exclus": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /exclus",
+        "description": "Endpoint derivado da referência oficial (exclus).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_exclus_C3_A3o-de-endpoint_2a3db474.md#exclus`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_exclus_C3_A3o-de-endpoint_2a3db474.md#exclus"
+      }
+    },
+    "/exemplo-de-post-da-notifica": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /exemplo-de-post-da-notifica",
+        "description": "Endpoint derivado da referência oficial (exemplo-de-post-da-notifica).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_exemplo-de-post-da-notifica_C3_A7_C3_A3o_9f91726a.md#exemplo-de-post-da-notifica`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_exemplo-de-post-da-notifica_C3_A7_C3_A3o_9f91726a.md#exemplo-de-post-da-notifica"
+      }
+    },
+    "/extrato": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /extrato",
+        "description": "Endpoint derivado da referência oficial (extrato).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_extrato_489bd8a2.md#extrato`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_extrato_489bd8a2.md#extrato"
+      }
+    },
+    "/getting-started-with-your-api-1": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /getting-started-with-your-api-1",
+        "description": "Endpoint derivado da referência oficial (getting-started-with-your-api-1).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_getting-started-with-your-api-1_dff3b5b8.md#getting-started-with-your-api-1`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_getting-started-with-your-api-1_dff3b5b8.md#getting-started-with-your-api-1"
+      }
+    },
+    "/getting-started-with-your-api-2": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /getting-started-with-your-api-2",
+        "description": "Endpoint derivado da referência oficial (getting-started-with-your-api-2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_getting-started-with-your-api-2_d0090673.md#getting-started-with-your-api-2`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_getting-started-with-your-api-2_d0090673.md#getting-started-with-your-api-2"
+      }
+    },
+    "/getting-started-with-your-api-3": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /getting-started-with-your-api-3",
+        "description": "Endpoint derivado da referência oficial (getting-started-with-your-api-3).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_getting-started-with-your-api-3_ff726370.md#getting-started-with-your-api-3`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_getting-started-with-your-api-3_ff726370.md#getting-started-with-your-api-3"
+      }
+    },
+    "/inicia": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /inicia",
+        "description": "Endpoint derivado da referência oficial (inicia).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_inicia_C3_A7_C3_A3o-de-pagamento-darf_3406d371.md#inicia`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_inicia_C3_A7_C3_A3o-de-pagamento-darf_3406d371.md#inicia"
+      }
+    },
+    "/lista-de-pagamentos": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /lista-de-pagamentos",
+        "description": "Endpoint derivado da referência oficial (lista-de-pagamentos).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_lista-de-pagamentos_05d0cac1.md#lista-de-pagamentos`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_lista-de-pagamentos_05d0cac1.md#lista-de-pagamentos"
+      }
+    },
+    "/lista-de-transfer": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /lista-de-transfer",
+        "description": "Endpoint derivado da referência oficial (lista-de-transfer).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_lista-de-transfer_C3_AAncia_6d18fbd7.md#lista-de-transfer`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_lista-de-transfer_C3_AAncia_6d18fbd7.md#lista-de-transfer"
+      }
+    },
+    "/nota-fiscal-de-servi": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /nota-fiscal-de-servi",
+        "description": "Endpoint derivado da referência oficial (nota-fiscal-de-servi).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_nota-fiscal-de-servi_o_9e025fd0.md#nota-fiscal-de-servi`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_nota-fiscal-de-servi_o_9e025fd0.md#nota-fiscal-de-servi"
+      }
+    },
+    "/pagamento-de-impostos": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /pagamento-de-impostos",
+        "description": "Endpoint derivado da referência oficial (pagamento-de-impostos).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_pagamento-de-impostos_f8f4432a.md#pagamento-de-impostos`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_pagamento-de-impostos_f8f4432a.md#pagamento-de-impostos"
+      }
+    },
+    "/pagamentos": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /pagamentos",
+        "description": "Endpoint derivado da referência oficial (pagamentos).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_pagamentos_750e1cae.md#pagamentos`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_pagamentos_750e1cae.md#pagamentos"
+      }
+    },
+    "/qr-code-pix-v2": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /qr-code-pix-v2",
+        "description": "Endpoint derivado da referência oficial (qr-code-pix-v2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_qr-code-pix-v2_435cb302.md#qr-code-pix-v2`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_qr-code-pix-v2_435cb302.md#qr-code-pix-v2"
+      }
+    },
+    "/qr-code-pix": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /qr-code-pix",
+        "description": "Endpoint derivado da referência oficial (qr-code-pix).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_qr-code-pix_ff14aceb.md#qr-code-pix`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_qr-code-pix_ff14aceb.md#qr-code-pix"
+      }
+    },
+    "/qr-code-v2": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /qr-code-v2",
+        "description": "Endpoint derivado da referência oficial (qr-code-v2).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_qr-code-v2_8145dff7.md#qr-code-v2`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_qr-code-v2_8145dff7.md#qr-code-v2"
+      }
+    },
+    "/reporte-do-pr": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /reporte-do-pr",
+        "description": "Endpoint derivado da referência oficial (reporte-do-pr).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_reporte-do-pr_-cadastro_2d37ffe1.md#reporte-do-pr`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_reporte-do-pr_-cadastro_2d37ffe1.md#reporte-do-pr"
+      }
+    },
+    "/upload-certificado-a1-e-credenciais-nfse": {
+      "post": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "POST /upload-certificado-a1-e-credenciais-nfse",
+        "description": "Endpoint derivado da referência oficial (upload-certificado-a1-e-credenciais-nfse).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_upload-certificado-a1-e-credenciais-nfse_66cfcd18.md#upload-certificado-a1-e-credenciais-nfse`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_upload-certificado-a1-e-credenciais-nfse_66cfcd18.md#upload-certificado-a1-e-credenciais-nfse"
+      }
+    },
+    "/webhook": {
+      "get": {
+        "tags": [
+          "Cora"
+        ],
+        "summary": "GET /webhook",
+        "description": "Endpoint derivado da referência oficial (webhook).\n\n---\n📍 **Origem:** Página de Referência Técnica (`developers_cora_com_br_reference_webhook_486ae390.md#webhook`)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-daemind-source": "Página de Referência Técnica",
+        "x-daemind-source-file": "developers_cora_com_br_reference_webhook_486ae390.md#webhook"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Estrutura padronizada de resposta de erro (RFC 7807 / RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://api.dominio.com/errors/invalid-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Erro na requisição"
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "Parâmetro obrigatório não informado ou inválido."
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/v1/orders/123"
+          },
+          "code": {
+            "type": "string",
+            "example": "INVALID_PARAMS"
+          }
+        },
+        "required": [
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Autenticação via token Bearer no cabeçalho Authorization."
+      },
+      "ApiKey_Token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Token",
+        "description": "Chave de API enviada no cabeçalho Token."
+      },
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Autenticação básica HTTP com usuário e senha ou token Base64."
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Autenticação padrão OAuth 2.0 (Authorization Code / Client Credentials).",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.dominio.com/oauth/authorize",
+            "tokenUrl": "https://api.dominio.com/oauth/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "webhooks": {
+    "pix_created": {
+      "description": "Notificação de webhook disparada no evento 'Pix.created'.",
+      "post": {
+        "summary": "Evento de Webhook: Pix.created",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "Pix.created"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "invoice_paid": {
+      "description": "Notificação de webhook disparada no evento 'invoice.paid'.",
+      "post": {
+        "summary": "Evento de Webhook: invoice.paid",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "invoice.paid"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "sucesso_canceled": {
+      "description": "Notificação de webhook disparada no evento 'sucesso.CANCELED'.",
+      "post": {
+        "summary": "Evento de Webhook: sucesso.CANCELED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "sucesso.CANCELED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "total_paid": {
+      "description": "Notificação de webhook disparada no evento 'total_paid'.",
+      "post": {
+        "summary": "Evento de Webhook: total_paid",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "total_paid"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-webhooks": {
+    "pix_created": {
+      "description": "Notificação de webhook disparada no evento 'Pix.created'.",
+      "post": {
+        "summary": "Evento de Webhook: Pix.created",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "Pix.created"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "invoice_paid": {
+      "description": "Notificação de webhook disparada no evento 'invoice.paid'.",
+      "post": {
+        "summary": "Evento de Webhook: invoice.paid",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "invoice.paid"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "sucesso_canceled": {
+      "description": "Notificação de webhook disparada no evento 'sucesso.CANCELED'.",
+      "post": {
+        "summary": "Evento de Webhook: sucesso.CANCELED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "sucesso.CANCELED"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    },
+    "total_paid": {
+      "description": "Notificação de webhook disparada no evento 'total_paid'.",
+      "post": {
+        "summary": "Evento de Webhook: total_paid",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "example": "total_paid"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Payload do recurso associado ao evento."
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "example": "2026-09-01T20:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmação de recebimento do webhook pelo cliente."
+          }
+        }
+      }
+    }
+  },
+  "x-idempotency": {
+    "supported": true,
+    "headers": [
+      "Idempotency-Key"
+    ]
+  },
+  "x-retry-policy": {
+    "exponential_backoff": false,
+    "retryable_status_codes": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ]
+  }
+}

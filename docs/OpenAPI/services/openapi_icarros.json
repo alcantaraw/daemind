@@ -20,7 +20,7 @@
           "automakerservice"
         ],
         "summary": "Lista o estoque atual do grupo regional",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealerStockAutoMaker",
         "produces": [
           "application/json"
@@ -43,66 +43,6 @@
                 "$ref": "#/definitions/Deal"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -111,14 +51,16 @@
               "gruporegional"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       },
       "post": {
         "tags": [
           "automakerservice"
         ],
         "summary": "Cria um novo anúncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "updateDeal",
         "consumes": [
           "application/json"
@@ -150,66 +92,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -218,7 +100,9 @@
               "gruporegional"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/automakerservice/automaker/{regionalGroupId}/inventory/{dealId}": {
@@ -227,7 +111,7 @@
           "automakerservice"
         ],
         "summary": "Atualiza o anúncio com os dados enviados",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "updateDealAutoMaker",
         "consumes": [
           "application/json"
@@ -266,66 +150,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -334,14 +158,16 @@
               "gruporegional"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       },
       "delete": {
         "tags": [
           "automakerservice"
         ],
         "summary": "Remover um anúncio do estoque",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "removeDeal",
         "produces": [
           "application/json"
@@ -368,66 +194,6 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -436,7 +202,9 @@
               "gruporegional"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/automakerservice/automakerlist": {
@@ -445,7 +213,7 @@
           "automakerservice"
         ],
         "summary": "Lista de grupos regionais do usuário autenticado",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getGruposRegionais",
         "produces": [
           "application/json"
@@ -460,66 +228,6 @@
                 "$ref": "#/definitions/ListRegionalGroup"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -528,7 +236,9 @@
               "gruporegional"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/cache/city/{cityId}": {
@@ -552,66 +262,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -620,7 +270,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/databaseservice/cache/ddds": {
@@ -636,66 +289,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -704,7 +297,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/databaseservice/category/{segmento}": {
@@ -713,7 +309,7 @@
           "databaseservice"
         ],
         "summary": "Retorna as categorias de veiculos",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getCategorias",
         "produces": [
           "application/json"
@@ -735,66 +331,6 @@
                 "$ref": "#/definitions/Categoria"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -803,7 +339,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/colors": {
@@ -812,7 +350,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a codificação para o campo colors (cor) para ser utilizada na inclusão do anúncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getColors",
         "produces": [
           "application/json"
@@ -827,66 +365,6 @@
                 "$ref": "#/definitions/ListItem"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -895,7 +373,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/deal/numberImages": {
@@ -911,66 +391,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -979,7 +399,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/databaseservice/equipments/{segmento}": {
@@ -988,7 +411,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a codificação para o campo equipments (opcionais do veículo) para ser utilizada na inclusão do anúncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getEquipments",
         "produces": [
           "application/json"
@@ -1010,66 +433,6 @@
                 "$ref": "#/definitions/Opcional"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1078,7 +441,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/fueltypes": {
@@ -1087,7 +452,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a codificação para o campo fuel (combustível) para ser utilizada na inclusão do anúncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getFuelTypes",
         "produces": [
           "application/json"
@@ -1102,66 +467,6 @@
                 "$ref": "#/definitions/ListItem"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1170,7 +475,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/makes/{segmento}": {
@@ -1179,7 +486,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a lista de marcas e sua codificação no iCarros",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getMakes",
         "produces": [
           "application/json"
@@ -1201,66 +508,6 @@
                 "$ref": "#/definitions/Marca"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1269,7 +516,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/model/{modelId}/qbbt": {
@@ -1278,7 +527,7 @@
           "databaseservice"
         ],
         "summary": "Retorna uma lista de modelos relacionadas a busca de um modelo especifico.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getModelsQBBT",
         "produces": [
           "application/json"
@@ -1301,66 +550,6 @@
                 "$ref": "#/definitions/Modelo"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1369,7 +558,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/models/launch/{segmento}": {
@@ -1378,7 +569,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a lista de modelos recém lançados e sua codificação no iCarros. A marca está associada pelo id.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getModelsLaunch",
         "produces": [
           "application/json"
@@ -1400,66 +591,6 @@
                 "$ref": "#/definitions/Modelo"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1468,7 +599,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/models/{segmento}": {
@@ -1477,7 +610,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a lista de modelos e sua codificação no iCarros. A marca está associada pelo id.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getModels",
         "produces": [
           "application/json"
@@ -1512,66 +645,6 @@
                 "$ref": "#/definitions/Modelo"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1580,7 +653,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/pricestats/{ufId}/{trimId}/{year}/{km}": {
@@ -1589,7 +664,7 @@
           "databaseservice"
         ],
         "summary": "Devolve o preço mínimo, médio e máximo anunciado para o veículo no iCarros (Brasil e se possível, no estado) juntamente com o preço Fipe.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getPriceStats",
         "produces": [
           "application/json"
@@ -1629,66 +704,6 @@
             "schema": {
               "$ref": "#/definitions/Cotacoes"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1697,7 +712,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/transmissions": {
@@ -1706,7 +723,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a codificação para o campo transmission (câmbio) para ser utilizada na inclusão do anúncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getTransmissions",
         "produces": [
           "application/json"
@@ -1721,66 +738,6 @@
                 "$ref": "#/definitions/ListItem"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1789,7 +746,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/trim/{trimId}/images": {
@@ -1798,7 +757,7 @@
           "databaseservice"
         ],
         "summary": "Retorna todos os IDs de imagens relacionados a uma versao",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getTrimImagesId",
         "produces": [
           "application/json"
@@ -1821,66 +780,6 @@
                 "type": "string"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1889,7 +788,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/databaseservice/trims/{segmento}": {
@@ -1898,7 +799,7 @@
           "databaseservice"
         ],
         "summary": "Retorna a lista de versões e sua codificação no iCarros. As versões são uma especialização do modelo e está associada a este pelo id.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getTrims",
         "produces": [
           "application/json"
@@ -1965,66 +866,6 @@
                 "$ref": "#/definitions/Versao"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2033,7 +874,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/1.0/dealer": {
@@ -2042,7 +885,7 @@
           "dealerservice1.0"
         ],
         "summary": "Lista dos Dealers aos quais esse login tem acesso",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealersLogin",
         "produces": [
           "application/json"
@@ -2057,66 +900,6 @@
                 "$ref": "#/definitions/Dealer"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2125,7 +908,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/1.0/dealer/minimal": {
@@ -2134,7 +919,7 @@
           "dealerservice1.0"
         ],
         "summary": "Lista dos Dealers aos quais esse login tem acesso",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getMinimalDealers",
         "produces": [
           "application/json"
@@ -2149,66 +934,6 @@
                 "$ref": "#/definitions/RetornoAnuncianteMinimal"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2217,7 +942,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/1.0/dealer/{dealerId}": {
@@ -2226,7 +953,7 @@
           "dealerservice1.0"
         ],
         "summary": "Lista as informaÃ§Ãµes do Dealer",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealersIntegrator",
         "produces": [
           "application/json"
@@ -2246,66 +973,6 @@
             "schema": {
               "$ref": "#/definitions/Dealer"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2314,7 +981,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/config/version/{trimId}": {
@@ -2323,7 +992,7 @@
           "dealerservice"
         ],
         "summary": "Recupera informaÃ§Ãµes sobre a versÃ£o",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getVersionInfo",
         "produces": [
           "application/json"
@@ -2346,66 +1015,6 @@
                 "type": "object"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2414,7 +1023,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/deal/refresh": {
@@ -2442,66 +1053,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2510,7 +1061,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/dealerservice/deal/refreshRemovedDeal/{zeroKm}": {
@@ -2544,66 +1098,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2612,7 +1106,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/dealerservice/dealer": {
@@ -2621,7 +1118,7 @@
           "dealerservice"
         ],
         "summary": "Lista dos Dealers aos quais esse login tem acesso",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealers",
         "produces": [
           "application/json"
@@ -2636,66 +1133,6 @@
                 "$ref": "#/definitions/Dealer"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2704,7 +1141,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/leads/check/{lastTimeChecked}": {
@@ -2713,7 +1152,7 @@
           "dealerservice"
         ],
         "summary": "Checa quais dos ID's de anunciantes enviados receberam leads depois de um perÃ­odo especÃ­fico.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealersThatReceivedLeadsAfter",
         "consumes": [
           "application/json"
@@ -2740,66 +1179,6 @@
                 "format": "int32"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2808,7 +1187,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/plans/pj/{dealerId}/{zeroKm}": {
@@ -2817,7 +1198,7 @@
           "dealerservice"
         ],
         "summary": "Lista todos os planos do dealer para ms-anuncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getPlansServiceAccount",
         "produces": [
           "application/json"
@@ -2840,66 +1221,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2908,7 +1229,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/plans/{dealerId}/{zeroKm}": {
@@ -2917,7 +1240,7 @@
           "dealerservice"
         ],
         "summary": "Lista todos os planos do dealer",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getPlans",
         "produces": [
           "application/json"
@@ -2948,66 +1271,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3016,7 +1279,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/calls": {
@@ -3025,7 +1290,7 @@
           "dealerservice"
         ],
         "summary": "Busca as ligaÃ§Ãµes recebidas pelo anunciante.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealerCallsByDate",
         "produces": [
           "application/json"
@@ -3056,66 +1321,6 @@
                 "$ref": "#/definitions/LeadUniqueUser"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3124,7 +1329,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/dealerstats": {
@@ -3152,66 +1359,6 @@
               "$ref": "#/definitions/ListDealerStats"
             },
             "headers": {}
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3220,7 +1367,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/dealerservice/dealer/{dealerId}/emdia": {
@@ -3248,66 +1398,6 @@
               "type": "boolean"
             },
             "headers": {}
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3316,7 +1406,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory": {
@@ -3325,7 +1418,7 @@
           "dealerservice"
         ],
         "summary": "Lista o estoque atual do dealer",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealerStock",
         "produces": [
           "application/json"
@@ -3348,66 +1441,6 @@
                 "$ref": "#/definitions/Deal"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3416,7 +1449,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory/new": {
@@ -3425,7 +1460,7 @@
           "dealerservice"
         ],
         "summary": "Cria um novo anÃºncio",
-        "description": "Retorna um JSON com o httpStatus, mensagem e o anuncioId(se o anuncio foi inserido). \n\n Ex: {\"httpStatus\": 200,\n \"mensagem\": \"Anuncio salvo com sucesso\", \"anuncioId\": 12345678}",
+        "description": "Retorna um JSON com o httpStatus, mensagem e o anuncioId(se o anuncio foi inserido). \n\n Ex: {\"httpStatus\": 200,\n \"mensagem\": \"Anuncio salvo com sucesso\", \"anuncioId\": 12345678}\n\n---\n📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "updateDealInventory",
         "consumes": [
           "application/json"
@@ -3454,66 +1489,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3522,7 +1497,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory/update/{dealId}": {
@@ -3531,7 +1508,7 @@
           "dealerservice"
         ],
         "summary": "Atualiza o anÃºncio com os dados enviados",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "updateDealWithStatus",
         "consumes": [
           "application/json"
@@ -3569,66 +1546,6 @@
             "schema": {
               "$ref": "#/definitions/RetornoStatusAnuncio"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3637,7 +1554,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory/{dealId}": {
@@ -3646,7 +1565,7 @@
           "dealerservice"
         ],
         "summary": "Retorna os dados atuais do anuncio solicitado",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealData",
         "produces": [
           "application/json"
@@ -3673,66 +1592,6 @@
             "schema": {
               "$ref": "#/definitions/Deal"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3741,14 +1600,16 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       },
       "put": {
         "tags": [
           "dealerservice"
         ],
         "summary": "Atualiza o anÃºncio com os dados enviados",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "updateDealDealerService",
         "consumes": [
           "application/json"
@@ -3787,66 +1648,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3855,14 +1656,16 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       },
       "delete": {
         "tags": [
           "dealerservice"
         ],
         "summary": "Apaga um anÃºncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "removeDealDealerService",
         "produces": [
           "application/json"
@@ -3889,66 +1692,6 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -3957,7 +1700,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory/{dealId}/image": {
@@ -3966,7 +1711,7 @@
           "dealerservice"
         ],
         "summary": "Cria uma nova imagem para o anuncio informado. Pode ser feito o upload via URL ou Array de byte",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "uploadImage",
         "consumes": [
           "application/json"
@@ -4005,66 +1750,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4074,7 +1759,9 @@
             ]
           }
         ],
-        "deprecated": true
+        "deprecated": true,
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory/{dealId}/image/{imageId}": {
@@ -4083,7 +1770,7 @@
           "dealerservice"
         ],
         "summary": "Remove uma imagem do anÃºncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "removeImage",
         "produces": [
           "application/json"
@@ -4117,66 +1804,6 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4185,7 +1812,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory/{dealId}/image/{imageId}/remove": {
@@ -4194,7 +1823,7 @@
           "dealerservice"
         ],
         "summary": "Remove uma imagem do anÃºncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "removeImageNew",
         "produces": [
           "application/json"
@@ -4225,66 +1854,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4293,7 +1862,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/inventory/{dealId}/orderimages/{imageIdsDelimitedByUnderline}": {
@@ -4302,7 +1873,7 @@
           "dealerservice"
         ],
         "summary": "Reordena as imagens do anÃºncio na ordem enviada (ids das imagens separados por underline. Ex: 123_432_9832)",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "orderImages",
         "produces": [
           "application/json"
@@ -4335,66 +1906,6 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4403,7 +1914,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/leads": {
@@ -4412,7 +1925,7 @@
           "dealerservice"
         ],
         "summary": "Retorna todas as leads de email e financiamento (agrupadas por usuÃ¡rio) dos ultimos 31 dias.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealerLeads",
         "produces": [
           "application/json"
@@ -4443,66 +1956,6 @@
                 "$ref": "#/definitions/LeadUniqueUser"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4511,7 +1964,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/leads/{initialDate}": {
@@ -4520,7 +1975,7 @@
           "dealerservice"
         ],
         "summary": "Busca as leads de email e financiamento (agrupadas por usuÃ¡rio) desde a data solicitada",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealerLeadsByDate",
         "produces": [
           "application/json"
@@ -4551,66 +2006,6 @@
                 "$ref": "#/definitions/LeadUniqueUser"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4619,7 +2014,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/dealer/{dealerId}/{anuncioId}/{spotLight}": {
@@ -4628,7 +2025,7 @@
           "dealerservice"
         ],
         "summary": "Atualiza o Spotlight de um anÃºncio",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "updateSpotlight",
         "produces": [
           "application/json"
@@ -4658,66 +2055,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4726,7 +2063,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/leads/check/{lastTimeChecked}": {
@@ -4735,7 +2074,7 @@
           "dealerservice"
         ],
         "summary": "Checa quais dos ID's de anunciantes enviados receberam leads depois de um perÃ­odo especÃ­fico.",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDealersThatReceivedLeadsAfterByDealersId",
         "consumes": [
           "application/json"
@@ -4774,66 +2113,6 @@
                 "format": "int32"
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4842,7 +2121,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/dealerservice/products": {
@@ -4858,66 +2139,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -4926,7 +2147,10 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/gestordelead/registerintegrator": {
@@ -4954,68 +2178,11 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/historicolead": {
@@ -5024,7 +2191,7 @@
           "historicolead"
         ],
         "summary": "Atualiza historico de leads",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "criaOuAtualizaHistoricoLead",
         "consumes": [
           "application/json"
@@ -5045,68 +2212,10 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/imageservice/upload/deal/{dealId}": {
@@ -5115,7 +2224,7 @@
           "imageservice"
         ],
         "summary": "Upload da imagem para o anúncio. Tamanho máximo da Imagem de 3MB. Enviar os dados da foto via Base64 ou URL",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "uploadImageDeal",
         "consumes": [
           "application/json"
@@ -5143,66 +2252,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -5211,7 +2260,9 @@
               "anunciantepj"
             ]
           }
-        ]
+        ],
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/multilead/multimatchmail": {
@@ -5220,7 +2271,7 @@
           "multilead"
         ],
         "summary": "Envio de multileads agrupados(multimatch)",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "sendMultileadMail",
         "consumes": [
           "application/json"
@@ -5241,68 +2292,10 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     },
     "/pf/cobranca": {
@@ -5330,68 +2323,11 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       },
       "put": {
         "tags": [
@@ -5417,68 +2353,11 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/pf/intencao": {
@@ -5506,68 +2385,11 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/pf/km": {
@@ -5586,68 +2408,11 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/pf/landingPage": {
@@ -5666,68 +2431,11 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/pf/refresh": {
@@ -5755,68 +2463,11 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)"
       }
     },
     "/pjconfig/desligamento/onda1": {
@@ -5825,7 +2476,7 @@
           "pjconfig"
         ],
         "summary": "Verifica se o desligamento da operaÃ§Ã£o PJ para a onda 1 estÃ¡ ativo",
-        "description": "",
+        "description": "📍 **Origem:** OpenAPI / Swagger Oficial Nativo (`native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json`)",
         "operationId": "getDesligamentoPjAtivoOnda1",
         "produces": [
           "application/json"
@@ -5837,428 +2488,14 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
-        }
-      }
-    },
-    "/rest": {
-      "get": {
-        "tags": [
-          "Icarros"
-        ],
-        "summary": "GET /rest",
-        "description": "Endpoint extraído por declaração de rota (apidocs.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/realms/icarros/protocol/openid-connect/token": {
-      "post": {
-        "tags": [
-          "Icarros"
-        ],
-        "summary": "POST /auth/realms/icarros/protocol/openid-connect/token",
-        "description": "Endpoint extraído da documentação (apidocs_apiOauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/rest/dealerservice/dealer": {
-      "get": {
-        "tags": [
-          "Icarros"
-        ],
-        "summary": "GET /rest/dealerservice/dealer",
-        "description": "Endpoint extraído da documentação (apidocs_apiOauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/realms/icarros/protocol/openid-connect/auth": {
-      "post": {
-        "tags": [
-          "Icarros"
-        ],
-        "summary": "POST /auth/realms/icarros/protocol/openid-connect/auth",
-        "description": "Endpoint extraído da documentação (apidocs_apiOauth_html.md).",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
+        },
+        "x-daemind-source": "OpenAPI / Swagger Oficial Nativo",
+        "x-daemind-source-file": "native_openapi_spec_www_icarros_com_br_rest_swagger_json_bc38fb41.json"
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Autenticação via Token Bearer / JWT para iCarros (Itaú) Anúncios Automotivos API"
-      },
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Chave de API (API Key / Token) para iCarros (Itaú) Anúncios Automotivos API"
-      },
-      "OAuth2": {
-        "type": "oauth2",
-        "description": "Fluxo de autorização OAuth 2.0 para iCarros (Itaú) Anúncios Automotivos API",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://api.icarros.com.br/oauth/authorize",
-            "tokenUrl": "https://api.icarros.com.br/oauth/token",
-            "scopes": {
-              "read": "Leitura de recursos em iCarros (Itaú) Anúncios Automotivos API",
-              "write": "Gravação e mutação em iCarros (Itaú) Anúncios Automotivos API"
-            }
-          }
-        }
-      }
-    },
     "schemas": {
       "ErrorResponse": {
         "type": "object",
@@ -6287,161 +2524,12 @@
           "code": {
             "type": "string",
             "example": "INVALID_PARAMS"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "O campo email é obrigatório."
-                }
-              }
-            }
           }
         },
         "required": [
           "status",
           "detail"
         ]
-      }
-    },
-    "responses": {
-      "400": {
-        "description": "Requisição inválida (Bad Request) - Parâmetros incorretos ou ausentes.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "Não autorizado (Unauthorized) - Token ausente, inválido ou expirado.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "Acesso proibido (Forbidden) - Permissões insuficientes para este recurso.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Recurso não encontrado (Not Found) - Entidade ou rota inexistente.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "429": {
-        "description": "Limite de requisições excedido (Too Many Requests) - Rate limit atingido.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro interno do servidor (Internal Server Error) - Falha no processamento.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      }
-    }
-  },
-  "security": [
-    {
-      "BearerAuth": []
-    },
-    {
-      "ApiKeyAuth": []
-    }
-  ],
-  "x-ratelimit": {
-    "description": "Políticas de Limites de Requisições e Throttling para a stack icarros.",
-    "default_limit": "Consulte o portal de desenvolvedores para cotas por plano.",
-    "headers": [
-      "X-RateLimit-Limit",
-      "X-RateLimit-Remaining",
-      "X-RateLimit-Reset"
-    ]
-  },
-  "x-retry-policy": {
-    "description": "Diretrizes e Políticas Recomendadas de Retries / Resiliência para a stack icarros.",
-    "max_retries": 3,
-    "retry_on_status": [
-      429,
-      500,
-      502,
-      503,
-      504
-    ],
-    "backoff_strategy": "exponential",
-    "initial_delay_ms": 1000,
-    "max_delay_ms": 10000,
-    "jitter": true,
-    "idempotency_header": "X-Idempotency-Key"
-  },
-  "webhooks": {
-    "icarros_event_notification": {
-      "post": {
-        "summary": "Notificação de Eventos em Tempo Real (iCarros (Itaú) Anúncios Automotivos API)",
-        "description": "Webhook disparado automaticamente quando ocorrem mutações de status, pedidos, rastreio ou pagamentos em iCarros (Itaú) Anúncios Automotivos API.",
-        "requestBody": {
-          "description": "Payload JSON com dados do evento disparado.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event": {
-                    "type": "string",
-                    "example": "order.created"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "data": {
-                    "type": "object",
-                    "description": "Dados da entidade mutada."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processado e confirmado com sucesso."
-          }
-        }
       }
     }
   }
