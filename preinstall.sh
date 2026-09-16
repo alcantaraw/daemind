@@ -657,18 +657,26 @@ EOF
     echo "➜ [SRE PREINSTALL] Sincronizando repositório oficial da solução..."
     sudo mkdir -p "${TARGET_DIR}"
 
-    if [ -d "${TARGET_DIR}/.git" ]; then
-        (cd "${TARGET_DIR}" && sudo git fetch --all -q >/dev/null 2>&1 && sudo git checkout -f "${REPO_BRANCH}" >/dev/null 2>&1 || sudo git checkout -b "${REPO_BRANCH}" "origin/${REPO_BRANCH}" >/dev/null 2>&1 || true && sudo git reset --hard "origin/${REPO_BRANCH}" >/dev/null 2>&1)
-    elif [ -d "${TARGET_DIR}" ] && [ "$(ls -A "${TARGET_DIR}" 2>/dev/null)" ]; then
-        TEMP_CLONE=$(mktemp -d)
-        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TEMP_CLONE}" > /dev/null 2>&1 || true
-        if [ -d "${TEMP_CLONE}/core" ]; then
-            sudo cp -rf "${TEMP_CLONE}"/* "${TARGET_DIR}/" 2>/dev/null || true
-            sudo cp -rf "${TEMP_CLONE}"/.git "${TARGET_DIR}/" 2>/dev/null || true
-        fi
-        sudo rm -rf "${TEMP_CLONE}"
+    if [ -n "$LOCAL_SOURCE_DIR" ] && [ "$LOCAL_SOURCE_DIR" != "$TARGET_DIR" ]; then
+        echo "➜ [INFO PREINSTALL] Mantendo e atualizando a partir da estrutura local (${LOCAL_SOURCE_DIR})..."
+        sudo cp -rf "${LOCAL_SOURCE_DIR}/core" "${TARGET_DIR}/" 2>/dev/null || true
+        [ -d "${LOCAL_SOURCE_DIR}/modules" ] && sudo cp -rf "${LOCAL_SOURCE_DIR}/modules" "${TARGET_DIR}/" 2>/dev/null || true
+    elif [ "$LOCAL_SOURCE_DIR" = "$TARGET_DIR" ]; then
+        echo "➜ [INFO PREINSTALL] Executando diretamente em ${TARGET_DIR}. Estrutura local preservada."
     else
-        sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TARGET_DIR}" > /dev/null 2>&1 || true
+        if [ -d "${TARGET_DIR}/.git" ]; then
+            (cd "${TARGET_DIR}" && sudo git fetch --all -q >/dev/null 2>&1 && sudo git checkout -f "${REPO_BRANCH}" >/dev/null 2>&1 || sudo git checkout -b "${REPO_BRANCH}" "origin/${REPO_BRANCH}" >/dev/null 2>&1 || true && sudo git reset --hard "origin/${REPO_BRANCH}" >/dev/null 2>&1)
+        elif [ -d "${TARGET_DIR}" ] && [ "$(ls -A "${TARGET_DIR}" 2>/dev/null)" ]; then
+            TEMP_CLONE=$(mktemp -d)
+            sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TEMP_CLONE}" > /dev/null 2>&1 || true
+            if [ -d "${TEMP_CLONE}/core" ]; then
+                sudo cp -rf "${TEMP_CLONE}"/* "${TARGET_DIR}/" 2>/dev/null || true
+                sudo cp -rf "${TEMP_CLONE}"/.git "${TARGET_DIR}/" 2>/dev/null || true
+            fi
+            sudo rm -rf "${TEMP_CLONE}"
+        else
+            sudo git clone -b "${REPO_BRANCH}" -q "${REPO_URL}" "${TARGET_DIR}" > /dev/null 2>&1 || true
+        fi
     fi
     echo "✔ [SUCESSO PREINSTALL] Repositório atualizado e pronto para uso."
 

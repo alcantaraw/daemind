@@ -916,10 +916,46 @@ TOTAL_SERVICOS=${#SERVICOS_DECLARADOS[@]}
 
 if [ "$TOTAL_SERVICOS" -gt 0 ]; then
     # Compila previamente quaisquer serviços que utilizem build local (ex: markitdown)
-    local SERVICOS_COM_BUILD=($(docker compose --profile "*" config 2>/dev/null | grep -B 3 'build:' | grep -E '^[a-zA-Z0-9_-]+:' | tr -d ':' || true))
+    # SRE Discovery: Usa python/jq ou parsing estruturado no docker compose para descobrir serviços com build
+    SERVICOS_COM_BUILD=()
+    IMAGENS_DE_BUILD=()
+    for svc in "${SERVICOS_DECLARADOS[@]}"; do
+        if docker compose --profile "*" config 2>/dev/null | awk -v target="$svc" '
+            $0 ~ "^  "target":" {in_svc=1; next}
+            $0 ~ "^  [a-zA-Z0-9_-]+:" {in_svc=0}
+            in_svc && /^[[:space:]]+build:/ {found=1}
+            END {exit !found}
+        '; then
+            SERVICOS_COM_BUILD+=("$svc")
+            b_img=$(docker compose --profile "*" config 2>/dev/null | awk -v target="$svc" '
+                $0 ~ "^  "target":" {in_svc=1; next}
+                $0 ~ "^  [a-zA-Z0-9_-]+:" {in_svc=0}
+                in_svc && /^[[:space:]]+image:/ {print $2; exit}
+            ' | tr -d '"' | tr -d "'" || true)
+            [ -n "$b_img" ] && IMAGENS_DE_BUILD+=("$b_img")
+        fi
+    done
+
+    # SRE Guardrail: Assegura inclusão explícita de markitdown se estiver nos serviços declarados
+    if [[ " ${SERVICOS_DECLARADOS[*]} " =~ " markitdown " ]]; then
+        if [[ ! " ${SERVICOS_COM_BUILD[*]} " =~ " markitdown " ]]; then
+            SERVICOS_COM_BUILD+=("markitdown")
+        fi
+        IMAGENS_DE_BUILD+=("${PREFIXO_CONTAINER}_markitdown:latest")
+    fi
+
     if [ ${#SERVICOS_COM_BUILD[@]} -gt 0 ]; then
         echo "➜ [SRE INSTALL] Compilando ${#SERVICOS_COM_BUILD[@]} imagem(ns) local(is) da stack (${SERVICOS_COM_BUILD[*]})..."
-        docker compose build "${SERVICOS_COM_BUILD[@]}" > /dev/null 2>&1 || docker compose build "${SERVICOS_COM_BUILD[@]}" || true
+        BUILD_LOG=$(mktemp -t docker_build_XXXXXX.log)
+        if docker compose build "${SERVICOS_COM_BUILD[@]}" > "$BUILD_LOG" 2>&1; then
+            echo "✔ [SUCESSO BUILD] Imagens compiladas e consolidadas no cache local."
+            rm -f "$BUILD_LOG" 2>/dev/null || true
+        else
+            echo "🚨 [ERRO CRÍTICO BUILD] Falha na compilação das imagens locais:"
+            cat "$BUILD_LOG"
+            rm -f "$BUILD_LOG" 2>/dev/null || true
+            exit 1
+        fi
     fi
 
     # Extrai a lista de imagens declaradas no docker-compose.yml
@@ -927,6 +963,17 @@ if [ "$TOTAL_SERVICOS" -gt 0 ]; then
     IMAGENS_FALTANDO=()
 
     for img in "${IMAGENS_NECESSARIAS[@]}"; do
+        # Pula se for uma imagem de build local que já existe
+        if [[ " ${IMAGENS_DE_BUILD[*]} " =~ " ${img} " ]] && docker image inspect "$img" >/dev/null 2>&1; then
+            continue
+        fi
+        # Se for imagem de build local e ainda não foi compilada, tenta compilar agora em vez de dar pull
+        if [[ " ${IMAGENS_DE_BUILD[*]} " =~ " ${img} " ]]; then
+            docker compose build "${SERVICOS_COM_BUILD[@]}" || true
+            if docker image inspect "$img" >/dev/null 2>&1; then
+                continue
+            fi
+        fi
         if ! docker image inspect "$img" >/dev/null 2>&1; then
             IMAGENS_FALTANDO+=("$img")
         fi

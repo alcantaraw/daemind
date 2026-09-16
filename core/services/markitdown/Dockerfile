@@ -4,8 +4,9 @@ FROM python:slim
 LABEL maintainer="Wellington Alcantara <alcantaraw@gmail.com>"
 LABEL description="Microsserviço Soberano de Extração de Documentos & OCR (MarkItDown + Tesseract)"
 
-# Instala dependências nativas para Tesseract OCR, PDF e mídia
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Instala dependências nativas para Tesseract OCR, PDF e mídia (Silencioso)
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
     tesseract-ocr \
     tesseract-ocr-por \
     tesseract-ocr-eng \
