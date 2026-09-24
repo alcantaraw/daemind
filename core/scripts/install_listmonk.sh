@@ -144,7 +144,7 @@ card = '''            <a href=\"#\" data-port=\"$port_num\" data-path=\"/admin/l
                     <h3>Listmonk Mailer</h3>
                     <p class=\"description\">Disparador de e-mail marketing, newsletters e e-mails transacionais soberanos.</p>
                     <div class=\"card-footer\">
-                        <span>Porta $port_num</span>
+                        <span>Gateway: HTTP</span>
                         <span class=\"port\">:$port_num/admin</span>
                     </div>
                 </div>

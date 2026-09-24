@@ -194,9 +194,15 @@
             margin-bottom: 0.8rem;
         }
 
+        .card-header .status-indicator,
+        .status-indicator {
+            display: none !important;
+        }
+
+        .icon,
         .card-icon {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 10px;
             background: rgba(82, 103, 61, 0.3);
             border: 1px solid rgba(112, 140, 83, 0.35);
@@ -206,24 +212,39 @@
             font-size: 1.3rem;
             color: #bbf7d0;
             flex-shrink: 0;
+            margin: 0;
         }
 
+        .card:hover .icon,
         .card:hover .card-icon {
             background: var(--primary);
             color: #ffffff;
             border-color: var(--gold);
         }
 
+        .card-header h3,
+        .card h3,
         .card-title {
             font-size: 1.15rem;
             font-weight: 700;
             color: #ffffff;
+            margin: 0;
+            line-height: 1.25;
+            letter-spacing: -0.2px;
         }
 
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card p.description,
         .card-desc {
             font-size: 0.875rem;
             color: var(--text-secondary);
             line-height: 1.45;
+            margin-top: 0.5rem;
             margin-bottom: 1.2rem;
             flex-grow: 1;
         }
@@ -333,6 +354,16 @@
     </div>
 
     <script>
+        document.querySelectorAll('.card').forEach(card => {
+            const header = card.querySelector('.card-header');
+            const h3 = card.querySelector('h3');
+            const status = card.querySelector('.status-indicator');
+            if (status) status.remove();
+            if (header && h3 && h3.parentElement !== header) {
+                header.appendChild(h3);
+            }
+        });
+
         document.querySelectorAll('.dynamic-link').forEach(link => {
             const port = link.getAttribute('data-port');
             const path = link.getAttribute('data-path') || '';
