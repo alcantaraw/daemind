@@ -599,9 +599,11 @@ EOF
     sudo dpkg --configure -a --force-confold > /dev/null 2>&1 < /dev/null || true
     sudo apt-get --fix-broken install -y -qq -o Dpkg::Options::="--force-confold" > /dev/null 2>&1 < /dev/null || true
     sudo apt-get autoremove --purge -y -qq > /dev/null 2>&1 < /dev/null || true
-    sudo docker builder prune -a -f 2>/dev/null || true
+    # SRE Safe Prune: Limpa apenas build cache e imagens órfãs sem remover containers da stack
+    sudo docker builder prune -f 2>/dev/null || true
     sudo docker image prune -f 2>/dev/null || true
-    sudo docker system prune -f 2>/dev/null || true
+    DEAD_CONTAINERS=$(sudo docker ps -a -q -f status=dead 2>/dev/null || true)
+    [ -n "$DEAD_CONTAINERS" ] && sudo docker rm -f $DEAD_CONTAINERS 2>/dev/null || true
     sudo journalctl --vacuum-size=50M 2>/dev/null || true
     sudo apt-get clean 2>/dev/null || true
 
@@ -675,9 +677,11 @@ EOF
         sudo touch "$NOSSO_STAMP"
 
         sudo -E env DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
-        sudo docker builder prune -a -f 2>/dev/null || true
+        # SRE Safe Prune: Limpa apenas build cache e imagens órfãs sem remover containers da stack
+        sudo docker builder prune -f 2>/dev/null || true
         sudo docker image prune -f 2>/dev/null || true
-        sudo docker system prune -f 2>/dev/null || true
+        DEAD_CONTAINERS=$(sudo docker ps -a -q -f status=dead 2>/dev/null || true)
+        [ -n "$DEAD_CONTAINERS" ] && sudo docker rm -f $DEAD_CONTAINERS 2>/dev/null || true
         sudo journalctl --vacuum-size=50M 2>/dev/null || true
         sudo apt-get clean 2>/dev/null || true
         sudo systemctl stop dnsmasq 2>/dev/null || true
