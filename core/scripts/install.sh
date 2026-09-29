@@ -127,6 +127,17 @@ mostrar_duracao() {
     echo "====================================================================="
 }
 
+# Sincronização atômica de relógio (previne certificados expirados e falhas de handshake TLS/Docker)
+if [ -x /usr/local/bin/daemind-timesync ]; then
+    /usr/local/bin/daemind-timesync >/dev/null 2>&1 || true
+else
+    HTTP_NOW=$(curl -sI -k --max-time 3 http://1.1.1.1 2>/dev/null | grep -i '^Date:' | head -n1 | sed 's/^[Dd]ate: //g' | tr -d '\r' || true)
+    if [ -z "$HTTP_NOW" ]; then
+        HTTP_NOW=$(curl -sI -k --max-time 3 https://1.1.1.1 2>/dev/null | grep -i '^Date:' | head -n1 | sed 's/^[Dd]ate: //g' | tr -d '\r' || true)
+    fi
+    [ -n "$HTTP_NOW" ] && date -s "$HTTP_NOW" >/dev/null 2>&1 || true
+fi
+
 # Registra o log de início
 echo "🚀 [SRE INSTALL] Início do deploy: $(date '+%Y-%m-%d %H:%M:%S')"
 
@@ -910,6 +921,9 @@ if [ "$USE_TAILSCALE" = "false" ]; then
 fi
 
 echo "➜ [SRE INSTALL] Verificando integridade das imagens Docker locais..."
+# SRE Guardrail: Purga camadas órfãs de downloads interrompidos e resíduos de compilação
+docker builder prune -f >/dev/null 2>&1 || true
+docker image prune -f >/dev/null 2>&1 || true
 
 SERVICOS_DECLARADOS=($(docker compose --profile "*" config --services 2>/dev/null | grep -v '^$' || true))
 TOTAL_SERVICOS=${#SERVICOS_DECLARADOS[@]}
@@ -1035,6 +1049,9 @@ if [ "$TOTAL_SERVICOS" -gt 0 ]; then
                 PULL_SUCCESS=true
                 break
             else
+                echo "  ⚠️ [SRE AUTO-HEALING] Purgando camadas órfãs e resíduos de downloads interrompidos antes da nova tentativa..."
+                docker builder prune -f >/dev/null 2>&1 || true
+                docker image prune -f >/dev/null 2>&1 || true
                 if [ "$tentativa" -lt "$MAX_PULL_RETRIES" ]; then
                     BACKOFF=$((tentativa * 3))
                     echo "  ↳ Aguardando ${BACKOFF}s antes de tentar novamente as imagens com falha..."

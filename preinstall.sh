@@ -62,7 +62,10 @@ fi
 sudo timedatectl set-timezone America/Sao_Paulo >/dev/null 2>&1 || true
 
 # Sincroniza relógio via HTTP silenciosamente
-HTTP_NOW=$(curl -sI --max-time 5 https://1.1.1.1 2>/dev/null | grep -i '^Date:' | sed 's/^[Dd]ate: //g' || true)
+HTTP_NOW=$(curl -sI -k --max-time 3 http://1.1.1.1 2>/dev/null | grep -i '^Date:' | head -n1 | sed 's/^[Dd]ate: //g' | tr -d '\r' || true)
+if [ -z "$HTTP_NOW" ]; then
+    HTTP_NOW=$(curl -sI -k --max-time 3 https://1.1.1.1 2>/dev/null | grep -i '^Date:' | head -n1 | sed 's/^[Dd]ate: //g' | tr -d '\r' || true)
+fi
 if [ -n "$HTTP_NOW" ]; then
     sudo date -s "$HTTP_NOW" >/dev/null 2>&1 || true
 fi
@@ -526,15 +529,46 @@ EOF
 
     sudo timedatectl set-timezone America/Sao_Paulo 2>/dev/null || true
 
-    echo "=== [SRE PREINSTALL] Sincronização Atômica de Relógio ==="
-    HTTP_NOW=$(curl -sI --max-time 5 https://1.1.1.1 2>/dev/null | grep -i '^Date:' | sed 's/^[Dd]ate: //g' || true)
+    echo "=== [SRE PREINSTALL] Sincronização Atômica de Relógio & Auto-Sync no Login ==="
+    cat << 'EOF' | sudo tee /usr/local/bin/daemind-timesync > /dev/null
+#!/usr/bin/env bash
+# /usr/local/bin/daemind-timesync - Sincronizador Atômico de Relógio SRE (Resiliente a DNS/TLS)
+[ -f /etc/timezone ] || echo "America/Sao_Paulo" > /etc/timezone 2>/dev/null || true
+timedatectl set-timezone America/Sao_Paulo 2>/dev/null || true
 
-    if [ -n "$HTTP_NOW" ]; then
-        sudo date -s "$HTTP_NOW" >/dev/null
-        echo "➜ [SUCESSO PREINSTALL] Relógio do Kernel recalibrado via HTTP: $(date)"
-    else
-        echo "⚠️ [AVISO PREINSTALL] Não foi possível obter o horário via HTTP."
-    fi
+# Consulta HTTP direta por IP (ignora falhas de DNS e certificados expirados por relógio atrasado)
+HTTP_DATE=$(curl -sI -k --max-time 2 http://1.1.1.1 2>/dev/null | grep -i '^Date:' | head -n1 | sed 's/^[Dd]ate: //g' | tr -d '\r' || true)
+if [ -z "$HTTP_DATE" ]; then
+    HTTP_DATE=$(curl -sI -k --max-time 2 https://1.1.1.1 2>/dev/null | grep -i '^Date:' | head -n1 | sed 's/^[Dd]ate: //g' | tr -d '\r' || true)
+fi
+
+if [ -n "$HTTP_DATE" ]; then
+    date -s "$HTTP_DATE" >/dev/null 2>&1 || true
+fi
+
+systemctl restart systemd-timesyncd 2>/dev/null || true
+
+if command -v vmware-toolbox-cmd >/dev/null 2>&1; then
+    vmware-toolbox-cmd timesync enable >/dev/null 2>&1 || true
+fi
+EOF
+    sudo chmod 0755 /usr/local/bin/daemind-timesync
+
+    # Permissão sem senha no sudoers restrita ao binário de timesync
+    echo "ALL ALL=(ALL) NOPASSWD: /usr/local/bin/daemind-timesync" | sudo tee /etc/sudoers.d/99-daemind-timesync > /dev/null
+    sudo chmod 0440 /etc/sudoers.d/99-daemind-timesync
+
+    # Hook em /etc/profile.d para auto-sincronizar a cada login interativo/SSH
+    cat << 'EOF' | sudo tee /etc/profile.d/99-daemind-timesync.sh > /dev/null
+# Auto-sync silencioso de relógio a cada login
+if [ -x /usr/local/bin/daemind-timesync ]; then
+    sudo -n /usr/local/bin/daemind-timesync >/dev/null 2>&1 &
+fi
+EOF
+    sudo chmod 0644 /etc/profile.d/99-daemind-timesync.sh
+
+    sudo /usr/local/bin/daemind-timesync
+    echo "➜ [SUCESSO PREINSTALL] Relógio sincronizado e hook de login configurado (/etc/profile.d): $(date)"
 
     echo "=== [SRE PREINSTALL] Verificando se há locks ativos do APT/DPKG no sistema ==="
     TENTATIVAS_APT_LOCK=0
@@ -565,7 +599,11 @@ EOF
     sudo dpkg --configure -a --force-confold > /dev/null 2>&1 < /dev/null || true
     sudo apt-get --fix-broken install -y -qq -o Dpkg::Options::="--force-confold" > /dev/null 2>&1 < /dev/null || true
     sudo apt-get autoremove --purge -y -qq > /dev/null 2>&1 < /dev/null || true
-    sudo apt-get clean > /dev/null 2>&1 < /dev/null || true
+    sudo docker builder prune -a -f 2>/dev/null || true
+    sudo docker image prune -f 2>/dev/null || true
+    sudo docker system prune -f 2>/dev/null || true
+    sudo journalctl --vacuum-size=50M 2>/dev/null || true
+    sudo apt-get clean 2>/dev/null || true
 
     echo "=== [SRE PREINSTALL] Configurando chaves e repositórios oficiais do Docker ==="
     sudo mkdir -p /etc/needrestart/conf.d
@@ -611,6 +649,11 @@ EOF
         bind9-utils sysstat htop dnsutils
     )
 
+    VIRT_TYPE=$(systemd-detect-virt 2>/dev/null || echo "none")
+    if [ "$VIRT_TYPE" = "vmware" ]; then
+        PACOTES_REQUERIDOS+=(open-vm-tools)
+    fi
+
     PACOTES_PARA_INSTALAR=()
     for pacote in "${PACOTES_REQUERIDOS[@]}"; do
         if ! dpkg -l "$pacote" &>/dev/null; then
@@ -632,7 +675,11 @@ EOF
         sudo touch "$NOSSO_STAMP"
 
         sudo -E env DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get install -y -qq -o Dpkg::Lock::Timeout=120 -o Dpkg::Options::="--force-confold" "${PACOTES_PARA_INSTALAR[@]}" > /dev/null 2>&1 < /dev/null
-        sudo apt-get clean > /dev/null 2>&1 || true
+        sudo docker builder prune -a -f 2>/dev/null || true
+        sudo docker image prune -f 2>/dev/null || true
+        sudo docker system prune -f 2>/dev/null || true
+        sudo journalctl --vacuum-size=50M 2>/dev/null || true
+        sudo apt-get clean 2>/dev/null || true
         sudo systemctl stop dnsmasq 2>/dev/null || true
         echo "✔ [SUCESSO PREINSTALL] Pacotes do sistema instalados com sucesso."
     else
