@@ -447,24 +447,17 @@ build_envs() {
         node_heap_postiz="4096"
     fi
 
-    # SRE FIX: Portas não-TLS (ex: 5000 no Tailscale/Host) operam em HTTP plano
-    # Postiz deriva o domínio do Cookie e as flags SameSite/Secure a partir de MAIN_URL e BACKEND_INTERNAL_URL.
-    local proto="http"
-    if [ "${CADDY_PROTOCOL:-http}" = "https" ] && [ "${USE_TAILSCALE:-false}" = "false" ]; then
-        proto="https"
-    fi
-
     cat << EOF >> "$env_path"
 
 # --- Postiz & Temporal Decoupled Env & Tuning ---
 USE_POSTIZ="${USE_POSTIZ:-s}"
 HOST_POSTIZ_PORT="5000"
 POSTIZ_JWT_SECRET=${FINAL_KEY}
-POSTIZ_FRONTEND_URL="${POSTIZ_FRONTEND_URL:-${proto}://${domain}:5000}"
-FRONTEND_URL="${FRONTEND_URL:-${proto}://${domain}:5000}"
-MAIN_URL="${MAIN_URL:-${proto}://${domain}:5000}"
-NEXT_PUBLIC_BACKEND_URL="${NEXT_PUBLIC_BACKEND_URL:-${proto}://${domain}:5000/api}"
-BACKEND_URL="${BACKEND_URL:-${proto}://${domain}:5000}"
+POSTIZ_FRONTEND_URL="http://${domain}:5000"
+FRONTEND_URL="http://${domain}:5000"
+MAIN_URL="http://${domain}:5000"
+NEXT_PUBLIC_BACKEND_URL="http://${domain}:5000"
+BACKEND_URL="http://${domain}:5000"
 BACKEND_INTERNAL_URL="http://localhost:3000"
 CPU_POSTIZ=${CPU_POSTIZ:-${cpu_postiz}}
 MEM_POSTIZ=${MEM_POSTIZ:-${mem_postiz}}

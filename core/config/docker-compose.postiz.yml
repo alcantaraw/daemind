@@ -72,7 +72,7 @@ services:
       - POSTIZ_FRONTEND_URL=${POSTIZ_FRONTEND_URL}
       - MAIN_URL=${MAIN_URL}
       - FRONTEND_URL=${FRONTEND_URL}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}/api
       - BACKEND_INTERNAL_URL=http://localhost:3000
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/postiz_db?connection_limit=30
       - REDIS_URL=redis://${IP_REDIS}:6379
