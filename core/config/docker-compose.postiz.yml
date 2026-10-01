@@ -44,7 +44,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "temporal operator cluster health --address $$(hostname -i | awk '{print $$1}'):7233 || exit 1"]
+      test: [ "CMD-SHELL", "temporal operator cluster health --address $$(hostname -i | awk '{print $$1}'):7233 || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -84,7 +84,6 @@ services:
       - TEMPORAL_INSECURE=true
       - DISABLE_SEARCH_ATTRIBUTES=true
       - DISABLE_TEMPORAL_SEARCH_ATTRIBUTES=true
-      - DISABLE_SSRF_PROTECTION=true
       - NODE_ENV=production
       - LOG_LEVEL=error
       - NEXT_TELEMETRY_DISABLED=1
@@ -100,6 +99,7 @@ services:
       - STORAGE_TYPE=${POSTIZ_STORAGE_PROVIDER:-local}
       - UPLOAD_DIRECTORY=/app/uploads
       - NEXT_PUBLIC_UPLOAD_DIRECTORY=/uploads
+      # --- Social Media OAuth Integrations ---
       - FACEBOOK_APP_ID=${FACEBOOK_APP_ID:-}
       - FACEBOOK_APP_SECRET=${FACEBOOK_APP_SECRET:-}
       - INSTAGRAM_APP_ID=${INSTAGRAM_APP_ID:-}
@@ -127,6 +127,10 @@ services:
       - SLACK_SECRET=${SLACK_SECRET:-}
       - TWITCH_CLIENT_ID=${TWITCH_CLIENT_ID:-}
       - TWITCH_CLIENT_SECRET=${TWITCH_CLIENT_SECRET:-}
+      # --- Listmonk Integration ---
+      - LISTMONK_URL=${LISTMONK_URL:-http://listmonk:9000}
+      - LISTMONK_USER=${LISTMONK_USER:-}
+      - LISTMONK_API_KEY=${LISTMONK_API_KEY:-}
     volumes:
       - './volumes/storage_data/postiz:/app/uploads'
       - '/etc/timezone:/etc/timezone:ro'
@@ -139,7 +143,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:5000/auth', (r) => process.exit(r.statusCode === 200 || r.statusCode === 307 ? 0 : 1))\""]
+      test: [ "CMD-SHELL", "node -e \"require('http').get('http://localhost:5000/auth', (r) => process.exit(r.statusCode === 200 || r.statusCode === 307 ? 0 : 1))\"" ]
       interval: 10s
       timeout: 5s
       retries: 5

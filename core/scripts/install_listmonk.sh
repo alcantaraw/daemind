@@ -299,6 +299,35 @@ provision_user() {
         echo "✔ [SUCESSO LISTMONK] Super Admin cadastrado e ativo no Listmonk (Login: ${USER_EMAIL} | Senha: [Cofre Mestre])."
     fi
 
+    # -----------------------------------------------------------------------
+    # SRE AUTO-INTEGRAÇÃO API (Postiz / Automações): Cria usuário API com LITELLM_MASTER_KEY
+    # -----------------------------------------------------------------------
+    local API_USER="${USER_EMAIL%%@*}_api"
+    local API_EMAIL="${USER_EMAIL%%@*}+api@gmail.com"
+    local API_TOKEN="${LITELLM_MASTER_KEY:-${DB_PASSWORD}}"
+
+    echo "➜ [SRE LISTMONK] Provisionando credencial de API soberana para Postiz / Daemind (${API_USER})..."
+    sudo docker exec -i "${PREFIX}_postgres" psql -U "$DB_ADMIN" -d "listmonk_db" -q -c "
+    DO \$\$
+    DECLARE
+        v_role_id INTEGER;
+        v_token_hash TEXT;
+    BEGIN
+        SELECT id INTO v_role_id FROM roles WHERE type = 'user' LIMIT 1;
+        v_token_hash := encode(sha256('${API_TOKEN}'), 'hex');
+
+        IF NOT EXISTS (SELECT 1 FROM users WHERE username = '${API_USER}') THEN
+            INSERT INTO users (username, password_login, password, email, name, type, user_role_id, status, twofa_type, created_at, updated_at)
+            VALUES ('${API_USER}', false, v_token_hash, '${API_EMAIL}', 'Postiz / Daemind API', 'api', v_role_id, 'enabled', 'none', NOW(), NOW());
+        ELSE
+            UPDATE users
+            SET password = v_token_hash, password_login = false, type = 'api', user_role_id = v_role_id, status = 'enabled', updated_at = NOW()
+            WHERE username = '${API_USER}';
+        END IF;
+    END \$\$;
+    " >/dev/null 2>&1 || true
+    echo "✔ [SUCESSO LISTMONK] Usuário de API soberana sincronizado (${API_USER} | Token: [LITELLM_MASTER_KEY])."
+
     # Reinicia o container do Listmonk para forçar recarga atômica de cache de usuários e roles da memória
     cd "$TARGET_DIR" && sudo docker compose restart listmonk >/dev/null 2>&1 || true
 
